@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[MUBlog]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>lib\media\favicon.png</url><title>MUBlog</title><link></link></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Wed, 18 Mar 2026 13:11:32 GMT</lastBuildDate><atom:link href="lib\rss.xml" rel="self" type="application/rss+xml"/><pubDate>Wed, 18 Mar 2026 13:11:31 GMT</pubDate><ttl>60</ttl><dc:creator></dc:creator><item><title><![CDATA[Lecture 1：强化学习基础]]></title><description><![CDATA[ 
+ <br><br><br>概念：强化学习和监督学习的区别<br>
+<br>(1) 训练数据中没有标签，只有奖励函数 (Reward Function)
+<br>(2) 训练数据不是现成给定，而是由行为 (Action)获得；
+
+<br>比如下棋的过程当中，训练的数据是棋盘上的棋子，即整个环境当中的动作决定的，而不是一开始就确定的；
+
+
+<br>(3) 现在的行为 (Action) 不仅影响后续训练数据的获得，也影响奖励函数 (Reward Function) 的取值 
+
+<br>比如在围棋中，走好的棋和不好的棋，最后训练数据的活动会不一样；
+
+
+<br>(4) 训练的目的是构建一个 “状态-&gt;行为” 的函数，其中状态 (State) 描述了目前内部和外部的环境，在此情况下，要使一个智能体 (Agent)在某个特定的状态下，通过这个函数，决定此时应该采取的行为。希望采取这些行为后，最终获得最大的奖励函数值；
+
+<br>所有的内部和外部的环境，构成了状态；
+
+
+<br><br>概念：强化学习基础概念<br>
+<br> t 时刻的奖励函数值
+
+<br>在围棋中，它每一个时刻都是为 ，只有在游戏结束的时候、才会返回  或者 ；
+<br>比如在游戏中，获得一个金币，R = +1，赢得游戏，R= +1000
+
+
+<br> t 时刻的状态
+
+<br>比如：某一个时刻，当前围棋的棋盘的状态，以及你是执黑子还是白子；
+
+
+<br> t 时刻的行为
+
+<br>根据一个  到  的映射，产生的哪一个行为；
+<br>其中， 是由策略控制得到的。当给定一个状态  时，行为可以被随机：
+
+<br><img alt="Pasted image 20250210180007.png" src="lib\media\pasted-image-20250210180007.png">
+
+
+
+
+<br>policy：策略 
+
+<br>
+
+
+<br>目的： 
+
+<br>强化学习的目的，就是学习 
+
+
+<br>概念：三个基本假设<br>
+<br>假设：马尔科夫假设 
+
+<br>在 t+1 时刻的状态，只和 t 时刻的状态有关，和其他时刻无关；
+<br>
+
+
+<br>假设：下一个时刻的状态，只和这一个时刻的状态，以及这一个时刻的行为有关；
+
+<br>
+<br>但是，如果是在自动驾驶当中，下一个时刻的状态，除了和自己这个时刻的内部状态有关，还可能和外部的环境有关；
+
+
+<br>假设：下一个时刻的奖励函数值，只与这一时刻的状态及这一时刻的行为有关
+
+<br>
+
+
+<br>补充：一个常用的强化学习库 - Gym<br>
+<br>Gym is a toolkit for developing and comparing reinforcement learning algorithms.
+<br><br>概念：MARKOV DECISION PROCESS - MDP<br>
+<br>(1)在 t=0 时候，环境给出一个初始状态 
+
+<br>比如围棋的空白棋盘；
+<br>但是如果是无人驾驶时，这里的初始状态可能不是 0，而是需要一些初始的设置；
+
+
+<br>(2) for t=0: end 
+
+<br>智能体选择行为 
+
+<br>根据已有状态选择行为；
+
+
+<br>环境采样奖励函数 
+
+<br>有了 s 有了 a，需要给出奖励函数；
+
+
+<br>环境产生下一个状态：
+
+<br>环境以一定的概率、产生下一个状态；
+<br>但是在无人驾驶时，可能会有不一样的情况；
+
+
+<br>智能体获得奖励函数  和下一个状态 
+
+
+<br>我们需要学习一个策略 (Policy)： ；
+<br>这是一个从状态到行为的映射函数，并且最大化累积的奖励；
+<br>概念：待优化目标函数 - Return<br>
+<br>概念：Return
+
+<br>将之后的奖励加在一起；
+<br>
+
+
+<br>概念：折扣回报 - Discounted return
+
+<br>增强学习中的待优化目标函数是累积奖励，即一段时间内的奖励函数加权平均值，以下是 Discounted return：
+<br>
+<br>在这里，GAMMA 是一个衰减项；
+
+
+<br>解释： 
+
+<br>需要评估未来状态的奖励，并且为了让最近的状态所带来的影响最大，因此使用加权平均值、保证最近的状态权值更大，但同时后续的步骤也有影响；
+<br>并且由于马尔可夫过程的存在，因此在当前 t 时刻，就可以计算出后续若干时刻的奖励函数；
+
+
+<br>概念：return 的随机性
+
+<br>在某一状态 t，当前的回报时随机的，随机性有两个来源：
+<br>
+
+<br>行为可以被随机：
+
+
+<br>
+
+<br>新的状态可以被随机：
+
+
+<br>而  随机性的来源，就是未来的所有行为以及状态的随机性；
+<br>由于  是一个随机变量，并不能评估当前状态下的局势，因此需要定义估值函数来判断；
+
+
+<br><br>概念：估值函数与 Q-learning 函数<br>
+<br>补充：路径
+
+<br>根据一个决策机制 (Policy)，我们可以获得一条路径：
+<br>
+
+
+<br>定义：Q 函数 - 动作价值函数
+
+<br>概念：
+
+<br>Q 函数是衡量某个状态下采取某个行为后，最终能获得多少累积奖励的函数；
+<br>
+<br>即：Q 是 s 确定、a 确定下（行为确定），算出来的估计值；
+
+
+<br>含义：
+
+<br>Q 函数告诉了我们，在给定策略  的情况下，在状态 s 的情况下，做动作 a 的行为是好还是坏，因此 Q 函数可以给当前状态 s 下的所有行为 a 打分，选择最好的行为；
+
+
+
+
+<br>定义：最优动作价值函数 - Optimal action-value function
+
+<br>
+
+
+<br>定义：状态价值函数 - State-value function
+
+<br>状态价值函数 (Value Function) 是衡量某个状态最终能获得多少累积奖励的函数；
+<br>
+<br>
+<br>即：V 是只有 s 确定（状态确定）、a 不确定的情况下，算出来的估计值；
+<br>因此 V 函数是对所有的状态进行遍历，计算其在不同状态下的概率以及 Q，求和得到 V； 
+<br>因此状态价值函数可以用于评估当前形势怎么样，是要赢了还是要输了；
+<br>并且 V 函数还可以用于评估策略函数，如果 V 越大，则策略越好；
+
+
+<br>分析：公式推导<br>
+<br>
+<br>
+<br><br>代码<br>import gym
+env = gym.make('CartPole-v0')
+
+state = env.reset() # 重置环境
+
+for t in range(100):
+	env.render() # 渲染
+	print(state)
+
+	action = env.action_space.sample() # 随机均匀抽样的选择动作
+	state, reward ,done , info = env.step(action) # 环境执行一次动作，其中done表示当前游戏是否结束
+
+	if done: 
+		print('Finished')
+		break
+
+env.close()
+<br><br><br>概念：DQN<br>
+<br>引入：为什么需要价值学习 
+
+<br>如果目标是赢得游戏；
+<br>则如果当前知道  函数，则最优的选择为 
+<br>即：根据当前选择的平均回报，选择平均回报最大的那个动作，真正的回报不一定是这个，但还是应该选择平均的选择；
+<br>而价值学习的思路，就是通过神经网络、学习出一个 ；
+<br>DQN 利用神经网络，学习出  来近似 ；
+
+
+<br>举例： 
+
+<br>图示： 
+
+<br><img alt="Pasted image 20250213191730.png" src="lib\media\pasted-image-20250213191730.png">
+
+
+<br>分析： 
+
+<br>画面作为输入，利用卷积将图片变为特征向量，然后再使用全连接层将特征映射到一个输出的向量；
+<br>这个输出的向量就是打分，每一个向量元素对应一个动作；
+<br>比如：向左的分数为 2000，向右为 3000 分，则需要选择向右；
+<br><img alt="Pasted image 20250213191937.png" src="lib\media\pasted-image-20250213191937.png">
+<br>重复以上过程；
+
+
+
+
+<br><br>概念：Temporal Difference (TD) Learning<br>
+<br>引入： 
+
+<br>  
+<br>其中左边是从纽约到亚特兰大的总时间，右边是两段分别的时间； 
+<br>理想情况下，这公式的两端应当是相等的，如果计算的结果和实际的情况有偏差，就更新；
+
+
+<br>公式：
+
+<br>
+<br>其中  是 t 时刻估计的值；
+<br> 是奖励， 是在 t+1 时刻的估计值； 
+
+
+<br>分析： 
+
+<br>由 return 的定义可知：
+
+<br>
+
+
+<br>因此，可以得到一个等式：
+
+<br>
+
+
+<br>这个等式反映了相邻两个折扣回报之间的关系；
+
+
+<br>概念：TD for DQN
+
+<br>DQN 的输出  是  的估计；
+<br>DQN 的输出  是  的估计；
+<br>因此得到：
+<br>并且将两者之间的差值，定义为损失函数：
+<br>然后使用梯度下降，来更新参数 ：
+<br>做梯度下降的目的，就是为了使得 Loss 变小；
+
+
+<br><br>概念：TD 算法过程<br>
+<br>（1）观察当前的状态  和动作 
+<br>（2）用 DQN 进行一次计算，预测价值，把输出作为 ，即：
+<br>（3）用反向传播对神经网络求导，计算其梯度：
+<br>（4）环境更新状态  并给出奖励 ；
+<br>（5）计算出 TD 目标值：
+<br>（6）做一次梯度下降：
+]]></description><link>04_人工智能理论\03_强化学习\lecture-1：强化学习基础.html</link><guid isPermaLink="false">04_人工智能理论/03_强化学习/Lecture 1：强化学习基础.md</guid><pubDate>Thu, 20 Mar 2025 03:39:14 GMT</pubDate><enclosure url="lib\media\pasted-image-20250210180007.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;lib\media\pasted-image-20250210180007.png&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[index]]></title><description><![CDATA[ 
+ <br>这是我用于学习游戏开发与计算机图形学的笔记仓库，按技术方向分类整理，方便系统梳理知识体系。<br><br>
+<br>01_CPP：C++ 语言相关学习笔记
+<br>02_CSharp：C# 语言学习笔记，包含语法特性、.脚本编写结合实践。
+<br>03_Python：Python 语言学习笔记
+<br><br>
+<br>01_基础理论：计算机图形学核心基础理论笔记
+<br>02_实时渲染：实时渲染技术笔记，涵盖光栅化渲染流程、着色器编程（GLSL/HLSL）、PBR 物理基于渲染、后处理效果等实时渲染管线技术
+<br>03_光线追踪：光线追踪技术笔记
+<br>04_软光栅渲染器：软光栅渲染器实现笔记，从 0 到 1 实现 CPU 端光栅化渲染器，包含三角形遍历、深度测试、纹理采样等核心模块。
+<br>05_渲染管线技术：现代图形渲染管线笔记
+<br><br>
+<br>01_游戏引擎技术：游戏引擎核心技术笔记
+<br>02_游戏数据系统：游戏数据管理与持久化笔记
+<br>03_游戏渲染技术：游戏引擎渲染实践笔记
+<br>04_热更新技术：游戏热更新技术笔记，包含资源热更、代码热更（如 XLua/ToLua）、补丁分发与版本管理方案。
+<br>05_游戏架构技术：游戏项目架构设计笔记，覆盖 MVC/ECS 等架构模式
+<br>06_游戏人工智能：游戏 AI 技术笔记，包含有限状态机、寻路算法（A*、NavMesh）等
+<br>07_游戏网络技术：游戏网络编程笔记
+<br>08_游戏性能优化：游戏性能优化笔记
+<br><br>
+<br>
+
+<br>左边的文件目录显示错误，需要设置；
+
+
+<br>
+
+<br>不能调整左右边框；
+
+
+<br>
+
+<br>去除掉一些不用的功能，比如搜索、交互图等等；
+
+
+<br>
+
+<br>继续定制 Index 内容，添加背景图片和内容介绍；
+
+
+]]></description><link>index.html</link><guid isPermaLink="false">index.md</guid><pubDate>Wed, 18 Mar 2026 11:54:58 GMT</pubDate></item></channel></rss>
