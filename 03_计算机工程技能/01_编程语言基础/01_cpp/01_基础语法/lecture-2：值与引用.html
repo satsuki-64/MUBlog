@@ -1,0 +1,917 @@
+<!DOCTYPE html> <html><head>
+		<title>Lecture 2：值与引用</title>
+		<base href="..\..\..\../">
+		<meta id="root-path" root-path="..\..\..\../">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
+		<meta charset="UTF-8">
+		<meta name="description" content="MUBlog - Lecture 2：值与引用">
+		<meta property="og:title" content="Lecture 2：值与引用">
+		<meta property="og:description" content="MUBlog - Lecture 2：值与引用">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="03_计算机工程技能/01_编程语言基础/01_cpp/01_基础语法/lecture-2：值与引用.html">
+		<meta property="og:image" content="lib\media\pasted-image-20250111143310.png">
+		<meta property="og:site_name" content="MUBlog">
+		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="lib/rss.xml"><script async="" id="webpage-script" src="lib/scripts/webpage.js" onload="this.onload=null;this.setAttribute(&quot;loaded&quot;, &quot;true&quot;)"></script><link rel="icon" href="lib/media/favicon.png"><style>body{--line-width:40em;--line-width-adaptive:40em;--file-line-width:40em;--sidebar-width:min(20em, 80vw);--collapse-arrow-size:11px;--tree-horizontal-spacing:0.6em;--tree-vertical-spacing:0.6em;--sidebar-margin:12px}.sidebar{height:100%;min-width:calc(var(--sidebar-width) + var(--divider-width-hover));max-width:calc(var(--sidebar-width) + var(--divider-width-hover));font-size:14px;z-index:10;position:relative;overflow:hidden;transition:min-width ease-in-out,max-width ease-in-out;transition-duration:.2s;contain:size}.sidebar-left{left:0}.sidebar-right{right:0}.sidebar.is-collapsed{min-width:0;max-width:0}body.floating-sidebars .sidebar{position:absolute}.sidebar-content{height:100%;min-width:calc(var(--sidebar-width) - var(--divider-width-hover));top:0;padding:var(--sidebar-margin);padding-top:4em;line-height:var(--line-height-tight);background-color:var(--background-secondary);transition:background-color,border-right,border-left,box-shadow;transition-duration:var(--color-fade-speed);transition-timing-function:ease-in-out;position:absolute;display:flex;flex-direction:column}.sidebar:not(.is-collapsed) .sidebar-content{min-width:calc(max(100%,var(--sidebar-width)) - 3px);max-width:calc(max(100%,var(--sidebar-width)) - 3px)}.sidebar-left .sidebar-content{left:0;border-top-right-radius:var(--radius-l);border-bottom-right-radius:var(--radius-l)}.sidebar-right .sidebar-content{right:0;border-top-left-radius:var(--radius-l);border-bottom-left-radius:var(--radius-l)}.sidebar:has(.sidebar-content:empty):has(.topbar-content:empty){display:none}.sidebar-topbar{height:2em;width:var(--sidebar-width);top:var(--sidebar-margin);padding-inline:var(--sidebar-margin);z-index:1;position:fixed;display:flex;align-items:center;transition:width ease-in-out;transition-duration:inherit}.sidebar.is-collapsed .sidebar-topbar{width:calc(2.3em + var(--sidebar-margin) * 2)}.sidebar .sidebar-topbar.is-collapsed{width:0}.sidebar-left .sidebar-topbar{left:0}.sidebar-right .sidebar-topbar{right:0}.topbar-content{overflow:hidden;overflow:clip;width:100%;height:100%;display:flex;align-items:center;transition:inherit}.sidebar.is-collapsed .topbar-content{width:0;transition:inherit}.clickable-icon.sidebar-collapse-icon{background-color:transparent;color:var(--icon-color-focused);padding:0!important;margin:0!important;height:100%!important;width:2.3em!important;margin-inline:0.14em!important;position:absolute}.sidebar-left .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);right:var(--sidebar-margin)}.sidebar-right .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);left:var(--sidebar-margin)}.clickable-icon.sidebar-collapse-icon svg.svg-icon{width:100%;height:100%}.sidebar-section-header{margin:0 0 1em 0;text-transform:uppercase;letter-spacing:.06em;font-weight:600}body{transition:background-color var(--color-fade-speed) ease-in-out}.webpage-container{display:flex;flex-direction:row;height:100%;width:100%;align-items:stretch;justify-content:center}.document-container{opacity:1;flex-basis:100%;max-width:100%;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;transition:opacity .2s ease-in-out;contain:inline-size}.hide{opacity:0;transition:opacity .2s ease-in-out}.document-container>.markdown-preview-view{margin:var(--sidebar-margin);margin-bottom:0;width:100%;width:-webkit-fill-available;width:-moz-available;width:fill-available;background-color:var(--background-primary);transition:background-color var(--color-fade-speed) ease-in-out;border-top-right-radius:var(--window-radius,var(--radius-m));border-top-left-radius:var(--window-radius,var(--radius-m));overflow-x:hidden!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;contain:inline-size}.document-container>.markdown-preview-view>.markdown-preview-sizer{padding-bottom:80vh!important;width:100%!important;max-width:var(--line-width)!important;flex-basis:var(--line-width)!important;transition:background-color var(--color-fade-speed) ease-in-out;contain:inline-size}.markdown-rendered img:not([width]),.view-content img:not([width]){max-width:100%;outline:0}.document-container>.view-content.embed{display:flex;padding:1em;height:100%;width:100%;align-items:center;justify-content:center}.document-container>.view-content.embed>*{max-width:100%;max-height:100%;object-fit:contain}:has(> :is(.math,table)){overflow-x:auto!important}.document-container>.view-content{overflow-x:auto;contain:content;padding:0;margin:0;height:100%}.scroll-highlight{position:absolute;width:100%;height:100%;pointer-events:none;z-index:1000;background-color:hsla(var(--color-accent-hsl),.25);opacity:0;padding:1em;inset:50%;translate:-50% -50%;border-radius:var(--radius-s)}</style><script defer="">async function loadIncludes(){if("file:"!=location.protocol){let e=document.querySelectorAll("include");for(let t=0;t<e.length;t++){let o=e[t],l=o.getAttribute("src");try{const e=await fetch(l);if(!e.ok){console.log("Could not include file: "+l),o?.remove();continue}let t=await e.text(),n=document.createRange().createContextualFragment(t),i=Array.from(n.children);for(let e of i)e.classList.add("hide"),e.style.transition="opacity 0.5s ease-in-out",setTimeout((()=>{e.classList.remove("hide")}),10);o.before(n),o.remove(),console.log("Included file: "+l)}catch(e){o?.remove(),console.log("Could not include file: "+l,e);continue}}}else{if(document.querySelectorAll("include").length>0){var e=document.createElement("div");e.id="error",e.textContent="Web server exports must be hosted on an http / web server to be viewed correctly.",e.style.position="fixed",e.style.top="50%",e.style.left="50%",e.style.transform="translate(-50%, -50%)",e.style.fontSize="1.5em",e.style.fontWeight="bold",e.style.textAlign="center",document.body.appendChild(e),document.querySelector(".document-container")?.classList.remove("hide")}}}document.addEventListener("DOMContentLoaded",(()=>{loadIncludes()}));let isFileProtocol="file:"==location.protocol;function waitLoadScripts(e,t){let o=e.map((e=>document.getElementById(e+"-script"))),l=0;!function e(){let n=o[l];l++,n&&"true"!=n.getAttribute("loaded")||l<o.length&&e(),l<o.length?n.addEventListener("load",e):t()}()}</script><link rel="stylesheet" href="lib/styles/obsidian.css"><link rel="stylesheet" href="lib/styles/theme.css"><link rel="preload" href="lib/styles/global-variable-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/global-variable-styles.css"></noscript><link rel="preload" href="lib/styles/supported-plugins.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/supported-plugins.css"></noscript><link rel="preload" href="lib/styles/main-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/main-styles.css"></noscript><link rel="preload" href="lib/styles/snippets.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/snippets.css"></noscript></head><body class="publish css-settings-manager styled-scrollbars show-inline-title theme-light ctp-rosepine-light ctp-mocha ctp-accent-rosewater anuppuccin-accent-toggle anp-current-line-border anp-callout-color-toggle anp-codeblock-numbers anp-list-toggle anp-table-width anp-toggle-preview anp-color-transition-toggle anp-button-metadata-toggle anp-toggle-metadata anp-toggle-scrollbars anp-h1-red anp-h1-divider anp-h2-peach anp-h3-green anp-h4-teal anp-h5-lavender anp-h6-mauve anp-decoration-toggle anp-bold-maroon anp-italic-green anp-highlight-yellow anp-colorful-frame-icon-toggle-dark anp-simple-rainbow-color-toggle anp-rainbow-file-toggle anp-simple-rainbow-title-toggle anp-simple-rainbow-icon-folder-toggle anp-simple-rainbow-indentation-toggle anp-simple-rainbow-collapse-toggle anp-card-layout anp-card-shadows anp-card-layout-filebrowser anp-theme-ext-light anp-theme-ext-dark anp-theme-ext-amoled ctp-atom-light ctp-atom-dark table-type-three-line table-header-color-blue table-row-alt-background-option table-dark-mode"><script defer="">let theme=localStorage.getItem("theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");"dark"==theme?(document.body.classList.add("theme-dark"),document.body.classList.remove("theme-light")):(document.body.classList.add("theme-light"),document.body.classList.remove("theme-dark")),window.innerWidth<480?document.body.classList.add("is-phone"):window.innerWidth<768?document.body.classList.add("is-tablet"):window.innerWidth<1024?document.body.classList.add("is-small-screen"):document.body.classList.add("is-large-screen")</script><div class="webpage-container workspace"><div class="sidebar-left sidebar"><div class="sidebar-topbar"><div class="topbar-content"><label class="theme-toggle-container" for="theme_toggle"><input class="theme-toggle-input" type="checkbox" id="theme_toggle"><div class="toggle-background"></div></label></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"><include src="lib/html/file-tree.html"></include></div><script defer="">let ls = document.querySelector(".sidebar-left"); ls.classList.add("is-collapsed"); if (window.innerWidth > 768) ls.classList.remove("is-collapsed"); ls.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-left-width"));</script></div><div class="document-container markdown-reading-view hide"><div class="markdown-preview-view markdown-rendered allow-fold-headings allow-fold-lists is-readable-line-width"><style id="MJX-CHTML-styles">mjx-container[jax="CHTML"] { line-height: 0; }
+mjx-container [space="1"] { margin-left: 0.111em; }
+mjx-container [space="2"] { margin-left: 0.167em; }
+mjx-container [space="3"] { margin-left: 0.222em; }
+mjx-container [space="4"] { margin-left: 0.278em; }
+mjx-container [space="5"] { margin-left: 0.333em; }
+mjx-container [rspace="1"] { margin-right: 0.111em; }
+mjx-container [rspace="2"] { margin-right: 0.167em; }
+mjx-container [rspace="3"] { margin-right: 0.222em; }
+mjx-container [rspace="4"] { margin-right: 0.278em; }
+mjx-container [rspace="5"] { margin-right: 0.333em; }
+mjx-container [size="s"] { font-size: 70.7%; }
+mjx-container [size="ss"] { font-size: 50%; }
+mjx-container [size="Tn"] { font-size: 60%; }
+mjx-container [size="sm"] { font-size: 85%; }
+mjx-container [size="lg"] { font-size: 120%; }
+mjx-container [size="Lg"] { font-size: 144%; }
+mjx-container [size="LG"] { font-size: 173%; }
+mjx-container [size="hg"] { font-size: 207%; }
+mjx-container [size="HG"] { font-size: 249%; }
+mjx-container [width="full"] { width: 100%; }
+mjx-box { display: inline-block; }
+mjx-block { display: block; }
+mjx-itable { display: inline-table; }
+mjx-row { display: table-row; }
+mjx-row > * { display: table-cell; }
+mjx-mtext { display: inline-block; }
+mjx-mstyle { display: inline-block; }
+mjx-merror { display: inline-block; color: red; background-color: yellow; }
+mjx-mphantom { visibility: hidden; }
+mjx-assistive-mml { top: 0px; left: 0px; clip: rect(1px, 1px, 1px, 1px); user-select: none; position: absolute !important; padding: 1px 0px 0px !important; border: 0px !important; display: block !important; width: auto !important; overflow: hidden !important; }
+mjx-assistive-mml[display="block"] { width: 100% !important; }
+mjx-math { display: inline-block; text-align: left; line-height: 0; text-indent: 0px; font-style: normal; font-weight: normal; font-size: 100%; font-size-adjust: none; letter-spacing: normal; border-collapse: collapse; overflow-wrap: normal; word-spacing: normal; white-space: nowrap; direction: ltr; padding: 1px 0px; }
+mjx-container[jax="CHTML"][display="true"] { display: block; text-align: center; margin: 1em 0px; }
+mjx-container[jax="CHTML"][display="true"][width="full"] { display: flex; }
+mjx-container[jax="CHTML"][display="true"] mjx-math { padding: 0px; }
+mjx-container[jax="CHTML"][justify="left"] { text-align: left; }
+mjx-container[jax="CHTML"][justify="right"] { text-align: right; }
+mjx-mi { display: inline-block; text-align: left; }
+mjx-c { display: inline-block; }
+mjx-utext { display: inline-block; padding: 0.75em 0px 0.2em; }
+mjx-mo { display: inline-block; text-align: left; }
+mjx-stretchy-h { display: inline-table; width: 100%; }
+mjx-stretchy-h > * { display: table-cell; width: 0px; }
+mjx-stretchy-h > * > mjx-c { display: inline-block; transform: scaleX(1); }
+mjx-stretchy-h > * > mjx-c::before { display: inline-block; width: initial; }
+mjx-stretchy-h > mjx-ext { overflow: clip visible; width: 100%; }
+mjx-stretchy-h > mjx-ext > mjx-c::before { transform: scaleX(500); }
+mjx-stretchy-h > mjx-ext > mjx-c { width: 0px; }
+mjx-stretchy-h > mjx-beg > mjx-c { margin-right: -0.1em; }
+mjx-stretchy-h > mjx-end > mjx-c { margin-left: -0.1em; }
+mjx-stretchy-v { display: inline-block; }
+mjx-stretchy-v > * { display: block; }
+mjx-stretchy-v > mjx-beg { height: 0px; }
+mjx-stretchy-v > mjx-end > mjx-c { display: block; }
+mjx-stretchy-v > * > mjx-c { transform: scaleY(1); transform-origin: left center; overflow: hidden; }
+mjx-stretchy-v > mjx-ext { display: block; height: 100%; box-sizing: border-box; border: 0px solid transparent; overflow: visible clip; }
+mjx-stretchy-v > mjx-ext > mjx-c::before { width: initial; box-sizing: border-box; }
+mjx-stretchy-v > mjx-ext > mjx-c { transform: scaleY(500) translateY(0.075em); overflow: visible; }
+mjx-mark { display: inline-block; height: 0px; }
+mjx-mn { display: inline-block; text-align: left; }
+mjx-c::before { display: block; width: 0px; }
+.MJX-TEX { font-family: MJXZERO, MJXTEX; }
+.TEX-B { font-family: MJXZERO, MJXTEX-B; }
+.TEX-I { font-family: MJXZERO, MJXTEX-I; }
+.TEX-MI { font-family: MJXZERO, MJXTEX-MI; }
+.TEX-BI { font-family: MJXZERO, MJXTEX-BI; }
+.TEX-S1 { font-family: MJXZERO, MJXTEX-S1; }
+.TEX-S2 { font-family: MJXZERO, MJXTEX-S2; }
+.TEX-S3 { font-family: MJXZERO, MJXTEX-S3; }
+.TEX-S4 { font-family: MJXZERO, MJXTEX-S4; }
+.TEX-A { font-family: MJXZERO, MJXTEX-A; }
+.TEX-C { font-family: MJXZERO, MJXTEX-C; }
+.TEX-CB { font-family: MJXZERO, MJXTEX-CB; }
+.TEX-FR { font-family: MJXZERO, MJXTEX-FR; }
+.TEX-FRB { font-family: MJXZERO, MJXTEX-FRB; }
+.TEX-SS { font-family: MJXZERO, MJXTEX-SS; }
+.TEX-SSB { font-family: MJXZERO, MJXTEX-SSB; }
+.TEX-SSI { font-family: MJXZERO, MJXTEX-SSI; }
+.TEX-SC { font-family: MJXZERO, MJXTEX-SC; }
+.TEX-T { font-family: MJXZERO, MJXTEX-T; }
+.TEX-V { font-family: MJXZERO, MJXTEX-V; }
+.TEX-VB { font-family: MJXZERO, MJXTEX-VB; }
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c { font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A !important; }
+@font-face { font-family: MJXZERO; src: url("lib/fonts/mathjax_zero.woff") format("woff"); }
+@font-face { font-family: MJXTEX; src: url("lib/fonts/mathjax_main-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-B; src: url("lib/fonts/mathjax_main-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-I; src: url("lib/fonts/mathjax_math-italic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-MI; src: url("lib/fonts/mathjax_main-italic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-BI; src: url("lib/fonts/mathjax_math-bolditalic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S1; src: url("lib/fonts/mathjax_size1-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S2; src: url("lib/fonts/mathjax_size2-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S3; src: url("lib/fonts/mathjax_size3-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S4; src: url("lib/fonts/mathjax_size4-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-A; src: url("lib/fonts/mathjax_ams-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-C; src: url("lib/fonts/mathjax_calligraphic-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-CB; src: url("lib/fonts/mathjax_calligraphic-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-FR; src: url("lib/fonts/mathjax_fraktur-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-FRB; src: url("lib/fonts/mathjax_fraktur-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SS; src: url("lib/fonts/mathjax_sansserif-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SSB; src: url("lib/fonts/mathjax_sansserif-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SSI; src: url("lib/fonts/mathjax_sansserif-italic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SC; src: url("lib/fonts/mathjax_script-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-T; src: url("lib/fonts/mathjax_typewriter-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-V; src: url("lib/fonts/mathjax_vector-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-VB; src: url("lib/fonts/mathjax_vector-bold.woff") format("woff"); }
+mjx-c.mjx-c1D442.TEX-I::before { padding: 0.704em 0.763em 0.022em 0px; content: "O"; }
+mjx-c.mjx-c28::before { padding: 0.75em 0.389em 0.25em 0px; content: "("; }
+mjx-c.mjx-c31::before { padding: 0.666em 0.5em 0px 0px; content: "1"; }
+mjx-c.mjx-c29::before { padding: 0.75em 0.389em 0.25em 0px; content: ")"; }
+</style><div class="markdown-preview-sizer markdown-preview-section"><h1 class="page-title heading inline-title" id="Lecture 2：值与引用"><p dir="auto">Lecture 2：值与引用</p></h1><div class="el-h2 heading-wrapper"><h2 data-heading="引用传递和值传递" dir="auto" class="heading" id="引用传递和值传递"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>引用传递和值传递</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：基础概念</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：形式参数
+<ul>
+<li data-line="1" dir="auto">在<strong>函数声明 / 定义</strong>时，写在函数名后的括号内的参数，是用来接收调用时传入数据的 “占位符”；</li>
+<li data-line="2" dir="auto">形参是函数内部的局部变量，仅在函数被调用时分配内存，函数执行结束后立即释放，作用域仅限函数内部；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：实际参数
+<ul>
+<li data-line="4" dir="auto">在函数调用时，写在函数名后的括号内的具体值 / 变量 / 表达式，是传递给形参的 “实际数据”；</li>
+<li data-line="5" dir="auto">实参是调用函数的上下文中已存在的变量 / 常量 / 表达式，其值（或地址）会传递给形参，实参的内存不受函数调用的影响（除非传引用 / 指针修改其值）；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">#include &lt;iostream&gt;
+using namespace std;
+
+// 形参是引用（&amp;num）：相当于实参的“别名”
+void Increase(int&amp; num) { 
+    num++; // 修改形参（实际是修改实参本身）
+}
+
+int main() 
+{
+    int val = 5;
+    
+    // 实参是val，传递给引用形参num
+    Increase(val); 
+    cout &lt;&lt; val &lt;&lt; endl; // 输出6（实参被修改）
+    return 0;
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-h3 heading-wrapper"><h3 data-heading="引用传递和值传递区别" dir="auto" class="heading" id="引用传递和值传递区别"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>引用传递和值传递区别</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：引用传递和值传递区别</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：值传递
+<ul>
+<li data-line="1" dir="auto">值传递的是一个值的副本，形参是实参的拷贝，改变形参的值并不会影响外部实参的值。如果是一个函数中传入值，对形参的操作不会影响实参的值；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：引用传递
+<ul>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念： 
+<ul>
+<li data-line="4" dir="auto">被调函数的形参是「原变量的别名」（编译器层面的绑定）；虽然栈上也会存实参地址，但编译器强制让这个形参和原变量 “绑定死”—— 语法上你无法修改这个地址，操作引用就等价于直接操作原变量；</li>
+<li data-line="5" dir="auto">对形参的操作其实就是对实参的操作，在引用传递过程中，被调函数的形式参数虽然也作为局部变量在栈中开辟了内存空间，但是这时指针指向的位置是由函数放进来的实参变量的地址。被调函数对形参的任何操作都被处理成间接寻址，即通过栈中存放的地址访问主调函数中的实参变量；</li>
+<li data-line="6" dir="auto">正因为如此，被调函数对形参做的任何操作都影响了主调函数中的实参变量。</li>
+<li data-line="7" dir="auto">即：引用传递传递的是引用对象的内存地址，函数对形参的操作会影响实参的值，实参的值会随着形参的值得改变而改变；</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结： 
+<ul>
+<li data-line="9" dir="auto">引用是一个别名，它在逻辑上不是独立的，它的存在具有依附性，所以引用必须在一开始就被初始化，而且其引用的对象在其整个生命周期中是不能被改变的（自始至终只能依附于同一个变量）；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：指针传递 
+<ul>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念： 
+<ul>
+<li data-line="12" dir="auto">指针传递参数本质上是值传递的方式，它所传递的是一个<strong>地址值</strong>；</li>
+<li data-line="13" dir="auto">指针的本质：指针变量本质上就是一个整型数值，其数值的含义是内存地址；</li>
+<li data-line="14" dir="auto">值传递过程中，被调函数的形式参数作为被调函数的局部变量处理，即在栈中开辟了内存空间以存放由主调函数放进来的实参的值，从而成为了实参的一个副本。值传递的特点是被调函数对形式参数的任何操作都是作为局部变量进行，不会影响主调函数的实参变量的值；</li>
+</ul>
+</li>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结： 
+<ul>
+<li data-line="16" dir="auto">指针从本质上讲就是存放变量地址的一个变量，在逻辑上是独立的，它可以被改变，包括其所指向的地址的改变和其指向的地址中所存放的数据的改变；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="17" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：指针和变量的自增自减有什么不同？
+<ul>
+<li data-line="18" dir="auto">变量的自增自减是改变变量的值，指针的自增自减是改变指针的指向地址；</li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：指针和引用的区别</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念： 
+<ul>
+<li data-line="1" dir="auto">指针和引用经常用于函数的参数传递，然而，指针传递参数和引用传递参数是有本质上的不同的；</li>
+<li data-line="2" dir="auto">指针传递参数本质上是值传递的方式，它所传递的是一个地址值。值传递过程中，被调函数的形式参数作为被调函数的局部变量处理，即<strong>在栈中开辟了内存空间以存放由主调函数放进来的实参的值</strong>，从而成为了实参的一个副本。值传递的特点是被调函数对形式参数的任何操作都是作为局部变量进行，不会影响主调函数的实参变量的值；</li>
+<li data-line="3" dir="auto">而在引用传递过程中，被调函数的形式参数虽然也作为局部变量在栈中开辟了内存空间，但是这时存放的是由主调函数放进来的实参变量的地址。被调函数对形参的任何操作都被处理成间接寻址，即通过栈中存放的地址访问主调函数中的实参变量。正因为如此，被调函数对形参做的任何操作都影响了主调函数中的实参变量；</li>
+<li data-line="4" dir="auto">引用传递和指针传递是不同的，虽然它们都是在被调函数栈空间上的一个局部变量，但是<strong>任何对于引用参数的处理都会通过一个间接寻址的方式操作到主调函数中的相关变量</strong>。而对于指针传递的参数，如果改变被调函数中的指针地址，它将影响不到主调函数的相关变量。如果想通过指针参数传递来改变主调函数中的相关变量，那就得使用指向指针的指针，或者指针引用；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：从编译的角度
+<ul>
+<li data-line="6" dir="auto">程序在编译时分别将指针和引用添加到符号表上，符号表上记录的是变量名及变量所对应地址。指针变量在符号表上对应的地址值为指针变量的地址值，而引用在符号表上对应的地址值为引用对象的地址值。符号表生成后就不会再改，因此指针可以改变其指向的对象（指针变量中的值可以改），而引用对象则不能修改；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结： 
+<ul>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>相同点： 
+<ul>
+<li data-line="9" dir="auto">指针和引用都是地址，指针指向一块内存，它的内容是所指内存的地址；而引用则是某块内存的别名；</li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>不同点： 
+<ul>
+<li data-line="11" dir="auto">（1）引用无需解引用，指针需要解引用； </li>
+<li data-line="12" dir="auto">（2）引用在定义时被初始化一次，之后不可变，指针可变； </li>
+<li data-line="13" dir="auto">（3）引用不能为空，指针可以为空； </li>
+<li data-line="14" dir="auto">（4）程序为指针变量分配内存区域，而引用不需要分配内存区域，所以指针自增操作是指针变量的自增，引用自增操作是变量值的自增；</li>
+<li data-line="15" dir="auto">（5）引用没有 <code>const</code>，指针有 <code>const</code>，<code>const</code> 的指针不可变； </li>
+<li data-line="16" dir="auto">（6）“<code>sizeof</code>&nbsp;引用”得到的是所指向的变量 (对象)的大小，而“<code>sizeof</code>&nbsp;指针”得到的是指针本身的大小；</li>
+<li data-line="17" dir="auto">（7）引用是类型安全的，而指针不是，引用比指针多了类型检查；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div><div class="el-table" dir="ltr" style="overflow-x: auto;"><table>
+<thead>
+<tr>
+<th dir="ltr">场景</th>
+<th dir="ltr">选择</th>
+<th dir="ltr">原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr">修改实参且确保非空</td>
+<td dir="ltr">引用</td>
+<td dir="ltr">简洁、安全（无空指针风险）</td>
+</tr>
+<tr>
+<td dir="ltr">参数可选（允许为空）</td>
+<td dir="ltr">指针</td>
+<td dir="ltr">可传<code>nullptr</code>表示无参数</td>
+</tr>
+<tr>
+<td dir="ltr">动态改变指向</td>
+<td dir="ltr">指针</td>
+<td dir="ltr">引用无法重绑定</td>
+</tr>
+<tr>
+<td dir="ltr">兼容 <code>C</code> 代码</td>
+<td dir="ltr">指针</td>
+<td dir="ltr"><code>C</code> 语言没有引用</td>
+</tr>
+<tr>
+<td dir="ltr">传递大对象（避免拷贝）</td>
+<td dir="ltr"><code>const</code> 引用</td>
+<td dir="ltr"><code>const int&amp;</code> 安全且无拷贝</td>
+</tr>
+</tbody>
+</table></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="代码示例" dir="auto" class="heading" id="代码示例"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>代码示例</h3><div class="heading-children"><div class="el-h4 heading-wrapper"><h4 data-heading="简单示例" dir="auto" class="heading" id="简单示例"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>简单示例</h4><div class="heading-children"><div class="el-p"><p dir="auto"><strong>代码</strong></p></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">#include &lt;iostream&gt;
+
+
+void Fun1(int number) 
+{
+    std::cout &lt;&lt; &amp;number &lt;&lt; std::endl;
+    std::cout &lt;&lt; number &lt;&lt; std::endl; 
+    number++;
+}
+
+void Fun2(int&amp; number)
+{
+    std::cout &lt;&lt; number &lt;&lt; std::endl;
+    std::cout &lt;&lt; &amp;number &lt;&lt; std::endl;
+    number++;
+}
+
+void Fun3(int* number)
+{
+    std::cout &lt;&lt; number &lt;&lt; std::endl;
+    std::cout &lt;&lt; &amp;number &lt;&lt; std::endl;
+    std::cout &lt;&lt; *number &lt;&lt; std::endl;
+
+    *number = *number + 1;
+    std::cout &lt;&lt; number &lt;&lt; std::endl;
+    std::cout &lt;&lt; &amp;number &lt;&lt; std::endl;
+    std::cout &lt;&lt; *number &lt;&lt; std::endl;
+}
+
+int main()
+{
+    int number = 10;
+    std::cout &lt;&lt; "Fun1():" &lt;&lt; std::endl;
+    Fun1(number);
+
+    std::cout &lt;&lt; "Fun2():" &lt;&lt; std::endl;
+    Fun2(number);
+
+
+    std::cout &lt;&lt; "Fun3():" &lt;&lt; std::endl;
+    Fun3(&amp;number);
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>运行截图：
+<ul>
+<li data-line="1" dir="auto"><span alt="Pasted image 20250111143310.png" src="Pasted image 20250111143310.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250111143310.png" src="lib/media/pasted-image-20250111143310.png"></span></li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析： 
+<ul>
+<li data-line="3" dir="auto">由运行结果可知：</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="4" dir="auto">值传递时，输出 <code>&amp;number</code> 得到的是局部参数在栈上的地址，输出 <code>number</code> 得到的是数值；</li>
+</ol>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="5" dir="auto">引用传递时，输出 <code>&amp;number</code> 得到的是 <code>main()</code> 函数执行 <code>int number</code> 后、在栈上分配的地址；</li>
+</ol>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="6" dir="auto">指针传递时，直接输出 <code>number</code> 得到的是内存地址，即 <code>main()</code> 函数执行 <code>int number</code> 后、在栈上分配的地址。而输出 <code>&amp;number</code> 表示对 <code>000000769F5AFA54</code> 进行寻址，得到其在栈上地址；</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h4 heading-wrapper"><h4 data-heading="`struct` 示例" dir="auto" class="heading" id="`struct`_示例"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>struct</code> 示例</h4><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>struct</code> 示例</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">#include &lt;iostream&gt;
+using namespace std;
+
+// 定义值类型结构体（包含大数组，拷贝成本极高）
+struct List {
+    int data[1000];
+    int len;
+    // 构造函数：初始化len为0
+    List() : len(0) {}
+};
+
+// 1. 指针传递：形参是List*（存储原结构体的地址副本）
+void ModifyListByPtr(List* listPtr) {
+    // 必须用-&gt;操作符访问成员（指针解引用+成员访问）
+    if (listPtr != nullptr) { // 必须判空，否则崩溃
+        listPtr-&gt;len = 10;    // 修改原结构体的len
+        listPtr-&gt;data[0] = 100; // 修改原结构体的数组
+        // 指针可重指向其他List对象（仅修改形参指针，不影响主调函数）
+        List temp;
+        listPtr = &amp;temp; 
+        listPtr-&gt;len = 20; // 仅修改temp，和原结构体无关
+    }
+}
+
+// 2. 引用传递：形参是List&amp;（原结构体的别名）
+void ModifyListByRef(List&amp; listRef) {
+    // 直接用.操作符访问成员（引用是别名，等价于操作原结构体）
+    listRef.len = 20;       // 修改原结构体的len
+    listRef.data[0] = 200;  // 修改原结构体的数组
+    // 错误：引用无法重绑定到其他对象（编译器强制约束）
+    // List temp;
+    // listRef = temp; // 这不是重绑定，是把temp的值拷贝给原结构体！
+}
+
+int main() {
+    List myList; // 定义原结构体（值类型，存储在栈上）
+    cout &lt;&lt; "修改前：len=" &lt;&lt; myList.len &lt;&lt; ", data[0]=" &lt;&lt; myList.data[0] &lt;&lt; endl;
+
+    // 指针传递调用：必须传地址（&amp;myList）
+    ModifyListByPtr(&amp;myList);
+    cout &lt;&lt; "指针传递后：len=" &lt;&lt; myList.len &lt;&lt; ", data[0]=" &lt;&lt; myList.data[0] &lt;&lt; endl; // len=10, data[0]=100
+
+    // 引用传递调用：直接传变量名（myList）
+    ModifyListByRef(myList);
+    cout &lt;&lt; "引用传递后：len=" &lt;&lt; myList.len &lt;&lt; ", data[0]=" &lt;&lt; myList.data[0] &lt;&lt; endl; // len=20, data[0]=200
+
+    return 0;
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">总结：</li>
+</ul></div><div class="el-table" dir="ltr" style="overflow-x: auto;"><table>
+<thead>
+<tr>
+<th dir="ltr">对比维度</th>
+<th dir="ltr">指针传递（<code>List*</code>）</th>
+<th dir="ltr">引用传递（<code>List&amp;</code>）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr">成员访问方式</td>
+<td dir="ltr">必须用<code>-&gt;</code>（如<code>listPtr-&gt;len</code>）</td>
+<td dir="ltr">直接用<code>.</code>（如<code>listRef.len</code>），更符合值类型的操作习惯</td>
+</tr>
+<tr>
+<td dir="ltr">空值处理</td>
+<td dir="ltr">允许传<code>nullptr</code>（需手动判空，否则<code>-&gt;</code>操作崩溃）</td>
+<td dir="ltr">必须初始化（只能传合法的 <code>List</code> 对象），无空引用，编译器强制非空</td>
+</tr>
+<tr>
+<td dir="ltr">重绑定能力</td>
+<td dir="ltr">形参指针可重指向其他 <code>List</code> 对象（如<code>listPtr = &amp;temp</code>），仅修改副本，不影响原结构体</td>
+<td dir="ltr">一旦绑定原结构体，无法重指向其他对象；若写<code>listRef = temp</code>，是<strong>值拷贝</strong>（把 temp 的值覆盖原结构体），而非重绑定</td>
+</tr>
+<tr>
+<td dir="ltr">拷贝开销</td>
+<td dir="ltr">仅传递地址（4/8 字节），无结构体拷贝</td>
+<td dir="ltr">仅传递地址（4/8 字节），无结构体拷贝</td>
+</tr>
+<tr>
+<td dir="ltr">语法安全性</td>
+<td dir="ltr">易出现空指针、野指针崩溃（如传 <code>nullptr</code> 未判空）</td>
+<td dir="ltr">更安全：编译器保证引用指向有效对象，无空指针风险</td>
+</tr>
+<tr>
+<td dir="ltr">函数调用写法</td>
+<td dir="ltr">必须传地址（<code>ModifyListByPtr(&amp;myList)</code>）</td>
+<td dir="ltr">直接传变量名（<code>ModifyListByRef(myList)</code>），更简洁</td>
+</tr>
+<tr>
+<td dir="ltr"><code>const</code> 适配</td>
+<td dir="ltr"><code>const List*</code>：需<code>(*listPtr).len</code>或<code>listPtr-&gt;len</code>（只读）</td>
+<td dir="ltr"><code>const List&amp;</code>：直接<code>listRef.len</code>（只读），语法更简洁（推荐用于只读场景）</td>
+</tr>
+</tbody>
+</table></div></div></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="右值引用" dir="auto" class="heading" id="右值引用"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>右值引用</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="右值引用基础概念" dir="auto" class="heading" id="右值引用基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>右值引用基础概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：右值基础概念</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：为什么需要右值引用
+<ul>
+<li data-line="1" dir="auto">右值引用主要用于解决不必要的 <code>Copy</code>，当程序在装载对象的时候经常会制造出临时对象；</li>
+<li data-line="2" dir="auto">而这是如果时 <code>Copy</code> 行为，因为要将这个对象完整复制一份，因此更加消耗性能。右值引用就是用于解决不必要的拷贝；</li>
+<li data-line="3" dir="auto">即当右手边是右值时，<strong>左手边可以直接引用右边的值</strong>，而无需重新分配内存；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：左值与右值
+<ul>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>左值与左值引用：
+<ul>
+<li data-line="6" dir="auto">左值就是变量，可以放在等于号的左右两边；</li>
+<li data-line="7" dir="auto"><code>int a = 5;</code></li>
+<li data-line="8" dir="auto"><code>int &amp;ref_a = a; // 左值引用指向左值，编译通过</code></li>
+<li data-line="9" dir="auto"><code>int &amp;ref_a = 5; // 左值引用指向了右值，会编译失败</code></li>
+<li data-line="10" dir="auto"><strong>引用是变量的别名，由于右值没有地址，没法被修改，所以左值引用无法指向右值</strong></li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>但是，<code>const</code> 左值引用是可以指向右值：
+<ul>
+<li data-line="12" dir="auto"><code>const int &amp;ref_a = 5;  // 编译通过</code></li>
+</ul>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>const</code> 左值引用不会修改指向值，因此可以指向右值，这也是为什么要使用 <code>const &amp;</code> 作为函数参数的原因之一，如 <code>std::vector</code> 的 <code>push_back</code>： 
+<ul>
+<li data-line="14" dir="auto"><code>void push_back (const value_type&amp; val);</code></li>
+</ul>
+</li>
+<li data-line="15" dir="auto">如果没有 <code>const</code>，<code>vec.push_back(5)</code> 这样的代码就无法编译通过了；</li>
+</ul>
+</li>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>右值与右值引用： 
+<ul>
+<li data-line="17" dir="auto">右值就是内容本身，只可以放在等于号的右边；</li>
+<li data-line="18" dir="auto">比如：临时对象 <code>string() = "World";</code> 此代码创建了一个 <code>String</code> 类型的临时对象；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="19" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>举例： 
+<ul>
+<li data-line="20" dir="auto">在下面的例子中，<code>foo</code> 返回的内容为右值，无法直接对其取地址；</li>
+<li data-line="21" dir="auto">在 <code>int x = foo()</code> 的时候，直接将“5”这个 <code>int</code> 类型的对象进行了复制，然后赋值到了 x 变量上；</li>
+</ul>
+</li>
+</ul></div><div class="el-pre"><pre class="language-cpp"><code data-line="0" class="language-cpp is-loaded"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream&gt;</span></span>
+<span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+<span class="token punctuation">{</span>
+    <span class="token keyword">int</span><span class="token operator">&amp;&amp;</span> s1 <span class="token operator">=</span> <span class="token number">123</span><span class="token punctuation">;</span> <span class="token comment">// 核心代码</span>
+    cout <span class="token operator">&lt;&lt;</span> <span class="token string">"s1的值: "</span> <span class="token operator">&lt;&lt;</span> s1 <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>       <span class="token comment">// 输出：123</span>
+    cout <span class="token operator">&lt;&lt;</span> <span class="token string">"s1的地址: "</span> <span class="token operator">&lt;&lt;</span> <span class="token operator">&amp;</span>s1 <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>    <span class="token comment">// 输出：s1有内存地址（证明是对象）</span>
+    s1 <span class="token operator">=</span> <span class="token number">456</span><span class="token punctuation">;</span>                               <span class="token comment">// 可以修改（右值引用是可修改的）</span>
+    cout <span class="token operator">&lt;&lt;</span> <span class="token string">"修改后s1的值: "</span> <span class="token operator">&lt;&lt;</span> s1 <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span> <span class="token comment">// 输出：456</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="1" dir="auto"><code>123</code> 是<strong>纯右值</strong>（没有内存地址），编译器会先创建一个<strong>临时的 int 对象</strong>（比如命名为 <code>temp</code>），值为 <code>123</code>，这个临时对象是 “将亡值（xvalue）”（属于右值的一种）</li>
+<li data-line="2" dir="auto">右值引用 <code>s1</code> 绑定到这个临时对象 <code>temp</code> 上。根据 <code>C++ </code> 标准规则：绑定到右值引用的临时对象，其生命周期会被延长至与引用变量（<code>s1</code>）的生命周期一致，直到 s 1 出作用域销毁；</li>
+<li data-line="3" dir="auto">此时 <code>s1</code> 不再是 “纯右值”，而是一个有名字的右值引用（本质是左值！因为它有内存地址、可被取址），可以被修改（如 <code>s1=456</code>）</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：
+<ul>
+<li data-line="5" dir="auto">对于 <code>int</code> 这类内置类型（<code>char</code>、<code>float</code>、<code>bool</code> 等），右值引用没有 “性能收益”；</li>
+<li data-line="6" dir="auto">因为 <code>int</code> 的大小只有 <code>4</code> 字节，“移动” 和 “拷贝” 都是直接复制值，没有资源（如堆内存、文件句柄）可转移。移动语义的价值体现在带资源的自定义类型（如 <code>std::string</code>、<code>std::vector</code>）上；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="右值引用语法" dir="auto" class="heading" id="右值引用语法"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>右值引用语法</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：右值引用的使用</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念： 
+<ul>
+<li data-line="1" dir="auto">右值引用的意义，就是<strong>右值引用可以使我们对右值取地址</strong>；</li>
+<li data-line="2" dir="auto">右值引用专门为右值而生，<strong>可以指向右值，不能指向左值</strong>；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>语法： 
+<ul>
+<li data-line="4" dir="auto"><code>&amp;&amp;</code></li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意： 
+<ul>
+<li data-line="6" dir="auto">执行指针的浅拷贝，上一根指针不可再被使用；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-cpp"><code data-line="0" class="language-cpp is-loaded"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream&gt;</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;vector&gt;</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string&gt;</span></span>
+
+<span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+<span class="token punctuation">{</span>
+    vector<span class="token operator">&lt;</span>string<span class="token operator">&gt;</span> vec<span class="token punctuation">;</span>
+    vec<span class="token punctuation">.</span><span class="token function">reserve</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 预分配空间，避免扩容</span>
+
+    <span class="token comment">// 1. 拷贝插入：创建临时string，拷贝到vec</span>
+    string s1 <span class="token operator">=</span> <span class="token string">"copy"</span><span class="token punctuation">;</span>
+    vec<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span>s1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    cout <span class="token operator">&lt;&lt;</span> <span class="token string">"s1（拷贝后）: "</span> <span class="token operator">&lt;&lt;</span> s1 <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span> <span class="token comment">// 输出：copy</span>
+
+    <span class="token comment">// 2. 移动插入：将临时string（右值）移动到vec</span>
+    string s2 <span class="token operator">=</span> <span class="token string">"move"</span><span class="token punctuation">;</span>
+    <span class="token comment">// 原本的 s2 是左值，但是通过 std::move 将其变成右值，并且push_back这些STL标准库的容器都提供了移动语义的接口，因此直接将 move(s2) 得到的右值引用的所有权移动到 vec 身上</span>
+    <span class="token comment">// 因此 s2 就失去了拥有权</span>
+    vec<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span><span class="token function">move</span><span class="token punctuation">(</span>s2<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    cout <span class="token operator">&lt;&lt;</span> <span class="token string">"s2（移动后）: "</span> <span class="token operator">&lt;&lt;</span> s2 <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span> <span class="token comment">// 输出：空</span>
+
+    <span class="token comment">// 3. emplace_back 直接构造（本质也是利用移动/构造优化）</span>
+    vec<span class="token punctuation">.</span><span class="token function">emplace_back</span><span class="token punctuation">(</span><span class="token string">"emplace"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 直接在vec的内存中构造string，无拷贝/移动</span>
+
+    cout <span class="token operator">&lt;&lt;</span> <span class="token string">"vec的元素: "</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">auto</span><span class="token operator">&amp;</span> s <span class="token operator">:</span> vec<span class="token punctuation">)</span> cout <span class="token operator">&lt;&lt;</span> s <span class="token operator">&lt;&lt;</span> <span class="token string">" "</span><span class="token punctuation">;</span> <span class="token comment">// 输出：copy move emplace</span>
+    cout <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>分析</strong>：右值引用的应用</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>STL</code> 当中的 <code>insert()</code> 函数；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析： 
+<ul>
+<li data-line="3" dir="auto">当使用 <code>insert(&amp;x)</code> 时，其本质上是进行的赋值；</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>当使用 <code>insert(&amp;&amp;x)</code> 时，其会有两种可能性：
+<ul>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>可能性一：传入右值
+<ul>
+<li data-line="6" dir="auto">此时将会调用执行传进来的对象“x”对应的 ctor 函数（右值引用的版本），通过构造函数获得对象浅拷贝的结果；</li>
+<li data-line="7" dir="auto">本质上就是直接把对象的指针直接偷过来，之后不可再使用其；</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>可能性二：传入左值
+<ul>
+<li data-line="9" dir="auto">传入的值为左值时，执行第一个重载</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="示例：右值引用与 `struct`" dir="auto" class="heading" id="示例：右值引用与_`struct`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>示例：右值引用与 <code>struct</code></h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：右值引用与 <code>struct</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">#include &lt;iostream&gt;
+using namespace std;
+
+struct List 
+{
+    int data[1000];
+    int len;
+    List() : len(0) {
+        cout &lt;&lt; "默认构造：分配栈上数组" &lt;&lt; endl;
+    }
+    
+    // 默认拷贝构造（编译器自动生成）：逐字节拷贝data[1000] + len
+    List(const List&amp; other) 
+    {
+        // 手动实现默认拷贝逻辑，便于观察
+        for (int i = 0; i &lt; 1000; i++) 
+        {
+            data[i] = other.data[i];
+        }
+        
+        len = other.len;
+        cout &lt;&lt; "拷贝构造：拷贝1000个int（开销大）" &lt;&lt; endl;
+    }
+};
+
+int main() 
+{
+    // 1. 创建临时List对象（右值）
+    List tempList;
+    tempList.data[0] = 100;
+    tempList.len = 1;
+
+    // 2. 右值引用绑定“即将销毁的右值”（用std::move将左值转为右值）
+    List&amp;&amp; rvalueRef = std::move(tempList); 
+    cout &lt;&lt; "右值引用访问：" &lt;&lt; rvalueRef.data[0] &lt;&lt; endl; // 输出100
+
+    // 3. 用右值引用初始化新对象：依然触发拷贝构造（无移动语义）
+    List newList = std::move(rvalueRef); 
+    return 0;
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="1" dir="auto"><code>data[1000]</code> 是栈上数组，栈内存的生命周期由作用域决定（随函数 / 对象销毁自动释放），无法转移所有权。即使绑定了右值引用，创建新对象时依然要完整拷贝 <code>1000</code> 个 <code>int</code>，移动语义在此场景下 “无效”；</li>
+<li data-line="2" dir="auto">若未自定义<strong>移动构造函数</strong>，编译器会优先调用拷贝构造函数处理右值（因为拷贝构造的参数 <code>const T&amp;</code> 可以绑定右值），导致即使是临时对象，也会触发高开销的拷贝；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto">示例：改造 <code>List</code></li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">struct List 
+{
+    int* data; // 堆上动态数组
+    int len;
+    int capacity; // 数组容量
+
+    // 1. 默认构造：分配堆上数组
+    List(int cap = 1000) : len(0), capacity(cap) {
+        data = new int[capacity]; // 堆上分配1000个int
+        cout &lt;&lt; "默认构造：分配堆上数组（地址：" &lt;&lt; (void*)data &lt;&lt; "）" &lt;&lt; endl;
+    }
+
+    // 2. 拷贝构造：深拷贝（完整复制堆上数组，开销大）
+    List(const List&amp; other) 
+    {
+        len = other.len;
+        capacity = other.capacity;
+        data = new int[capacity]; // 重新分配堆内存
+        for (int i = 0; i &lt; len; i++) {
+            data[i] = other.data[i]; // 逐元素拷贝
+        }
+        cout &lt;&lt; "拷贝构造：深拷贝堆数组（地址：" &lt;&lt; (void*)data &lt;&lt; "）" &lt;&lt; endl;
+    }
+
+    // 3. 析构函数：释放堆内存（避免泄漏）
+    ~List() {
+        if (data != nullptr) {
+            delete[] data;
+            cout &lt;&lt; "析构：释放堆数组（地址：" &lt;&lt; (void*)data &lt;&lt; "）" &lt;&lt; endl;
+            data = nullptr;
+        }
+    }
+
+    // 4. 移动构造函数（核心：右值引用参数 + 转移资源）
+    List(List&amp;&amp; other) noexcept // noexcept：告诉编译器无异常，容器会优先调用 
+    { 
+        // 转移资源所有权（仅拷贝指针，无数组拷贝）
+        data = other.data;
+        len = other.len;
+        capacity = other.capacity;
+
+        // 置空源对象的指针（避免析构时重复释放）
+        other.data = nullptr;
+        other.len = 0;
+        other.capacity = 0;
+
+        cout &lt;&lt; "移动构造：转移堆数组（地址：" &lt;&lt; (void*)data &lt;&lt; "）" &lt;&lt; endl;
+    }
+
+    // 5. 移动赋值运算符（处理a = std::move(b)场景）
+    List&amp; operator=(List&amp;&amp; other) noexcept {
+        if (this == &amp;other) 
+        { // 防止自赋值
+            return *this;
+        }
+
+        // 释放当前对象的堆资源
+        if (data != nullptr) 
+        {
+            delete[] data;
+        }
+
+        // 转移源对象的资源
+        data = other.data;
+        len = other.len;
+        capacity = other.capacity;
+
+        // 置空源对象
+        other.data = nullptr;
+        other.len = 0;
+        other.capacity = 0;
+
+        cout &lt;&lt; "移动赋值：转移堆数组（地址：" &lt;&lt; (void*)data &lt;&lt; "）" &lt;&lt; endl;
+        return *this;
+    }
+
+    // 禁用拷贝赋值（可选，突出移动语义）
+    List&amp; operator=(const List&amp; other) = delete;
+};
+
+int main() {
+    // 1. 创建临时List对象（右值）
+    List tempList;
+    tempList.data[0] = 100;
+    tempList.len = 1;
+
+    // 2. 用std::move将左值转为右值，触发移动构造
+    List newList = std::move(tempList); 
+
+    // 3. 验证：tempList的资源已被转移（指针为空）
+    cout &lt;&lt; "tempList.data是否为空：" &lt;&lt; (tempList.data == nullptr ? "是" : "否") &lt;&lt; endl;
+    cout &lt;&lt; "newList.data[0]：" &lt;&lt; newList.data[0] &lt;&lt; endl;
+
+    return 0;
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="移动语义" dir="auto" class="heading" id="移动语义"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>移动语义</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="左值和右值" dir="auto" class="heading" id="左值和右值"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>左值和右值</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：左值和右值</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">总结：</li>
+</ul></div><div class="el-table" dir="ltr" style="overflow-x: auto;"><table>
+<thead>
+<tr>
+<th dir="ltr">值类别</th>
+<th dir="ltr">定义</th>
+<th dir="ltr">例子</th>
+<th dir="ltr">能否被移动</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr">左值</td>
+<td dir="ltr">能取地址、生命周期长的对象（有名字）</td>
+<td dir="ltr"><code>int a = 10;</code> 中的<code>a</code>；<code>List list;</code> 中的<code>list</code></td>
+<td dir="ltr">可通过<code>std::move</code>转为右值后移动</td>
+</tr>
+<tr>
+<td dir="ltr">右值</td>
+<td dir="ltr">不能取地址、生命周期极短的对象（无名字）</td>
+<td dir="ltr">临时对象<code>List()</code>；函数返回的临时对象<code>createBigList()</code>；字面量<code>10</code></td>
+<td dir="ltr">天然可被移动</td>
+</tr>
+</tbody>
+</table></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="移动语义基本概念" dir="auto" class="heading" id="移动语义基本概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>移动语义基本概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：移动语义</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>引入：
+<ul>
+<li data-line="1" dir="auto"><code>C++11</code> 之前，对象的 “复制” 只有拷贝语义：当我们用一个对象初始化另一个对象（如 <code>List a = b;</code>），或给对象赋值（如 <code>a = b;</code>）时，编译器会调用拷贝构造函数 / 拷贝赋值运算符，对对象的所有资源（尤其是堆上资源，如动态数组、文件句柄、内存缓冲区）做 “深拷贝”—— 即重新分配一块内存，再把原对象的内容逐字节复制过去；</li>
+<li data-line="2" dir="auto">临时对象的资源 “拷贝完就扔”，完全没必要：移动语义的核心目标就是解决这种 “无意义拷贝” 的性能问题；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念： 
+<ul>
+<li data-line="4" dir="auto">将一个对象（通常是生命周期极短的右值）的「资源所有权」直接转移给另一个对象，而非复制资源本身；</li>
+<li data-line="5" dir="auto">当传入的值为左值，但是你明确的知道此左值再未来不会被再进行操作，此时就可以在传入参数时用 <code>std::move()</code> 将其指明为右值进行传入，从而进行浅拷贝；</li>
+<li data-line="6" dir="auto"><code>std::move</code>（函数，<code>&lt;utility&gt;</code>）是将左值转为右值引用；<code>std::move</code>（算法，<code>&lt;algorithm&gt;</code>）是将一个范围的元素<strong>移动</strong>到另一个范围，避免拷贝元素；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：
+<ul>
+<li data-line="8" dir="auto">很多人误以为 <code>std::move</code> 会 “移动资源”，这是典型误区；</li>
+<li data-line="9" dir="auto"><code>std::move</code> 的唯一作用是：将传入的参数（无论左值 / 右值）强制转换成对应的右值引用类型，它本身不执行任何内存操作、不转移任何资源</li>
+<li data-line="10" dir="auto">
+<pre class="language-none"><code data-line="10" class="language-C++ language-none is-loaded">  // 模板版本（简化）
+template &lt;typename T&gt;
+typename remove_reference&lt;T&gt;::type&amp;&amp; move(T&amp;&amp; t) noexcept {
+    // 核心：静态转换为右值引用
+    return static_cast&lt;typename remove_reference&lt;T&gt;::type&amp;&amp;&gt;(t);
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+</li>
+<li data-line="18" dir="auto">它的本质是一个<strong>类型转换函数</strong>，没有任何逻辑（如内存拷贝、资源转移），只是改变了参数的 “值类别”（左值 → 右值引用）</li>
+</ul>
+</li>
+<li data-line="19" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>语法： 
+<ul>
+<li data-line="20" dir="auto"><code>std::move()</code></li>
+</ul>
+</li>
+<li data-line="21" dir="auto">举例：</li>
+</ul></div><div class="el-pre"><pre class="language-cpp"><code data-line="0" class="language-cpp is-loaded"><span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span> <span class="token comment">// a是个左值</span>
+<span class="token keyword">int</span> <span class="token operator">&amp;</span>ref_a_left <span class="token operator">=</span> a<span class="token punctuation">;</span> <span class="token comment">// 左值引用指向左值</span>
+<span class="token keyword">int</span> <span class="token operator">&amp;&amp;</span>ref_a_right <span class="token operator">=</span> std<span class="token double-colon punctuation">::</span><span class="token function">move</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 通过std::move将左值转化为右值，可以被右值引用指向</span>
+ 
+cout <span class="token operator">&lt;&lt;</span> a<span class="token punctuation">;</span> <span class="token comment">// 打印结果：5</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="代码示例" dir="auto" class="heading" id="代码示例"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>代码示例</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：移动语义在 <code>STL</code> 中的使用</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">移动语义（基于右值引用 <code>T&amp;&amp;</code>）的核心是资源转移而非拷贝，<code>STL</code>（标准模板库）中的容器、算法、工具函数都广泛实现了移动语义，目的是<strong>避免不必要的深拷贝</strong>，大幅提升性能；</li>
+<li data-line="2" dir="auto">所有 <code>STL</code> 容器（如 <code>vector</code>、<code>string</code>、<code>map</code> 等）都默认实现了移动构造函数和移动赋值运算符；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto">示例：<code>STL</code> 容器的移动构造与移动赋值</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+
+using namespace std;
+
+void printVector(const vector&lt;string&gt;&amp; v, const string&amp; name) {
+    cout &lt;&lt; name &lt;&lt; " size: " &lt;&lt; v.size() &lt;&lt; ", data: ";
+    for (const auto&amp; s : v) cout &lt;&lt; s &lt;&lt; " ";
+    cout &lt;&lt; endl;
+}
+
+int main() {
+    // 1. 构造一个包含大量数据的vector
+    vector&lt;string&gt; vec1 = {"apple", "banana", "cherry", "date"};
+    printVector(vec1, "vec1（移动前）");
+
+    // 2. 移动构造 vec2：将vec1的资源的所有权转移给vec2
+    vector&lt;string&gt; vec2(std::move(vec1));
+    printVector(vec2, "vec2（移动构造后）");
+    printVector(vec1, "vec1（被移动后）"); // 移动后vec1处于"有效但未指定"状态（通常为空）
+
+    // 3. 移动赋值vec3
+    vector&lt;string&gt; vec3;
+    vec3 = move(vec2);
+    printVector(vec3, "vec3（移动赋值后）");
+    printVector(vec2, "vec2（移动后）");
+
+    return 0;
+}
+
+// 结果：
+vec1（移动前） size: 4, data: apple banana cherry date 
+vec2（移动构造后） size: 4, data: apple banana cherry date 
+vec1（移动后） size: 0, data: 
+vec3（移动赋值后） size: 4, data: apple banana cherry date 
+vec2（移动后） size: 0, data: 
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="1" dir="auto"><code>vector&lt;string&gt; vec2(move(vec1))</code>：调用 <code>vector</code> 的移动构造函数，仅转移 <code>vec1</code> 的内存指针（而非拷贝字符串数据），时间复杂度 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D442 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c></mjx-mn><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math></mjx-container></span></li>
+<li data-line="2" dir="auto">移动后原对象（<code>vec1</code>）的状态：<code>C++</code> 标准规定其处于 “有效但未指定” 状态（通常为空），不能再依赖其原有数据，但可以安全地调用析构函数或重新赋值； </li>
+</ul>
+</li>
+<li data-line="3" dir="auto">示例：函数返回 <code>STL</code> 容器时的移动语义</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+// 函数返回一个大vector
+vector&lt;int&gt; createBigVector() {
+    vector&lt;int&gt; vec(1000000, 1); // 100万个元素
+    cout &lt;&lt; "函数内vec的地址: " &lt;&lt; &amp;vec[0] &lt;&lt; endl;
+    return move(vec); // 显式移动（也可省略，编译器会自动优化）
+}
+
+int main() 
+{
+    vector&lt;int&gt; result = createBigVector();
+    cout &lt;&lt; "main中result的地址: " &lt;&lt; &amp;result[0] &lt;&lt; endl;
+    cout &lt;&lt; "result大小: " &lt;&lt; result.size() &lt;&lt; endl;
+    return 0;
+}
+
+// 结果：
+函数内vec的地址: 0x55f8a7a2a010
+main中result的地址: 0x55f8a7a2a010
+result大小: 1000000
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="1" dir="auto">返回的 <code>vec</code> 是局部对象（右值），编译器会自动调用移动构造函数，将 <code>vec</code> 的内存缓冲区直接转移给 <code>result</code>，而非拷贝 100 万个 int；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto">示例：移动元素</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+#include &lt;algorithm&gt; // std::move算法的头文件
+
+using namespace std;
+
+int main() {
+    vector&lt;string&gt; src = {"hello", "world", "move", "semantics"};
+    vector&lt;string&gt; dest(src.size()); // 预分配空间
+
+    // 使用std::move算法，将src的元素移动到dest
+    move(src.begin(), src.end(), dest.begin());
+
+    cout &lt;&lt; "dest的元素: ";
+    for (const auto&amp; s : dest) cout &lt;&lt; s &lt;&lt; " "; // 输出：hello world move semantics
+    cout &lt;&lt; endl;
+
+    cout &lt;&lt; "src的元素（移动后）: ";
+    for (const auto&amp; s : src) cout &lt;&lt; "[" &lt;&lt; s &lt;&lt; "] "; 
+    // 输出：[] [] [] []（string移动后变为空）
+    cout &lt;&lt; endl;
+
+    return 0;
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`Forwarding`" dir="auto" class="heading" id="`Forwarding`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Forwarding</code></h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：转交</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：不完美转交
+<ul>
+<li data-line="1" dir="auto">当一个函数在参数中接受右值时，会将此右值当成变量成为另一个函数的参数；</li>
+<li data-line="2" dir="auto">传入到此函数当中的另一个函数时，其作为参数传入进来的值在使用时就又变为了左值。此时就是不完美转交；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：完美转交
+<ul>
+<li data-line="4" dir="auto"><code>std::forward&lt;T1&gt;(t1)</code></li>
+</ul>
+</li>
+<li data-line="5" dir="auto">举例：</li>
+</ul></div><div class="el-pre"><pre class="language-cpp"><code data-line="0" class="language-cpp is-loaded"><span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">T1</span><span class="token punctuation">,</span><span class="token keyword">typename</span> <span class="token class-name">T2</span><span class="token operator">&gt;</span>
+<span class="token keyword">void</span> <span class="token function">functionA</span><span class="token punctuation">(</span>T1<span class="token operator">&amp;&amp;</span> t1<span class="token punctuation">,</span>T2<span class="token operator">&amp;&amp;</span> t2<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+	<span class="token function">functionB</span><span class="token punctuation">(</span>std<span class="token double-colon punctuation">::</span><span class="token generic-function"><span class="token function">forward</span><span class="token generic class-name"><span class="token operator">&lt;</span>T1<span class="token operator">&gt;</span></span></span><span class="token punctuation">(</span>t1<span class="token punctuation">)</span><span class="token punctuation">,</span>std<span class="token double-colon punctuation">::</span><span class="token generic-function"><span class="token function">forward</span><span class="token generic class-name"><span class="token operator">&lt;</span>T2<span class="token operator">&gt;</span></span></span><span class="token punctuation">(</span>t2<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="mod-footer mod-ui"></div></div></div></div></div></div></div></div><div class="sidebar-right sidebar"><div class="sidebar-topbar"><div class="topbar-content"></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"></div><script defer="">let rs = document.querySelector(".sidebar-right"); rs.classList.add("is-collapsed"); if (window.innerWidth > 768) rs.classList.remove("is-collapsed"); rs.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-right-width"));</script></div></div></body></html>

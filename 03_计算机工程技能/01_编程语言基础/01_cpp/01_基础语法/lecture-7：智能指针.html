@@ -1,0 +1,477 @@
+<!DOCTYPE html> <html><head>
+		<title>Lecture 7：智能指针</title>
+		<base href="..\..\..\../">
+		<meta id="root-path" root-path="..\..\..\../">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
+		<meta charset="UTF-8">
+		<meta name="description" content="MUBlog - Lecture 7：智能指针">
+		<meta property="og:title" content="Lecture 7：智能指针">
+		<meta property="og:description" content="MUBlog - Lecture 7：智能指针">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="03_计算机工程技能/01_编程语言基础/01_cpp/01_基础语法/lecture-7：智能指针.html">
+		<meta property="og:image" content="lib\media\pasted-image-20250114153040.png">
+		<meta property="og:site_name" content="MUBlog">
+		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="lib/rss.xml"><script async="" id="webpage-script" src="lib/scripts/webpage.js" onload="this.onload=null;this.setAttribute(&quot;loaded&quot;, &quot;true&quot;)"></script><link rel="icon" href="lib/media/favicon.png"><style>body{--line-width:40em;--line-width-adaptive:40em;--file-line-width:40em;--sidebar-width:min(20em, 80vw);--collapse-arrow-size:11px;--tree-horizontal-spacing:0.6em;--tree-vertical-spacing:0.6em;--sidebar-margin:12px}.sidebar{height:100%;min-width:calc(var(--sidebar-width) + var(--divider-width-hover));max-width:calc(var(--sidebar-width) + var(--divider-width-hover));font-size:14px;z-index:10;position:relative;overflow:hidden;transition:min-width ease-in-out,max-width ease-in-out;transition-duration:.2s;contain:size}.sidebar-left{left:0}.sidebar-right{right:0}.sidebar.is-collapsed{min-width:0;max-width:0}body.floating-sidebars .sidebar{position:absolute}.sidebar-content{height:100%;min-width:calc(var(--sidebar-width) - var(--divider-width-hover));top:0;padding:var(--sidebar-margin);padding-top:4em;line-height:var(--line-height-tight);background-color:var(--background-secondary);transition:background-color,border-right,border-left,box-shadow;transition-duration:var(--color-fade-speed);transition-timing-function:ease-in-out;position:absolute;display:flex;flex-direction:column}.sidebar:not(.is-collapsed) .sidebar-content{min-width:calc(max(100%,var(--sidebar-width)) - 3px);max-width:calc(max(100%,var(--sidebar-width)) - 3px)}.sidebar-left .sidebar-content{left:0;border-top-right-radius:var(--radius-l);border-bottom-right-radius:var(--radius-l)}.sidebar-right .sidebar-content{right:0;border-top-left-radius:var(--radius-l);border-bottom-left-radius:var(--radius-l)}.sidebar:has(.sidebar-content:empty):has(.topbar-content:empty){display:none}.sidebar-topbar{height:2em;width:var(--sidebar-width);top:var(--sidebar-margin);padding-inline:var(--sidebar-margin);z-index:1;position:fixed;display:flex;align-items:center;transition:width ease-in-out;transition-duration:inherit}.sidebar.is-collapsed .sidebar-topbar{width:calc(2.3em + var(--sidebar-margin) * 2)}.sidebar .sidebar-topbar.is-collapsed{width:0}.sidebar-left .sidebar-topbar{left:0}.sidebar-right .sidebar-topbar{right:0}.topbar-content{overflow:hidden;overflow:clip;width:100%;height:100%;display:flex;align-items:center;transition:inherit}.sidebar.is-collapsed .topbar-content{width:0;transition:inherit}.clickable-icon.sidebar-collapse-icon{background-color:transparent;color:var(--icon-color-focused);padding:0!important;margin:0!important;height:100%!important;width:2.3em!important;margin-inline:0.14em!important;position:absolute}.sidebar-left .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);right:var(--sidebar-margin)}.sidebar-right .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);left:var(--sidebar-margin)}.clickable-icon.sidebar-collapse-icon svg.svg-icon{width:100%;height:100%}.sidebar-section-header{margin:0 0 1em 0;text-transform:uppercase;letter-spacing:.06em;font-weight:600}body{transition:background-color var(--color-fade-speed) ease-in-out}.webpage-container{display:flex;flex-direction:row;height:100%;width:100%;align-items:stretch;justify-content:center}.document-container{opacity:1;flex-basis:100%;max-width:100%;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;transition:opacity .2s ease-in-out;contain:inline-size}.hide{opacity:0;transition:opacity .2s ease-in-out}.document-container>.markdown-preview-view{margin:var(--sidebar-margin);margin-bottom:0;width:100%;width:-webkit-fill-available;width:-moz-available;width:fill-available;background-color:var(--background-primary);transition:background-color var(--color-fade-speed) ease-in-out;border-top-right-radius:var(--window-radius,var(--radius-m));border-top-left-radius:var(--window-radius,var(--radius-m));overflow-x:hidden!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;contain:inline-size}.document-container>.markdown-preview-view>.markdown-preview-sizer{padding-bottom:80vh!important;width:100%!important;max-width:var(--line-width)!important;flex-basis:var(--line-width)!important;transition:background-color var(--color-fade-speed) ease-in-out;contain:inline-size}.markdown-rendered img:not([width]),.view-content img:not([width]){max-width:100%;outline:0}.document-container>.view-content.embed{display:flex;padding:1em;height:100%;width:100%;align-items:center;justify-content:center}.document-container>.view-content.embed>*{max-width:100%;max-height:100%;object-fit:contain}:has(> :is(.math,table)){overflow-x:auto!important}.document-container>.view-content{overflow-x:auto;contain:content;padding:0;margin:0;height:100%}.scroll-highlight{position:absolute;width:100%;height:100%;pointer-events:none;z-index:1000;background-color:hsla(var(--color-accent-hsl),.25);opacity:0;padding:1em;inset:50%;translate:-50% -50%;border-radius:var(--radius-s)}</style><script defer="">async function loadIncludes(){if("file:"!=location.protocol){let e=document.querySelectorAll("include");for(let t=0;t<e.length;t++){let o=e[t],l=o.getAttribute("src");try{const e=await fetch(l);if(!e.ok){console.log("Could not include file: "+l),o?.remove();continue}let t=await e.text(),n=document.createRange().createContextualFragment(t),i=Array.from(n.children);for(let e of i)e.classList.add("hide"),e.style.transition="opacity 0.5s ease-in-out",setTimeout((()=>{e.classList.remove("hide")}),10);o.before(n),o.remove(),console.log("Included file: "+l)}catch(e){o?.remove(),console.log("Could not include file: "+l,e);continue}}}else{if(document.querySelectorAll("include").length>0){var e=document.createElement("div");e.id="error",e.textContent="Web server exports must be hosted on an http / web server to be viewed correctly.",e.style.position="fixed",e.style.top="50%",e.style.left="50%",e.style.transform="translate(-50%, -50%)",e.style.fontSize="1.5em",e.style.fontWeight="bold",e.style.textAlign="center",document.body.appendChild(e),document.querySelector(".document-container")?.classList.remove("hide")}}}document.addEventListener("DOMContentLoaded",(()=>{loadIncludes()}));let isFileProtocol="file:"==location.protocol;function waitLoadScripts(e,t){let o=e.map((e=>document.getElementById(e+"-script"))),l=0;!function e(){let n=o[l];l++,n&&"true"!=n.getAttribute("loaded")||l<o.length&&e(),l<o.length?n.addEventListener("load",e):t()}()}</script><link rel="stylesheet" href="lib/styles/obsidian.css"><link rel="stylesheet" href="lib/styles/theme.css"><link rel="preload" href="lib/styles/global-variable-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/global-variable-styles.css"></noscript><link rel="preload" href="lib/styles/supported-plugins.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/supported-plugins.css"></noscript><link rel="preload" href="lib/styles/main-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/main-styles.css"></noscript><link rel="preload" href="lib/styles/snippets.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/snippets.css"></noscript></head><body class="publish css-settings-manager styled-scrollbars show-inline-title theme-light ctp-rosepine-light ctp-mocha ctp-accent-rosewater anuppuccin-accent-toggle anp-current-line-border anp-callout-color-toggle anp-codeblock-numbers anp-list-toggle anp-table-width anp-toggle-preview anp-color-transition-toggle anp-button-metadata-toggle anp-toggle-metadata anp-toggle-scrollbars anp-h1-red anp-h1-divider anp-h2-peach anp-h3-green anp-h4-teal anp-h5-lavender anp-h6-mauve anp-decoration-toggle anp-bold-maroon anp-italic-green anp-highlight-yellow anp-colorful-frame-icon-toggle-dark anp-simple-rainbow-color-toggle anp-rainbow-file-toggle anp-simple-rainbow-title-toggle anp-simple-rainbow-icon-folder-toggle anp-simple-rainbow-indentation-toggle anp-simple-rainbow-collapse-toggle anp-card-layout anp-card-shadows anp-card-layout-filebrowser anp-theme-ext-light anp-theme-ext-dark anp-theme-ext-amoled ctp-atom-light ctp-atom-dark table-type-three-line table-header-color-blue table-row-alt-background-option table-dark-mode"><script defer="">let theme=localStorage.getItem("theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");"dark"==theme?(document.body.classList.add("theme-dark"),document.body.classList.remove("theme-light")):(document.body.classList.add("theme-light"),document.body.classList.remove("theme-dark")),window.innerWidth<480?document.body.classList.add("is-phone"):window.innerWidth<768?document.body.classList.add("is-tablet"):window.innerWidth<1024?document.body.classList.add("is-small-screen"):document.body.classList.add("is-large-screen")</script><div class="webpage-container workspace"><div class="sidebar-left sidebar"><div class="sidebar-topbar"><div class="topbar-content"><label class="theme-toggle-container" for="theme_toggle"><input class="theme-toggle-input" type="checkbox" id="theme_toggle"><div class="toggle-background"></div></label></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"><include src="lib/html/file-tree.html"></include></div><script defer="">let ls = document.querySelector(".sidebar-left"); ls.classList.add("is-collapsed"); if (window.innerWidth > 768) ls.classList.remove("is-collapsed"); ls.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-left-width"));</script></div><div class="document-container markdown-reading-view hide"><div class="markdown-preview-view markdown-rendered allow-fold-headings allow-fold-lists is-readable-line-width"><style id="MJX-CHTML-styles">mjx-c.mjx-c1D463.TEX-I::before{padding:.443em .485em .011em 0;content:"v"}mjx-c.mjx-c1D45D.TEX-I::before{padding:.442em .503em .194em 0;content:"p"}mjx-c.mjx-c1D461.TEX-I::before{padding:.626em .361em .011em 0;content:"t"}mjx-c.mjx-c1D45F.TEX-I::before{padding:.442em .451em .011em 0;content:"r"}mjx-c.mjx-c2192::before{padding:.511em 1em .011em 0;content:"→"}mjx-c.mjx-c1D44E.TEX-I::before{padding:.441em .529em .01em 0;content:"a"}mjx-c.mjx-c1D44F.TEX-I::before{padding:.694em .429em .011em 0;content:"b"}mjx-c.mjx-c1D459.TEX-I::before{padding:.694em .298em .011em 0;content:"l"}mjx-c.mjx-c1D452.TEX-I::before{padding:.442em .466em .011em 0;content:"e"}mjx-container[jax=CHTML]{line-height:0}mjx-container [space="1"]{margin-left:.111em}mjx-container [space="2"]{margin-left:.167em}mjx-container [space="3"]{margin-left:.222em}mjx-container [space="4"]{margin-left:.278em}mjx-container [space="5"]{margin-left:.333em}mjx-container [rspace="1"]{margin-right:.111em}mjx-container [rspace="2"]{margin-right:.167em}mjx-container [rspace="3"]{margin-right:.222em}mjx-container [rspace="4"]{margin-right:.278em}mjx-container [rspace="5"]{margin-right:.333em}mjx-container [size="s"]{font-size:70.7%}mjx-container [size=ss]{font-size:50%}mjx-container [size=Tn]{font-size:60%}mjx-container [size=sm]{font-size:85%}mjx-container [size=lg]{font-size:120%}mjx-container [size=Lg]{font-size:144%}mjx-container [size=LG]{font-size:173%}mjx-container [size=hg]{font-size:207%}mjx-container [size=HG]{font-size:249%}mjx-container [width=full]{width:100%}mjx-box{display:inline-block}mjx-block{display:block}mjx-itable{display:inline-table}mjx-row{display:table-row}mjx-row>*{display:table-cell}mjx-mtext{display:inline-block}mjx-mstyle{display:inline-block}mjx-merror{display:inline-block;color:red;background-color:#ff0}mjx-mphantom{visibility:hidden}mjx-assistive-mml{top:0;left:0;clip:rect(1px,1px,1px,1px);user-select:none;position:absolute!important;padding:1px 0 0!important;border:0!important;display:block!important;width:auto!important;overflow:hidden!important}mjx-assistive-mml[display=block]{width:100%!important}mjx-math{display:inline-block;text-align:left;line-height:0;text-indent:0;font-style:normal;font-weight:400;font-size:100%;font-size-adjust:none;letter-spacing:normal;border-collapse:collapse;overflow-wrap:normal;word-spacing:normal;white-space:nowrap;direction:ltr;padding:1px 0}mjx-container[jax=CHTML][display=true]{display:block;text-align:center;margin:1em 0}mjx-container[jax=CHTML][display=true][width=full]{display:flex}mjx-container[jax=CHTML][display=true] mjx-math{padding:0}mjx-container[jax=CHTML][justify=left]{text-align:left}mjx-container[jax=CHTML][justify=right]{text-align:right}mjx-mi{display:inline-block;text-align:left}mjx-c{display:inline-block}mjx-utext{display:inline-block;padding:.75em 0 .2em}mjx-mo{display:inline-block;text-align:left}mjx-stretchy-h{display:inline-table;width:100%}mjx-stretchy-h>*{display:table-cell;width:0}mjx-stretchy-h>*>mjx-c{display:inline-block;transform:scaleX(1)}mjx-stretchy-h>*>mjx-c::before{display:inline-block;width:initial}mjx-stretchy-h>mjx-ext{overflow:clip visible;width:100%}mjx-stretchy-h>mjx-ext>mjx-c::before{transform:scaleX(500)}mjx-stretchy-h>mjx-ext>mjx-c{width:0}mjx-stretchy-h>mjx-beg>mjx-c{margin-right:-.1em}mjx-stretchy-h>mjx-end>mjx-c{margin-left:-.1em}mjx-stretchy-v{display:inline-block}mjx-stretchy-v>*{display:block}mjx-stretchy-v>mjx-beg{height:0}mjx-stretchy-v>mjx-end>mjx-c{display:block}mjx-stretchy-v>*>mjx-c{transform:scaleY(1);transform-origin:left center;overflow:hidden}mjx-stretchy-v>mjx-ext{display:block;height:100%;box-sizing:border-box;border:0 solid transparent;overflow:visible clip}mjx-stretchy-v>mjx-ext>mjx-c::before{width:initial;box-sizing:border-box}mjx-stretchy-v>mjx-ext>mjx-c{transform:scaleY(500) translateY(.075em);overflow:visible}mjx-mark{display:inline-block;height:0}mjx-mn{display:inline-block;text-align:left}mjx-c::before{display:block;width:0}.MJX-TEX{font-family:MJXZERO,MJXTEX}.TEX-B{font-family:MJXZERO,MJXTEX-B}.TEX-I{font-family:MJXZERO,MJXTEX-I}.TEX-MI{font-family:MJXZERO,MJXTEX-MI}.TEX-BI{font-family:MJXZERO,MJXTEX-BI}.TEX-S1{font-family:MJXZERO,MJXTEX-S1}.TEX-S2{font-family:MJXZERO,MJXTEX-S2}.TEX-S3{font-family:MJXZERO,MJXTEX-S3}.TEX-S4{font-family:MJXZERO,MJXTEX-S4}.TEX-A{font-family:MJXZERO,MJXTEX-A}.TEX-C{font-family:MJXZERO,MJXTEX-C}.TEX-CB{font-family:MJXZERO,MJXTEX-CB}.TEX-FR{font-family:MJXZERO,MJXTEX-FR}.TEX-FRB{font-family:MJXZERO,MJXTEX-FRB}.TEX-SS{font-family:MJXZERO,MJXTEX-SS}.TEX-SSB{font-family:MJXZERO,MJXTEX-SSB}.TEX-SSI{font-family:MJXZERO,MJXTEX-SSI}.TEX-SC{font-family:MJXZERO,MJXTEX-SC}.TEX-T{font-family:MJXZERO,MJXTEX-T}.TEX-V{font-family:MJXZERO,MJXTEX-V}.TEX-VB{font-family:MJXZERO,MJXTEX-VB}mjx-stretchy-h mjx-c,mjx-stretchy-v mjx-c{font-family:MJXZERO,MJXTEX-S1,MJXTEX-S4,MJXTEX,MJXTEX-A!important}@font-face{font-family:MJXZERO;src:url("lib/fonts/mathjax_zero.woff") format("woff")}@font-face{font-family:MJXTEX;src:url("lib/fonts/mathjax_main-regular.woff") format("woff")}@font-face{font-family:MJXTEX-B;src:url("lib/fonts/mathjax_main-bold.woff") format("woff")}@font-face{font-family:MJXTEX-I;src:url("lib/fonts/mathjax_math-italic.woff") format("woff")}@font-face{font-family:MJXTEX-MI;src:url("lib/fonts/mathjax_main-italic.woff") format("woff")}@font-face{font-family:MJXTEX-BI;src:url("lib/fonts/mathjax_math-bolditalic.woff") format("woff")}@font-face{font-family:MJXTEX-S1;src:url("lib/fonts/mathjax_size1-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S2;src:url("lib/fonts/mathjax_size2-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S3;src:url("lib/fonts/mathjax_size3-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S4;src:url("lib/fonts/mathjax_size4-regular.woff") format("woff")}@font-face{font-family:MJXTEX-A;src:url("lib/fonts/mathjax_ams-regular.woff") format("woff")}@font-face{font-family:MJXTEX-C;src:url("lib/fonts/mathjax_calligraphic-regular.woff") format("woff")}@font-face{font-family:MJXTEX-CB;src:url("lib/fonts/mathjax_calligraphic-bold.woff") format("woff")}@font-face{font-family:MJXTEX-FR;src:url("lib/fonts/mathjax_fraktur-regular.woff") format("woff")}@font-face{font-family:MJXTEX-FRB;src:url("lib/fonts/mathjax_fraktur-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SS;src:url("lib/fonts/mathjax_sansserif-regular.woff") format("woff")}@font-face{font-family:MJXTEX-SSB;src:url("lib/fonts/mathjax_sansserif-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SSI;src:url("lib/fonts/mathjax_sansserif-italic.woff") format("woff")}@font-face{font-family:MJXTEX-SC;src:url("lib/fonts/mathjax_script-regular.woff") format("woff")}@font-face{font-family:MJXTEX-T;src:url("lib/fonts/mathjax_typewriter-regular.woff") format("woff")}@font-face{font-family:MJXTEX-V;src:url("lib/fonts/mathjax_vector-regular.woff") format("woff")}@font-face{font-family:MJXTEX-VB;src:url("lib/fonts/mathjax_vector-bold.woff") format("woff")}mjx-c.mjx-c1D442.TEX-I::before{padding:.704em .763em .022em 0;content:"O"}mjx-c.mjx-c28::before{padding:.75em .389em .25em 0;content:"("}mjx-c.mjx-c31::before{padding:.666em .5em 0 0;content:"1"}mjx-c.mjx-c29::before{padding:.75em .389em .25em 0;content:")"}</style><div class="markdown-preview-sizer markdown-preview-section"><h1 class="page-title heading inline-title" id="Lecture 7：智能指针"><p dir="auto">Lecture 7：智能指针</p></h1><div class="el-h2 heading-wrapper"><h2 data-heading="为什么需要智能指针" dir="auto" class="heading" id="为什么需要智能指针"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>为什么需要智能指针</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：为什么需要智能指针</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">智能指针就是帮我们 <code>C++</code> 程序员管理动态分配的内存的，它会帮助我们自动释放 <code>new</code> 出来的内存，从而<strong>避免内存泄漏</strong>； </li>
+<li data-line="1" dir="auto">比如 <code>new</code> 了一个字符串指针，但是没有 <code>delete</code> 就已经 <code>return</code> 结束函数了，导致内存没有被释放，内存泄露；</li>
+<li data-line="2" dir="auto">使用指针，我们没有释放，就会造成内存泄露。但是我们使用普通的对象却不会；</li>
+<li data-line="3" dir="auto">因此，如果我们分配的动态内存都交由有生命周期的对象来处理，那么在对象过期时，让它的析构函数删除指向的内存就可以避免上述的内存泄露；</li>
+</ul></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`auto_ptr`" dir="auto" class="heading" id="`auto_ptr`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>auto_ptr</code></h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`auto_ptr` 基础概念" dir="auto" class="heading" id="`auto_ptr`_基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>auto_ptr</code> 基础概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：什么是 <code>auto_ptr</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念： 
+<ul>
+<li data-line="1" dir="auto"><code>auto_ptr</code> 是 <code>c++</code> 定义的智能指针模板，其定义了管理指针的对象，可以将 <code>new</code> 获得（直接或间接）的地址赋给这种对象；</li>
+<li data-line="2" dir="auto">当对象过期时，其析构函数将使用 <code>delete</code> 来释放内存；</li>
+<li data-line="3" dir="auto">智能指针重载了 <code>*</code> 和 <code>-&gt;</code> 运算符， <code>*</code> 返回普通对象，而 <code>-&gt;</code> 返回指针对象；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>用法： 
+<ul>
+<li data-line="5" dir="auto">引用头文件：<code>#include &lt;memory&gt;</code></li>
+<li data-line="6" dir="auto">使用：<code>auto_ptr&lt;类型&gt; 变量名(new 类型)</code></li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意： 
+<ul>
+<li data-line="8" dir="auto"><code>C++11</code> 之后已经废弃了 <code>auto_ptr</code>，转而使用 <code>unique_ptr</code> 代替；</li>
+</ul>
+</li>
+<li data-line="9" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">class Test {
+public:
+	Test() { cout &lt;&lt; "Test的构造函数..." &lt;&lt; endl; }
+	~Test() { cout &lt;&lt; "Test的析构函数..." &lt;&lt; endl; }
+
+	int getDebug() { return this-&gt;debug; }
+
+private:
+	int debug = 20;
+};
+
+int main(void) 
+{
+	// 定义智能指针
+	auto_ptr&lt;Test&gt; test(new Test);
+
+	// 使用智能指针，和普通的指针一样
+	cout &lt;&lt; "test-&gt;debug：" &lt;&lt; test-&gt;getDebug() &lt;&lt; endl;
+	cout &lt;&lt; "(*test).debug：" &lt;&lt; (*test).getDebug() &lt;&lt; endl;
+
+	return 0;
+} 
+
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`auto_ptr` 常用方法" dir="auto" class="heading" id="`auto_ptr`_常用方法"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>auto_ptr</code> 常用方法</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>方法</strong>：<code>get()</code> </p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>作用： 
+<ul>
+<li data-line="1" dir="auto">获取智能指针托管的指针地址；</li>
+<li data-line="2" dir="auto">但我们一般不会这样使用，因为都可以直接使用智能指针去操作；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">// 定义智能指针
+auto_ptr&lt;Test&gt; test(new Test);
+
+Test *tmp = test.get();		// 获取指针返回
+cout &lt;&lt; "tmp-&gt;debug：" &lt;&lt; tmp-&gt;getDebug() &lt;&lt; endl;
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>方法</strong>：<code>release()</code> </p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>作用： 
+<ul>
+<li data-line="1" dir="auto">取消智能指针对动态内存的托管；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">// 定义智能指针
+auto_ptr&lt;Test&gt; test(new Test);
+
+Test *tmp2 = test.release();	// 取消智能指针对动态内存的托管
+delete tmp2;	// 之前分配的内存需要自己手动释放
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>方法</strong>：<code>reset()</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>作用： 
+<ul>
+<li data-line="1" dir="auto">重置智能指针托管的内存地址，如果地址不一致，原来的会被析构掉；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">// 定义智能指针
+auto_ptr&lt;Test&gt; test(new Test);
+
+test.reset();			// 释放掉智能指针托管的指针内存，并将其置NULL
+
+test.reset(new Test());	// 释放掉智能指针托管的指针内存，并将参数指针取代之
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`auto_ptr` 的问题" dir="auto" class="heading" id="`auto_ptr`_的问题"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>auto_ptr</code> 的问题</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>auto_ptr</code> 指针复制或者赋值都会改变资源的所有权</p></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">// auto_ptr 被C++11抛弃的主要原因
+auto_ptr&lt;string&gt; p1(new string("I'm Li Ming!"));
+auto_ptr&lt;string&gt; p2(new string("I'm age 22."));
+
+cout &lt;&lt; "p1：" &lt;&lt; p1.get() &lt;&lt; endl;
+cout &lt;&lt; "p2：" &lt;&lt; p2.get() &lt;&lt; endl;
+
+// p2赋值给p1后，首先p1会先将自己原先托管的指针释放掉，然后接收托管p2所托管的指针，
+// 然后p2所托管的指针制NULL，也就是p1托管了p2托管的指针，而p2放弃了托管。
+p1 = p2;	
+cout &lt;&lt; "p1 = p2 赋值后：" &lt;&lt; endl;
+cout &lt;&lt; "p1：" &lt;&lt; p1.get() &lt;&lt; endl;
+cout &lt;&lt; "p2：" &lt;&lt; p2.get() &lt;&lt; endl;
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`unique_ptr`" dir="auto" class="heading" id="`unique_ptr`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>unique_ptr</code></h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`unique_ptr` 基础概念" dir="auto" class="heading" id="`unique_ptr`_基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>unique_ptr</code> 基础概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>unique_ptr</code> 基础概念</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>引入： 
+<ul>
+<li data-line="1" dir="auto"><code>auto_ptr</code> 是用于 <code>C++11</code> 之前的智能指针，由于 <code>auto_ptr</code> 基于排他所有权模式，两个指针不能指向同一个资源，复制或赋值都会改变资源的所有权，<code>auto_ptr</code> 主要有三大问题： </li>
+<li data-line="2" dir="auto">（1）复制和赋值会改变资源的所有权，不符合人的直觉；</li>
+<li data-line="3" dir="auto">（2）在 <code>STL</code> 容器中使用 <code>auto_ptr</code> 存在重大风险，因为容器内的元素必需支持可复制（<code>copy constructable</code>）和可赋值（<code>assignable</code>）；</li>
+<li data-line="4" dir="auto">（3）不支持对象数组的操作；</li>
+<li data-line="5" dir="auto">因此需要使用 <code>unique_ptr</code> 来解决上述问题；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念： 
+<ul>
+<li data-line="7" dir="auto"><code>C++11</code> 用更严谨的 <code>unique_ptr</code> 取代了 <code>auto_ptr</code>；</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>特点： 
+<ul>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="9" dir="auto">基于<strong>排他所有权</strong>模式：两个指针不能指向同一个资源；</li>
+</ol>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="10" dir="auto">无法进行左值 <code>unique_ptr</code> 赋值构造，也无法进行左值复制赋值操作，但<strong>允许临时右值赋值构造和赋值</strong>；</li>
+</ol>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="11" dir="auto">保存指向某个对象的指针，当<strong>它本身离开</strong>作用域时会<strong>自动释放它指向的对象</strong>；</li>
+</ol>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="12" dir="auto">在容器中保存指针是安全的；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="13" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">unique_ptr&lt;string&gt; p1(new string("I'm Li Ming!"));
+unique_ptr&lt;string&gt; p2(new string("I'm age 22."));
+	
+cout &lt;&lt; "p1：" &lt;&lt; p1.get() &lt;&lt; endl;
+cout &lt;&lt; "p2：" &lt;&lt; p2.get() &lt;&lt; endl;
+
+// 错误：p1 = p2;					// 禁止左值赋值
+// 错误：unique_ptr&lt;string&gt; p3(p2);	// 禁止左值赋值构造
+
+unique_ptr&lt;string&gt; p3(std::move(p1)); // 使用p1生成其右值，传入p3的构造函数中
+p1 = std::move(p2);	// 使用move把左值转成右值就可以赋值了，效果和auto_ptr赋值一样
+
+cout &lt;&lt; "p1 = p2 赋值后：错误" &lt;&lt; endl;
+cout &lt;&lt; "p1：" &lt;&lt; p1.get() &lt;&lt; endl;
+cout &lt;&lt; "p2：" &lt;&lt; p2.get() &lt;&lt; endl;
+
+// 会自动调用 delete[] 函数去释放内存
+unique_ptr&lt;int[]&gt; array(new int[5]);	// 支持这样定义，即允许临时右值赋值构造
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`unique_ptr` 的问题" dir="auto" class="heading" id="`unique_ptr`_的问题"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>unique_ptr</code> 的问题</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>auto_ptr</code> 与 <code>unique_ptr</code> 智能指针的内存管理陷阱</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">分析：以下问题是由于 <code>auto_ptr</code> 与 <code>unique_ptr</code> 的排他性所导致的；</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">auto_ptr&lt;string&gt; p1;
+string *str = new string("智能指针的内存管理陷阱");
+p1.reset(str);	// p1托管str指针
+{
+	auto_ptr&lt;string&gt; p2;
+	p2.reset(str);	// p2接管str指针时，会先取消p1的托管，然后再对str的托管
+}
+
+// 此时p1已经没有托管内容指针了，为NULL，在使用它就会内存报错！
+cout &lt;&lt; "str：" &lt;&lt; *p1 &lt;&lt; endl;
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：独占所有权导致无法拷贝，仅支持移动
+<ul>
+<li data-line="1" dir="auto"><code>unique_ptr</code> 的核心设计是 “独占对象所有权”，因此它<strong>禁用了拷贝构造和拷贝赋值运算符</strong>，只能通过 <code>std::move</code> 转移所有权。这是设计特性，但也导致它无法用于需要 “拷贝” 的场景，新手易因误拷贝触发编译错误；</li>
+<li data-line="2" dir="auto">比如：下面代码当中的 <code>std::move(p1)</code> 只是 “标记” <code>p1</code> 的所有权可转移，转移后 <code>p1</code> 变为 “空指针”，若误操作 <code>p1</code> 会触发未定义行为；</li>
+<li data-line="3" dir="auto">因此，无法将 <code>unique_ptr</code> 直接存入需要拷贝的容器 / 函数参数，必须显式移动，增加了使用成本； </li>
+</ul>
+</li>
+<li data-line="4" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">#include &lt;iostream&gt;
+#include &lt;memory&gt;
+using namespace std;
+
+class Test {
+public:
+    Test() { cout &lt;&lt; "Test构造" &lt;&lt; endl; }
+    ~Test() { cout &lt;&lt; "Test析构" &lt;&lt; endl; }
+};
+
+int main() {
+    unique_ptr&lt;Test&gt; p1(new Test);
+    
+    // 错误1：直接拷贝unique_ptr（编译失败）
+    unique_ptr&lt;Test&gt; p2 = p1; // 编译报错：拷贝构造函数被删除
+    
+    // 错误2：函数参数传递时的隐式拷贝
+    auto func = [](unique_ptr&lt;Test&gt; p) {};
+    func(p1); // 编译报错：无法拷贝unique_ptr
+    
+    // 正确：必须用std::move转移所有权
+    unique_ptr&lt;Test&gt; p3 = move(p1); 
+    func(move(p3)); // 转移后p3失效
+    
+    // 注意：p1已失效，解引用会导致未定义行为
+    // cout &lt;&lt; p1.get() &lt;&lt; endl; // 输出nullptr（多数编译器），但操作p1指向的对象会崩溃
+    return 0;
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：指向数组的语法陷阱
+<ul>
+<li data-line="1" dir="auto"><code>unique_ptr</code> 对 “单个对象” 和 “数组” 的处理是分离的：</li>
+<li data-line="2" dir="auto">（1）<code>unique_ptr&lt;T&gt;</code>：析构时调用 <code>delete</code>（针对单个对象）</li>
+<li data-line="3" dir="auto">（2）<code>unique_ptr&lt;T[]&gt;</code>：析构时调用 <code>delete[]</code>（针对数组）</li>
+<li data-line="4" dir="auto">，用 <code>unique_ptr&lt;T&gt;</code> 指向数组，导致析构时仅释放第一个元素，引发内存泄漏；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">#include &lt;iostream&gt;
+#include &lt;memory&gt;
+using namespace std;
+
+int main() {
+    // 错误写法：用unique_ptr&lt;int&gt;指向数组（析构调用delete，而非delete[]）
+    unique_ptr&lt;int&gt; arr_err(new int[5]{1,2,3,4,5}); 
+    // 析构时仅释放第一个int，剩余4个int内存泄漏（未定义行为）
+    
+    // 正确写法：用unique_ptr&lt;int[]&gt;指向数组
+    unique_ptr&lt;int[]&gt; arr_ok(new int[5]{1,2,3,4,5});
+    // 析构时调用delete[]，正确释放整个数组
+    
+    return 0;
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`shared_ptr`" dir="auto" class="heading" id="`shared_ptr`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>shared_ptr</code></h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`shared_ptr` 基础概念" dir="auto" class="heading" id="`shared_ptr`_基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>shared_ptr</code> 基础概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>shared_ptr</code> 基础概念</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>原理： 
+<ul>
+<li data-line="1" dir="auto">记录引用特定内存对象的智能指针数量，当复制或拷贝时，<strong>引用计数</strong>加 1，当智能指针析构时，<strong>引用计数</strong>减 1，如果计数为零，代表已经没有指针指向这块内存，那么我们就释放它。这就是 <code>shared_ptr</code> 采用的策略；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实现：
+<ul>
+<li data-line="3" dir="auto">每个 <code>shared_ptr&lt;T&gt;</code> 对象本身只包含<strong>两个指针</strong>，<code>64</code> 位系统下共 <code>16</code> 字节，<code>32</code> 位下 <code>8</code> 字节；</li>
+<li data-line="4" dir="auto">（1）<code>T* ptr</code>：指向被管理的实际对象（裸指针）</li>
+<li data-line="5" dir="auto">（2）<code>ControlBlock* cb</code>：指向控制块（核心，存储引用计数、删除器等）</li>
+<li data-line="6" dir="auto"><code>shared_ptr</code> 本身不存储引用计数，所有共享同一对象的 <code>shared_ptr</code>，其 <code>cb</code> 指针都指向<strong>同一个控制块</strong>，这是实现 “共享计数” 的核心；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：控制块
+<ul>
+<li data-line="8" dir="auto">控制块是 <code>shared_ptr</code> 底层最核心的结构，由编译器自动创建，存储所有管理对象所需的元数据；</li>
+<li data-line="9" dir="auto">（1）<code>std::size_t use_count</code> 强引用计数：记录当前有多少 <code>shared_ptr</code> 指向该对象（独占所有权的计数）</li>
+<li data-line="10" dir="auto">（2）<code>std::size_t weak_count</code> 弱引用计数：记录当前有多少 <code>weak_ptr</code> 指向该控制块（仅观察，不持有所有权）</li>
+<li data-line="11" dir="auto">（3）<code>T* object_ptr</code>：指向被管理对象的裸指针（与 <code>shared_ptr</code> 的 <code>ptr</code> 一致，或为 <code>nullptr</code>）</li>
+<li data-line="12" dir="auto">（4）<code>Deleter deleter</code> 自定义删除器：默认是 <code>delete/delete[]</code>，支持用户自定义销毁逻辑；</li>
+<li data-line="13" dir="auto">（5）<code>Allocator allocator</code> 内存分配器：用于释放控制块自身内存；</li>
+<li data-line="14" dir="auto">控制块的类型是 “类型擦除” 的，无论删除器 / 分配器是什么类型，控制块都能统一管理，因此 <code>shared_ptr&lt;void&gt;</code> 也能正确释放任意类型的对象（删除器知道具体类型）</li>
+</ul>
+</li>
+<li data-line="15" dir="auto">示例： </li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">class Person {
+public:
+	Person(int v) {
+		this-&gt;no = v;
+		cout &lt;&lt; "构造函数 \t no = " &lt;&lt; this-&gt;no &lt;&lt; endl;
+	}
+
+	~Person() {
+		cout &lt;&lt; "析构函数 \t no = " &lt;&lt; this-&gt;no &lt;&lt; endl;
+	}
+
+private:
+	int no;
+};
+
+// 仿函数，内存删除
+class DestructPerson {
+public:
+	void operator() (Person *pt) {
+		cout &lt;&lt; "DestructPerson..." &lt;&lt; endl;
+		delete pt;
+	}
+};
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意：
+<ul>
+<li data-line="1" dir="auto">绝对不要用同一个裸指针创建多个独立的 <code>shared_ptr</code>，会创建多个控制块，导致重复释放；</li>
+<li data-line="2" dir="auto">
+<pre class="language-none"><code data-line="2" class="language-C++ language-none is-loaded">Test* raw = new Test();
+shared_ptr&lt;Test&gt; p1(raw); // 创建控制块1，use_count=1
+shared_ptr&lt;Test&gt; p2(raw); // 创建控制块2，use_count=1 → 析构时p1、p2各自释放raw，触发double free崩溃
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`shared_ptr` 的使用" dir="auto" class="heading" id="`shared_ptr`_的使用"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>shared_ptr</code> 的使用</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：引用计数</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念： 
+<ul>
+<li data-line="1" dir="auto">调用 <strong><code>use_count()</code></strong> 函数可以获得当前托管指针的引用计数；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>构造： 
+<ul>
+<li data-line="3" dir="auto"><span alt="Pasted image 20250114153040.png" src="Pasted image 20250114153040.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250114153040.png" src="lib/media/pasted-image-20250114153040.png"></span></li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意： 
+<ul>
+<li data-line="5" dir="auto">（1）使用 <code>shared_ptr</code> 时，一定要注意是否有循环引用。使用 <code>shared_ptr</code> 智能指针时，要注意避免对象交叉使用智能指针的情况，否则会导致内存泄露； </li>
+<li data-line="6" dir="auto">（2）可以使用 <code>weak_ptr</code> 来避免上述问题；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">shared_ptr&lt;Person&gt; sp1;
+
+shared_ptr&lt;Person&gt; sp2(new Person(2));
+
+// 获取智能指针管控的共享指针的数量	use_count()：引用计数
+cout &lt;&lt; "sp1	use_count() = " &lt;&lt; sp1.use_count() &lt;&lt; endl;
+cout &lt;&lt; "sp2	use_count() = " &lt;&lt; sp2.use_count() &lt;&lt; endl &lt;&lt; endl;
+
+// 共享
+sp1 = sp2;
+
+cout &lt;&lt; "sp1	use_count() = " &lt;&lt; sp1.use_count() &lt;&lt; endl; // 2
+cout &lt;&lt; "sp2	use_count() = " &lt;&lt; sp2.use_count() &lt;&lt; endl &lt;&lt; endl; // 2
+
+shared_ptr&lt;Person&gt; sp3(sp1);
+cout &lt;&lt; "sp1	use_count() = " &lt;&lt; sp1.use_count() &lt;&lt; endl; // 3
+cout &lt;&lt; "sp2	use_count() = " &lt;&lt; sp2.use_count() &lt;&lt; endl; // 3
+cout &lt;&lt; "sp2	use_count() = " &lt;&lt; sp3.use_count() &lt;&lt; endl &lt;&lt; endl;  // 3
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="1" dir="auto"><code>sp1 = sp2;</code> <code>-&gt;sp1</code> 和 <code>sp2</code> 共同托管同一个指针，所以他们的引用计数为 <code>2</code>； </li>
+<li data-line="2" dir="auto"><code>shared_ptr&lt; Person &gt; sp3(sp1);</code> <code>-&gt; sp1</code> 和 <code>sp2</code> 和 <code>sp3</code> 共同托管同一个指针，所以他们的引用计数为 <code>3</code>； </li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`weak_ptr`" dir="auto" class="heading" id="`weak_ptr`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>weak_ptr</code></h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`weak_ptr` 基础概念" dir="auto" class="heading" id="`weak_ptr`_基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>weak_ptr</code> 基础概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>weak_ptr</code> 基础概念</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>std::weak_ptr</code> 是 <code>C++11</code> 引入的弱引用智能指针，它并非独立的所有权管理者，而是 <code>std::shared_ptr</code> 的 “辅助工具”，核心作用是观察 <code>shared_ptr</code> 管理的对象，却不持有对象的所有权，因此不会影响对象的生命周期；</li>
+<li data-line="2" dir="auto">其设计初衷是解决 <code>shared_ptr</code> 最典型的问题：循环引用导致的内存泄漏；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto">区别：</li>
+</ul></div><div class="el-table" dir="ltr" style="overflow-x: auto;"><table>
+<thead>
+<tr>
+<th dir="ltr">特性</th>
+<th dir="ltr"><code>shared_ptr</code></th>
+<th dir="ltr"><code>weak_ptr</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr">所有权</td>
+<td dir="ltr">持有对象所有权（强引用）</td>
+<td dir="ltr">无所有权（弱引用）</td>
+</tr>
+<tr>
+<td dir="ltr">影响对象生命周期</td>
+<td dir="ltr">递增 / 递减<strong>强引用计数</strong>，计数为 0 时释放对象</td>
+<td dir="ltr">递增 / 递减<strong>弱引用计数</strong>，不影响对象释放</td>
+</tr>
+<tr>
+<td dir="ltr">直接解引用</td>
+<td dir="ltr">支持（<code>*p</code>/<code>p-&gt;</code>）</td>
+<td dir="ltr">不支持（必须先转换为<code>shared_ptr</code>）</td>
+</tr>
+<tr>
+<td dir="ltr">核心目标</td>
+<td dir="ltr">安全共享对象所有权</td>
+<td dir="ltr">观察对象，解决循环引用</td>
+</tr>
+</tbody>
+</table></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="1" dir="auto"><code>weak_ptr</code> 完全依赖 <code>shared_ptr</code> 的<strong>控制块（<code>Control Block</code>）</strong> 实现功能，自身无独立的内存管理；</li>
+<li data-line="2" dir="auto">每个 <code>weak_ptr&lt;T&gt;</code> 对象仅包含一个指针：</li>
+<li data-line="3" dir="auto"><code>weak_ptr&lt;T&gt; { ControlBlock* cb; // 指向 shared_ptr 的控制块（与共享同一对象的 shared_ptr 指向同一个控制块） };</code></li>
+<li data-line="4" dir="auto">所有观察同一对象的 <code>weak_ptr</code>，其 <code>cb</code> 指针都指向同一个控制块；</li>
+<li data-line="5" dir="auto">因此，<code>weak_ptr</code> 仅操作控制块的 <code>weak_count</code>，不碰 <code>use_count</code>；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：
+<ul>
+<li data-line="7" dir="auto">控制块的释放条件：仅当 <code>use_count == 0</code>（对象已释放）且 <code>weak_count == 0</code>（无 <code>weak_ptr</code> 观察）时，才释放控制块内存；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`weak_ptr` 的使用" dir="auto" class="heading" id="`weak_ptr`_的使用"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>weak_ptr</code> 的使用</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>weak_ptr</code> 的使用</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>weak_ptr</code> 提供的成员函数不多，核心围绕 “检查对象存活” 和 “安全获取强引用” 展开；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>方法：<code>lock()</code>
+<ul>
+<li data-line="3" dir="auto">尝试获取一个指向对象的 <code>shared_ptr</code>（强引用），是唯一能安全操作对象的方式；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto">语法：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">std::shared_ptr&lt;T&gt; sp = wp.lock();
+if (sp) { // 先判断是否非空
+    sp-&gt;func(); // 安全操作对象
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">方法：<code>expired()</code> 检查对象是否已销毁</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">if (wp.expired()) {
+    cout &lt;&lt; "对象已销毁" &lt;&lt; endl;
+} else {
+    auto sp = wp.lock(); // 再获取强引用
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>概念</strong>：解决 <code>shared_ptr</code> 循环引用</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="1" dir="auto"><code>shared_ptr</code> 双向引用时，强引用计数会 “互锁”，导致计数永远无法减到 0，对象无法释放（内存泄漏）</li>
+<li data-line="2" dir="auto"><code>weak_ptr</code> 可以替换一侧的 <code>shared_ptr</code>，仅保留弱引用，打破循环；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto">示例：循环引用的问题</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">#include &lt;iostream&gt;
+#include &lt;memory&gt;
+using namespace std;
+
+struct Node {
+    shared_ptr&lt;Node&gt; next; // 强引用指向另一个节点
+    ~Node() { cout &lt;&lt; "Node析构" &lt;&lt; endl; } // 永远不会执行！
+};
+
+int main() 
+{
+    shared_ptr&lt;Node&gt; n1(new Node);
+    shared_ptr&lt;Node&gt; n2(new Node);
+    
+    n1-&gt;next = n2; // n2的use_count=2
+    n2-&gt;next = n1; // n1的use_count=2
+    
+    // 函数结束时，n1/n2析构：n1的use_count=1，n2的use_count=1
+    // 强引用计数未到0，对象无法释放 → 内存泄漏
+    return 0;
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">#include &lt;iostream&gt;
+#include &lt;memory&gt;
+using namespace std;
+
+struct Node {
+    weak_ptr&lt;Node&gt; next; // 弱引用，不增加强引用计数
+    ~Node() { cout &lt;&lt; "Node析构" &lt;&lt; endl; } // 正常执行
+};
+
+int main() {
+    shared_ptr&lt;Node&gt; n1(new Node);
+    shared_ptr&lt;Node&gt; n2(new Node);
+    
+    n1-&gt;next = n2; // 仅递增n2的weak_count，n2的use_count仍=1
+    n2-&gt;next = n1; // 仅递增n1的weak_count，n1的use_count仍=1
+    
+    // 函数结束时，n1/n2析构：
+    // n1的use_count=0 → 释放n1对象；n2的use_count=0 → 释放n2对象
+    // 最后weak_count=0，释放控制块
+    return 0;
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="mod-footer mod-ui"></div></div></div></div></div></div></div></div><div class="sidebar-right sidebar"><div class="sidebar-topbar"><div class="topbar-content"></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"></div><script defer="">let rs = document.querySelector(".sidebar-right"); rs.classList.add("is-collapsed"); if (window.innerWidth > 768) rs.classList.remove("is-collapsed"); rs.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-right-width"));</script></div></div></body></html>

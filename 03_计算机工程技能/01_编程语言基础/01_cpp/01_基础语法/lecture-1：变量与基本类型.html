@@ -1,0 +1,395 @@
+<!DOCTYPE html> <html><head>
+		<title>Lecture 1：变量与基本类型</title>
+		<base href="..\..\..\../">
+		<meta id="root-path" root-path="..\..\..\../">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
+		<meta charset="UTF-8">
+		<meta name="description" content="MUBlog - Lecture 1：变量与基本类型">
+		<meta property="og:title" content="Lecture 1：变量与基本类型">
+		<meta property="og:description" content="MUBlog - Lecture 1：变量与基本类型">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="03_计算机工程技能/01_编程语言基础/01_cpp/01_基础语法/lecture-1：变量与基本类型.html">
+		<meta property="og:image" content="lib\media\pasted-image-20250411112948.png">
+		<meta property="og:site_name" content="MUBlog">
+		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="lib/rss.xml"><script async="" id="webpage-script" src="lib/scripts/webpage.js" onload="this.onload=null;this.setAttribute(&quot;loaded&quot;, &quot;true&quot;)"></script><link rel="icon" href="lib/media/favicon.png"><style>body{--line-width:40em;--line-width-adaptive:40em;--file-line-width:40em;--sidebar-width:min(20em, 80vw);--collapse-arrow-size:11px;--tree-horizontal-spacing:0.6em;--tree-vertical-spacing:0.6em;--sidebar-margin:12px}.sidebar{height:100%;min-width:calc(var(--sidebar-width) + var(--divider-width-hover));max-width:calc(var(--sidebar-width) + var(--divider-width-hover));font-size:14px;z-index:10;position:relative;overflow:hidden;transition:min-width ease-in-out,max-width ease-in-out;transition-duration:.2s;contain:size}.sidebar-left{left:0}.sidebar-right{right:0}.sidebar.is-collapsed{min-width:0;max-width:0}body.floating-sidebars .sidebar{position:absolute}.sidebar-content{height:100%;min-width:calc(var(--sidebar-width) - var(--divider-width-hover));top:0;padding:var(--sidebar-margin);padding-top:4em;line-height:var(--line-height-tight);background-color:var(--background-secondary);transition:background-color,border-right,border-left,box-shadow;transition-duration:var(--color-fade-speed);transition-timing-function:ease-in-out;position:absolute;display:flex;flex-direction:column}.sidebar:not(.is-collapsed) .sidebar-content{min-width:calc(max(100%,var(--sidebar-width)) - 3px);max-width:calc(max(100%,var(--sidebar-width)) - 3px)}.sidebar-left .sidebar-content{left:0;border-top-right-radius:var(--radius-l);border-bottom-right-radius:var(--radius-l)}.sidebar-right .sidebar-content{right:0;border-top-left-radius:var(--radius-l);border-bottom-left-radius:var(--radius-l)}.sidebar:has(.sidebar-content:empty):has(.topbar-content:empty){display:none}.sidebar-topbar{height:2em;width:var(--sidebar-width);top:var(--sidebar-margin);padding-inline:var(--sidebar-margin);z-index:1;position:fixed;display:flex;align-items:center;transition:width ease-in-out;transition-duration:inherit}.sidebar.is-collapsed .sidebar-topbar{width:calc(2.3em + var(--sidebar-margin) * 2)}.sidebar .sidebar-topbar.is-collapsed{width:0}.sidebar-left .sidebar-topbar{left:0}.sidebar-right .sidebar-topbar{right:0}.topbar-content{overflow:hidden;overflow:clip;width:100%;height:100%;display:flex;align-items:center;transition:inherit}.sidebar.is-collapsed .topbar-content{width:0;transition:inherit}.clickable-icon.sidebar-collapse-icon{background-color:transparent;color:var(--icon-color-focused);padding:0!important;margin:0!important;height:100%!important;width:2.3em!important;margin-inline:0.14em!important;position:absolute}.sidebar-left .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);right:var(--sidebar-margin)}.sidebar-right .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);left:var(--sidebar-margin)}.clickable-icon.sidebar-collapse-icon svg.svg-icon{width:100%;height:100%}.sidebar-section-header{margin:0 0 1em 0;text-transform:uppercase;letter-spacing:.06em;font-weight:600}body{transition:background-color var(--color-fade-speed) ease-in-out}.webpage-container{display:flex;flex-direction:row;height:100%;width:100%;align-items:stretch;justify-content:center}.document-container{opacity:1;flex-basis:100%;max-width:100%;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;transition:opacity .2s ease-in-out;contain:inline-size}.hide{opacity:0;transition:opacity .2s ease-in-out}.document-container>.markdown-preview-view{margin:var(--sidebar-margin);margin-bottom:0;width:100%;width:-webkit-fill-available;width:-moz-available;width:fill-available;background-color:var(--background-primary);transition:background-color var(--color-fade-speed) ease-in-out;border-top-right-radius:var(--window-radius,var(--radius-m));border-top-left-radius:var(--window-radius,var(--radius-m));overflow-x:hidden!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;contain:inline-size}.document-container>.markdown-preview-view>.markdown-preview-sizer{padding-bottom:80vh!important;width:100%!important;max-width:var(--line-width)!important;flex-basis:var(--line-width)!important;transition:background-color var(--color-fade-speed) ease-in-out;contain:inline-size}.markdown-rendered img:not([width]),.view-content img:not([width]){max-width:100%;outline:0}.document-container>.view-content.embed{display:flex;padding:1em;height:100%;width:100%;align-items:center;justify-content:center}.document-container>.view-content.embed>*{max-width:100%;max-height:100%;object-fit:contain}:has(> :is(.math,table)){overflow-x:auto!important}.document-container>.view-content{overflow-x:auto;contain:content;padding:0;margin:0;height:100%}.scroll-highlight{position:absolute;width:100%;height:100%;pointer-events:none;z-index:1000;background-color:hsla(var(--color-accent-hsl),.25);opacity:0;padding:1em;inset:50%;translate:-50% -50%;border-radius:var(--radius-s)}</style><script defer="">async function loadIncludes(){if("file:"!=location.protocol){let e=document.querySelectorAll("include");for(let t=0;t<e.length;t++){let o=e[t],l=o.getAttribute("src");try{const e=await fetch(l);if(!e.ok){console.log("Could not include file: "+l),o?.remove();continue}let t=await e.text(),n=document.createRange().createContextualFragment(t),i=Array.from(n.children);for(let e of i)e.classList.add("hide"),e.style.transition="opacity 0.5s ease-in-out",setTimeout((()=>{e.classList.remove("hide")}),10);o.before(n),o.remove(),console.log("Included file: "+l)}catch(e){o?.remove(),console.log("Could not include file: "+l,e);continue}}}else{if(document.querySelectorAll("include").length>0){var e=document.createElement("div");e.id="error",e.textContent="Web server exports must be hosted on an http / web server to be viewed correctly.",e.style.position="fixed",e.style.top="50%",e.style.left="50%",e.style.transform="translate(-50%, -50%)",e.style.fontSize="1.5em",e.style.fontWeight="bold",e.style.textAlign="center",document.body.appendChild(e),document.querySelector(".document-container")?.classList.remove("hide")}}}document.addEventListener("DOMContentLoaded",(()=>{loadIncludes()}));let isFileProtocol="file:"==location.protocol;function waitLoadScripts(e,t){let o=e.map((e=>document.getElementById(e+"-script"))),l=0;!function e(){let n=o[l];l++,n&&"true"!=n.getAttribute("loaded")||l<o.length&&e(),l<o.length?n.addEventListener("load",e):t()}()}</script><link rel="stylesheet" href="lib/styles/obsidian.css"><link rel="stylesheet" href="lib/styles/theme.css"><link rel="preload" href="lib/styles/global-variable-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/global-variable-styles.css"></noscript><link rel="preload" href="lib/styles/supported-plugins.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/supported-plugins.css"></noscript><link rel="preload" href="lib/styles/main-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/main-styles.css"></noscript><link rel="preload" href="lib/styles/snippets.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/snippets.css"></noscript></head><body class="publish css-settings-manager styled-scrollbars show-inline-title theme-light ctp-rosepine-light ctp-mocha ctp-accent-rosewater anuppuccin-accent-toggle anp-current-line-border anp-callout-color-toggle anp-codeblock-numbers anp-list-toggle anp-table-width anp-toggle-preview anp-color-transition-toggle anp-button-metadata-toggle anp-toggle-metadata anp-toggle-scrollbars anp-h1-red anp-h1-divider anp-h2-peach anp-h3-green anp-h4-teal anp-h5-lavender anp-h6-mauve anp-decoration-toggle anp-bold-maroon anp-italic-green anp-highlight-yellow anp-colorful-frame-icon-toggle-dark anp-simple-rainbow-color-toggle anp-rainbow-file-toggle anp-simple-rainbow-title-toggle anp-simple-rainbow-icon-folder-toggle anp-simple-rainbow-indentation-toggle anp-simple-rainbow-collapse-toggle anp-card-layout anp-card-shadows anp-card-layout-filebrowser anp-theme-ext-light anp-theme-ext-dark anp-theme-ext-amoled ctp-atom-light ctp-atom-dark table-type-three-line table-header-color-blue table-row-alt-background-option table-dark-mode"><script defer="">let theme=localStorage.getItem("theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");"dark"==theme?(document.body.classList.add("theme-dark"),document.body.classList.remove("theme-light")):(document.body.classList.add("theme-light"),document.body.classList.remove("theme-dark")),window.innerWidth<480?document.body.classList.add("is-phone"):window.innerWidth<768?document.body.classList.add("is-tablet"):window.innerWidth<1024?document.body.classList.add("is-small-screen"):document.body.classList.add("is-large-screen")</script><div class="webpage-container workspace"><div class="sidebar-left sidebar"><div class="sidebar-topbar"><div class="topbar-content"><label class="theme-toggle-container" for="theme_toggle"><input class="theme-toggle-input" type="checkbox" id="theme_toggle"><div class="toggle-background"></div></label></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"><include src="lib/html/file-tree.html"></include></div><script defer="">let ls = document.querySelector(".sidebar-left"); ls.classList.add("is-collapsed"); if (window.innerWidth > 768) ls.classList.remove("is-collapsed"); ls.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-left-width"));</script></div><div class="document-container markdown-reading-view hide"><div class="markdown-preview-view markdown-rendered allow-fold-headings allow-fold-lists is-readable-line-width"><style id="MJX-CHTML-styles"></style><div class="markdown-preview-sizer markdown-preview-section"><h1 class="page-title heading inline-title" id="Lecture 1：变量与基本类型"><p dir="auto">Lecture 1：变量与基本类型</p></h1><div class="el-h2 heading-wrapper"><h2 data-heading="`const` 关键词" dir="auto" class="heading" id="`const`_关键词"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>const</code> 关键词</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="基础概念" dir="auto" class="heading" id="基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>基础概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>const</code> 关键词</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>const</code> 必须初始化；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：默认状态下，<code>const</code> 对象仅在文件内有效
+<ul>
+<li data-line="3" dir="auto">编译器将在编译过程中把<strong>用到该变量的地方都替换成对应的值</strong>；</li>
+<li data-line="4" dir="auto">也就是说，编译器会找到代码中所有用到 <code>const</code> 的地方，然后用其值替换；</li>
+<li data-line="5" dir="auto">默认情况下，<code>const</code> 对象被设定为仅在文件内有效。当多个文件中出现了同名的 <code>const</code> 变量时, 其实<strong>等同于在不同文件中分别定义了独立的变量</strong>；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：const 和 define 的区别
+<ul>
+<li data-line="7" dir="auto"><code>const</code> 行为和 <code>#define</code> 宏替换有点像，但 <code>const</code> 是类型安全的（其有数据类型检查），而宏是纯文本替换（无类型检查）；</li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>const</code> 的作用域</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>C++</code> 中，未加 extern 修饰的 const 变量（默认状态），其作用域被编译器限定为「当前编译单元」（即单个 .cpp 文件，也叫 “翻译单元”），而非整个程序。编译器会默认给这类 <code>const</code> 变量加上 <code>static</code> 特性（注意：是编译器隐式加的，不是你手动写的 <code>static</code>），使其成为 “文件局部常量”，相当于这个 <code>const</code> 变量只属于当前 <code>.cpp</code> 文件，其他文件看不到；</li>
+<li data-line="2" dir="auto">哪怕多个 <code>.cpp</code> 文件里定义了<strong>同名、同值</strong>的 <code>const</code> 变量（比如都写 <code>const int MAX = 100;</code>），编译器会为每个文件分别创建独立的内存对象（地址不同）。但因为编译器会把所有引用处替换成字面量值，所以表面上用起来 “好像是同一个变量”，且不会触发 “多重定义” 的链接错误；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：让 <code>const</code> 在其他文件有效
+<ul>
+<li data-line="4" dir="auto">解决的办法是，对于 <code>const</code> 变量不管是声明还是定义都添加 <code>extern</code> 关键字，这样只需定义一次就可以了；</li>
+<li data-line="5" dir="auto"><span alt="Pasted image 20250411112948.png" src="Pasted image 20250411112948.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250411112948.png" src="lib/media/pasted-image-20250411112948.png"></span></li>
+<li data-line="6" dir="auto"><code>file 1.h</code> 头文件中的声明也由 <code>extern</code> 做了限定，其作用是指明 <code>bufsize</code> 并非本文件所独有，它的定义将在别处出现；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`const` 与引用" dir="auto" class="heading" id="`const`_与引用"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>const</code> 与引用</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>const</code> 的引用</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>const int&amp; ref = variable; // ref是variable的常量引用</code></li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="3" dir="auto">可以把引用绑定到 <code>const</code> 对象上，就像绑定到其他对象上一样，我们称之为对常量的引用；</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>与普通引用不同的是，对<strong>常量的引用不能被用作修改它所绑定的对象</strong>；
+<ul>
+<li data-line="5" dir="auto"><code>const int ci = 1024;</code></li>
+<li data-line="6" dir="auto"><code>const int &amp;r1 = ci; // 正确</code></li>
+<li data-line="7" dir="auto"><code>r1 = 42 // 错误</code></li>
+<li data-line="8" dir="auto"><code>int &amp;r2 = ci; // 错误，试图让一个非常量引用指向常量对象</code></li>
+<li data-line="9" dir="auto">因为不允许直接为 <code>ci</code> 赋值，当然也就不能通过引用去改变 <code>ci</code>；</li>
+<li data-line="10" dir="auto">因此，对 <code>r2</code> 的初始化是错误的，假设该初始化合法，则可以通过 <code>r2</code> 来改变它引用对象的值，这显然是不正确的；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>特点：
+<ul>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="12" dir="auto"><strong>不可修改性</strong>：通过 <code>const</code> 引用只能读取数据，不能修改原始对象；</li>
+</ol>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="13" dir="auto"><strong>延长临时对象生命周期</strong>：<code>const</code> 引用可以绑定到临时对象（如表达式结果或函数返回值），并延长其生命周期至引用作用域结束；</li>
+</ol>
+<ul>
+<li data-line="14" dir="auto"><code>const int&amp; ref = 5 + 3; // 合法：临时对象生命周期延长</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>应用：
+<ul>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="16" dir="auto"><strong>函数参数</strong>：避免拷贝，同时防止函数内部修改传入的值；</li>
+</ol>
+<ul>
+<li data-line="17" dir="auto"><code>void print(const std::string&amp; str)</code></li>
+</ul>
+</li>
+<li data-line="18" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="18" dir="auto"><strong>返回临时对象</strong>：返回临时对象的引用时，通常用 <code>const</code> 引用接收 </li>
+</ol>
+<ul>
+<li data-line="19" dir="auto"><code>const std::string&amp; getString()</code></li>
+<li data-line="20" dir="auto"><code>{return "Hello"; // 返回临时对象的const引用}</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="21" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结：
+<ul>
+<li data-line="22" dir="auto"><span alt="Pasted image 20250411114116.png" src="Pasted image 20250411114116.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250411114116.png" src="lib/media/pasted-image-20250411114116.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`const` 与指针" dir="auto" class="heading" id="`const`_与指针"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>const</code> 与指针</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>const</code> 与指针</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">指针是对象而引用不是，因此就像其他对象类型一样，允许把指针本身定为常量；</li>
+<li data-line="2" dir="auto">常量指针 (<code>const pointer</code>) 必须初始化，而且一旦初始化完成，则它的值 (也就是存放在指针中的那个地址)就不能再改变了；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：情况一 - <code>*const</code>
+<ul>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><strong>把 <code>*</code> 放在 <code>const</code> 关键字之前用以说明指针是一个常量</strong>，这样的书写形式隐含着一层意味，即<strong>不变的是指针本身的值</strong>，而非指向的那个值；
+<ul>
+<li data-line="5" dir="auto"><code>int errNumb = 0;</code></li>
+<li data-line="6" dir="auto"><code>int *const curErr = &amp;errNumb; // 指针curErr一直指向errNumb</code></li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>因为只是限定指针本身指向的地址，而没有限定此地址的值，因此可以修改其内容：
+<ul>
+<li data-line="8" dir="auto"><code>*curErr = 0; // 正确</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：情况二 - <code>const*</code>
+<ul>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>指针指向的对象是常量，​<strong>不能通过该指针修改对象的值</strong>，但<strong>指针本身可以指向其他对象</strong>；
+<ul>
+<li data-line="11" dir="auto"><code>const int* ptr;  // ptr是一个指向常量int的指针</code></li>
+</ul>
+</li>
+<li data-line="12" dir="auto">可以修改指针的指向（<code>ptr = &amp;new_value</code>），但不能通过指针修改指向的对象（<code>*ptr = 10</code>&nbsp;会报错）；</li>
+</ul>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：情况三 - 双重常量
+<ul>
+<li data-line="14" dir="auto">指针本身和指向的对象都是常量，既不能修改指针的指向，也不能通过指针修改对象的值； </li>
+<li data-line="15" dir="auto"><code>const int* const ptr = &amp;a;  // 必须初始化</code></li>
+</ul>
+</li>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结：
+<ul>
+<li data-line="17" dir="auto"><span alt="Pasted image 20250411114903.png" src="Pasted image 20250411114903.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250411114903.png" src="lib/media/pasted-image-20250411114903.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="常量表达式：`constexpr`" dir="auto" class="heading" id="常量表达式：`constexpr`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>常量表达式：<code>constexpr</code></h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：常量表达式 - <code>constexpr</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>引入：
+<ul>
+<li data-line="1" dir="auto">在一个复杂系统中，很难分辨一个初始值到底是不是常量表达式，当然可以定义一个 <code>const</code> 变量并把它的初始值设为我们认为的某个常量表达式，但在实际使用时，尽管要求如此却常常发现初始值并非常量表达式的情况；</li>
+<li data-line="2" dir="auto">可以这么说，在此种情况下，对象的定义和使用根本就是两回事儿；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="4" dir="auto"><code>C++11</code> 新标准规定，允许将变量声明为 <code>constexpr</code> 类型以<strong>便由编译器来验证变量的值是否是一个常量表达式</strong>；</li>
+<li data-line="5" dir="auto">声明为 <code>constexpr</code> 的变量一定是一个常量，而且必须用常量表达式初始化；</li>
+<li data-line="6" dir="auto"><code>constexpr int mf = 20; // 20是常量表达式</code></li>
+<li data-line="7" dir="auto"><code>constexpr int limit = mf + 1; // mf+1是常量表达式</code></li>
+<li data-line="8" dir="auto"><code>constexpr int sz = size(); //当size是一个constexpr函数时才是正确的声明</code></li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="类型处理" dir="auto" class="heading" id="类型处理"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>类型处理</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="类型别名" dir="auto" class="heading" id="类型别名"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>类型别名</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：类型别名</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">类型别名 (<code>typealias</code>) 是一个名字，它是某种类型的同义词；</li>
+<li data-line="2" dir="auto">使用类型别名有很多好处，它让复杂的类型名字变得简单明了、易于理解和使用，还有助于程序员清楚地知道使用该类型的真实目的；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>方法：使用 <code>typedef</code>
+<ul>
+<li data-line="4" dir="auto"><code>typedef double wages;</code></li>
+<li data-line="5" dir="auto"><code>typedef wages base,*p;</code></li>
+<li data-line="6" dir="auto">其中含有 <code>typedef</code> 的声明语句定义的不再是变量，而是类型别名；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto">举例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">typedef struct ListNode 
+{
+    // 数据域：存储结点数据（示例用int，可替换为string/自定义类型）
+    int data;
+    
+    // 指针域：指向“下一个结点”的指针（类型为struct ListNode*，别名后可写Node*）
+    struct ListNode* next; 
+
+    // C++结构体构造函数（初始化结点，简化创建）
+    ListNode(int val) : data(val), next(nullptr) {}
+} Node; // 别名Node：此后Node等价于struct ListNode
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>方法：使用 <code>using</code>
+<ul>
+<li data-line="1" dir="auto">使用别名声明 (<code>alias declaration</code>) 来定义类型的别名：</li>
+<li data-line="2" dir="auto"><code>using SI = Sales_item</code></li>
+<li data-line="3" dir="auto"><code>SI item; // 等价于 Sales_tiem item</code></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`auto` 关键字" dir="auto" class="heading" id="`auto`_关键字"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>auto</code> 关键字</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>auto</code> 关键字</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>auto</code> 关键字让编译器替我们去分析表达式所属的类型；</li>
+<li data-line="2" dir="auto">和原来那些只对应一种特定类型的说明符 (比如 <code>double</code>) 不同，<code>auto</code> 让编译器通过初始值来推算变量的类型，因此 <strong><code>auto</code> 定义的变量必须有初始值</strong>；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>使用：
+<ul>
+<li data-line="4" dir="auto"><code>auto item = val1 + val2; // item初始化为 val1和 val2 相加的结果</code></li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>auto</code> 和引用类型</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：使用引用类型
+<ul>
+<li data-line="1" dir="auto">使用引用其实是使用引用的对象，特别是当引用被用作初始值时, 真正参与初始化的其实是引用对象的值；</li>
+<li data-line="2" dir="auto">因此此时编译器以引用对象的类型作为 <code>auto</code> 的类型；</li>
+<li data-line="3" dir="auto">比如：<code>int i =0,&amp;r = i;</code></li>
+<li data-line="4" dir="auto">然后：<code>auto a = r; // a 是一个整型</code></li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：声明引用类型的 <code>auto</code> 
+<ul>
+<li data-line="6" dir="auto">情况一：<code>auto &amp;g=ci; // g 是一个整型常量引用，绑定到 ci</code></li>
+<li data-line="7" dir="auto">情况二：<code>auto &amp;h=42; // 错误: 不能为非常量引用绑定字面值</code></li>
+<li data-line="8" dir="auto">情况三：<code>const auto &amp;j= 42; // 正确: 可以为常量引用绑定字面值</code></li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>auto</code> 和 <code>const</code> </p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="0" dir="auto"><code>auto</code> 一般会忽略掉顶层 <code>const</code>，同时底层 <code>const</code> 则会保留下来；</li>
+</ol>
+</li>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="1" dir="auto">如果希望推断出的 <code>auto</code> 类型是一个顶层 <code>const</code>，需要明确指出 <code>const auto f = ci;</code></li>
+</ol>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="2" dir="auto">要在一条语句中定义多个变量，切记，符号 <code>&amp;</code> 和 <code>*</code> 只从属于某个声明符，而非基本数据类型的一部分，因此初始值必须是同一种类型；</li>
+</ol>
+<ul>
+<li data-line="3" dir="auto"><span alt="Pasted image 20250413015251.png" src="Pasted image 20250413015251.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250413015251.png" src="lib/media/pasted-image-20250413015251.png"></span></li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>总结</strong></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><span alt="Pasted image 20250413015430.png" src="Pasted image 20250413015430.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250413015430.png" src="lib/media/pasted-image-20250413015430.png"></span></li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`decltype`" dir="auto" class="heading" id="`decltype`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>decltype</code></h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>decltype</code> 关键词</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>decltype</code>&nbsp;是 <code>C++11</code> 引入的关键字，用于<strong>推导表达式的类型</strong>，但不会计算表达式的值；</li>
+<li data-line="2" dir="auto">它主要用于<strong>类型推断</strong>，特别是在模板编程和复杂类型声明中非常有用；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>举例：
+<ul>
+<li data-line="4" dir="auto"><code>decltype(f()) sum = x;</code></li>
+<li data-line="5" dir="auto">在这行代码当中使用 <code>f()</code> 的结果的类型来定义 sum 变量，但是并不实际的调用并执行 <code>f()</code>；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>decltype</code> 与引用
+<ul>
+<li data-line="7" dir="auto"><code>decltype</code> 的结果可以是引用类型：</li>
+<li data-line="8" dir="auto">比如假设 <code>int i = 42,&amp;r = i;</code></li>
+<li data-line="9" dir="auto">则当执行 <code>decltype(*p) c</code> 时将会报错，因为 c 时引用类型 <code>int&amp;</code>，因此必须初始化；</li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结：区别
+<ul>
+<li data-line="11" dir="auto"><span alt="Pasted image 20250413015840.png" src="Pasted image 20250413015840.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250413015840.png" src="lib/media/pasted-image-20250413015840.png"></span></li>
+</ul>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意：
+<ul>
+<li data-line="13" dir="auto"><code>decltype((variable))</code> (注意是双层括号) 的结果永远是引用，而 <code>decltype(variable)</code> 结果只有当 <code>variable</code> 本身就是一个引用时才是引用；</li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="基本类型与指针" dir="auto" class="heading" id="基本类型与指针"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>基本类型与指针</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`int*` 与 `int`" dir="auto" class="heading" id="`int*`_与_`int`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>int*</code> 与 <code>int</code></h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>int*</code> 与 <code>int</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">32 位系统：<code>int</code>（4 字节）、<code>int*</code>（4 字节，指针大小等于系统寻址位数）</li>
+<li data-line="2" dir="auto">64 位系统：<code>int</code>（仍为 4 字节，C++ 标准仅规定 <code>int</code> 至少 16 位，主流平台保持 4 字节）、<code>int*</code>（8 字节，对应 64 位寻址）</li>
+<li data-line="3" dir="auto"><code>int*</code> 的价值都不在于 “占用多少字节”，而在于它的<strong>指针语义</strong>，即指向内存地址、间接操作数据的能力；</li>
+<li data-line="4" dir="auto">并且 <code>C++</code> 中用 <code>new</code> /C 语言用 <code>malloc</code> 分配动态内存时，返回的必然是指针（如 <code>int*</code>），因为动态内存的地址需要被记录和管理，<code>int</code> 无法存储内存地址；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    // 动态分配一个int，返回其地址（必须用int*接收）
+    int* dynamicInt = new int(20);
+    cout &lt;&lt; *dynamicInt &lt;&lt; endl; // 输出20（解引用访问动态内存）
+    
+    // 动态分配int数组（只能用int*管理）
+    int* arr = new int[5]{1,2,3,4,5};
+    for (int i=0; i&lt;5; i++) {
+        cout &lt;&lt; arr[i] &lt;&lt; " "; // arr[i] 等价于 *(arr+i)，通过指针访问数组
+    } // 输出1 2 3 4 5
+    
+    // 释放动态内存（必须用指针）
+    delete dynamicInt;
+    delete[] arr;
+    return 0;
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`int* a` 与 `int a[]` 的区别" dir="auto" class="heading" id="`int*_a`_与_`int_a[]`_的区别"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>int* a</code> 与 <code>int a[]</code> 的区别</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>int* a</code> 与 <code>int a[]</code> 的区别</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">这两个数组声明的核心差异，本质是静态栈数组和动态堆数组的区别：指针符号的有无，正是由它们的内存分配方式、类型本质决定的；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto">区别：</li>
+</ul></div><div class="el-table" dir="ltr" style="overflow-x: auto;"><table>
+<thead>
+<tr>
+<th dir="ltr">维度</th>
+<th dir="ltr">静态数组 <code>int a[] = {1,2,3,4,5}</code></th>
+<th dir="ltr">动态数组 <code>int* arr = new int[]{1,2,3,4,5}</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr">内存分配位置</td>
+<td dir="ltr">栈（<code>stack</code>）</td>
+<td dir="ltr">堆（<code>heap</code>）</td>
+</tr>
+<tr>
+<td dir="ltr">生命周期</td>
+<td dir="ltr">随作用域结束自动释放（如函数执行完）</td>
+<td dir="ltr">手动调用 <code>delete[] arr</code> 才释放，否则内存泄漏</td>
+</tr>
+<tr>
+<td dir="ltr">大小信息</td>
+<td dir="ltr">编译器可知（<code>sizeof(a)</code>=20 字节）</td>
+<td dir="ltr">编译器不可知（<code>sizeof(arr)</code>=4/8 字节，仅指针大小）</td>
+</tr>
+<tr>
+<td dir="ltr">类型本质</td>
+<td dir="ltr">数组类型 <code>int[5]</code>（常量指针）</td>
+<td dir="ltr">指针类型 <code>int*</code>（普通指针）</td>
+</tr>
+<tr>
+<td dir="ltr">可修改指向</td>
+<td dir="ltr">数组名<code>a</code>是常量指针，不能重指向</td>
+<td dir="ltr">指针<code>arr</code>可重指向其他内存（如<code>arr = new int[10]</code>）</td>
+</tr>
+<tr>
+<td dir="ltr">初始化限制</td>
+<td dir="ltr">编译期必须确定大小（字面量初始化）</td>
+<td dir="ltr">运行期可动态确定大小（如 <code>new int[n]</code>，n 是变量）</td>
+</tr>
+</tbody>
+</table></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="1" dir="auto">动态数组返回的是 <code>int*</code> 指针，编译器只知道 “这是一个指向 int 的指针”，不知道指向的内存有多少个元素，所以 <code>sizeof(arr)</code> 只能得到指针本身的大小；</li>
+<li data-line="2" dir="auto"><code>int a[]</code> 告诉编译器 “我要在栈上分配一块连续的内存，存储 <code>5</code> 个 <code>int</code>，变量名是 <code>a</code>”，数组名 <code>a</code> 的类型是 <code>int[5]</code>（数组类型），但编译器会<strong>隐式将 <code>a</code> 当作 <code>const int*</code>（常量指针）</strong> 使用，比如 <code>a[0]</code> 等价于 <code>*(a+0)</code>；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`new Test` 和 `new Test()` 区别" dir="auto" class="heading" id="`new_Test`_和_`new_Test()`_区别"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>new Test</code> 和 <code>new Test()</code> 区别</h3><div class="heading-children"><div class="el-table" dir="ltr" style="overflow-x: auto;"><table>
+<thead>
+<tr>
+<th dir="ltr">初始化方式</th>
+<th dir="ltr"><code>new Test</code>（默认初始化）</th>
+<th dir="ltr"><code>new Test()</code>（值初始化）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="ltr">核心逻辑</td>
+<td dir="ltr">编译器按 “类型特性” 做最少初始化</td>
+<td dir="ltr">编译器强制做 “零 / 合法初始化”</td>
+</tr>
+<tr>
+<td dir="ltr">对<strong>有自定义默认构造函数</strong>的类</td>
+<td dir="ltr">调用自定义默认构造函数（和值初始化效果一致）</td>
+<td dir="ltr">调用自定义默认构造函数（和默认初始化效果一致）</td>
+</tr>
+<tr>
+<td dir="ltr">对<strong>无自定义默认构造函数</strong>的类</td>
+<td dir="ltr">内置类型成员（如 int）未初始化（随机值）</td>
+<td dir="ltr">内置类型成员强制零初始化（值为 0）</td>
+</tr>
+<tr>
+<td dir="ltr">对内置类型（如 int）</td>
+<td dir="ltr"><code>new int</code> → 内存未初始化（随机值）</td>
+<td dir="ltr"><code>new int()</code> → 内存初始化为 0</td>
+</tr>
+</tbody>
+</table></div><div class="mod-footer mod-ui"></div></div></div></div></div></div></div></div><div class="sidebar-right sidebar"><div class="sidebar-topbar"><div class="topbar-content"></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"></div><script defer="">let rs = document.querySelector(".sidebar-right"); rs.classList.add("is-collapsed"); if (window.innerWidth > 768) rs.classList.remove("is-collapsed"); rs.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-right-width"));</script></div></div></body></html>
