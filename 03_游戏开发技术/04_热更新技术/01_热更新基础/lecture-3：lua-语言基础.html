@@ -1,0 +1,837 @@
+<!DOCTYPE html> <html><head>
+		<title>Lecture 3：Lua 语言基础</title>
+		<base href="..\..\../">
+		<meta id="root-path" root-path="..\..\../">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
+		<meta charset="UTF-8">
+		<meta name="description" content="MUBlog - Lecture 3：Lua 语言基础">
+		<meta property="og:title" content="Lecture 3：Lua 语言基础">
+		<meta property="og:description" content="MUBlog - Lecture 3：Lua 语言基础">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="03_游戏开发技术/04_热更新技术/01_热更新基础/lecture-3：lua-语言基础.html">
+		<meta property="og:image" content="lib\media\pasted-image-20250729101733.png">
+		<meta property="og:site_name" content="MUBlog">
+		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="lib/rss.xml"><script async="" id="webpage-script" src="lib/scripts/webpage.js" onload="this.onload=null;this.setAttribute(&quot;loaded&quot;, &quot;true&quot;)"></script><link rel="icon" href="lib/media/favicon.png"><style>body{--line-width:40em;--line-width-adaptive:40em;--file-line-width:40em;--sidebar-width:min(20em, 80vw);--collapse-arrow-size:11px;--tree-horizontal-spacing:0.6em;--tree-vertical-spacing:0.6em;--sidebar-margin:12px}.sidebar{height:100%;min-width:calc(var(--sidebar-width) + var(--divider-width-hover));max-width:calc(var(--sidebar-width) + var(--divider-width-hover));font-size:14px;z-index:10;position:relative;overflow:hidden;transition:min-width ease-in-out,max-width ease-in-out;transition-duration:.2s;contain:size}.sidebar-left{left:0}.sidebar-right{right:0}.sidebar.is-collapsed{min-width:0;max-width:0}body.floating-sidebars .sidebar{position:absolute}.sidebar-content{height:100%;min-width:calc(var(--sidebar-width) - var(--divider-width-hover));top:0;padding:var(--sidebar-margin);padding-top:4em;line-height:var(--line-height-tight);background-color:var(--background-secondary);transition:background-color,border-right,border-left,box-shadow;transition-duration:var(--color-fade-speed);transition-timing-function:ease-in-out;position:absolute;display:flex;flex-direction:column}.sidebar:not(.is-collapsed) .sidebar-content{min-width:calc(max(100%,var(--sidebar-width)) - 3px);max-width:calc(max(100%,var(--sidebar-width)) - 3px)}.sidebar-left .sidebar-content{left:0;border-top-right-radius:var(--radius-l);border-bottom-right-radius:var(--radius-l)}.sidebar-right .sidebar-content{right:0;border-top-left-radius:var(--radius-l);border-bottom-left-radius:var(--radius-l)}.sidebar:has(.sidebar-content:empty):has(.topbar-content:empty){display:none}.sidebar-topbar{height:2em;width:var(--sidebar-width);top:var(--sidebar-margin);padding-inline:var(--sidebar-margin);z-index:1;position:fixed;display:flex;align-items:center;transition:width ease-in-out;transition-duration:inherit}.sidebar.is-collapsed .sidebar-topbar{width:calc(2.3em + var(--sidebar-margin) * 2)}.sidebar .sidebar-topbar.is-collapsed{width:0}.sidebar-left .sidebar-topbar{left:0}.sidebar-right .sidebar-topbar{right:0}.topbar-content{overflow:hidden;overflow:clip;width:100%;height:100%;display:flex;align-items:center;transition:inherit}.sidebar.is-collapsed .topbar-content{width:0;transition:inherit}.clickable-icon.sidebar-collapse-icon{background-color:transparent;color:var(--icon-color-focused);padding:0!important;margin:0!important;height:100%!important;width:2.3em!important;margin-inline:0.14em!important;position:absolute}.sidebar-left .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);right:var(--sidebar-margin)}.sidebar-right .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);left:var(--sidebar-margin)}.clickable-icon.sidebar-collapse-icon svg.svg-icon{width:100%;height:100%}.sidebar-section-header{margin:0 0 1em 0;text-transform:uppercase;letter-spacing:.06em;font-weight:600}body{transition:background-color var(--color-fade-speed) ease-in-out}.webpage-container{display:flex;flex-direction:row;height:100%;width:100%;align-items:stretch;justify-content:center}.document-container{opacity:1;flex-basis:100%;max-width:100%;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;transition:opacity .2s ease-in-out;contain:inline-size}.hide{opacity:0;transition:opacity .2s ease-in-out}.document-container>.markdown-preview-view{margin:var(--sidebar-margin);margin-bottom:0;width:100%;width:-webkit-fill-available;width:-moz-available;width:fill-available;background-color:var(--background-primary);transition:background-color var(--color-fade-speed) ease-in-out;border-top-right-radius:var(--window-radius,var(--radius-m));border-top-left-radius:var(--window-radius,var(--radius-m));overflow-x:hidden!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;contain:inline-size}.document-container>.markdown-preview-view>.markdown-preview-sizer{padding-bottom:80vh!important;width:100%!important;max-width:var(--line-width)!important;flex-basis:var(--line-width)!important;transition:background-color var(--color-fade-speed) ease-in-out;contain:inline-size}.markdown-rendered img:not([width]),.view-content img:not([width]){max-width:100%;outline:0}.document-container>.view-content.embed{display:flex;padding:1em;height:100%;width:100%;align-items:center;justify-content:center}.document-container>.view-content.embed>*{max-width:100%;max-height:100%;object-fit:contain}:has(> :is(.math,table)){overflow-x:auto!important}.document-container>.view-content{overflow-x:auto;contain:content;padding:0;margin:0;height:100%}.scroll-highlight{position:absolute;width:100%;height:100%;pointer-events:none;z-index:1000;background-color:hsla(var(--color-accent-hsl),.25);opacity:0;padding:1em;inset:50%;translate:-50% -50%;border-radius:var(--radius-s)}</style><script defer="">async function loadIncludes(){if("file:"!=location.protocol){let e=document.querySelectorAll("include");for(let t=0;t<e.length;t++){let o=e[t],l=o.getAttribute("src");try{const e=await fetch(l);if(!e.ok){console.log("Could not include file: "+l),o?.remove();continue}let t=await e.text(),n=document.createRange().createContextualFragment(t),i=Array.from(n.children);for(let e of i)e.classList.add("hide"),e.style.transition="opacity 0.5s ease-in-out",setTimeout((()=>{e.classList.remove("hide")}),10);o.before(n),o.remove(),console.log("Included file: "+l)}catch(e){o?.remove(),console.log("Could not include file: "+l,e);continue}}}else{if(document.querySelectorAll("include").length>0){var e=document.createElement("div");e.id="error",e.textContent="Web server exports must be hosted on an http / web server to be viewed correctly.",e.style.position="fixed",e.style.top="50%",e.style.left="50%",e.style.transform="translate(-50%, -50%)",e.style.fontSize="1.5em",e.style.fontWeight="bold",e.style.textAlign="center",document.body.appendChild(e),document.querySelector(".document-container")?.classList.remove("hide")}}}document.addEventListener("DOMContentLoaded",(()=>{loadIncludes()}));let isFileProtocol="file:"==location.protocol;function waitLoadScripts(e,t){let o=e.map((e=>document.getElementById(e+"-script"))),l=0;!function e(){let n=o[l];l++,n&&"true"!=n.getAttribute("loaded")||l<o.length&&e(),l<o.length?n.addEventListener("load",e):t()}()}</script><link rel="stylesheet" href="lib/styles/obsidian.css"><link rel="stylesheet" href="lib/styles/theme.css"><link rel="preload" href="lib/styles/global-variable-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/global-variable-styles.css"></noscript><link rel="preload" href="lib/styles/supported-plugins.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/supported-plugins.css"></noscript><link rel="preload" href="lib/styles/main-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/main-styles.css"></noscript><link rel="preload" href="lib/styles/snippets.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/snippets.css"></noscript></head><body class="publish css-settings-manager styled-scrollbars theme-light show-inline-title ctp-rosepine-light ctp-mocha ctp-accent-rosewater anuppuccin-accent-toggle anp-current-line-border anp-callout-color-toggle anp-codeblock-numbers anp-list-toggle anp-table-width anp-toggle-preview anp-color-transition-toggle anp-button-metadata-toggle anp-toggle-metadata anp-toggle-scrollbars anp-h1-red anp-h1-divider anp-h2-peach anp-h3-green anp-h4-teal anp-h5-lavender anp-h6-mauve anp-decoration-toggle anp-bold-maroon anp-italic-green anp-highlight-yellow anp-colorful-frame-icon-toggle-dark anp-simple-rainbow-color-toggle anp-rainbow-file-toggle anp-simple-rainbow-title-toggle anp-simple-rainbow-icon-folder-toggle anp-simple-rainbow-indentation-toggle anp-simple-rainbow-collapse-toggle anp-card-layout anp-card-shadows anp-card-layout-filebrowser anp-theme-ext-light anp-theme-ext-dark anp-theme-ext-amoled ctp-atom-light ctp-atom-dark table-type-three-line table-header-color-blue table-row-alt-background-option table-dark-mode"><script defer="">let theme=localStorage.getItem("theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");"dark"==theme?(document.body.classList.add("theme-dark"),document.body.classList.remove("theme-light")):(document.body.classList.add("theme-light"),document.body.classList.remove("theme-dark")),window.innerWidth<480?document.body.classList.add("is-phone"):window.innerWidth<768?document.body.classList.add("is-tablet"):window.innerWidth<1024?document.body.classList.add("is-small-screen"):document.body.classList.add("is-large-screen")</script><div class="webpage-container workspace"><div class="sidebar-left sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"><label class="theme-toggle-container" for="theme_toggle"><input class="theme-toggle-input" type="checkbox" id="theme_toggle"><div class="toggle-background"></div></label></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"><include src="lib/html/file-tree.html"></include></div><script defer="">let ls = document.querySelector(".sidebar-left"); ls.classList.add("is-collapsed"); if (window.innerWidth > 768) ls.classList.remove("is-collapsed"); ls.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-left-width"));</script></div><div class="document-container markdown-reading-view hide"><div class="markdown-preview-view markdown-rendered allow-fold-headings allow-fold-lists is-readable-line-width"><style id="MJX-CHTML-styles">mjx-mpadded{display:inline-block;text-align:left}mjx-rbox{display:inline-block;position:relative}mjx-stretchy-h.mjx-c2192 mjx-ext mjx-c::before{content:"−";padding:.583em 0 .082em}mjx-stretchy-h.mjx-c2192 mjx-end mjx-c::before{content:"→";padding:.583em 0 .082em}mjx-c.mjx-c39::before{padding:.666em .5em .022em 0;content:"9"}mjx-c.mjx-c1D44D.TEX-I::before{padding:.683em .723em 0 0;content:"Z"}mjx-c.mjx-c58::before{padding:.683em .75em 0 0;content:"X"}mjx-c.mjx-c59::before{padding:.683em .75em 0 0;content:"Y"}mjx-c.mjx-c5A::before{padding:.683em .611em 0 0;content:"Z"}mjx-c.mjx-c28.TEX-S2::before{padding:1.15em .597em .649em 0;content:"("}mjx-c.mjx-c29.TEX-S2::before{padding:1.15em .597em .649em 0;content:")"}mjx-c.mjx-c4E::before{padding:.683em .75em 0 0;content:"N"}mjx-c.mjx-c22A4::before{padding:.668em .778em 0 0;content:"⊤"}mjx-c.mjx-cB7::before{padding:.31em .278em 0 0;content:"⋅"}mjx-c.mjx-c36::before{padding:.666em .5em .022em 0;content:"6"}mjx-c.mjx-c1D43E.TEX-I::before{padding:.683em .889em 0 0;content:"K"}mjx-c.mjx-c52::before{padding:.683em .736em .022em 0;content:"R"}mjx-c.mjx-c1D42B.TEX-B::before{padding:.45em .474em 0 0;content:"r"}mjx-c.mjx-c1D428.TEX-B::before{padding:.452em .575em .005em 0;content:"o"}mjx-c.mjx-c1D41D.TEX-B::before{padding:.694em .639em .006em 0;content:"d"}mjx-c.mjx-c3C::before{padding:.54em .778em .04em 0;content:"<"}mjx-c.mjx-c221E::before{padding:.442em 1em .011em 0;content:"∞"}mjx-c.mjx-c1D429.TEX-B::before{padding:.45em .639em .194em 0;content:"p"}mjx-c.mjx-cB1::before{padding:.666em .778em 0 0;content:"±"}mjx-c.mjx-c221A::before{padding:.8em .853em .2em 0;content:"√"}mjx-c.mjx-c47::before{padding:.705em .785em .022em 0;content:"G"}mjx-c.mjx-c66::before{padding:.705em .372em 0 0;content:"f"}mjx-c.mjx-c71::before{padding:.442em .528em .194em 0;content:"q"}mjx-c.mjx-c5E.TEX-B::before{padding:.694em .575em 0 0;content:"^"}mjx-c.mjx-c1D42D.TEX-B::before{padding:.635em .447em .005em 0;content:"t"}mjx-c.mjx-c1D40E.TEX-B::before{padding:.696em .864em .01em 0;content:"O"}mjx-c.mjx-c1D403.TEX-B::before{padding:.686em .882em 0 0;content:"D"}mjx-c.mjx-c1D40F.TEX-B::before{padding:.686em .786em 0 0;content:"P"}mjx-c.mjx-c2219::before{padding:.444em .5em 0 0;content:"∙"}mjx-c.mjx-c1D404.TEX-B::before{padding:.68em .756em 0 0;content:"E"}mjx-c.mjx-c20D7.TEX-VB::before{padding:.723em .575em 0 0;content:"→"}mjx-c.mjx-c7B::before{padding:.75em .5em .25em 0;content:"{"}mjx-c.mjx-c7D::before{padding:.75em .5em .25em 0;content:"}"}mjx-c.mjx-c26::before{padding:.716em .778em .022em 0;content:"&"}mjx-c.mjx-c2261::before{padding:.464em .778em 0 0;content:"≡"}mjx-c.mjx-c3A6::before{padding:.683em .722em 0 0;content:"Φ"}mjx-c.mjx-c57::before{padding:.683em 1.028em .022em 0;content:"W"}mjx-c.mjx-c2035.TEX-A::before{padding:.56em .275em 0 0;content:"‵"}mjx-c.mjx-c1D446.TEX-I::before{padding:.705em .645em .022em 0;content:"S"}mjx-c.mjx-c1D719.TEX-I::before{padding:.694em .596em .205em 0;content:"ϕ"}mjx-c.mjx-c7C::before{padding:.75em .278em .249em 0;content:"|"}.mjx-stretched mjx-c.mjx-c2013::before{content:"–"}mjx-stretchy-h.mjx-c2013 mjx-ext mjx-c::before{content:"–";padding:.285em 0 0}mjx-c.mjx-c1D52E.TEX-FR::before{padding:.479em .489em .219em 0;content:"q"}mjx-c.mjx-c1D52D.TEX-FR::before{padding:.541em .5em .212em 0;content:"p"}mjx-c.mjx-c1D43A.TEX-I::before{padding:.705em .786em .022em 0;content:"G"}mjx-c.mjx-c1D439.TEX-I::before{padding:.68em .749em 0 0;content:"F"}mjx-c.mjx-c3A9::before{padding:.704em .722em 0 0;content:"Ω"}mjx-c.mjx-c2248::before{padding:.483em .778em 0 0;content:"≈"}mjx-c.mjx-c222B.TEX-S1::before{padding:.805em .61em .306em 0;content:"∫"}mjx-c.mjx-c200B::before{padding:0;content:""}mjx-c.mjx-c1D44A.TEX-I::before{padding:.683em 1.048em .022em 0;content:"W"}mjx-c.mjx-c1D443.TEX-I::before{padding:.683em .751em 0 0;content:"P"}mjx-c.mjx-c1D45E.TEX-I::before{padding:.442em .46em .194em 0;content:"q"}mjx-c.mjx-c2208::before{padding:.54em .667em .04em 0;content:"∈"}mjx-c.mjx-c4E.TEX-C::before{padding:.789em .979em .05em 0;content:"N"}mjx-c.mjx-c1D712.TEX-I::before{padding:.442em .626em .204em 0;content:"χ"}mjx-c.mjx-c53::before{padding:.705em .556em .022em 0;content:"S"}mjx-c.mjx-c4D::before{padding:.683em .917em 0 0;content:"M"}mjx-c.mjx-c1D44B.TEX-I::before{padding:.683em .852em 0 0;content:"X"}mjx-c.mjx-c56::before{padding:.683em .75em .022em 0;content:"V"}mjx-c.mjx-c45::before{padding:.68em .681em 0 0;content:"E"}mjx-c.mjx-c2264::before{padding:.636em .778em .138em 0;content:"≤"}mjx-c.mjx-c1D70E.TEX-I::before{padding:.431em .571em .011em 0;content:"σ"}mjx-c.mjx-c1D707.TEX-I::before{padding:.442em .603em .216em 0;content:"μ"}mjx-c.mjx-c1D708.TEX-I::before{padding:.442em .53em 0 0;content:"ν"}mjx-c.mjx-c46::before{padding:.68em .653em 0 0;content:"F"}mjx-c.mjx-c7B.TEX-S3::before{padding:1.45em .75em .949em 0;content:"{"}mjx-c.mjx-c7D.TEX-S3::before{padding:1.45em .75em .949em 0;content:"}"}mjx-c.mjx-c1D438.TEX-I::before{padding:.68em .764em 0 0;content:"E"}mjx-c.mjx-c222B.TEX-S2::before{padding:1.36em .944em .862em 0;content:"∫"}mjx-c.mjx-c1D43B.TEX-I::before{padding:.683em .888em 0 0;content:"H"}mjx-c.mjx-c1D70C.TEX-I::before{padding:.442em .517em .216em 0;content:"ρ"}mjx-c.mjx-c1D702.TEX-I::before{padding:.442em .497em .216em 0;content:"η"}mjx-c.mjx-c221A.TEX-S2::before{padding:1.15em 1.02em .65em 0;content:"√"}mjx-c.mjx-c3E::before{padding:.54em .778em .04em 0;content:">"}mjx-munderover{display:inline-block;text-align:left}mjx-munderover:not([limits=false]){padding-top:.1em}mjx-munderover:not([limits=false])>*{display:block}mjx-c.mjx-c221A.TEX-S1::before{padding:.85em 1.02em .35em 0;content:"√"}mjx-c.mjx-c3A::before{padding:.43em .278em 0 0;content:":"}mjx-c.mjx-c211D.TEX-A::before{padding:.683em .722em 0 0;content:"R"}mjx-c.mjx-c3B::before{padding:.43em .278em .194em 0;content:";"}mjx-c.mjx-c21A6::before{padding:.511em 1em .011em 0;content:"↦"}mjx-c.mjx-c1D41B.TEX-B::before{padding:.694em .639em .006em 0;content:"b"}mjx-c.mjx-c2211.TEX-S2::before{padding:.95em 1.444em .45em 0;content:"∑"}mjx-c.mjx-c1D457.TEX-I::before{padding:.661em .412em .204em 0;content:"j"}mjx-c.mjx-c38::before{padding:.666em .5em .022em 0;content:"8"}mjx-c.mjx-c41::before{padding:.716em .75em 0 0;content:"A"}mjx-c.mjx-c43::before{padding:.705em .722em .021em 0;content:"C"}mjx-msqrt{display:inline-block;text-align:left}mjx-root{display:inline-block;white-space:nowrap}mjx-surd{display:inline-block;vertical-align:top}mjx-sqrt{display:inline-block;padding-top:.07em}mjx-sqrt>mjx-box{border-top:.07em solid}mjx-sqrt.mjx-tall>mjx-box{padding-left:.3em;margin-left:-.3em}mjx-c.mjx-c1D435.TEX-I::before{padding:.683em .759em 0 0;content:"B"}mjx-c.mjx-c1D436.TEX-I::before{padding:.705em .76em .022em 0;content:"C"}mjx-c.mjx-c28.TEX-S3::before{padding:1.45em .736em .949em 0;content:"("}mjx-c.mjx-c29.TEX-S3::before{padding:1.45em .736em .949em 0;content:")"}mjx-c.mjx-c42::before{padding:.683em .708em 0 0;content:"B"}mjx-c.mjx-c1D449.TEX-I::before{padding:.683em .769em .022em 0;content:"V"}mjx-c.mjx-c1D462.TEX-I::before{padding:.442em .572em .011em 0;content:"u"}mjx-c.mjx-c221A.TEX-S4::before{padding:1.75em 1.02em 1.25em 0;content:"√"}mjx-c.mjx-c22C6::before{padding:.486em .5em 0 0;content:"⋆"}mjx-c.mjx-c1D42E.TEX-B::before{padding:.45em .639em .006em 0;content:"u"}mjx-c.mjx-c2E::before{padding:.12em .278em 0 0;content:"."}mjx-c.mjx-c1D43C.TEX-I::before{padding:.683em .504em 0 0;content:"I"}mjx-c.mjx-c1D43F.TEX-I::before{padding:.683em .681em 0 0;content:"L"}mjx-c.mjx-c1D458.TEX-I::before{padding:.694em .521em .011em 0;content:"k"}mjx-c.mjx-c28.TEX-S1::before{padding:.85em .458em .349em 0;content:"("}mjx-c.mjx-c29.TEX-S1::before{padding:.85em .458em .349em 0;content:")"}mjx-c.mjx-c6D::before{padding:.442em .833em 0 0;content:"m"}mjx-c.mjx-c1D425.TEX-B::before{padding:.694em .319em 0 0;content:"l"}mjx-c.mjx-c1D421.TEX-B::before{padding:.694em .639em 0 0;content:"h"}mjx-c.mjx-c62::before{padding:.694em .556em .011em 0;content:"b"}mjx-c.mjx-c1D42F.TEX-B::before{padding:.444em .607em 0 0;content:"v"}mjx-c.mjx-c2225::before{padding:.75em .5em .25em 0;content:"∥"}mjx-c.mjx-c1D441.TEX-I::before{padding:.683em .888em 0 0;content:"N"}mjx-c.mjx-c2211.TEX-S1::before{padding:.75em 1.056em .25em 0;content:"∑"}mjx-stretchy-v.mjx-c7B mjx-beg mjx-c::before{content:"⎧";padding:.899em .889em .01em 0}mjx-stretchy-v.mjx-c7B mjx-ext mjx-c::before{content:"⎪";width:.889em}mjx-stretchy-v.mjx-c7B mjx-end mjx-c::before{content:"⎩";padding:.01em .889em .899em 0}mjx-stretchy-v.mjx-c7B mjx-mid mjx-c::before{content:"⎨";padding:1.16em .889em .66em 0}mjx-stretchy-v.mjx-c7B>mjx-mid{margin-top:-.91em;margin-bottom:-.91em}mjx-stretchy-v.mjx-c7B>mjx-end{margin-top:-.909em}mjx-stretchy-v.mjx-c7B>mjx-ext{height:50%;border-top-width:.879em;border-bottom-width:.879em}mjx-c.mjx-c2217::before{padding:.465em .5em 0 0;content:"∗"}mjx-c.mjx-c68::before{padding:.694em .556em 0 0;content:"h"}mjx-c.mjx-c1D70B.TEX-I::before{padding:.431em .57em .011em 0;content:"π"}mjx-c.mjx-c1D714.TEX-I::before{padding:.443em .622em .011em 0;content:"ω"}mjx-c.mjx-c37::before{padding:.676em .5em .022em 0;content:"7"}mjx-mtable{display:inline-block;text-align:center;vertical-align:.25em;position:relative;box-sizing:border-box;border-spacing:0px;border-collapse:collapse}mjx-mstyle[size="s"] mjx-mtable{vertical-align:.354em}mjx-labels{position:absolute;left:0;top:0}mjx-table{display:inline-block;vertical-align:-.5ex;box-sizing:border-box}mjx-table>mjx-itable{vertical-align:middle;text-align:left;box-sizing:border-box}mjx-labels>mjx-itable{position:absolute;top:0}mjx-mtable[justify=left]{text-align:left}mjx-mtable[justify=right]{text-align:right}mjx-mtable[justify=left][side=left]{padding-right:0!important}mjx-mtable[justify=left][side=right]{padding-left:0!important}mjx-mtable[justify=right][side=left]{padding-right:0!important}mjx-mtable[justify=right][side=right]{padding-left:0!important}mjx-mtable[align]{vertical-align:baseline}mjx-mtable[align=top]>mjx-table{vertical-align:top}mjx-mtable[align=bottom]>mjx-table{vertical-align:bottom}mjx-mtable[side=right] mjx-labels{min-width:100%}mjx-mtr{display:table-row;text-align:left}mjx-mtr[rowalign=top]>mjx-mtd{vertical-align:top}mjx-mtr[rowalign=center]>mjx-mtd{vertical-align:middle}mjx-mtr[rowalign=bottom]>mjx-mtd{vertical-align:bottom}mjx-mtr[rowalign=baseline]>mjx-mtd{vertical-align:baseline}mjx-mtr[rowalign=axis]>mjx-mtd{vertical-align:.25em}mjx-mtd{display:table-cell;text-align:center;padding:.215em .4em}mjx-mtd:first-child{padding-left:0}mjx-mtd:last-child{padding-right:0}mjx-mtable>*>mjx-itable>:first-child>mjx-mtd{padding-top:0}mjx-mtable>*>mjx-itable>:last-child>mjx-mtd{padding-bottom:0}mjx-tstrut{display:inline-block;height:1em;vertical-align:-.25em}mjx-labels[align=left]>mjx-mtr>mjx-mtd{text-align:left}mjx-labels[align=right]>mjx-mtr>mjx-mtd{text-align:right}mjx-mtd[extra]{padding:0}mjx-mtd[rowalign=top]{vertical-align:top}mjx-mtd[rowalign=center]{vertical-align:middle}mjx-mtd[rowalign=bottom]{vertical-align:bottom}mjx-mtd[rowalign=baseline]{vertical-align:baseline}mjx-mtd[rowalign=axis]{vertical-align:.25em}mjx-texatom{display:inline-block;text-align:left}mjx-mrow{display:inline-block;text-align:left}mjx-msub{display:inline-block;text-align:left}mjx-mspace{display:inline-block;text-align:left}mjx-mtext{display:inline-block;text-align:left}mjx-munder{display:inline-block;text-align:left}mjx-over{text-align:left}mjx-munder:not([limits=false]){display:inline-table}mjx-munder>mjx-row{text-align:left}mjx-under{padding-bottom:.1em}mjx-mover{display:inline-block;text-align:left}mjx-mover:not([limits=false]){padding-top:.1em}mjx-mover:not([limits=false])>*{display:block;text-align:left}mjx-msubsup{display:inline-block;text-align:left}mjx-script{display:inline-block;padding-right:.05em;padding-left:.033em}mjx-script>mjx-spacer{display:block}mjx-mfrac{display:inline-block;text-align:left}mjx-frac{display:inline-block;vertical-align:.17em;padding:0 .22em}mjx-frac[type="d"]{vertical-align:.04em}mjx-frac[delims]{padding:0 .1em}mjx-frac[atop]{padding:0 .12em}mjx-frac[atop][delims]{padding:0}mjx-dtable{display:inline-table;width:100%}mjx-dtable>*{font-size:2000%}mjx-dbox{display:block;font-size:5%}mjx-num{display:block;text-align:center}mjx-den{display:block;text-align:center}mjx-mfrac[bevelled]>mjx-num{display:inline-block}mjx-mfrac[bevelled]>mjx-den{display:inline-block}mjx-den[align=right],mjx-num[align=right]{text-align:right}mjx-den[align=left],mjx-num[align=left]{text-align:left}mjx-nstrut{display:inline-block;height:.054em;width:0;vertical-align:-.054em}mjx-nstrut[type="d"]{height:.217em;vertical-align:-.217em}mjx-dstrut{display:inline-block;height:.505em;width:0}mjx-dstrut[type="d"]{height:.726em}mjx-line{display:block;box-sizing:border-box;min-height:1px;height:.06em;border-top:.06em solid;margin:.06em -.1em;overflow:hidden}mjx-line[type="d"]{margin:.18em -.1em}mjx-stretchy-v.mjx-c28 mjx-beg mjx-c::before{content:"⎛";padding:1.154em .875em .655em 0}mjx-stretchy-v.mjx-c28 mjx-ext mjx-c::before{content:"⎜";width:.875em}mjx-stretchy-v.mjx-c28 mjx-end mjx-c::before{content:"⎝";padding:1.165em .875em .644em 0}mjx-stretchy-v.mjx-c28>mjx-end{margin-top:-1.809em}mjx-stretchy-v.mjx-c28>mjx-ext{border-top-width:1.779em;border-bottom-width:1.779em}mjx-stretchy-v.mjx-c29 mjx-beg mjx-c::before{content:"⎞";padding:1.154em .875em .655em 0}mjx-stretchy-v.mjx-c29 mjx-ext mjx-c::before{content:"⎟";width:.875em}mjx-stretchy-v.mjx-c29 mjx-end mjx-c::before{content:"⎠";padding:1.165em .875em .644em 0}mjx-stretchy-v.mjx-c29>mjx-end{margin-top:-1.809em}mjx-stretchy-v.mjx-c29>mjx-ext{border-top-width:1.779em;border-bottom-width:1.779em}mjx-stretchy-v.mjx-c5B mjx-beg mjx-c::before{content:"⎡";padding:1.154em .667em .645em 0}mjx-stretchy-v.mjx-c5B mjx-ext mjx-c::before{content:"⎢";width:.667em}mjx-stretchy-v.mjx-c5B mjx-end mjx-c::before{content:"⎣";padding:1.155em .667em .644em 0}mjx-stretchy-v.mjx-c5B>mjx-end{margin-top:-1.799em}mjx-stretchy-v.mjx-c5B>mjx-ext{border-top-width:1.769em;border-bottom-width:1.769em}mjx-stretchy-v.mjx-c5D mjx-beg mjx-c::before{content:"⎤";padding:1.154em .667em .645em 0}mjx-stretchy-v.mjx-c5D mjx-ext mjx-c::before{content:"⎥";width:.667em}mjx-stretchy-v.mjx-c5D mjx-end mjx-c::before{content:"⎦";padding:1.155em .667em .644em 0}mjx-stretchy-v.mjx-c5D>mjx-end{margin-top:-1.799em}mjx-stretchy-v.mjx-c5D>mjx-ext{border-top-width:1.769em;border-bottom-width:1.769em}mjx-stretchy-h.mjx-c23DF mjx-beg mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF mjx-ext mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF mjx-end mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF mjx-mid mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF>mjx-ext{width:50%}mjx-c.mjx-c1D466.TEX-I::before{padding:.442em .49em .205em 0;content:"y"}mjx-c.mjx-c5B.TEX-S3::before{padding:1.45em .528em .949em 0;content:"["}mjx-c.mjx-c5D.TEX-S3::before{padding:1.45em .528em .949em 0;content:"]"}mjx-c.mjx-c30::before{padding:.666em .5em .022em 0;content:"0"}mjx-c.mjx-c2212::before{padding:.583em .778em .082em 0;content:"−"}mjx-c.mjx-c1D411.TEX-B::before{padding:.686em .862em .011em 0;content:"R"}mjx-c.mjx-c1D703.TEX-I::before{padding:.705em .469em .01em 0;content:"θ"}mjx-c.mjx-c63::before{padding:.448em .444em .011em 0;content:"c"}mjx-c.mjx-c6F::before{padding:.448em .5em .01em 0;content:"o"}mjx-c.mjx-c73::before{padding:.448em .394em .011em 0;content:"s"}mjx-c.mjx-c2061::before{padding:0;content:""}mjx-c.mjx-c69::before{padding:.669em .278em 0 0;content:"i"}mjx-c.mjx-c6E::before{padding:.442em .556em 0 0;content:"n"}mjx-c.mjx-c1D451.TEX-I::before{padding:.694em .52em .01em 0;content:"d"}mjx-c.mjx-c1D437.TEX-I::before{padding:.683em .828em 0 0;content:"D"}mjx-c.mjx-c1D447.TEX-I::before{padding:.677em .704em 0 0;content:"T"}mjx-c.mjx-c1D464.TEX-I::before{padding:.443em .716em .011em 0;content:"w"}mjx-c.mjx-c22C5::before{padding:.31em .278em 0 0;content:"⋅"}mjx-c.mjx-c1D412.TEX-B::before{padding:.697em .639em .011em 0;content:"S"}mjx-c.mjx-c1D6FC.TEX-I::before{padding:.442em .64em .011em 0;content:"α"}mjx-c.mjx-c1D445.TEX-I::before{padding:.683em .759em .021em 0;content:"R"}mjx-c.mjx-c34::before{padding:.677em .5em 0 0;content:"4"}mjx-c.mjx-c35::before{padding:.666em .5em .022em 0;content:"5"}mjx-c.mjx-c2218::before{padding:.444em .5em 0 0;content:"∘"}mjx-c.mjx-c1D434.TEX-I::before{padding:.716em .75em 0 0;content:"A"}mjx-c.mjx-c2026::before{padding:.12em 1.172em 0 0;content:"…"}mjx-c.mjx-c1D431.TEX-B::before{padding:.444em .607em 0 0;content:"x"}mjx-c.mjx-c1D400.TEX-B::before{padding:.698em .869em 0 0;content:"A"}mjx-c.mjx-c22EF::before{padding:.31em 1.172em 0 0;content:"⋯"}mjx-c.mjx-c1D413.TEX-B::before{padding:.675em .8em 0 0;content:"T"}mjx-c.mjx-c28.TEX-B::before{padding:.75em .447em .249em 0;content:"("}mjx-c.mjx-c1D41C.TEX-B::before{padding:.453em .511em .006em 0;content:"c"}mjx-c.mjx-c29.TEX-B::before{padding:.75em .447em .249em 0;content:")"}mjx-c.mjx-c2212.TEX-B::before{padding:.281em .894em 0 0;content:"−"}mjx-c.mjx-c33::before{padding:.665em .5em .022em 0;content:"3"}mjx-c.mjx-c44::before{padding:.683em .764em 0 0;content:"D"}mjx-c.mjx-cA0::before{padding:0 .25em 0 0;content:" "}mjx-c.mjx-c70::before{padding:.442em .556em .194em 0;content:"p"}mjx-c.mjx-c74::before{padding:.615em .389em .01em 0;content:"t"}mjx-c.mjx-c78::before{padding:.431em .528em 0 0;content:"x"}mjx-c.mjx-c79::before{padding:.431em .528em .204em 0;content:"y"}mjx-c.mjx-c7A::before{padding:.431em .444em 0 0;content:"z"}mjx-c.mjx-c54::before{padding:.677em .722em 0 0;content:"T"}mjx-c.mjx-c76::before{padding:.431em .528em .011em 0;content:"v"}mjx-c.mjx-c65::before{padding:.448em .444em .011em 0;content:"e"}mjx-c.mjx-c72::before{padding:.442em .392em 0 0;content:"r"}mjx-c.mjx-c1D467.TEX-I::before{padding:.442em .465em .011em 0;content:"z"}mjx-c.mjx-c1D453.TEX-I::before{padding:.705em .55em .205em 0;content:"f"}mjx-c.mjx-c1D6FD.TEX-I::before{padding:.705em .566em .194em 0;content:"β"}mjx-c.mjx-c1D6FE.TEX-I::before{padding:.441em .543em .216em 0;content:"γ"}mjx-c.mjx-c1D427.TEX-B::before{padding:.45em .639em 0 0;content:"n"}mjx-c.mjx-c1D408.TEX-B::before{padding:.686em .436em 0 0;content:"I"}mjx-c.mjx-c1D40D.TEX-B::before{padding:.686em .9em 0 0;content:"N"}mjx-c.mjx-c50::before{padding:.683em .681em 0 0;content:"P"}mjx-c.mjx-c20D7.TEX-V::before{padding:.714em .5em 0 0;content:"→"}mjx-c.mjx-c4C::before{padding:.683em .625em 0 0;content:"L"}mjx-c.mjx-c6B::before{padding:.694em .528em 0 0;content:"k"}mjx-c.mjx-c2D::before{padding:.252em .333em 0 0;content:"-"}mjx-c.mjx-c61::before{padding:.448em .5em .011em 0;content:"a"}mjx-c.mjx-c20::before{padding:0 .25em 0 0;content:" "}mjx-c.mjx-c2F::before{padding:.75em .5em .25em 0;content:"/"}mjx-c.mjx-c67::before{padding:.453em .5em .206em 0;content:"g"}mjx-c.mjx-c64::before{padding:.694em .556em .011em 0;content:"d"}mjx-c.mjx-c5E::before{padding:.694em .5em 0 0;content:"^"}mjx-c.mjx-c1D448.TEX-I::before{padding:.683em .767em .022em 0;content:"U"}mjx-c.mjx-cD7::before{padding:.491em .778em 0 0;content:"×"}mjx-c.mjx-c5B::before{padding:.75em .278em .25em 0;content:"["}mjx-c.mjx-c5D::before{padding:.75em .278em .25em 0;content:"]"}mjx-c.mjx-c21D2::before{padding:.525em 1em .024em 0;content:"⇒"}mjx-c.mjx-c75::before{padding:.442em .556em .011em 0;content:"u"}mjx-c.mjx-c77::before{padding:.431em .722em .011em 0;content:"w"}mjx-c.mjx-c6C::before{padding:.694em .278em 0 0;content:"l"}mjx-c.mjx-c1D440.TEX-I::before{padding:.683em 1.051em 0 0;content:"M"}mjx-c.mjx-c1D465.TEX-I::before{padding:.442em .572em .011em 0;content:"x"}mjx-c.mjx-cD7::before{padding:.491em .778em 0 0;content:"×"}mjx-c.mjx-c32::before{padding:.666em .5em 0 0;content:"2"}mjx-c.mjx-c1D463.TEX-I::before{padding:.443em .485em .011em 0;content:"v"}mjx-c.mjx-c1D45D.TEX-I::before{padding:.442em .503em .194em 0;content:"p"}mjx-c.mjx-c2192::before{padding:.511em 1em .011em 0;content:"→"}mjx-c.mjx-c1D44E.TEX-I::before{padding:.441em .529em .01em 0;content:"a"}mjx-c.mjx-c1D44F.TEX-I::before{padding:.694em .429em .011em 0;content:"b"}mjx-c.mjx-c1D459.TEX-I::before{padding:.694em .298em .011em 0;content:"l"}mjx-c.mjx-c1D452.TEX-I::before{padding:.442em .466em .011em 0;content:"e"}mjx-mn{display:inline-block;text-align:left}mjx-c.mjx-c1D442.TEX-I::before{padding:.704em .763em .022em 0;content:"O"}mjx-c.mjx-c31::before{padding:.666em .5em 0 0;content:"1"}mjx-container[jax=CHTML]{line-height:0}mjx-container [space="1"]{margin-left:.111em}mjx-container [space="2"]{margin-left:.167em}mjx-container [space="3"]{margin-left:.222em}mjx-container [space="4"]{margin-left:.278em}mjx-container [space="5"]{margin-left:.333em}mjx-container [rspace="1"]{margin-right:.111em}mjx-container [rspace="2"]{margin-right:.167em}mjx-container [rspace="3"]{margin-right:.222em}mjx-container [rspace="4"]{margin-right:.278em}mjx-container [rspace="5"]{margin-right:.333em}mjx-container [size="s"]{font-size:70.7%}mjx-container [size=ss]{font-size:50%}mjx-container [size=Tn]{font-size:60%}mjx-container [size=sm]{font-size:85%}mjx-container [size=lg]{font-size:120%}mjx-container [size=Lg]{font-size:144%}mjx-container [size=LG]{font-size:173%}mjx-container [size=hg]{font-size:207%}mjx-container [size=HG]{font-size:249%}mjx-container [width=full]{width:100%}mjx-box{display:inline-block}mjx-block{display:block}mjx-itable{display:inline-table}mjx-row{display:table-row}mjx-row>*{display:table-cell}mjx-mtext{display:inline-block}mjx-mstyle{display:inline-block}mjx-merror{display:inline-block;color:red;background-color:#ff0}mjx-mphantom{visibility:hidden}mjx-assistive-mml{top:0;left:0;clip:rect(1px,1px,1px,1px);user-select:none;position:absolute!important;padding:1px 0 0!important;border:0!important;display:block!important;width:auto!important;overflow:hidden!important}mjx-assistive-mml[display=block]{width:100%!important}mjx-math{display:inline-block;text-align:left;line-height:0;text-indent:0;font-style:normal;font-weight:400;font-size:100%;font-size-adjust:none;letter-spacing:normal;border-collapse:collapse;overflow-wrap:normal;word-spacing:normal;white-space:nowrap;direction:ltr;padding:1px 0}mjx-container[jax=CHTML][display=true]{display:block;text-align:center;margin:1em 0}mjx-container[jax=CHTML][display=true][width=full]{display:flex}mjx-container[jax=CHTML][display=true] mjx-math{padding:0}mjx-container[jax=CHTML][justify=left]{text-align:left}mjx-container[jax=CHTML][justify=right]{text-align:right}mjx-mi{display:inline-block;text-align:left}mjx-c{display:inline-block}mjx-utext{display:inline-block;padding:.75em 0 .2em}mjx-mo{display:inline-block;text-align:left}mjx-stretchy-h{display:inline-table;width:100%}mjx-stretchy-h>*{display:table-cell;width:0}mjx-stretchy-h>*>mjx-c{display:inline-block;transform:scaleX(1)}mjx-stretchy-h>*>mjx-c::before{display:inline-block;width:initial}mjx-stretchy-h>mjx-ext{overflow:clip visible;width:100%}mjx-stretchy-h>mjx-ext>mjx-c::before{transform:scaleX(500)}mjx-stretchy-h>mjx-ext>mjx-c{width:0}mjx-stretchy-h>mjx-beg>mjx-c{margin-right:-.1em}mjx-stretchy-h>mjx-end>mjx-c{margin-left:-.1em}mjx-stretchy-v{display:inline-block}mjx-stretchy-v>*{display:block}mjx-stretchy-v>mjx-beg{height:0}mjx-stretchy-v>mjx-end>mjx-c{display:block}mjx-stretchy-v>*>mjx-c{transform:scaleY(1);transform-origin:left center;overflow:hidden}mjx-stretchy-v>mjx-ext{display:block;height:100%;box-sizing:border-box;border:0 solid transparent;overflow:visible clip}mjx-stretchy-v>mjx-ext>mjx-c::before{width:initial;box-sizing:border-box}mjx-stretchy-v>mjx-ext>mjx-c{transform:scaleY(500) translateY(.075em);overflow:visible}mjx-mark{display:inline-block;height:0}mjx-msup{display:inline-block;text-align:left}mjx-c::before{display:block;width:0}.MJX-TEX{font-family:MJXZERO,MJXTEX}.TEX-B{font-family:MJXZERO,MJXTEX-B}.TEX-I{font-family:MJXZERO,MJXTEX-I}.TEX-MI{font-family:MJXZERO,MJXTEX-MI}.TEX-BI{font-family:MJXZERO,MJXTEX-BI}.TEX-S1{font-family:MJXZERO,MJXTEX-S1}.TEX-S2{font-family:MJXZERO,MJXTEX-S2}.TEX-S3{font-family:MJXZERO,MJXTEX-S3}.TEX-S4{font-family:MJXZERO,MJXTEX-S4}.TEX-A{font-family:MJXZERO,MJXTEX-A}.TEX-C{font-family:MJXZERO,MJXTEX-C}.TEX-CB{font-family:MJXZERO,MJXTEX-CB}.TEX-FR{font-family:MJXZERO,MJXTEX-FR}.TEX-FRB{font-family:MJXZERO,MJXTEX-FRB}.TEX-SS{font-family:MJXZERO,MJXTEX-SS}.TEX-SSB{font-family:MJXZERO,MJXTEX-SSB}.TEX-SSI{font-family:MJXZERO,MJXTEX-SSI}.TEX-SC{font-family:MJXZERO,MJXTEX-SC}.TEX-T{font-family:MJXZERO,MJXTEX-T}.TEX-V{font-family:MJXZERO,MJXTEX-V}.TEX-VB{font-family:MJXZERO,MJXTEX-VB}mjx-stretchy-h mjx-c,mjx-stretchy-v mjx-c{font-family:MJXZERO,MJXTEX-S1,MJXTEX-S4,MJXTEX,MJXTEX-A!important}@font-face{font-family:MJXZERO;src:url("lib/fonts/mathjax_zero.woff") format("woff")}@font-face{font-family:MJXTEX;src:url("lib/fonts/mathjax_main-regular.woff") format("woff")}@font-face{font-family:MJXTEX-B;src:url("lib/fonts/mathjax_main-bold.woff") format("woff")}@font-face{font-family:MJXTEX-I;src:url("lib/fonts/mathjax_math-italic.woff") format("woff")}@font-face{font-family:MJXTEX-MI;src:url("lib/fonts/mathjax_main-italic.woff") format("woff")}@font-face{font-family:MJXTEX-BI;src:url("lib/fonts/mathjax_math-bolditalic.woff") format("woff")}@font-face{font-family:MJXTEX-S1;src:url("lib/fonts/mathjax_size1-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S2;src:url("lib/fonts/mathjax_size2-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S3;src:url("lib/fonts/mathjax_size3-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S4;src:url("lib/fonts/mathjax_size4-regular.woff") format("woff")}@font-face{font-family:MJXTEX-A;src:url("lib/fonts/mathjax_ams-regular.woff") format("woff")}@font-face{font-family:MJXTEX-C;src:url("lib/fonts/mathjax_calligraphic-regular.woff") format("woff")}@font-face{font-family:MJXTEX-CB;src:url("lib/fonts/mathjax_calligraphic-bold.woff") format("woff")}@font-face{font-family:MJXTEX-FR;src:url("lib/fonts/mathjax_fraktur-regular.woff") format("woff")}@font-face{font-family:MJXTEX-FRB;src:url("lib/fonts/mathjax_fraktur-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SS;src:url("lib/fonts/mathjax_sansserif-regular.woff") format("woff")}@font-face{font-family:MJXTEX-SSB;src:url("lib/fonts/mathjax_sansserif-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SSI;src:url("lib/fonts/mathjax_sansserif-italic.woff") format("woff")}@font-face{font-family:MJXTEX-SC;src:url("lib/fonts/mathjax_script-regular.woff") format("woff")}@font-face{font-family:MJXTEX-T;src:url("lib/fonts/mathjax_typewriter-regular.woff") format("woff")}@font-face{font-family:MJXTEX-V;src:url("lib/fonts/mathjax_vector-regular.woff") format("woff")}@font-face{font-family:MJXTEX-VB;src:url("lib/fonts/mathjax_vector-bold.woff") format("woff")}mjx-c.mjx-c1D45F.TEX-I::before{padding:.442em .451em .011em 0;content:"r"}mjx-c.mjx-c210E.TEX-I::before{padding:.694em .576em .011em 0;content:"h"}mjx-c.mjx-c1D460.TEX-I::before{padding:.442em .469em .01em 0;content:"s"}mjx-c.mjx-c28::before{padding:.75em .389em .25em 0;content:"("}mjx-c.mjx-c29::before{padding:.75em .389em .25em 0;content:")"}mjx-c.mjx-c3D::before{padding:.583em .778em .082em 0;content:"="}mjx-c.mjx-c1D45A.TEX-I::before{padding:.442em .878em .011em 0;content:"m"}mjx-c.mjx-c1D456.TEX-I::before{padding:.661em .345em .011em 0;content:"i"}mjx-c.mjx-c1D45B.TEX-I::before{padding:.442em .6em .011em 0;content:"n"}mjx-c.mjx-c1D454.TEX-I::before{padding:.442em .477em .205em 0;content:"g"}mjx-c.mjx-c2032::before{padding:.56em .275em 0 0;content:"′"}mjx-c.mjx-c2B::before{padding:.583em .778em .082em 0;content:"+"}mjx-c.mjx-c1D450.TEX-I::before{padding:.442em .433em .011em 0;content:"c"}mjx-c.mjx-c1D45C.TEX-I::before{padding:.441em .485em .011em 0;content:"o"}mjx-c.mjx-c1D461.TEX-I::before{padding:.626em .361em .011em 0;content:"t"}mjx-c.mjx-c2C::before{padding:.121em .278em .194em 0;content:","}</style><div class="markdown-preview-sizer markdown-preview-section"><h1 class="page-title heading inline-title" id="Lua 语言基础"><p dir="auto">Lua 语言基础</p></h1><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>题目：
+<ul>
+<li data-line="1" dir="auto"><span alt="Pasted image 20250729101733.png" src="Pasted image 20250729101733.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250729101733.png" src="lib/media/pasted-image-20250729101733.png"></span></li>
+</ul>
+</li>
+</ul></div><div class="el-h1 heading-wrapper"><div class="heading-children"><div class="el-h2 heading-wrapper"><h2 data-heading="注释与输出" dir="auto" class="heading" id="注释与输出"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注释与输出</h2><div class="heading-children"><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded"><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"准备就绪"</span><span class="token punctuation">)</span>
+
+<span class="token comment">--单行注释</span>
+
+<span class="token comment">--[[ 
+多行
+注释
+]]</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="变量" dir="auto" class="heading" id="变量"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>变量</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：变量</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念： 
+<ul>
+<li data-line="1" dir="auto"><code>lua</code> 中所有的变量申明都不需要申明变量类型，他会自动的判断类型；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>nil</code> 
+<ul>
+<li data-line="3" dir="auto"><code>a = nil</code></li>
+<li data-line="4" dir="auto">这里的 <code>nil</code> 就是空</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>number</code> 
+<ul>
+<li data-line="6" dir="auto">所有的数值都是 <code>number</code>；</li>
+<li data-line="7" dir="auto"><code>a = 1</code></li>
+<li data-line="8" dir="auto"><code>lua</code> 中的所有数值可以随意更换类型，刚刚是 nil、现在是 number 类型；</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>string</code>
+<ul>
+<li data-line="10" dir="auto"><code>a = '123'</code></li>
+<li data-line="11" dir="auto">使用单引号或者双引号包裹，没有 <code>char</code> 类型；</li>
+</ul>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>bool</code>
+<ul>
+<li data-line="13" dir="auto"><code>a = true</code></li>
+<li data-line="14" dir="auto"><code>a = false</code></li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>type</code> 函数</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念： 
+<ul>
+<li data-line="1" dir="auto">可以通过 <code>type</code> 函数打印类型；</li>
+<li data-line="2" dir="auto"><code>type</code> 返回值类型是 <code>string</code> 类型；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>举例：
+<ul>
+<li data-line="4" dir="auto"><code>a = 10</code></li>
+<li data-line="5" dir="auto"><code>print(type(a))</code></li>
+<li data-line="6" dir="auto">输出结果为 <code>number</code> </li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：未赋值变量</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><code>print(b)</code></li>
+<li data-line="1" dir="auto"><code>lua</code> 中使用没有声明过的变量不会报错，<strong>默认值是 <code>nil</code></strong>；</li>
+</ul></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="字符串操作" dir="auto" class="heading" id="字符串操作"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>字符串操作</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>Lua</code> 中字符串操作</p></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded">str <span class="token operator">=</span> <span class="token string">"123"</span>
+str2 <span class="token operator">=</span> <span class="token string">'456'</span>
+
+<span class="token comment">--1. 获得长度：使用"#"号键来获得字符串的长度</span>
+s <span class="token operator">=</span> <span class="token string">'abcde'</span>
+<span class="token function">print</span><span class="token punctuation">(</span><span class="token operator">#</span>s<span class="token punctuation">)</span>
+<span class="token comment">--注意：一个汉字占三个长度，一个英文字符占一个长度</span>
+
+<span class="token comment">--2. 多行打印</span>
+<span class="token comment">--注意：\n表示换行</span>
+<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"123 \n 123"</span><span class="token punctuation">)</span>
+
+<span class="token comment">-- 3. 字符串拼接</span>
+<span class="token comment">-- 使用两个点，拼接字符串</span>
+<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"123"</span> <span class="token operator">..</span> <span class="token string">"456"</span><span class="token punctuation">)</span> 
+
+s1 <span class="token operator">=</span> <span class="token string">"123"</span>
+s2 <span class="token operator">=</span> <span class="token number">123</span>
+<span class="token function">print</span><span class="token punctuation">(</span>s1 <span class="token operator">..</span> s2<span class="token punctuation">)</span> <span class="token comment">-- 结果为：123123</span>
+
+<span class="token comment">-- 4. 字符串格式化</span>
+<span class="token function">print</span><span class="token punctuation">(</span>string<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"你好，我是%s"</span><span class="token punctuation">,</span><span class="token string">"人"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment">--%d: 与数字拼接</span>
+<span class="token comment">--%a: 与任何字符拼接</span>
+<span class="token comment">--%s: 与字符配对</span>
+
+<span class="token comment">-- 5. tostring()：转字符串</span>
+a <span class="token operator">=</span> <span class="token keyword">true</span>
+<span class="token function">print</span><span class="token punctuation">(</span><span class="token function">tostring</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment">-- 6. 小写转大写</span>
+str <span class="token operator">=</span> <span class="token string">"abc"</span>
+<span class="token function">print</span><span class="token punctuation">(</span>string<span class="token punctuation">.</span><span class="token function">upper</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">-- 注意：这里不会改变原字符串</span>
+
+<span class="token comment">-- 7. 索引查找</span>
+<span class="token function">print</span><span class="token punctuation">(</span>string<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span>str<span class="token punctuation">,</span><span class="token string">"bc"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="运算符" dir="auto" class="heading" id="运算符"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>运算符</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：算数运算符</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">只有 <code>+-*%</code>，在 <code>Lua</code> 语言中 <strong>没有自加自减以及 <code>+=</code></strong> 运算符；</li>
+<li data-line="1" dir="auto">幂运算：<code>^</code></li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：条件运算符</p></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded"><span class="token comment">-- &gt; &lt; &gt;= &lt;= == ~=</span>
+<span class="token comment">-- ~=是不等于</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>概念</strong>：逻辑运算符</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">在 <code>Lua</code> 中，逻辑运算符&nbsp;<code>and</code>、<code>or</code>、<code>not</code>&nbsp;的行为与其他语言（如 <code>C/C++</code>）有所不同，它们不仅可以返回布尔值，还会根据操作数的值返回其中一个操作数本身；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto">语法：</li>
+</ul></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded"><span class="token comment">-- 逻辑与：and</span>
+<span class="token comment">-- 逻辑或：or</span>
+<span class="token comment">-- 逻辑非：not</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充： 
+<ul>
+<li data-line="1" dir="auto">（1）<code>and、or</code>：他们不仅可以连接 <code>boolean</code>，任何东西都可以用来连接；</li>
+<li data-line="2" dir="auto">（2）<code>lua</code> 中只有 <code>nil</code> 和 <code>false</code> 才认为是假；</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（3）"短路"：对于 <code>and</code> 来说，有假则假。对于 <code>or</code> 来说，有真则真。
+<ul>
+<li data-line="4" dir="auto">所以他们只需要判断第一个是否满足，就会停止计算了；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：运算规则
+<ul>
+<li data-line="6" dir="auto"><span alt="Pasted image 20250414190544.png" src="Pasted image 20250414190544.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250414190544.png" src="lib/media/pasted-image-20250414190544.png"></span></li>
+</ul>
+</li>
+<li data-line="7" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded"><span class="token function">print</span><span class="token punctuation">(</span><span class="token number">1</span> <span class="token keyword">and</span> <span class="token number">2</span> <span class="token punctuation">)</span> <span class="token comment">-- 第一个操作数不为假，所以返回第二个操作数</span>
+<span class="token function">print</span><span class="token punctuation">(</span><span class="token number">0</span> <span class="token keyword">and</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment">-- 第一个操作数不为假，所以返回第二个操作数</span>
+<span class="token function">print</span><span class="token punctuation">(</span><span class="token keyword">nil</span> <span class="token keyword">and</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment">-- 第一个操作数为假，所以直接返回</span>
+<span class="token function">print</span><span class="token punctuation">(</span><span class="token keyword">false</span> <span class="token keyword">and</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token comment">-- 第一个操作数为假，所以直接返回</span>
+<span class="token function">print</span><span class="token punctuation">(</span><span class="token keyword">true</span> <span class="token keyword">and</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token comment">-- 第一个操作数不为假，所以返回第二个操作数</span>
+<span class="token function">print</span><span class="token punctuation">(</span><span class="token keyword">true</span> <span class="token keyword">or</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment">-- 第一个操作数为真，所以返回第一个操作数</span>
+<span class="token function">print</span><span class="token punctuation">(</span><span class="token keyword">false</span> <span class="token keyword">or</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment">-- 第一个操作数不为真，所以返回第二个操作数</span>
+<span class="token function">print</span><span class="token punctuation">(</span><span class="token keyword">nil</span> <span class="token keyword">or</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token comment">-- 第一个操作数不为真，所以返回第二个操作数</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结：
+<ul>
+<li data-line="1" dir="auto"><code>and</code>：第一个操作数为真时，返回第二个操作数；</li>
+<li data-line="2" dir="auto"><code>or</code>：第一个操作数为假时，返回第二个操作数；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>结果： 
+<ul>
+<li data-line="4" dir="auto"><span alt="Pasted image 20250414190329.png" src="Pasted image 20250414190329.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250414190329.png" src="lib/media/pasted-image-20250414190329.png"></span></li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：用逻辑运算符实现三目运算符</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念： 
+<ul>
+<li data-line="1" dir="auto">先看前面的 <code>and</code>，得到一个结果，然后再和后面的 <code>or</code> 进行计算； </li>
+</ul>
+</li>
+<li data-line="2" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded">x <span class="token operator">=</span> <span class="token number">1</span>
+y <span class="token operator">=</span> <span class="token number">2</span>
+<span class="token keyword">local</span> res <span class="token operator">=</span> <span class="token punctuation">(</span>x<span class="token operator">&gt;</span>y<span class="token punctuation">)</span> <span class="token keyword">and</span> x <span class="token keyword">or</span> y
+<span class="token function">print</span><span class="token punctuation">(</span>res<span class="token punctuation">)</span> <span class="token comment">-- 和三目运算符效果一样</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="多变量赋值" dir="auto" class="heading" id="多变量赋值"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>多变量赋值</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：多变量赋值</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念： 
+<ul>
+<li data-line="1" dir="auto">多变量赋值，如果后面的值不够会自动补空</li>
+<li data-line="2" dir="auto">多变量赋值，如果后面的值多了会自动省略</li>
+</ul>
+</li>
+<li data-line="3" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded">a<span class="token punctuation">,</span>b<span class="token punctuation">,</span>c <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span>
+<span class="token function">print</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+<span class="token function">print</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+<span class="token function">print</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span>
+
+a<span class="token punctuation">,</span>b<span class="token punctuation">,</span>c <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span>
+<span class="token function">print</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+<span class="token function">print</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span> 
+<span class="token function">print</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span> <span class="token comment">-- 输出结果：nil</span>
+
+a<span class="token punctuation">,</span>b<span class="token punctuation">,</span>c <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">6</span>
+<span class="token function">print</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+<span class="token function">print</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span> 
+<span class="token function">print</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h1 heading-wrapper"><h1 data-heading="基础语句" dir="auto" class="heading" id="基础语句">基础语句</h1><div class="heading-children"><div class="el-h2 heading-wrapper"><h2 data-heading="条件分支语句" dir="auto" class="heading" id="条件分支语句"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>条件分支语句</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：条件分支语句</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">核心：<code>Lua</code> 中 <code>if</code> 的条件后要写 <code>then</code>，最后用 <code>end</code> 结尾；</li>
+</ul></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded">a <span class="token operator">=</span> <span class="token number">9</span>
+<span class="token comment">-- 语法：if 条件 then ... end</span>
+<span class="token keyword">if</span> a<span class="token operator">&gt;</span><span class="token number">5</span> <span class="token keyword">then</span>
+
+<span class="token keyword">end</span>
+
+<span class="token comment">-- 双分支</span>
+<span class="token keyword">if</span> a<span class="token operator">&lt;</span><span class="token number">5</span> <span class="token keyword">then</span>
+	<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"123"</span><span class="token punctuation">)</span>
+<span class="token keyword">else</span>
+	<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"456"</span><span class="token punctuation">)</span>
+<span class="token keyword">end</span>
+
+<span class="token comment">-- 多分支</span>
+<span class="token keyword">if</span> a<span class="token operator">&lt;</span><span class="token number">5</span> <span class="token keyword">and</span> a<span class="token operator">&gt;=</span> <span class="token number">0</span> <span class="token keyword">then</span>
+	<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"123"</span><span class="token punctuation">)</span>
+<span class="token keyword">elseif</span> a <span class="token operator">=</span> <span class="token number">6</span> <span class="token keyword">then</span>
+	<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"456"</span><span class="token punctuation">)</span>
+<span class="token keyword">elseif</span> a <span class="token operator">=</span> <span class="token number">7</span> <span class="token keyword">then</span>
+	<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"789"</span><span class="token punctuation">)</span>
+<span class="token keyword">end</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意： 
+<ul>
+<li data-line="1" dir="auto">不支持 <code>switch</code>；</li>
+<li data-line="2" dir="auto">不支持三目运算符；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="循环语句" dir="auto" class="heading" id="循环语句"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>循环语句</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>while</code></p></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded">num <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">while</span> num<span class="token operator">&lt;</span><span class="token number">5</span> <span class="token keyword">do</span>
+	<span class="token function">print</span><span class="token punctuation">(</span>num<span class="token punctuation">)</span>
+	num <span class="token operator">=</span> num <span class="token operator">+</span> <span class="token number">1</span>
+<span class="token keyword">end</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>do-while</code></p></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded">num <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">repeat</span>
+	<span class="token function">print</span><span class="token punctuation">(</span>num<span class="token punctuation">)</span> 
+	num <span class="token operator">=</span> num <span class="token operator">+</span> <span class="token number">1</span>
+<span class="token keyword">until</span> num <span class="token operator">&gt;</span> <span class="token number">5</span> <span class="token comment">-- 满足条件跳出，结束条件，即这里的条件是结束条件</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>for</code></p></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded"><span class="token comment">-- i 从1一直执行到5</span>
+<span class="token comment">-- 这里面 i 会默认加 1，即默认递增</span>
+<span class="token keyword">for</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">5</span> <span class="token keyword">do</span>
+	<span class="token function">print</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span>
+<span class="token keyword">end</span>
+
+<span class="token comment">-- 第三个位置为增量，即一次增加2</span>
+<span class="token keyword">for</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">2</span> <span class="token keyword">do</span>
+	<span class="token function">print</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span>
+<span class="token keyword">end</span>
+
+<span class="token comment">-- 第三个位置为增量，即一次减少1</span>
+<span class="token keyword">for</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token operator">-</span><span class="token number">1</span> <span class="token keyword">do</span>
+	<span class="token function">print</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span>
+<span class="token keyword">end</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="函数" dir="auto" class="heading" id="函数"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>函数</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>代码</strong>：函数</p></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded"><span class="token keyword">function</span> <span class="token function">F1</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"F1"</span><span class="token punctuation">)</span>
+<span class="token keyword">end</span>
+
+<span class="token comment">-- 类似于C#中的委托和事件</span>
+F2 <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"F2"</span><span class="token punctuation">)</span>
+<span class="token keyword">end</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>代码</strong>：参数与无返回值</p></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded"><span class="token keyword">function</span> <span class="token function">F3</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+	<span class="token function">print</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+<span class="token keyword">end</span>
+
+<span class="token function">F3</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+<span class="token function">F3</span><span class="token punctuation">(</span><span class="token string">"123"</span><span class="token punctuation">)</span>
+<span class="token function">F3</span><span class="token punctuation">(</span><span class="token keyword">true</span><span class="token punctuation">)</span>
+<span class="token function">F3</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">-- 打印为nil</span>
+<span class="token function">F3</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">)</span> <span class="token comment">-- 不会报错，只会补空nil</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>代码</strong>：有返回值</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：多返回值 
+<ul>
+<li data-line="1" dir="auto">多返回值时，你用几个变量接，就有几个值；</li>
+<li data-line="2" dir="auto">如果少了，就少接几个，如果多了，就自动补空；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded"><span class="token keyword">function</span> <span class="token function">F4</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+	<span class="token keyword">return</span> a
+<span class="token keyword">end</span>
+
+<span class="token comment">-- 不会报错，lua 支持多返回值，几个返回值、就使用几个变量去接受它</span>
+<span class="token keyword">function</span> <span class="token function">F5</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+	<span class="token keyword">return</span> a<span class="token punctuation">,</span><span class="token string">"123"</span><span class="token punctuation">,</span><span class="token keyword">true</span>
+<span class="token keyword">end</span>
+
+<span class="token comment">-- temp分别为 a,"123",true</span>
+temp<span class="token punctuation">,</span>temp2<span class="token punctuation">,</span>temp3 <span class="token operator">=</span> <span class="token function">F5</span><span class="token punctuation">(</span><span class="token string">"1"</span><span class="token punctuation">)</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>代码</strong>：函数的重载</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>Lua</code> 不支持函数的重载，只会默认调用最后一个函数；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="3" dir="auto">在 <code>Lua</code> 中，​<strong>函数重载</strong>​（<code>Function Overloading</code>）的概念与其他语言（如 <code>C++</code> 或 <code>Java</code>）不同；</li>
+<li data-line="4" dir="auto"><code>Lua</code> 本身不直接支持基于参数类型或数量的传统重载机制，但可以通过灵活的参数处理和运行时判断来模拟类似功能；</li>
+<li data-line="5" dir="auto">因为 <code>Lua</code> 是弱类型语言，变量和参数没有固定类型（例如&nbsp;<code>number</code>、<code>string</code>&nbsp;等在运行时才确定）；</li>
+<li data-line="6" dir="auto">因此 <code>Lua</code> 中的<strong>函数的识别仅通过名称</strong>，无法通过参数列表区分；</li>
+</ul>
+</li>
+</ul></div><div class="el-h3 heading-wrapper"><h3 data-heading="变长参数" dir="auto" class="heading" id="变长参数"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>变长参数</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>代码</strong>：变长参数</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">核心：使用 <code>...</code> 接收参数，使用 <code>#arg</code> 配合 <code>arg</code> 在 <code>for</code> 中使用；</li>
+</ul></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded"><span class="token keyword">function</span> <span class="token function">F6</span><span class="token punctuation">(</span><span class="token punctuation">...</span><span class="token punctuation">)</span>
+	arg <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">...</span><span class="token punctuation">}</span> <span class="token comment">-- 这里的arg是table类型</span>
+	<span class="token keyword">for</span> i<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token operator">#</span>arg <span class="token keyword">do</span>
+		<span class="token function">print</span><span class="token punctuation">(</span>arg<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
+	<span class="token keyword">end</span>
+<span class="token keyword">end</span>
+
+<span class="token comment">-- 使用</span>
+<span class="token function">F6</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token string">"123"</span><span class="token punctuation">,</span><span class="token keyword">true</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">6</span><span class="token punctuation">,</span><span class="token number">7</span><span class="token punctuation">,</span><span class="token number">8</span><span class="token punctuation">)</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>概念</strong>：函数嵌套</p></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded"><span class="token keyword">function</span> <span class="token function">F7</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	F8 <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token function">print</span><span class="token punctuation">(</span><span class="token number">123</span><span class="token punctuation">)</span>
+	<span class="token keyword">end</span>
+	
+	<span class="token keyword">return</span> F8 <span class="token comment">-- 函数也是一个变量，类型是function</span>
+<span class="token keyword">end</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="闭包" dir="auto" class="heading" id="闭包"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>闭包</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：闭包</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结：
+<ul>
+<li data-line="1" dir="auto"><code>Lua</code> 中闭包的体现：函数里面返回一个函数，改变了函数里面变量的生命周期；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="3" dir="auto">在 <code>Lua</code> 中，​<strong>闭包（<code>Closure</code>）​</strong>&nbsp;是由 ​<strong>函数</strong>&nbsp;和 ​<strong>该函数访问的外部变量</strong> 组合而成的实体；</li>
+<li data-line="4" dir="auto">闭包允许函数“记住”并持续访问其<strong>创建时的上下文环境</strong>，即使该函数在其他地方被调用；</li>
+<li data-line="5" dir="auto">这一特性使得闭包成为实现 ​<strong>状态封装</strong>、<strong>函数工厂</strong>&nbsp;和 ​<strong>回调机制</strong>&nbsp;的强大工具； </li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>解释：
+<ul>
+<li data-line="7" dir="auto">闭包 (<code>Closure</code>)是指一个函数和其可以访问的外部变量之间的组合。具体来说，当一个函数在另一个函数内部定义，并且该内部函数引用了外部函数的局部变量时，就会形成闭包；</li>
+<li data-line="8" dir="auto">闭包可以访问其所在函数的局部变量，即使外部函数已经执行完毕，这是因为闭包会将外部函数的局部变量保存在自己的环境中，在Lua中，这种被内部函数引用的外部局部变量称为"<code>upvalue</code>"；</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>upvalue</code>
+<ul>
+<li data-line="10" dir="auto">其表示函数外部定义的局部变量，被函数引用并“捕获”；</li>
+<li data-line="11" dir="auto">普通函数仅依赖自身的参数和局部变量，而闭包额外持有对外部变量的引用，维持这些变量的生命周期；</li>
+</ul>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>特点：
+<ul>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="13" dir="auto">词法定界：当一个函数内嵌套另一个函数时，内部的函数可以访问外部函数的局部变量，这种特征叫做词法定界；</li>
+</ol>
+</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="14" dir="auto">函数是第一类值：在 <code>Lua</code> 中，函数是一种"第一类值" (<code>First-Class Value</code>)，这意味着函数可以像普通数据一样被存储在变量中、作为参数传递或作为返回值；</li>
+</ol>
+</li>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="15" dir="auto">状态保持：闭包可以记住并访问它被创建时的上下文环境，即使这个环境已经不再存在；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>原理：
+<ul>
+<li data-line="17" dir="auto">当调用一个创建闭包的函数时，Lua 会：</li>
+<li data-line="18" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="18" dir="auto">创建闭包所需的 <code>upvalue</code>；</li>
+</ol>
+</li>
+<li data-line="19" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="19" dir="auto">将这些 <code>upvalue</code> 与内部函数绑定；</li>
+</ol>
+</li>
+<li data-line="20" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="20" dir="auto">返回这个绑定后的组合体；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="21" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意：
+<ul>
+<li data-line="22" dir="auto">每个闭包实例都独立保存自己的 <code>upvalue</code>，即使它们由同一个函数创建； </li>
+</ul>
+</li>
+<li data-line="23" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>应用：
+<ul>
+<li data-line="24" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="24" dir="auto">闭包常用于实现自定义迭代器，因为它可以记住迭代的状态；</li>
+</ol>
+</li>
+<li data-line="25" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="25" dir="auto">利用闭包可以实现面向对象风格的数据封装，将数据隐藏在函数内部，只暴露操作接口</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="26" dir="auto">代码：闭包示例</li>
+</ul></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded"><span class="token keyword">function</span> <span class="token function">createCounter</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">local</span> count <span class="token operator">=</span> <span class="token number">0</span>  <span class="token comment">-- 外部局部变量（upvalue）</span>
+    <span class="token keyword">return</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">-- 内部函数（闭包）</span>
+        count <span class="token operator">=</span> count <span class="token operator">+</span> <span class="token number">1</span>
+        <span class="token keyword">return</span> count
+    <span class="token keyword">end</span>
+<span class="token keyword">end</span>
+
+<span class="token comment">-- 创建闭包</span>
+<span class="token keyword">local</span> counter <span class="token operator">=</span> <span class="token function">createCounter</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token function">print</span><span class="token punctuation">(</span><span class="token function">counter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">-- 输出: 1</span>
+<span class="token function">print</span><span class="token punctuation">(</span><span class="token function">counter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">-- 输出: 2</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">代码：独立闭包示例</li>
+</ul></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded"><span class="token keyword">function</span> <span class="token function">counter</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">local</span> i <span class="token operator">=</span> <span class="token number">0</span>
+	<span class="token keyword">return</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		i <span class="token operator">=</span> i <span class="token operator">+</span> <span class="token number">1</span>
+		<span class="token keyword">return</span> i
+	<span class="token keyword">end</span>
+<span class="token keyword">end</span>
+
+<span class="token comment">-- counter1和counter2是建立在同一个函数、同一个局部变量的不同实例上的两个独立闭包，它们的upvalue各自独立</span>
+<span class="token keyword">local</span> counter1 <span class="token operator">=</span> <span class="token function">counter</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">local</span> counter2 <span class="token operator">=</span> <span class="token function">counter</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token function">print</span><span class="token punctuation">(</span><span class="token function">counter1</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">-- 输出 1</span>
+<span class="token function">print</span><span class="token punctuation">(</span><span class="token function">counter1</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">-- 输出 2</span>
+<span class="token function">print</span><span class="token punctuation">(</span><span class="token function">counter2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">-- 输出 1</span>
+<span class="token function">print</span><span class="token punctuation">(</span><span class="token function">counter2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">-- 输出 2</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>分析</strong>：闭包的性能分析</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="1" dir="auto">闭包会延长其捕获变量的生命周期，即使外部函数已经执行完毕，只要闭包存在，这些变量就不会被垃圾回收。大量使用闭包可能增加垃圾回收器的负担；</li>
+<li data-line="2" dir="auto">因此，在高频调用的场景中 (如游戏循环、<code>UI</code> 事件处理)，应避免重复创建功能相同的闭包，转而复用已创建的闭包；</li>
+<li data-line="3" dir="auto">只捕获真正需要的变量，减少闭包中 <code>upvalue</code> 的数量。不必要的变量捕获会增加内存占用和访问开销，因此可以检查闭包是否真的需要访问所有捕获的变量，并且将大对象分解，只捕获需要的部分；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded"><span class="token comment">-- 即使`createLargeClosure`执行完毕，`largeTable`也不会被回收，因为闭包仍然引用它</span>
+<span class="token keyword">function</span> <span class="token function">createLargeClosure</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">local</span> largeTable <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>  <span class="token comment">-- 大对象</span>
+    <span class="token keyword">for</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">100000</span> <span class="token keyword">do</span>
+        largeTable<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> i
+    <span class="token keyword">end</span>
+    <span class="token keyword">return</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token operator">#</span>largeTable  <span class="token comment">-- 闭包持有大对象的引用</span>
+    <span class="token keyword">end</span>
+<span class="token keyword">end</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意：避免在循环中创建闭包
+<ul>
+<li data-line="1" dir="auto">循环中创建闭包是一个常见性能陷阱，特别是当循环次数很多时。应该将闭包创建移到循环外部</li>
+</ul>
+</li>
+<li data-line="2" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded"><span class="token comment">-- 问题代码：循环中创建闭包</span>
+<span class="token keyword">local</span> funcs <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token keyword">for</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">10000</span> <span class="token keyword">do</span>
+    funcs<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+        <span class="token keyword">return</span> i  <span class="token comment">-- 所有闭包共享同一个i</span>
+    <span class="token keyword">end</span>
+<span class="token keyword">end</span>
+
+<span class="token comment">-- 修复方法1：使用IIFE创建独立作用域</span>
+<span class="token keyword">for</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">10000</span> <span class="token keyword">do</span>
+    funcs<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+            <span class="token keyword">return</span> value 
+        <span class="token keyword">end</span>
+    <span class="token keyword">end</span><span class="token punctuation">)</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span>
+<span class="token keyword">end</span>
+
+<span class="token comment">-- 修复方法2：将闭包创建移出循环</span>
+<span class="token keyword">local</span> <span class="token keyword">function</span> <span class="token function">makeClosure</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> value
+    <span class="token keyword">end</span>
+<span class="token keyword">end</span>
+
+<span class="token keyword">for</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">10000</span> <span class="token keyword">do</span>
+    funcs<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">makeClosure</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span>
+<span class="token keyword">end</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div></div></div><div class="el-h1 heading-wrapper"><h1 data-heading="其他语法" dir="auto" class="heading" id="其他语法">其他语法</h1><div class="heading-children"><div class="el-h2 heading-wrapper"><h2 data-heading="`Lua` 中的协程" dir="auto" class="heading" id="`Lua`_中的协程"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Lua</code> 中的协程</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="协程的使用" dir="auto" class="heading" id="协程的使用"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>协程的使用</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：创建协程</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念： 
+<ul>
+<li data-line="1" dir="auto">协程的本质是一个线程对象；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>语法： 
+<ul>
+<li data-line="3" dir="auto">方法一：<code>coroutine.create()</code></li>
+<li data-line="4" dir="auto">方法二：<code>co2 = coroutine.wrap(fun)</code></li>
+</ul>
+</li>
+<li data-line="5" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded">fun <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token function">print</span><span class="token punctuation">(</span><span class="token number">123</span><span class="token punctuation">)</span>
+<span class="token keyword">end</span>
+
+<span class="token comment">-- 方法一</span>
+co <span class="token operator">=</span> coroutine<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>fun<span class="token punctuation">)</span>
+<span class="token function">print</span><span class="token punctuation">(</span>co<span class="token punctuation">)</span>
+
+<span class="token comment">-- 方法二</span>
+co2 <span class="token operator">=</span> coroutine<span class="token punctuation">.</span><span class="token function">wrap</span><span class="token punctuation">(</span>fun<span class="token punctuation">)</span>
+<span class="token function">print</span><span class="token punctuation">(</span>co2<span class="token punctuation">)</span> <span class="token comment">-- 这里打印的就是一个函数</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>概念</strong>：协程的运行</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念： 
+<ul>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>方法一： 
+<ul>
+<li data-line="2" dir="auto">第一种方式对应的是通过 <code>create</code> 创建的协程；</li>
+<li data-line="3" dir="auto"><code>coroutine.resume(co)</code></li>
+<li data-line="4" dir="auto">第一次调用 <code>resume</code> 时，从协程函数的开始处执行，后续调用 <code>resume</code> 时，从上一次 <code>yield</code> 的位置继续执行； </li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>方法二： 
+<ul>
+<li data-line="6" dir="auto">直接调用函数</li>
+<li data-line="7" dir="auto"><code>co2()</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="8" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded">fun <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token function">print</span><span class="token punctuation">(</span><span class="token number">123</span><span class="token punctuation">)</span>
+<span class="token keyword">end</span>
+
+co <span class="token operator">=</span> coroutine<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>fun<span class="token punctuation">)</span>
+coroutine<span class="token punctuation">.</span><span class="token function">resume</span><span class="token punctuation">(</span>co<span class="token punctuation">)</span>
+
+co2 <span class="token operator">=</span> coroutine<span class="token punctuation">.</span><span class="token function">wrap</span><span class="token punctuation">(</span>fun<span class="token punctuation">)</span>
+<span class="token function">co2</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>概念</strong>：协程的状态</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>语法： 
+<ul>
+<li data-line="1" dir="auto"><code>coroutine.status(协程对象)</code></li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>状态： 
+<ul>
+<li data-line="3" dir="auto"><code>dead</code>：结束</li>
+<li data-line="4" dir="auto"><code>suspended</code>：暂停</li>
+<li data-line="5" dir="auto"><code>running</code>：进行中</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充： 
+<ul>
+<li data-line="7" dir="auto">得到当前正在运行的协程的线程号：<code>coroutine.running(协程对象)</code> </li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：协程的挂起</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>语法：
+<ul>
+<li data-line="1" dir="auto">协程的挂起函数：</li>
+<li data-line="2" dir="auto"><code>coroutine.yield()</code></li>
+<li data-line="3" dir="auto">暂停当前协程的执行，将控制权返回给 <code>resume</code> 的调用者；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充： 
+<ul>
+<li data-line="5" dir="auto"><code>coroutine.yield(i)</code> 函数可以带返回值，其第一个返回值默认是协程是否成功执行，第二个返回值是传入的参数；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-lua"><code data-line="0" class="language-lua is-loaded">fun2 <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">local</span> i <span class="token operator">=</span> <span class="token number">1</span>
+	<span class="token keyword">while</span> <span class="token keyword">true</span> <span class="token keyword">do</span>
+		<span class="token function">print</span><span class="token punctuation">(</span><span class="token number">123</span><span class="token punctuation">)</span>
+		i <span class="token operator">=</span> i <span class="token operator">+</span> <span class="token number">1</span>
+		coroutine<span class="token punctuation">.</span><span class="token function">yield</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span>
+	<span class="token keyword">end</span>
+<span class="token keyword">end</span>
+
+<span class="token comment">-- 只打印了一次 123</span>
+co3 <span class="token operator">=</span> coroutine<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>fun2<span class="token punctuation">)</span>
+coroutine<span class="token punctuation">.</span><span class="token function">resume</span><span class="token punctuation">(</span>co3<span class="token punctuation">)</span>
+isTrue<span class="token punctuation">,</span> temp <span class="token operator">=</span> coroutine<span class="token punctuation">.</span><span class="token function">resume</span><span class="token punctuation">(</span>co3<span class="token punctuation">)</span> <span class="token comment">-- 返回：true, 1</span>
+
+<span class="token comment">-- 打印协程状态</span>
+<span class="token function">print</span><span class="token punctuation">(</span>co3<span class="token punctuation">.</span><span class="token function">status</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">-- 打印的结果为 suspended </span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`Lua` 中协程的实现原理" dir="auto" class="heading" id="`Lua`_中协程的实现原理"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Lua</code> 中协程的实现原理</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>Lua</code> 中协程的实现原理</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>Lua</code> 中的协程 (<code>coroutine</code>) 是一种轻量级的用户级线程，它允许在单线程环境中实现协作式多任务处理，<code>Lua</code> 语言中协程相关的所有函数都被放在表 <code>coroutine</code> 函数中。函数 <code>create</code> 用于创建新协程，该函数只有一个参数，即协程要执行的代码的函数 (协程体) 函数 <code>create</code> 返回一个"<code>thread</code>"类型的值，即新协程。通常，函数 <code>create</code> 的参数是一个匿名函数；</li>
+<li data-line="2" dir="auto">与操作系统线程不同，协程的调度完全由程序控制，而非操作系统内核，其具有几个核心机制：</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="3" dir="auto">非抢占式调度：协程必须显式调用 <code>yield</code> 主动让出执行权，不会被强制中断；</li>
+</ol>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="4" dir="auto">状态管理：每个协程都有独立的状态，包括"<code>suspended</code>" (挂起)、"<code>running</code>" (运行中)、"<code>normal</code>" (正常)和"<code>dead</code>" (结束)； </li>
+</ol>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="5" dir="auto">数据交换：协程通过 <code>resume</code> 和 <code>yield</code> 之间的参数传递实现协程内外的数据交换；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实现：
+<ul>
+<li data-line="7" dir="auto">Lua 中协程的实现基于以下几个设计：</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="8" dir="auto">独立的指向上下文：</li>
+</ol>
+<ul>
+<li data-line="9" dir="auto">每个协程拥有自己独立的执行堆栈、局部变量空间和指令指针；</li>
+<li data-line="10" dir="auto">协程的状态存储在 <code>lua_State</code> 结构体中，比操作系统线程的数据结构轻量得多；</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="11" dir="auto">虚拟栈机制：</li>
+</ol>
+<ul>
+<li data-line="12" dir="auto"><code>Lua</code> 使用虚拟栈来实现协程间的数据交换和函数调用，每次协程切换时，<code>Lua</code> 解释器会保存当前协程的栈状态并恢复目标协程的栈状态；</li>
+</ul>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="13" dir="auto">注册表：</li>
+</ol>
+<ul>
+<li data-line="14" dir="auto"><code>Lua</code> 提供了一张只能被 <code>C</code> 代码访问的全局表 (注册表)，用于在多个模块间共享数据；</li>
+<li data-line="15" dir="auto">注册表位于伪索引 <code>LUA_REGISTRYINDEX</code> 中，协程可以通过它访问共享资源；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`Lua` 中的常见库" dir="auto" class="heading" id="`Lua`_中的常见库"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Lua</code> 中的常见库</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>Lua</code> 中的常见库</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：时间相关
+<ul>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>系统时间：
+<ul>
+<li data-line="2" dir="auto"><code>os.time() -- 当前的系统时间</code></li>
+<li data-line="3" dir="auto"><code>os.time({year = 2014,month = 8, day = 14}) -- 传参的方式</code></li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>时间：<code>local nowTime = os.data("*t")</code>
+<ul>
+<li data-line="5" dir="auto">这种方式得到的是一张表，包含小时、月份、日期等信息；</li>
+<li data-line="6" dir="auto">比如：<code>nowTime.hour -- 小时</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：数学运算 
+<ul>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>绝对值：
+<ul>
+<li data-line="9" dir="auto"><code>math.abs(-11)</code></li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>弧度转角度： 
+<ul>
+<li data-line="11" dir="auto"><code>math.deg(math.pi)</code></li>
+</ul>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>三角函数： 
+<ul>
+<li data-line="13" dir="auto"><code>math.cos(math.pi)</code></li>
+</ul>
+</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>向上取整 
+<ul>
+<li data-line="15" dir="auto"><code>math.floor(2.6)</code></li>
+</ul>
+</li>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>最大值： 
+<ul>
+<li data-line="17" dir="auto"><code>math.max(1,2)</code></li>
+</ul>
+</li>
+<li data-line="18" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>拆分小数为整数部分和小数部分：
+<ul>
+<li data-line="19" dir="auto"><code>math.modf(1.2) -- 拆分为：1和0.2</code></li>
+</ul>
+</li>
+<li data-line="20" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>随机数： 
+<ul>
+<li data-line="21" dir="auto">先设置随机数种子：<code>math.randomseed(os.time())</code></li>
+<li data-line="22" dir="auto"><code>math.random(100)</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="23" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>导入脚本： 
+<ul>
+<li data-line="24" dir="auto"><code>package.path -- Lua脚本加载路径</code></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`Lua` 垃圾回收" dir="auto" class="heading" id="`Lua`_垃圾回收"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Lua</code> 垃圾回收</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="相关方法" dir="auto" class="heading" id="相关方法"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>相关方法</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>Lua</code> 垃圾回收</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：内存占用情况
+<ul>
+<li data-line="1" dir="auto">概念：获取当前 <code>lua</code> 占用内存数，单位为 <code>K</code> 字节，用返回值 <code>*1024</code> 就可以得到具体的内存占用字节数；</li>
+<li data-line="2" dir="auto">语法：<code>collectgarbage("count")</code></li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：进行垃圾回收
+<ul>
+<li data-line="4" dir="auto">语法：<code>collectgarbage("collect")</code> </li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>Lua</code> 中的 <code>GC</code> 
+<ul>
+<li data-line="6" dir="auto"><code>Lua</code> 中和 <code>C#</code> 类似，都是基于引用的 <code>GC</code> 算法；</li>
+<li data-line="7" dir="auto">当一个变量没有被引用，或者说其变量为 <code>nil</code>，则 <code>Lua</code> 认为其可以被回收；</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：
+<ul>
+<li data-line="9" dir="auto">（1）<code>Lua</code> 中有自动、定时进行 <code>GC</code> 的方法；</li>
+<li data-line="10" dir="auto">（2）但是在 <code>Unity</code> 进行热更新开发时，尽量不要去用自动垃圾回收；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`Lua` 垃圾回收实现原理" dir="auto" class="heading" id="`Lua`_垃圾回收实现原理"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Lua</code> 垃圾回收实现原理</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>Lua</code> 垃圾回收实现原理</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>Lua</code> 采用自动内存管理机制，通过垃圾回收 (<code>GC</code>)来自动释放不再使用的内存；</li>
+<li data-line="2" dir="auto"><code>Lua</code> 的 <code>GC</code> 基于<strong>标记-清除 (<code>Mark-Sweep</code>)​</strong>算法，从 <code>Lua 5.1</code> 版本开始使用<strong>三色标记增量式回收算法</strong>，显著提高了 <code>GC</code> 效率并减少了停顿时间；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>特点：
+<ul>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="4" dir="auto">标记-清除算法：通过标记活跃对象，清除未被标记的对象；</li>
+</ol>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="5" dir="auto">增量式回收：<code>GC</code> 过程可以分步执行，减少对主程序的干扰；</li>
+</ol>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="6" dir="auto">三色标记法：使用白、灰、黑三种颜色标记对象状态；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：垃圾回收原理
+<ul>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="8" dir="auto">标记-清除算法：<code>Lua</code> 的 <code>GC</code> 过程分为两个主要阶段 </li>
+</ol>
+<ul>
+<li data-line="9" dir="auto">（1）<strong>标记阶段 (<code>Mark</code>)​</strong>​：从根对象 (如主线程、注册表等)开始，遍历所有可达对象并标记它们为活跃状态；</li>
+<li data-line="10" dir="auto">（2）<strong>清除阶段 (<code>Sweep</code>)​</strong>​：遍历所有对象，回收未被标记的对象 (即不可达对象)占用的内存； </li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="11" dir="auto">三色标记法：<code>Lua</code> 使用三种颜色来表示对象的状态 </li>
+</ol>
+<ul>
+<li data-line="12" dir="auto">白色：表示对象未被访问或可回收。新创建的对象初始状态为白色。如果在标记阶段结束后对象仍为白色，则会被回收；</li>
+<li data-line="13" dir="auto">灰色：表示对象本身已被标记，但其引用的其他对象还未被标记。这是标记过程的中间状态；</li>
+<li data-line="14" dir="auto">黑色： 表示对象及其引用的所有对象都已被标记，是确定活跃的最终状态；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：弱引用表
+<ul>
+<li data-line="16" dir="auto">弱引用表允许某些引用不影响对象的生命周期，通过元表的 <code>__mode</code> 字段设置：</li>
+<li data-line="17" dir="auto"><code>k</code>：键为弱引用；</li>
+<li data-line="18" dir="auto"><code>v</code>：值为弱引用；</li>
+<li data-line="19" dir="auto"><code>kv</code>：键和值都为弱引用；</li>
+<li data-line="20" dir="auto">弱引用表在标记阶段会特殊处理，确保不影响所引用对象的可达性判断；</li>
+</ul>
+</li>
+<li data-line="21" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：<code>Mark</code> 阶段如何找到不可达对象
+<ul>
+<li data-line="22" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="22" dir="auto">根对象集合：<code>Mark</code> 阶段从一组<strong>根对象 (<code>root set</code>)​</strong>开始，这些是 <code>Lua</code> 可以直接访问的对象，包括 </li>
+</ol>
+<ul>
+<li data-line="23" dir="auto">主线程对象；</li>
+<li data-line="24" dir="auto">全局注册表；</li>
+<li data-line="25" dir="auto">基础类型的元表；</li>
+<li data-line="26" dir="auto">上次 GC 中剩余的待析构对象；</li>
+<li data-line="27" dir="auto">这些根对象是标记过程的起点，所有从这些对象直接或间接可达的对象都会被标记为活跃；</li>
+</ul>
+</li>
+<li data-line="28" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="28" dir="auto">标记过程：</li>
+</ol>
+<ul>
+<li data-line="29" dir="auto">（1）初始化阶段：清除灰色链条或其他辅助链条，将所有根对象标记为灰色，并且加入灰色链条，准备开始传播标记；</li>
+<li data-line="30" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（2）传播阶段：从灰色链条取出一个灰色对象，将其标记为黑色，遍历该对象引用的所有其他对象；
+<ul>
+<li data-line="31" dir="auto">如果引用对象是白色，则将其标记为灰色并加入灰色链表；</li>
+<li data-line="32" dir="auto">对于弱引用表，根据其弱引用模式 (<code>"k"</code>,&nbsp;<code>"v"</code> 或 <code>"kv"</code>)进行特殊处理；</li>
+<li data-line="33" dir="auto">重复此过程，直到灰色链表为空；</li>
+</ul>
+</li>
+<li data-line="34" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（3）原子阶段：确保所有的灰色对象都被处理
+<ul>
+<li data-line="35" dir="auto">处理弱引用表，移除其中未被标记的键或值 (根据弱引用模式)，处理待析构对象，将其移动到专门链表；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="36" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="36" dir="auto">确定不可达对象：</li>
+</ol>
+<ul>
+<li data-line="37" dir="auto">可达对象为那些被标记为黑色的对象，以及新创建的白色对象 (使用当前白色标记)；</li>
+<li data-line="38" dir="auto">而不可达对象，为经过上述过程之后、依然保持旧白色的对象；</li>
+<li data-line="39" dir="auto">清除阶段会回收这些保持"旧白色"的对象，因为它们无法从任何根对象通过引用链到达；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="40" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：增量标记的实现
+<ul>
+<li data-line="41" dir="auto">从 <code>Lua 5.1</code> 开始，标记过程可以增量执行： </li>
+<li data-line="42" dir="auto"><code>GC</code> 与解释器交替工作，每次只处理少量灰色对象，使用<strong>写屏障(<code>write barrier</code>)​</strong>维护三色不变性，防止黑色对象引用白色对象，分为前向屏障(立即标记白色对象为灰色)和后向屏障(将黑色对象变回灰色)；</li>
+</ul>
+</li>
+</ul></div><div class="mod-footer mod-ui"></div></div></div></div></div></div></div></div></div></div><div class="sidebar-right sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"></div><script defer="">let rs = document.querySelector(".sidebar-right"); rs.classList.add("is-collapsed"); if (window.innerWidth > 768) rs.classList.remove("is-collapsed"); rs.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-right-width"));</script></div></div></body></html>

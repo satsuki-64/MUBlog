@@ -1,0 +1,312 @@
+<!DOCTYPE html> <html><head>
+		<title>Lecture 5：异步编程</title>
+		<base href="..\..\../">
+		<meta id="root-path" root-path="..\..\../">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
+		<meta charset="UTF-8">
+		<meta name="description" content="MUBlog - Lecture 5：异步编程">
+		<meta property="og:title" content="Lecture 5：异步编程">
+		<meta property="og:description" content="MUBlog - Lecture 5：异步编程">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="01_编程语言基础/02_csharp/02_多线程与异步编程/lecture-5：异步编程.html">
+		<meta property="og:image" content="lib\media\pasted-image-20250926163252.png">
+		<meta property="og:site_name" content="MUBlog">
+		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="lib/rss.xml"><script async="" id="webpage-script" src="lib/scripts/webpage.js" onload="this.onload=null;this.setAttribute(&quot;loaded&quot;, &quot;true&quot;)"></script><link rel="icon" href="lib/media/favicon.png"><style>body{--line-width:40em;--line-width-adaptive:40em;--file-line-width:40em;--sidebar-width:min(20em, 80vw);--collapse-arrow-size:11px;--tree-horizontal-spacing:0.6em;--tree-vertical-spacing:0.6em;--sidebar-margin:12px}.sidebar{height:100%;min-width:calc(var(--sidebar-width) + var(--divider-width-hover));max-width:calc(var(--sidebar-width) + var(--divider-width-hover));font-size:14px;z-index:10;position:relative;overflow:hidden;transition:min-width ease-in-out,max-width ease-in-out;transition-duration:.2s;contain:size}.sidebar-left{left:0}.sidebar-right{right:0}.sidebar.is-collapsed{min-width:0;max-width:0}body.floating-sidebars .sidebar{position:absolute}.sidebar-content{height:100%;min-width:calc(var(--sidebar-width) - var(--divider-width-hover));top:0;padding:var(--sidebar-margin);padding-top:4em;line-height:var(--line-height-tight);background-color:var(--background-secondary);transition:background-color,border-right,border-left,box-shadow;transition-duration:var(--color-fade-speed);transition-timing-function:ease-in-out;position:absolute;display:flex;flex-direction:column}.sidebar:not(.is-collapsed) .sidebar-content{min-width:calc(max(100%,var(--sidebar-width)) - 3px);max-width:calc(max(100%,var(--sidebar-width)) - 3px)}.sidebar-left .sidebar-content{left:0;border-top-right-radius:var(--radius-l);border-bottom-right-radius:var(--radius-l)}.sidebar-right .sidebar-content{right:0;border-top-left-radius:var(--radius-l);border-bottom-left-radius:var(--radius-l)}.sidebar:has(.sidebar-content:empty):has(.topbar-content:empty){display:none}.sidebar-topbar{height:2em;width:var(--sidebar-width);top:var(--sidebar-margin);padding-inline:var(--sidebar-margin);z-index:1;position:fixed;display:flex;align-items:center;transition:width ease-in-out;transition-duration:inherit}.sidebar.is-collapsed .sidebar-topbar{width:calc(2.3em + var(--sidebar-margin) * 2)}.sidebar .sidebar-topbar.is-collapsed{width:0}.sidebar-left .sidebar-topbar{left:0}.sidebar-right .sidebar-topbar{right:0}.topbar-content{overflow:hidden;overflow:clip;width:100%;height:100%;display:flex;align-items:center;transition:inherit}.sidebar.is-collapsed .topbar-content{width:0;transition:inherit}.clickable-icon.sidebar-collapse-icon{background-color:transparent;color:var(--icon-color-focused);padding:0!important;margin:0!important;height:100%!important;width:2.3em!important;margin-inline:0.14em!important;position:absolute}.sidebar-left .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);right:var(--sidebar-margin)}.sidebar-right .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);left:var(--sidebar-margin)}.clickable-icon.sidebar-collapse-icon svg.svg-icon{width:100%;height:100%}.sidebar-section-header{margin:0 0 1em 0;text-transform:uppercase;letter-spacing:.06em;font-weight:600}body{transition:background-color var(--color-fade-speed) ease-in-out}.webpage-container{display:flex;flex-direction:row;height:100%;width:100%;align-items:stretch;justify-content:center}.document-container{opacity:1;flex-basis:100%;max-width:100%;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;transition:opacity .2s ease-in-out;contain:inline-size}.hide{opacity:0;transition:opacity .2s ease-in-out}.document-container>.markdown-preview-view{margin:var(--sidebar-margin);margin-bottom:0;width:100%;width:-webkit-fill-available;width:-moz-available;width:fill-available;background-color:var(--background-primary);transition:background-color var(--color-fade-speed) ease-in-out;border-top-right-radius:var(--window-radius,var(--radius-m));border-top-left-radius:var(--window-radius,var(--radius-m));overflow-x:hidden!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;contain:inline-size}.document-container>.markdown-preview-view>.markdown-preview-sizer{padding-bottom:80vh!important;width:100%!important;max-width:var(--line-width)!important;flex-basis:var(--line-width)!important;transition:background-color var(--color-fade-speed) ease-in-out;contain:inline-size}.markdown-rendered img:not([width]),.view-content img:not([width]){max-width:100%;outline:0}.document-container>.view-content.embed{display:flex;padding:1em;height:100%;width:100%;align-items:center;justify-content:center}.document-container>.view-content.embed>*{max-width:100%;max-height:100%;object-fit:contain}:has(> :is(.math,table)){overflow-x:auto!important}.document-container>.view-content{overflow-x:auto;contain:content;padding:0;margin:0;height:100%}.scroll-highlight{position:absolute;width:100%;height:100%;pointer-events:none;z-index:1000;background-color:hsla(var(--color-accent-hsl),.25);opacity:0;padding:1em;inset:50%;translate:-50% -50%;border-radius:var(--radius-s)}</style><script defer="">async function loadIncludes(){if("file:"!=location.protocol){let e=document.querySelectorAll("include");for(let t=0;t<e.length;t++){let o=e[t],l=o.getAttribute("src");try{const e=await fetch(l);if(!e.ok){console.log("Could not include file: "+l),o?.remove();continue}let t=await e.text(),n=document.createRange().createContextualFragment(t),i=Array.from(n.children);for(let e of i)e.classList.add("hide"),e.style.transition="opacity 0.5s ease-in-out",setTimeout((()=>{e.classList.remove("hide")}),10);o.before(n),o.remove(),console.log("Included file: "+l)}catch(e){o?.remove(),console.log("Could not include file: "+l,e);continue}}}else{if(document.querySelectorAll("include").length>0){var e=document.createElement("div");e.id="error",e.textContent="Web server exports must be hosted on an http / web server to be viewed correctly.",e.style.position="fixed",e.style.top="50%",e.style.left="50%",e.style.transform="translate(-50%, -50%)",e.style.fontSize="1.5em",e.style.fontWeight="bold",e.style.textAlign="center",document.body.appendChild(e),document.querySelector(".document-container")?.classList.remove("hide")}}}document.addEventListener("DOMContentLoaded",(()=>{loadIncludes()}));let isFileProtocol="file:"==location.protocol;function waitLoadScripts(e,t){let o=e.map((e=>document.getElementById(e+"-script"))),l=0;!function e(){let n=o[l];l++,n&&"true"!=n.getAttribute("loaded")||l<o.length&&e(),l<o.length?n.addEventListener("load",e):t()}()}</script><link rel="stylesheet" href="lib/styles/obsidian.css"><link rel="stylesheet" href="lib/styles/theme.css"><link rel="preload" href="lib/styles/global-variable-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/global-variable-styles.css"></noscript><link rel="preload" href="lib/styles/supported-plugins.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/supported-plugins.css"></noscript><link rel="preload" href="lib/styles/main-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/main-styles.css"></noscript><link rel="preload" href="lib/styles/snippets.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/snippets.css"></noscript></head><body class="publish css-settings-manager styled-scrollbars theme-light show-inline-title ctp-rosepine-light ctp-mocha ctp-accent-rosewater anuppuccin-accent-toggle anp-current-line-border anp-callout-color-toggle anp-codeblock-numbers anp-list-toggle anp-table-width anp-toggle-preview anp-color-transition-toggle anp-button-metadata-toggle anp-toggle-metadata anp-toggle-scrollbars anp-h1-red anp-h1-divider anp-h2-peach anp-h3-green anp-h4-teal anp-h5-lavender anp-h6-mauve anp-decoration-toggle anp-bold-maroon anp-italic-green anp-highlight-yellow anp-colorful-frame-icon-toggle-dark anp-simple-rainbow-color-toggle anp-rainbow-file-toggle anp-simple-rainbow-title-toggle anp-simple-rainbow-icon-folder-toggle anp-simple-rainbow-indentation-toggle anp-simple-rainbow-collapse-toggle anp-card-layout anp-card-shadows anp-card-layout-filebrowser anp-theme-ext-light anp-theme-ext-dark anp-theme-ext-amoled ctp-atom-light ctp-atom-dark table-type-three-line table-header-color-blue table-row-alt-background-option table-dark-mode"><script defer="">let theme=localStorage.getItem("theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");"dark"==theme?(document.body.classList.add("theme-dark"),document.body.classList.remove("theme-light")):(document.body.classList.add("theme-light"),document.body.classList.remove("theme-dark")),window.innerWidth<480?document.body.classList.add("is-phone"):window.innerWidth<768?document.body.classList.add("is-tablet"):window.innerWidth<1024?document.body.classList.add("is-small-screen"):document.body.classList.add("is-large-screen")</script><div class="webpage-container workspace"><div class="sidebar-left sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"><label class="theme-toggle-container" for="theme_toggle"><input class="theme-toggle-input" type="checkbox" id="theme_toggle"><div class="toggle-background"></div></label></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"><include src="lib/html/file-tree.html"></include></div><script defer="">let ls = document.querySelector(".sidebar-left"); ls.classList.add("is-collapsed"); if (window.innerWidth > 768) ls.classList.remove("is-collapsed"); ls.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-left-width"));</script></div><div class="document-container markdown-reading-view hide"><div class="markdown-preview-view markdown-rendered allow-fold-headings allow-fold-lists is-readable-line-width"><style id="MJX-CHTML-styles">mjx-c.mjx-c1D440.TEX-I::before{padding:.683em 1.051em 0 0;content:"M"}mjx-c.mjx-c1D465.TEX-I::before{padding:.442em .572em .011em 0;content:"x"}mjx-c.mjx-cD7::before{padding:.491em .778em 0 0;content:"×"}mjx-c.mjx-c32::before{padding:.666em .5em 0 0;content:"2"}mjx-c.mjx-c1D463.TEX-I::before{padding:.443em .485em .011em 0;content:"v"}mjx-c.mjx-c1D45D.TEX-I::before{padding:.442em .503em .194em 0;content:"p"}mjx-c.mjx-c2192::before{padding:.511em 1em .011em 0;content:"→"}mjx-c.mjx-c1D44E.TEX-I::before{padding:.441em .529em .01em 0;content:"a"}mjx-c.mjx-c1D44F.TEX-I::before{padding:.694em .429em .011em 0;content:"b"}mjx-c.mjx-c1D459.TEX-I::before{padding:.694em .298em .011em 0;content:"l"}mjx-c.mjx-c1D452.TEX-I::before{padding:.442em .466em .011em 0;content:"e"}mjx-mn{display:inline-block;text-align:left}mjx-c.mjx-c1D442.TEX-I::before{padding:.704em .763em .022em 0;content:"O"}mjx-c.mjx-c31::before{padding:.666em .5em 0 0;content:"1"}mjx-container[jax=CHTML]{line-height:0}mjx-container [space="1"]{margin-left:.111em}mjx-container [space="2"]{margin-left:.167em}mjx-container [space="3"]{margin-left:.222em}mjx-container [space="4"]{margin-left:.278em}mjx-container [space="5"]{margin-left:.333em}mjx-container [rspace="1"]{margin-right:.111em}mjx-container [rspace="2"]{margin-right:.167em}mjx-container [rspace="3"]{margin-right:.222em}mjx-container [rspace="4"]{margin-right:.278em}mjx-container [rspace="5"]{margin-right:.333em}mjx-container [size="s"]{font-size:70.7%}mjx-container [size=ss]{font-size:50%}mjx-container [size=Tn]{font-size:60%}mjx-container [size=sm]{font-size:85%}mjx-container [size=lg]{font-size:120%}mjx-container [size=Lg]{font-size:144%}mjx-container [size=LG]{font-size:173%}mjx-container [size=hg]{font-size:207%}mjx-container [size=HG]{font-size:249%}mjx-container [width=full]{width:100%}mjx-box{display:inline-block}mjx-block{display:block}mjx-itable{display:inline-table}mjx-row{display:table-row}mjx-row>*{display:table-cell}mjx-mtext{display:inline-block}mjx-mstyle{display:inline-block}mjx-merror{display:inline-block;color:red;background-color:#ff0}mjx-mphantom{visibility:hidden}mjx-assistive-mml{top:0;left:0;clip:rect(1px,1px,1px,1px);user-select:none;position:absolute!important;padding:1px 0 0!important;border:0!important;display:block!important;width:auto!important;overflow:hidden!important}mjx-assistive-mml[display=block]{width:100%!important}mjx-math{display:inline-block;text-align:left;line-height:0;text-indent:0;font-style:normal;font-weight:400;font-size:100%;font-size-adjust:none;letter-spacing:normal;border-collapse:collapse;overflow-wrap:normal;word-spacing:normal;white-space:nowrap;direction:ltr;padding:1px 0}mjx-container[jax=CHTML][display=true]{display:block;text-align:center;margin:1em 0}mjx-container[jax=CHTML][display=true][width=full]{display:flex}mjx-container[jax=CHTML][display=true] mjx-math{padding:0}mjx-container[jax=CHTML][justify=left]{text-align:left}mjx-container[jax=CHTML][justify=right]{text-align:right}mjx-mi{display:inline-block;text-align:left}mjx-c{display:inline-block}mjx-utext{display:inline-block;padding:.75em 0 .2em}mjx-mo{display:inline-block;text-align:left}mjx-stretchy-h{display:inline-table;width:100%}mjx-stretchy-h>*{display:table-cell;width:0}mjx-stretchy-h>*>mjx-c{display:inline-block;transform:scaleX(1)}mjx-stretchy-h>*>mjx-c::before{display:inline-block;width:initial}mjx-stretchy-h>mjx-ext{overflow:clip visible;width:100%}mjx-stretchy-h>mjx-ext>mjx-c::before{transform:scaleX(500)}mjx-stretchy-h>mjx-ext>mjx-c{width:0}mjx-stretchy-h>mjx-beg>mjx-c{margin-right:-.1em}mjx-stretchy-h>mjx-end>mjx-c{margin-left:-.1em}mjx-stretchy-v{display:inline-block}mjx-stretchy-v>*{display:block}mjx-stretchy-v>mjx-beg{height:0}mjx-stretchy-v>mjx-end>mjx-c{display:block}mjx-stretchy-v>*>mjx-c{transform:scaleY(1);transform-origin:left center;overflow:hidden}mjx-stretchy-v>mjx-ext{display:block;height:100%;box-sizing:border-box;border:0 solid transparent;overflow:visible clip}mjx-stretchy-v>mjx-ext>mjx-c::before{width:initial;box-sizing:border-box}mjx-stretchy-v>mjx-ext>mjx-c{transform:scaleY(500) translateY(.075em);overflow:visible}mjx-mark{display:inline-block;height:0}mjx-msup{display:inline-block;text-align:left}mjx-c::before{display:block;width:0}.MJX-TEX{font-family:MJXZERO,MJXTEX}.TEX-B{font-family:MJXZERO,MJXTEX-B}.TEX-I{font-family:MJXZERO,MJXTEX-I}.TEX-MI{font-family:MJXZERO,MJXTEX-MI}.TEX-BI{font-family:MJXZERO,MJXTEX-BI}.TEX-S1{font-family:MJXZERO,MJXTEX-S1}.TEX-S2{font-family:MJXZERO,MJXTEX-S2}.TEX-S3{font-family:MJXZERO,MJXTEX-S3}.TEX-S4{font-family:MJXZERO,MJXTEX-S4}.TEX-A{font-family:MJXZERO,MJXTEX-A}.TEX-C{font-family:MJXZERO,MJXTEX-C}.TEX-CB{font-family:MJXZERO,MJXTEX-CB}.TEX-FR{font-family:MJXZERO,MJXTEX-FR}.TEX-FRB{font-family:MJXZERO,MJXTEX-FRB}.TEX-SS{font-family:MJXZERO,MJXTEX-SS}.TEX-SSB{font-family:MJXZERO,MJXTEX-SSB}.TEX-SSI{font-family:MJXZERO,MJXTEX-SSI}.TEX-SC{font-family:MJXZERO,MJXTEX-SC}.TEX-T{font-family:MJXZERO,MJXTEX-T}.TEX-V{font-family:MJXZERO,MJXTEX-V}.TEX-VB{font-family:MJXZERO,MJXTEX-VB}mjx-stretchy-h mjx-c,mjx-stretchy-v mjx-c{font-family:MJXZERO,MJXTEX-S1,MJXTEX-S4,MJXTEX,MJXTEX-A!important}@font-face{font-family:MJXZERO;src:url("lib/fonts/mathjax_zero.woff") format("woff")}@font-face{font-family:MJXTEX;src:url("lib/fonts/mathjax_main-regular.woff") format("woff")}@font-face{font-family:MJXTEX-B;src:url("lib/fonts/mathjax_main-bold.woff") format("woff")}@font-face{font-family:MJXTEX-I;src:url("lib/fonts/mathjax_math-italic.woff") format("woff")}@font-face{font-family:MJXTEX-MI;src:url("lib/fonts/mathjax_main-italic.woff") format("woff")}@font-face{font-family:MJXTEX-BI;src:url("lib/fonts/mathjax_math-bolditalic.woff") format("woff")}@font-face{font-family:MJXTEX-S1;src:url("lib/fonts/mathjax_size1-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S2;src:url("lib/fonts/mathjax_size2-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S3;src:url("lib/fonts/mathjax_size3-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S4;src:url("lib/fonts/mathjax_size4-regular.woff") format("woff")}@font-face{font-family:MJXTEX-A;src:url("lib/fonts/mathjax_ams-regular.woff") format("woff")}@font-face{font-family:MJXTEX-C;src:url("lib/fonts/mathjax_calligraphic-regular.woff") format("woff")}@font-face{font-family:MJXTEX-CB;src:url("lib/fonts/mathjax_calligraphic-bold.woff") format("woff")}@font-face{font-family:MJXTEX-FR;src:url("lib/fonts/mathjax_fraktur-regular.woff") format("woff")}@font-face{font-family:MJXTEX-FRB;src:url("lib/fonts/mathjax_fraktur-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SS;src:url("lib/fonts/mathjax_sansserif-regular.woff") format("woff")}@font-face{font-family:MJXTEX-SSB;src:url("lib/fonts/mathjax_sansserif-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SSI;src:url("lib/fonts/mathjax_sansserif-italic.woff") format("woff")}@font-face{font-family:MJXTEX-SC;src:url("lib/fonts/mathjax_script-regular.woff") format("woff")}@font-face{font-family:MJXTEX-T;src:url("lib/fonts/mathjax_typewriter-regular.woff") format("woff")}@font-face{font-family:MJXTEX-V;src:url("lib/fonts/mathjax_vector-regular.woff") format("woff")}@font-face{font-family:MJXTEX-VB;src:url("lib/fonts/mathjax_vector-bold.woff") format("woff")}mjx-c.mjx-c1D45F.TEX-I::before{padding:.442em .451em .011em 0;content:"r"}mjx-c.mjx-c210E.TEX-I::before{padding:.694em .576em .011em 0;content:"h"}mjx-c.mjx-c1D460.TEX-I::before{padding:.442em .469em .01em 0;content:"s"}mjx-c.mjx-c28::before{padding:.75em .389em .25em 0;content:"("}mjx-c.mjx-c29::before{padding:.75em .389em .25em 0;content:")"}mjx-c.mjx-c3D::before{padding:.583em .778em .082em 0;content:"="}mjx-c.mjx-c1D45A.TEX-I::before{padding:.442em .878em .011em 0;content:"m"}mjx-c.mjx-c1D456.TEX-I::before{padding:.661em .345em .011em 0;content:"i"}mjx-c.mjx-c1D45B.TEX-I::before{padding:.442em .6em .011em 0;content:"n"}mjx-c.mjx-c1D454.TEX-I::before{padding:.442em .477em .205em 0;content:"g"}mjx-c.mjx-c2032::before{padding:.56em .275em 0 0;content:"′"}mjx-c.mjx-c2B::before{padding:.583em .778em .082em 0;content:"+"}mjx-c.mjx-c1D450.TEX-I::before{padding:.442em .433em .011em 0;content:"c"}mjx-c.mjx-c1D45C.TEX-I::before{padding:.441em .485em .011em 0;content:"o"}mjx-c.mjx-c1D461.TEX-I::before{padding:.626em .361em .011em 0;content:"t"}mjx-c.mjx-c2C::before{padding:.121em .278em .194em 0;content:","}</style><div class="markdown-preview-sizer markdown-preview-section"><h1 class="page-title heading inline-title" id="Lecture 5：异步编程"><p dir="auto">Lecture 5：异步编程</p></h1><div class="el-h2 heading-wrapper"><h2 data-heading="什么是异步" dir="auto" class="heading" id="什么是异步"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>什么是异步</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="基础概念" dir="auto" class="heading" id="基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>基础概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：同步操作与异步操作</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：什么是同步操作与异步操作
+<ul>
+<li data-line="1" dir="auto">同步操作 (<code>synchronous operation</code>) 先完成其工作再返回调用者；</li>
+<li data-line="2" dir="auto">异步操作 (<code>asynchronous operation</code>) 的大部分工作则是在返回给调用者之后才完成的；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：异步编程的本质
+<ul>
+<li data-line="4" dir="auto">异步编程的核心在于<strong>非阻塞</strong>和<strong>并发处理</strong>；</li>
+<li data-line="5" dir="auto">与同步操作必须等待当前任务完成才能继续执行下一个任务不同，异步操作允许程序在发起一个耗时任务后，​不必原地等待，而是立即返回并继续执行后续代码。当那个耗时任务在后台完成时，程序再通过某种机制（如回调、事件）来处理结果；</li>
+<li data-line="6" dir="auto">在同步模式下，一个需要从网络获取数据的任务会“冻住”整个程序，<code>CPU</code> 只能空闲等待。而异步模式下，<code>CPU</code> 在数据到达前可以去处理其他计算任务，就像一位高效的管家，总能找到事情做，避免资源闲置；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意：异步 ≠ 多线程
+<ul>
+<li data-line="8" dir="auto">多线程是实现异步的一种方式，但并非全部；</li>
+<li data-line="9" dir="auto">许多异步操作（特别是 <code>I/O</code> 密集型任务）依赖于操作系统的底层非阻塞机制，在等待期间并不占用线程，从而可以实现用少量线程处理大量并发任务；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="常见应用场景" dir="auto" class="heading" id="常见应用场景"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>常见应用场景</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：常见应用场景</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>I/O</code> 密集型应用
+<ul>
+<li data-line="1" dir="auto">包括网络请求​（如调用 <code>API</code>、微服务通信）、文件读写​（访问本地或网络存储）、以及数据库操作； </li>
+<li data-line="2" dir="auto">这些操作的共同点是大量时间花在等待数据传输上，而非 CPU 计算。使用异步可以避免线程大量阻塞，用极少资源支撑高并发； </li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：需要高实时性的客户端响应
+<ul>
+<li data-line="4" dir="auto">在图形界面（<code>GUI</code>）程序中，主线程负责响应用户交互。如果在这个线程上执行同步耗时操作（如复杂计算或网络请求），界面就会“卡住”；</li>
+<li data-line="5" dir="auto">通过异步编程，可以将这些任务移出主线程，确保用户操作始终能得到即时响应；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="问题：`Callback Hell`" dir="auto" class="heading" id="问题：`Callback_Hell`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>问题：<code>Callback Hell</code></h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>Callback Hell</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Callback Hell</code>（回调地狱）是异步编程中一个经典问题，简单来说，它就像是你为了完成一件事（比如计划一次旅行），需要不停地等待前一个步骤的结果才能进行下一个步骤：
+<ul>
+<li data-line="2" dir="auto">先查天气，等天气结果出来了再订机票，等机票订好了再订酒店……</li>
+</ul>
+</li>
+<li data-line="3" dir="auto">如果这些“等待”和“后续动作”都以嵌套的方式写进代码，代码就会向右缩进得越来越深，形成一个难以阅读和维护的“金字塔”或“阶梯”状结构；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-js"><code data-line="0" class="language-js is-loaded"><span class="token keyword">const</span> fs <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'fs'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+fs<span class="token punctuation">.</span><span class="token method function property-access">readFile</span><span class="token punctuation">(</span><span class="token string">'file1.txt'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">err<span class="token punctuation">,</span> data1</span><span class="token punctuation">)</span> <span class="token arrow operator">=&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword control-flow">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token keyword control-flow">throw</span> err<span class="token punctuation">;</span>
+  fs<span class="token punctuation">.</span><span class="token method function property-access">readFile</span><span class="token punctuation">(</span><span class="token string">'file2.txt'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">err<span class="token punctuation">,</span> data2</span><span class="token punctuation">)</span> <span class="token arrow operator">=&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword control-flow">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token keyword control-flow">throw</span> err<span class="token punctuation">;</span>
+    fs<span class="token punctuation">.</span><span class="token method function property-access">readFile</span><span class="token punctuation">(</span><span class="token string">'file3.txt'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">err<span class="token punctuation">,</span> data3</span><span class="token punctuation">)</span> <span class="token arrow operator">=&gt;</span> <span class="token punctuation">{</span>
+      <span class="token keyword control-flow">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token keyword control-flow">throw</span> err<span class="token punctuation">;</span>
+      <span class="token comment">// ... 可能还有更多嵌套</span>
+      <span class="token console class-name">console</span><span class="token punctuation">.</span><span class="token method function property-access">log</span><span class="token punctuation">(</span>data1<span class="token punctuation">,</span> data2<span class="token punctuation">,</span> data3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>解决：<code>Async/Await</code>
+<ul>
+<li data-line="1" dir="auto">其类似于同步的写法，但是却实现一个异步操作；</li>
+<li data-line="2" dir="auto"><code>async</code> ​关键字用于声明一个异步函数，​ <code>await</code>  关键字则用于等待一个任务完成，并返回其结果；</li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="异步编程基础" dir="auto" class="heading" id="异步编程基础"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>异步编程基础</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`await`" dir="auto" class="heading" id="`await`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>await</code></h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>await</code> 关键字 </p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>await</code>
+<ul>
+<li data-line="1" dir="auto">用于在异步方法内部，​<strong>等待</strong>一个异步操作完成；</li>
+<li data-line="2" dir="auto">当执行到 <code>await</code> 时，其暂停当前方法的执行，将控制权返回给调用方，待等待的任务完成后，再从暂停处恢复执行；</li>
+<li data-line="3" dir="auto">其后通常跟一个返回 <code>Task</code>、<code>Task&lt;T&gt;</code> 等可等待对象的表达式；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>语法：
+<ul>
+<li data-line="5" dir="auto"><code>var result = await expression;</code></li>
+<li data-line="6" dir="auto"><code>statement(s);</code></li>
+<li data-line="7" dir="auto">等待一个异步操作（<code>expression</code>）完成，获取它的结果（<code>result</code>），然后继续执行后面的语句；</li>
+</ul>
+</li>
+<li data-line="8" dir="auto">分析：<code>await</code> 的实现</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">var result = await expression;
+statement(s);
+// 编译器会将上述代码转化为以下代码
+
+// 1. 获取等待器 (Awaiter)
+// expression 通常是一个返回 Task 或 Task&lt;T&gt; 的方法调用
+// GetAwaiter() 方法返回一个“等待器”对象，这个对象负责协调异步操作
+// 这个对象（通常是 TaskAwaiter&lt;T&gt;）知道异步操作的状态（是否完成）
+var awaiter = expression.GetAwaiter();
+
+// 2. 注册延续（Continuation）—— 异步的“回调函数”
+// 这是最核心的一步，调用等待器的 OnCompleted 方法
+// 它的作用是：“当这个异步操作（expression）在后台完成时，请执行我提供的这个回调函数”
+// 这个回调函数就是一个“延续”（Continuation），它包含了 await 之后的所有代码
+awaiter.OnCompleted ( () =&gt; 
+{
+    // 3. 获取结果并继续执行
+    // 当异步操作完成后，运行时（如线程池）会调用这个回调
+    // GetResult() 会获取异步操作的结果。如果操作失败，这里会抛出异常
+    // 对于 Task&lt;T&gt;，GetResult() 返回类型 T；对于普通 Task，它返回 void
+    var result = awaiter.GetResult();
+
+    // 4. 执行原代码中 await 之后的所有语句 (statement(s))
+    // 此时，result 已经可用，程序可以从 await 的地方“无缝”恢复执行。
+    // 注意：此回调可能在原线程上执行，也可能在线程池的另一个线程上执行，这取决于同步上下文
+});
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="1" dir="auto">编译器会将整个 <code>async</code> 方法编译成一个复杂的类（状态机），​这个状态机内部有字段来保存所有的局部变量和方法当前的执行位置；</li>
+<li data-line="2" dir="auto">因此，即使方法“返回”了，代表这个方法的那个状态机对象依然被回调函数引用着，它和它的所有状态（局部变量）都保留在内存中。当回调执行时，状态机就知道应该从哪儿继续，并且能访问到之前所有的变量值；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结：
+<ul>
+<li data-line="4" dir="auto">将 <code>await</code> 之后的代码打包成一个回调函数，注册给异步操作。然后立即返回，释放当前线程；</li>
+<li data-line="5" dir="auto">当异步操作完成后，系统在某个合适的时机调用这个回调，从而让程序从“中断”处恢复执行；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`async`" dir="auto" class="heading" id="`async`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>async</code></h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>async</code> 关键字</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>async</code>
+<ul>
+<li data-line="1" dir="auto"><code>async</code> 是一个关键字，用于声明一个函数是异步函数，其向编译器表明该方法内部包含异步操作，允许使用 <code>await</code> 关键字；</li>
+<li data-line="2" dir="auto">标记了 <code>async</code> 的函数，返回值通常返回 <code>Task</code>、<code>Task&lt;T&gt;</code> 或 <code>ValueTask</code> / <code>ValueTask&lt;T&gt;</code>；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="4" dir="auto"><code>async</code> 修饰符会指示编译器将 <code>await</code> 作为一个关键字而非标识符来避免二义性；</li>
+<li data-line="5" dir="auto"><code>async</code> 修饰符和 <code>unsafe</code> 修饰符类似，都不会对方法签名或者公共元数据产生影响，它只影响方法内部的执行细节，因此在接口上添加 <code>async</code> 是没有意义的；</li>
+<li data-line="6" dir="auto">但是这种方式也是合法的。例如，可以在一个重写的非异步的虚方法上添加 <code>async</code> (但前提是方法签名必须保持不变)；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：<code>async</code> 与异步函数的执行过程
+<ul>
+<li data-line="8" dir="auto">在一个方法签名前加上 <code>async</code> 关键字之后，它就成为了一个异步方法；</li>
+<li data-line="9" dir="auto">这个修饰符本身并不使方法自动并行运行，它的核心作用是告知编译器该方法内部将包含 <code>await</code> 表达式，编译器会据此对方法进行特殊处理，将其转换成一个状态机，这是实现非阻塞等待的基础；</li>
+<li data-line="10" dir="auto">然后当进入方法执行，当遇到 <code>await</code> 表达式时，当前异步方法的执行会被挂起（暂停），控制权立即返回给该方法的调用者。这就好比在迭代器中遇到 <code>yield return</code>，方法在此处“让步”；</li>
+<li data-line="11" dir="auto">最重要的是，​挂起并不会阻塞当前的线程​（例如 <code>Unity</code> 的主线程）。该线程会被释放，从而可以去处理其他工作，比如响应用户操作或处理其他请求，这保证了应用程序的响应能力；</li>
+<li data-line="12" dir="auto">同时会在等待的任务上附加一个延续（<code>Continuation</code>），保证任务结束时能跳回方法。在内部，<code>await</code> 会向它等待的那个任务（一个 <code>Task</code> 对象）注册一个回调函数，这个回调函数里封装了 <code>await</code> 之后的所有代码，当后台的耗时任务（如网络请求、文件读写）完成时，这个回调函数会被触发。运行时（通常是线程池）会安排执行这个回调，从而使异步方法从 <code>await</code> 语句之后的位置<strong>恢复执行</strong>​；</li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="示例：异步方法基础使用" dir="auto" class="heading" id="示例：异步方法基础使用"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>示例：异步方法基础使用</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="示例一：获取异步方法的返回值" dir="auto" class="heading" id="示例一：获取异步方法的返回值"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>示例一：获取异步方法的返回值</h3><div class="heading-children"><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">using System;
+using System.Threading.Tasks;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        Console.WriteLine("开始获取数据...");
+        
+        // 因为使用了关键字，因此Main方法在await处暂停，等待FetchDataAsync完成
+        string data = await FetchDataAsync();
+        
+        // 这行代码会在FetchDataAsync完全完成后执行
+        Console.WriteLine("【主线程】Main方法在调用AsyncMethod后继续执行");
+        Console.WriteLine($"获取到的数据是: {data}");
+        Console.WriteLine("【主线程】Main方法在调用AsyncMethod后继续执行");
+    }
+
+    static async Task&lt;string&gt; FetchDataAsync()
+    {
+        // 模拟一个耗时的网络请求或文件读取操作
+        await Task.Delay(2000); // 模拟耗时2秒的操作
+        
+        // 返回结果
+        return "这是从异步方法返回的数据";
+    }
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">输出结果：</li>
+</ul></div><div class="el-pre"><pre class="language-txt"><code data-line="0" class="language-txt is-loaded">开始获取数据...
+(这里等待两秒)
+【主线程】Main方法在调用AsyncMethod后继续执行
+获取到的数据是: 这是从异步方法返回的数据
+【主线程】Main方法在调用AsyncMethod后继续执行
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>分析</strong>：为什么 <code>async</code> 函数使用 <code>Task&lt;string&gt;</code> 作为返回值类型</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：返回值包裹 <code>Task</code> 的作用
+<ul>
+<li data-line="1" dir="auto"><code>async</code> 函数返回 <code>Task&lt;T&gt;</code>（而非直接返回 <code>T</code>，如 <code>string</code>）主要基于以下几个核心原因：</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="2" dir="auto">表示一个“未来”的值：</li>
+</ol>
+<ul>
+<li data-line="3" dir="auto"><code>Task&lt;string&gt;</code> 代表一个正在进行中的异步操作，它是对操作结果的“承诺”，这个操作可能很耗时（如读取网络文件），无法立即返回最终的 <code>string</code>。因此，<code>Task&lt;T&gt;</code> 封装了这个操作的生命周期，如未完成、完成、出错等状态；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="4" dir="auto">实现非阻塞与协作：</li>
+</ol>
+<ul>
+<li data-line="5" dir="auto">直接返回 <code>string</code> 意味着调用线程必须被阻塞，直到操作完成；</li>
+<li data-line="6" dir="auto">而返回 <code>Task&lt;string&gt;</code> 使得方法可以立即返回，让出当前线程去处理其他工作，从而提高程序的响应性；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="7" dir="auto">支持组合与状态监控：<code>Task&lt;T&gt;</code> 类型提供了如 <code>Task.WhenAll,&nbsp;Task.WhenAny</code> 方法来组合多个异步操作；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：<code>await</code>&nbsp;如何拆箱得到返回值
+<ul>
+<li data-line="9" dir="auto"><code>await</code> 关键字的核心作用之一就是拆箱这个 <code>Task&lt;T&gt;</code> 对象，并提取出最终的 <code>T</code> 值。其内部过程可以概括为以下几步</li>
+<li data-line="10" dir="auto">（1）挂起与让出：当执行流遇到 <code>await</code> 表达式时，它会立即返回一个 <code>Task&lt;string&gt;</code> 给调用者。这使得调用线程不会被阻塞。异步方法内部的逻辑会在此处挂起；</li>
+<li data-line="11" dir="auto">（2）注册回调与等待：运行时系统会注册一个回调方法，然后开始异步等待 <code>Task&lt;string&gt;</code> 的完成。这个等待过程是高效的，不占用额外的线程；</li>
+<li data-line="12" dir="auto">（3）恢复与提取：一旦底层的异步操作（如文件加载完成），<code>Task&lt;string&gt;</code> 的状态会变为 <code>RanToCompletion</code>。这时，运行时会自动在适当的上下文中恢复异步方法的执行。<code>await</code> 运算符会自动从已完成任务的 <code>Result</code> 属性中取出 <code>string</code> 结果，并赋值给等号左边的变量； </li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="示例二：基础异步使用" dir="auto" class="heading" id="示例二：基础异步使用"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>示例二：基础异步使用</h3><div class="heading-children"><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">using System;
+using System.Threading.Tasks;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        Console.WriteLine("【主线程】开始执行Main方法");
+        
+        // 调用异步方法，但不等待它完成
+        AsyncMethod();
+        
+        // 这行代码不会等待AsyncMethod完成就会执行
+        Console.WriteLine("【主线程】Main方法在调用AsyncMethod后继续执行");
+        Console.ReadKey(); // 等待用户按键，防止程序退出
+    }
+
+    static async Task AsyncMethod()
+    {
+        Console.WriteLine("【异步方法】开始执行");
+        
+        // 使用await等待一个异步操作（这里模拟一个耗时操作）
+        await Task.Delay(2000); // 等待2秒
+        
+        // 这行代码会在2秒后执行
+        Console.WriteLine("【异步方法】在await之后继续执行");
+    }
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-h4 heading-wrapper"><h4 data-heading="分析" dir="auto" class="heading" id="分析"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析</h4><div class="heading-children"><div class="el-p"><p dir="auto"><strong>分析</strong>：是否在调用处使用 <code>await</code> 关键字</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：两种方法的不同
+<ul>
+<li data-line="1" dir="auto"><span alt="Pasted image 20250926163252.png" src="Pasted image 20250926163252.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250926163252.png" src="lib/media/pasted-image-20250926163252.png"></span></li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="3" dir="auto"><code>await</code> 是“等待”的开关​，它的存在与否，决定了调用方是否要等待异步方法完成后再继续；</li>
+<li data-line="4" dir="auto">这提供了极大的灵活性，你可以选择等待一个耗时操作，也可以选择“即发即弃”（<code>fire-and-forget</code>）；</li>
+<li data-line="5" dir="auto"><code>async</code> / <code>await</code> 并不会创建新线程（除非你使用 <code>Task.Run</code>），其核心价值在于高效地等待，特别是在 <code>I/O</code> 密集型操作（如网络请求、文件读写）期间，可以释放当前线程（如 <code>UI</code> 线程）去处理其他工作，从而提升应用程序的响应能力和吞吐量；</li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="示例三：结合异常处理" dir="auto" class="heading" id="示例三：结合异常处理"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>示例三：结合异常处理</h3><div class="heading-children"><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        // 创建一个取消令牌源，用于发送取消请求
+        var cancellationTokenSource = new CancellationTokenSource();
+        
+        try
+        {
+            // 模拟在5秒后自动取消任务，你也可以手动调用cancellationTokenSource.Cancel()
+            cancellationTokenSource.CancelAfter(5000);
+            
+            Console.WriteLine("开始执行一个可能被取消或出错的任务...");
+            await ProcessDataAsync(cancellationTokenSource.Token);
+            Console.WriteLine("任务成功完成！");
+        }
+        catch (OperationCanceledException)
+        {
+            Console.WriteLine("任务被用户取消了。");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"任务执行过程中出错: {ex.Message}");
+        }
+    }
+
+    static async Task ProcessDataAsync(CancellationToken cancellationToken)
+    {
+        for (int i = 0; i &lt; 10; i++)
+        {
+            // 在每次循环开始时检查是否被取消，如果被取消会抛出OperationCanceledException
+            cancellationToken.ThrowIfCancellationRequested();
+            
+            // 模拟一部分工作
+            Console.WriteLine($"正在处理第 {i+1} 部分...");
+            
+            // 将取消令牌传递给Task.Delay，这样如果任务在延迟期间被取消，Delay也会被中断
+            await Task.Delay(1000, cancellationToken);
+        }
+    }
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="mod-footer mod-ui"></div></div></div></div></div></div></div></div><div class="sidebar-right sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"></div><script defer="">let rs = document.querySelector(".sidebar-right"); rs.classList.add("is-collapsed"); if (window.innerWidth > 768) rs.classList.remove("is-collapsed"); rs.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-right-width"));</script></div></div></body></html>

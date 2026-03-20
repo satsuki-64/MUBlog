@@ -1,0 +1,760 @@
+<!DOCTYPE html> <html><head>
+		<title>Lecture 5：AssetDatabase 类</title>
+		<base href="..\..\../">
+		<meta id="root-path" root-path="..\..\../">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
+		<meta charset="UTF-8">
+		<meta name="description" content="MUBlog - Lecture 5：AssetDatabase 类">
+		<meta property="og:title" content="Lecture 5：AssetDatabase 类">
+		<meta property="og:description" content="MUBlog - Lecture 5：AssetDatabase 类">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="03_游戏开发技术/01_游戏引擎技术/02_unity-编辑器扩展/lecture-5：assetdatabase-类.html">
+		<meta property="og:image" content="lib\media\pasted-image-20250813165802.png">
+		<meta property="og:site_name" content="MUBlog">
+		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="lib/rss.xml"><script async="" id="webpage-script" src="lib/scripts/webpage.js" onload="this.onload=null;this.setAttribute(&quot;loaded&quot;, &quot;true&quot;)"></script><link rel="icon" href="lib/media/favicon.png"><style>body{--line-width:40em;--line-width-adaptive:40em;--file-line-width:40em;--sidebar-width:min(20em, 80vw);--collapse-arrow-size:11px;--tree-horizontal-spacing:0.6em;--tree-vertical-spacing:0.6em;--sidebar-margin:12px}.sidebar{height:100%;min-width:calc(var(--sidebar-width) + var(--divider-width-hover));max-width:calc(var(--sidebar-width) + var(--divider-width-hover));font-size:14px;z-index:10;position:relative;overflow:hidden;transition:min-width ease-in-out,max-width ease-in-out;transition-duration:.2s;contain:size}.sidebar-left{left:0}.sidebar-right{right:0}.sidebar.is-collapsed{min-width:0;max-width:0}body.floating-sidebars .sidebar{position:absolute}.sidebar-content{height:100%;min-width:calc(var(--sidebar-width) - var(--divider-width-hover));top:0;padding:var(--sidebar-margin);padding-top:4em;line-height:var(--line-height-tight);background-color:var(--background-secondary);transition:background-color,border-right,border-left,box-shadow;transition-duration:var(--color-fade-speed);transition-timing-function:ease-in-out;position:absolute;display:flex;flex-direction:column}.sidebar:not(.is-collapsed) .sidebar-content{min-width:calc(max(100%,var(--sidebar-width)) - 3px);max-width:calc(max(100%,var(--sidebar-width)) - 3px)}.sidebar-left .sidebar-content{left:0;border-top-right-radius:var(--radius-l);border-bottom-right-radius:var(--radius-l)}.sidebar-right .sidebar-content{right:0;border-top-left-radius:var(--radius-l);border-bottom-left-radius:var(--radius-l)}.sidebar:has(.sidebar-content:empty):has(.topbar-content:empty){display:none}.sidebar-topbar{height:2em;width:var(--sidebar-width);top:var(--sidebar-margin);padding-inline:var(--sidebar-margin);z-index:1;position:fixed;display:flex;align-items:center;transition:width ease-in-out;transition-duration:inherit}.sidebar.is-collapsed .sidebar-topbar{width:calc(2.3em + var(--sidebar-margin) * 2)}.sidebar .sidebar-topbar.is-collapsed{width:0}.sidebar-left .sidebar-topbar{left:0}.sidebar-right .sidebar-topbar{right:0}.topbar-content{overflow:hidden;overflow:clip;width:100%;height:100%;display:flex;align-items:center;transition:inherit}.sidebar.is-collapsed .topbar-content{width:0;transition:inherit}.clickable-icon.sidebar-collapse-icon{background-color:transparent;color:var(--icon-color-focused);padding:0!important;margin:0!important;height:100%!important;width:2.3em!important;margin-inline:0.14em!important;position:absolute}.sidebar-left .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);right:var(--sidebar-margin)}.sidebar-right .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);left:var(--sidebar-margin)}.clickable-icon.sidebar-collapse-icon svg.svg-icon{width:100%;height:100%}.sidebar-section-header{margin:0 0 1em 0;text-transform:uppercase;letter-spacing:.06em;font-weight:600}body{transition:background-color var(--color-fade-speed) ease-in-out}.webpage-container{display:flex;flex-direction:row;height:100%;width:100%;align-items:stretch;justify-content:center}.document-container{opacity:1;flex-basis:100%;max-width:100%;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;transition:opacity .2s ease-in-out;contain:inline-size}.hide{opacity:0;transition:opacity .2s ease-in-out}.document-container>.markdown-preview-view{margin:var(--sidebar-margin);margin-bottom:0;width:100%;width:-webkit-fill-available;width:-moz-available;width:fill-available;background-color:var(--background-primary);transition:background-color var(--color-fade-speed) ease-in-out;border-top-right-radius:var(--window-radius,var(--radius-m));border-top-left-radius:var(--window-radius,var(--radius-m));overflow-x:hidden!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;contain:inline-size}.document-container>.markdown-preview-view>.markdown-preview-sizer{padding-bottom:80vh!important;width:100%!important;max-width:var(--line-width)!important;flex-basis:var(--line-width)!important;transition:background-color var(--color-fade-speed) ease-in-out;contain:inline-size}.markdown-rendered img:not([width]),.view-content img:not([width]){max-width:100%;outline:0}.document-container>.view-content.embed{display:flex;padding:1em;height:100%;width:100%;align-items:center;justify-content:center}.document-container>.view-content.embed>*{max-width:100%;max-height:100%;object-fit:contain}:has(> :is(.math,table)){overflow-x:auto!important}.document-container>.view-content{overflow-x:auto;contain:content;padding:0;margin:0;height:100%}.scroll-highlight{position:absolute;width:100%;height:100%;pointer-events:none;z-index:1000;background-color:hsla(var(--color-accent-hsl),.25);opacity:0;padding:1em;inset:50%;translate:-50% -50%;border-radius:var(--radius-s)}</style><script defer="">async function loadIncludes(){if("file:"!=location.protocol){let e=document.querySelectorAll("include");for(let t=0;t<e.length;t++){let o=e[t],l=o.getAttribute("src");try{const e=await fetch(l);if(!e.ok){console.log("Could not include file: "+l),o?.remove();continue}let t=await e.text(),n=document.createRange().createContextualFragment(t),i=Array.from(n.children);for(let e of i)e.classList.add("hide"),e.style.transition="opacity 0.5s ease-in-out",setTimeout((()=>{e.classList.remove("hide")}),10);o.before(n),o.remove(),console.log("Included file: "+l)}catch(e){o?.remove(),console.log("Could not include file: "+l,e);continue}}}else{if(document.querySelectorAll("include").length>0){var e=document.createElement("div");e.id="error",e.textContent="Web server exports must be hosted on an http / web server to be viewed correctly.",e.style.position="fixed",e.style.top="50%",e.style.left="50%",e.style.transform="translate(-50%, -50%)",e.style.fontSize="1.5em",e.style.fontWeight="bold",e.style.textAlign="center",document.body.appendChild(e),document.querySelector(".document-container")?.classList.remove("hide")}}}document.addEventListener("DOMContentLoaded",(()=>{loadIncludes()}));let isFileProtocol="file:"==location.protocol;function waitLoadScripts(e,t){let o=e.map((e=>document.getElementById(e+"-script"))),l=0;!function e(){let n=o[l];l++,n&&"true"!=n.getAttribute("loaded")||l<o.length&&e(),l<o.length?n.addEventListener("load",e):t()}()}</script><link rel="stylesheet" href="lib/styles/obsidian.css"><link rel="stylesheet" href="lib/styles/theme.css"><link rel="preload" href="lib/styles/global-variable-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/global-variable-styles.css"></noscript><link rel="preload" href="lib/styles/supported-plugins.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/supported-plugins.css"></noscript><link rel="preload" href="lib/styles/main-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/main-styles.css"></noscript><link rel="preload" href="lib/styles/snippets.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/snippets.css"></noscript></head><body class="publish css-settings-manager styled-scrollbars theme-light show-inline-title ctp-rosepine-light ctp-mocha ctp-accent-rosewater anuppuccin-accent-toggle anp-current-line-border anp-callout-color-toggle anp-codeblock-numbers anp-list-toggle anp-table-width anp-toggle-preview anp-color-transition-toggle anp-button-metadata-toggle anp-toggle-metadata anp-toggle-scrollbars anp-h1-red anp-h1-divider anp-h2-peach anp-h3-green anp-h4-teal anp-h5-lavender anp-h6-mauve anp-decoration-toggle anp-bold-maroon anp-italic-green anp-highlight-yellow anp-colorful-frame-icon-toggle-dark anp-simple-rainbow-color-toggle anp-rainbow-file-toggle anp-simple-rainbow-title-toggle anp-simple-rainbow-icon-folder-toggle anp-simple-rainbow-indentation-toggle anp-simple-rainbow-collapse-toggle anp-card-layout anp-card-shadows anp-card-layout-filebrowser anp-theme-ext-light anp-theme-ext-dark anp-theme-ext-amoled ctp-atom-light ctp-atom-dark table-type-three-line table-header-color-blue table-row-alt-background-option table-dark-mode"><script defer="">let theme=localStorage.getItem("theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");"dark"==theme?(document.body.classList.add("theme-dark"),document.body.classList.remove("theme-light")):(document.body.classList.add("theme-light"),document.body.classList.remove("theme-dark")),window.innerWidth<480?document.body.classList.add("is-phone"):window.innerWidth<768?document.body.classList.add("is-tablet"):window.innerWidth<1024?document.body.classList.add("is-small-screen"):document.body.classList.add("is-large-screen")</script><div class="webpage-container workspace"><div class="sidebar-left sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"><label class="theme-toggle-container" for="theme_toggle"><input class="theme-toggle-input" type="checkbox" id="theme_toggle"><div class="toggle-background"></div></label></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"><include src="lib/html/file-tree.html"></include></div><script defer="">let ls = document.querySelector(".sidebar-left"); ls.classList.add("is-collapsed"); if (window.innerWidth > 768) ls.classList.remove("is-collapsed"); ls.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-left-width"));</script></div><div class="document-container markdown-reading-view hide"><div class="markdown-preview-view markdown-rendered allow-fold-headings allow-fold-lists is-readable-line-width"><style id="MJX-CHTML-styles">mjx-c.mjx-c36::before{padding:.666em .5em .022em 0;content:"6"}mjx-c.mjx-c1D43E.TEX-I::before{padding:.683em .889em 0 0;content:"K"}mjx-c.mjx-c52::before{padding:.683em .736em .022em 0;content:"R"}mjx-c.mjx-c1D42B.TEX-B::before{padding:.45em .474em 0 0;content:"r"}mjx-c.mjx-c1D428.TEX-B::before{padding:.452em .575em .005em 0;content:"o"}mjx-c.mjx-c1D41D.TEX-B::before{padding:.694em .639em .006em 0;content:"d"}mjx-c.mjx-c3C::before{padding:.54em .778em .04em 0;content:"<"}mjx-c.mjx-c221E::before{padding:.442em 1em .011em 0;content:"∞"}mjx-c.mjx-c1D429.TEX-B::before{padding:.45em .639em .194em 0;content:"p"}mjx-c.mjx-cB1::before{padding:.666em .778em 0 0;content:"±"}mjx-c.mjx-c221A::before{padding:.8em .853em .2em 0;content:"√"}mjx-c.mjx-c47::before{padding:.705em .785em .022em 0;content:"G"}mjx-c.mjx-c66::before{padding:.705em .372em 0 0;content:"f"}mjx-c.mjx-c71::before{padding:.442em .528em .194em 0;content:"q"}mjx-c.mjx-c5E.TEX-B::before{padding:.694em .575em 0 0;content:"^"}mjx-c.mjx-c1D42D.TEX-B::before{padding:.635em .447em .005em 0;content:"t"}mjx-c.mjx-c1D40E.TEX-B::before{padding:.696em .864em .01em 0;content:"O"}mjx-c.mjx-c1D403.TEX-B::before{padding:.686em .882em 0 0;content:"D"}mjx-c.mjx-c1D40F.TEX-B::before{padding:.686em .786em 0 0;content:"P"}mjx-c.mjx-c2219::before{padding:.444em .5em 0 0;content:"∙"}mjx-c.mjx-c1D404.TEX-B::before{padding:.68em .756em 0 0;content:"E"}mjx-c.mjx-c20D7.TEX-VB::before{padding:.723em .575em 0 0;content:"→"}mjx-c.mjx-c7B::before{padding:.75em .5em .25em 0;content:"{"}mjx-c.mjx-c7D::before{padding:.75em .5em .25em 0;content:"}"}mjx-c.mjx-c26::before{padding:.716em .778em .022em 0;content:"&"}mjx-c.mjx-c2261::before{padding:.464em .778em 0 0;content:"≡"}mjx-c.mjx-c3A6::before{padding:.683em .722em 0 0;content:"Φ"}mjx-c.mjx-c57::before{padding:.683em 1.028em .022em 0;content:"W"}mjx-c.mjx-c2035.TEX-A::before{padding:.56em .275em 0 0;content:"‵"}mjx-c.mjx-c1D446.TEX-I::before{padding:.705em .645em .022em 0;content:"S"}mjx-c.mjx-c1D719.TEX-I::before{padding:.694em .596em .205em 0;content:"ϕ"}mjx-c.mjx-c7C::before{padding:.75em .278em .249em 0;content:"|"}.mjx-stretched mjx-c.mjx-c2013::before{content:"–"}mjx-stretchy-h.mjx-c2013 mjx-ext mjx-c::before{content:"–";padding:.285em 0 0}mjx-c.mjx-c1D52E.TEX-FR::before{padding:.479em .489em .219em 0;content:"q"}mjx-c.mjx-c1D52D.TEX-FR::before{padding:.541em .5em .212em 0;content:"p"}mjx-c.mjx-c1D43A.TEX-I::before{padding:.705em .786em .022em 0;content:"G"}mjx-c.mjx-c1D439.TEX-I::before{padding:.68em .749em 0 0;content:"F"}mjx-c.mjx-c3A9::before{padding:.704em .722em 0 0;content:"Ω"}mjx-c.mjx-c2248::before{padding:.483em .778em 0 0;content:"≈"}mjx-c.mjx-c222B.TEX-S1::before{padding:.805em .61em .306em 0;content:"∫"}mjx-c.mjx-c200B::before{padding:0;content:""}mjx-c.mjx-c1D44A.TEX-I::before{padding:.683em 1.048em .022em 0;content:"W"}mjx-c.mjx-c1D443.TEX-I::before{padding:.683em .751em 0 0;content:"P"}mjx-c.mjx-c1D45E.TEX-I::before{padding:.442em .46em .194em 0;content:"q"}mjx-c.mjx-c2208::before{padding:.54em .667em .04em 0;content:"∈"}mjx-c.mjx-c4E.TEX-C::before{padding:.789em .979em .05em 0;content:"N"}mjx-c.mjx-c1D712.TEX-I::before{padding:.442em .626em .204em 0;content:"χ"}mjx-c.mjx-c53::before{padding:.705em .556em .022em 0;content:"S"}mjx-c.mjx-c4D::before{padding:.683em .917em 0 0;content:"M"}mjx-c.mjx-c1D44B.TEX-I::before{padding:.683em .852em 0 0;content:"X"}mjx-c.mjx-c56::before{padding:.683em .75em .022em 0;content:"V"}mjx-c.mjx-c45::before{padding:.68em .681em 0 0;content:"E"}mjx-c.mjx-c2264::before{padding:.636em .778em .138em 0;content:"≤"}mjx-c.mjx-c1D70E.TEX-I::before{padding:.431em .571em .011em 0;content:"σ"}mjx-c.mjx-c1D707.TEX-I::before{padding:.442em .603em .216em 0;content:"μ"}mjx-c.mjx-c1D708.TEX-I::before{padding:.442em .53em 0 0;content:"ν"}mjx-c.mjx-c46::before{padding:.68em .653em 0 0;content:"F"}mjx-c.mjx-c7B.TEX-S3::before{padding:1.45em .75em .949em 0;content:"{"}mjx-c.mjx-c7D.TEX-S3::before{padding:1.45em .75em .949em 0;content:"}"}mjx-c.mjx-c1D438.TEX-I::before{padding:.68em .764em 0 0;content:"E"}mjx-c.mjx-c222B.TEX-S2::before{padding:1.36em .944em .862em 0;content:"∫"}mjx-c.mjx-c1D43B.TEX-I::before{padding:.683em .888em 0 0;content:"H"}mjx-c.mjx-c1D70C.TEX-I::before{padding:.442em .517em .216em 0;content:"ρ"}mjx-c.mjx-c1D702.TEX-I::before{padding:.442em .497em .216em 0;content:"η"}mjx-c.mjx-c221A.TEX-S2::before{padding:1.15em 1.02em .65em 0;content:"√"}mjx-c.mjx-c3E::before{padding:.54em .778em .04em 0;content:">"}mjx-munderover{display:inline-block;text-align:left}mjx-munderover:not([limits=false]){padding-top:.1em}mjx-munderover:not([limits=false])>*{display:block}mjx-c.mjx-c221A.TEX-S1::before{padding:.85em 1.02em .35em 0;content:"√"}mjx-c.mjx-c3A::before{padding:.43em .278em 0 0;content:":"}mjx-c.mjx-c211D.TEX-A::before{padding:.683em .722em 0 0;content:"R"}mjx-c.mjx-c3B::before{padding:.43em .278em .194em 0;content:";"}mjx-c.mjx-c21A6::before{padding:.511em 1em .011em 0;content:"↦"}mjx-c.mjx-c1D41B.TEX-B::before{padding:.694em .639em .006em 0;content:"b"}mjx-c.mjx-c2211.TEX-S2::before{padding:.95em 1.444em .45em 0;content:"∑"}mjx-c.mjx-c1D457.TEX-I::before{padding:.661em .412em .204em 0;content:"j"}mjx-c.mjx-c38::before{padding:.666em .5em .022em 0;content:"8"}mjx-c.mjx-c41::before{padding:.716em .75em 0 0;content:"A"}mjx-c.mjx-c43::before{padding:.705em .722em .021em 0;content:"C"}mjx-msqrt{display:inline-block;text-align:left}mjx-root{display:inline-block;white-space:nowrap}mjx-surd{display:inline-block;vertical-align:top}mjx-sqrt{display:inline-block;padding-top:.07em}mjx-sqrt>mjx-box{border-top:.07em solid}mjx-sqrt.mjx-tall>mjx-box{padding-left:.3em;margin-left:-.3em}mjx-c.mjx-c1D435.TEX-I::before{padding:.683em .759em 0 0;content:"B"}mjx-c.mjx-c1D436.TEX-I::before{padding:.705em .76em .022em 0;content:"C"}mjx-c.mjx-c28.TEX-S3::before{padding:1.45em .736em .949em 0;content:"("}mjx-c.mjx-c29.TEX-S3::before{padding:1.45em .736em .949em 0;content:")"}mjx-c.mjx-c42::before{padding:.683em .708em 0 0;content:"B"}mjx-c.mjx-c1D449.TEX-I::before{padding:.683em .769em .022em 0;content:"V"}mjx-c.mjx-c1D462.TEX-I::before{padding:.442em .572em .011em 0;content:"u"}mjx-c.mjx-c221A.TEX-S4::before{padding:1.75em 1.02em 1.25em 0;content:"√"}mjx-c.mjx-c22C6::before{padding:.486em .5em 0 0;content:"⋆"}mjx-c.mjx-c1D42E.TEX-B::before{padding:.45em .639em .006em 0;content:"u"}mjx-c.mjx-c2E::before{padding:.12em .278em 0 0;content:"."}mjx-c.mjx-c1D43C.TEX-I::before{padding:.683em .504em 0 0;content:"I"}mjx-c.mjx-c1D43F.TEX-I::before{padding:.683em .681em 0 0;content:"L"}mjx-c.mjx-c1D458.TEX-I::before{padding:.694em .521em .011em 0;content:"k"}mjx-c.mjx-c28.TEX-S1::before{padding:.85em .458em .349em 0;content:"("}mjx-c.mjx-c29.TEX-S1::before{padding:.85em .458em .349em 0;content:")"}mjx-c.mjx-c6D::before{padding:.442em .833em 0 0;content:"m"}mjx-c.mjx-c1D425.TEX-B::before{padding:.694em .319em 0 0;content:"l"}mjx-c.mjx-c1D421.TEX-B::before{padding:.694em .639em 0 0;content:"h"}mjx-c.mjx-c62::before{padding:.694em .556em .011em 0;content:"b"}mjx-c.mjx-c1D42F.TEX-B::before{padding:.444em .607em 0 0;content:"v"}mjx-c.mjx-c2225::before{padding:.75em .5em .25em 0;content:"∥"}mjx-c.mjx-c1D441.TEX-I::before{padding:.683em .888em 0 0;content:"N"}mjx-c.mjx-c2211.TEX-S1::before{padding:.75em 1.056em .25em 0;content:"∑"}mjx-stretchy-v.mjx-c7B mjx-beg mjx-c::before{content:"⎧";padding:.899em .889em .01em 0}mjx-stretchy-v.mjx-c7B mjx-ext mjx-c::before{content:"⎪";width:.889em}mjx-stretchy-v.mjx-c7B mjx-end mjx-c::before{content:"⎩";padding:.01em .889em .899em 0}mjx-stretchy-v.mjx-c7B mjx-mid mjx-c::before{content:"⎨";padding:1.16em .889em .66em 0}mjx-stretchy-v.mjx-c7B>mjx-mid{margin-top:-.91em;margin-bottom:-.91em}mjx-stretchy-v.mjx-c7B>mjx-end{margin-top:-.909em}mjx-stretchy-v.mjx-c7B>mjx-ext{height:50%;border-top-width:.879em;border-bottom-width:.879em}mjx-c.mjx-c2217::before{padding:.465em .5em 0 0;content:"∗"}mjx-c.mjx-c68::before{padding:.694em .556em 0 0;content:"h"}mjx-c.mjx-c1D70B.TEX-I::before{padding:.431em .57em .011em 0;content:"π"}mjx-c.mjx-c1D714.TEX-I::before{padding:.443em .622em .011em 0;content:"ω"}mjx-c.mjx-c37::before{padding:.676em .5em .022em 0;content:"7"}mjx-mtable{display:inline-block;text-align:center;vertical-align:.25em;position:relative;box-sizing:border-box;border-spacing:0px;border-collapse:collapse}mjx-mstyle[size="s"] mjx-mtable{vertical-align:.354em}mjx-labels{position:absolute;left:0;top:0}mjx-table{display:inline-block;vertical-align:-.5ex;box-sizing:border-box}mjx-table>mjx-itable{vertical-align:middle;text-align:left;box-sizing:border-box}mjx-labels>mjx-itable{position:absolute;top:0}mjx-mtable[justify=left]{text-align:left}mjx-mtable[justify=right]{text-align:right}mjx-mtable[justify=left][side=left]{padding-right:0!important}mjx-mtable[justify=left][side=right]{padding-left:0!important}mjx-mtable[justify=right][side=left]{padding-right:0!important}mjx-mtable[justify=right][side=right]{padding-left:0!important}mjx-mtable[align]{vertical-align:baseline}mjx-mtable[align=top]>mjx-table{vertical-align:top}mjx-mtable[align=bottom]>mjx-table{vertical-align:bottom}mjx-mtable[side=right] mjx-labels{min-width:100%}mjx-mtr{display:table-row;text-align:left}mjx-mtr[rowalign=top]>mjx-mtd{vertical-align:top}mjx-mtr[rowalign=center]>mjx-mtd{vertical-align:middle}mjx-mtr[rowalign=bottom]>mjx-mtd{vertical-align:bottom}mjx-mtr[rowalign=baseline]>mjx-mtd{vertical-align:baseline}mjx-mtr[rowalign=axis]>mjx-mtd{vertical-align:.25em}mjx-mtd{display:table-cell;text-align:center;padding:.215em .4em}mjx-mtd:first-child{padding-left:0}mjx-mtd:last-child{padding-right:0}mjx-mtable>*>mjx-itable>:first-child>mjx-mtd{padding-top:0}mjx-mtable>*>mjx-itable>:last-child>mjx-mtd{padding-bottom:0}mjx-tstrut{display:inline-block;height:1em;vertical-align:-.25em}mjx-labels[align=left]>mjx-mtr>mjx-mtd{text-align:left}mjx-labels[align=right]>mjx-mtr>mjx-mtd{text-align:right}mjx-mtd[extra]{padding:0}mjx-mtd[rowalign=top]{vertical-align:top}mjx-mtd[rowalign=center]{vertical-align:middle}mjx-mtd[rowalign=bottom]{vertical-align:bottom}mjx-mtd[rowalign=baseline]{vertical-align:baseline}mjx-mtd[rowalign=axis]{vertical-align:.25em}mjx-texatom{display:inline-block;text-align:left}mjx-mrow{display:inline-block;text-align:left}mjx-msub{display:inline-block;text-align:left}mjx-mspace{display:inline-block;text-align:left}mjx-mtext{display:inline-block;text-align:left}mjx-munder{display:inline-block;text-align:left}mjx-over{text-align:left}mjx-munder:not([limits=false]){display:inline-table}mjx-munder>mjx-row{text-align:left}mjx-under{padding-bottom:.1em}mjx-mover{display:inline-block;text-align:left}mjx-mover:not([limits=false]){padding-top:.1em}mjx-mover:not([limits=false])>*{display:block;text-align:left}mjx-msubsup{display:inline-block;text-align:left}mjx-script{display:inline-block;padding-right:.05em;padding-left:.033em}mjx-script>mjx-spacer{display:block}mjx-mfrac{display:inline-block;text-align:left}mjx-frac{display:inline-block;vertical-align:.17em;padding:0 .22em}mjx-frac[type="d"]{vertical-align:.04em}mjx-frac[delims]{padding:0 .1em}mjx-frac[atop]{padding:0 .12em}mjx-frac[atop][delims]{padding:0}mjx-dtable{display:inline-table;width:100%}mjx-dtable>*{font-size:2000%}mjx-dbox{display:block;font-size:5%}mjx-num{display:block;text-align:center}mjx-den{display:block;text-align:center}mjx-mfrac[bevelled]>mjx-num{display:inline-block}mjx-mfrac[bevelled]>mjx-den{display:inline-block}mjx-den[align=right],mjx-num[align=right]{text-align:right}mjx-den[align=left],mjx-num[align=left]{text-align:left}mjx-nstrut{display:inline-block;height:.054em;width:0;vertical-align:-.054em}mjx-nstrut[type="d"]{height:.217em;vertical-align:-.217em}mjx-dstrut{display:inline-block;height:.505em;width:0}mjx-dstrut[type="d"]{height:.726em}mjx-line{display:block;box-sizing:border-box;min-height:1px;height:.06em;border-top:.06em solid;margin:.06em -.1em;overflow:hidden}mjx-line[type="d"]{margin:.18em -.1em}mjx-stretchy-v.mjx-c28 mjx-beg mjx-c::before{content:"⎛";padding:1.154em .875em .655em 0}mjx-stretchy-v.mjx-c28 mjx-ext mjx-c::before{content:"⎜";width:.875em}mjx-stretchy-v.mjx-c28 mjx-end mjx-c::before{content:"⎝";padding:1.165em .875em .644em 0}mjx-stretchy-v.mjx-c28>mjx-end{margin-top:-1.809em}mjx-stretchy-v.mjx-c28>mjx-ext{border-top-width:1.779em;border-bottom-width:1.779em}mjx-stretchy-v.mjx-c29 mjx-beg mjx-c::before{content:"⎞";padding:1.154em .875em .655em 0}mjx-stretchy-v.mjx-c29 mjx-ext mjx-c::before{content:"⎟";width:.875em}mjx-stretchy-v.mjx-c29 mjx-end mjx-c::before{content:"⎠";padding:1.165em .875em .644em 0}mjx-stretchy-v.mjx-c29>mjx-end{margin-top:-1.809em}mjx-stretchy-v.mjx-c29>mjx-ext{border-top-width:1.779em;border-bottom-width:1.779em}mjx-stretchy-v.mjx-c5B mjx-beg mjx-c::before{content:"⎡";padding:1.154em .667em .645em 0}mjx-stretchy-v.mjx-c5B mjx-ext mjx-c::before{content:"⎢";width:.667em}mjx-stretchy-v.mjx-c5B mjx-end mjx-c::before{content:"⎣";padding:1.155em .667em .644em 0}mjx-stretchy-v.mjx-c5B>mjx-end{margin-top:-1.799em}mjx-stretchy-v.mjx-c5B>mjx-ext{border-top-width:1.769em;border-bottom-width:1.769em}mjx-stretchy-v.mjx-c5D mjx-beg mjx-c::before{content:"⎤";padding:1.154em .667em .645em 0}mjx-stretchy-v.mjx-c5D mjx-ext mjx-c::before{content:"⎥";width:.667em}mjx-stretchy-v.mjx-c5D mjx-end mjx-c::before{content:"⎦";padding:1.155em .667em .644em 0}mjx-stretchy-v.mjx-c5D>mjx-end{margin-top:-1.799em}mjx-stretchy-v.mjx-c5D>mjx-ext{border-top-width:1.769em;border-bottom-width:1.769em}mjx-stretchy-h.mjx-c23DF mjx-beg mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF mjx-ext mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF mjx-end mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF mjx-mid mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF>mjx-ext{width:50%}mjx-c.mjx-c1D466.TEX-I::before{padding:.442em .49em .205em 0;content:"y"}mjx-c.mjx-c5B.TEX-S3::before{padding:1.45em .528em .949em 0;content:"["}mjx-c.mjx-c5D.TEX-S3::before{padding:1.45em .528em .949em 0;content:"]"}mjx-c.mjx-c30::before{padding:.666em .5em .022em 0;content:"0"}mjx-c.mjx-c2212::before{padding:.583em .778em .082em 0;content:"−"}mjx-c.mjx-c1D411.TEX-B::before{padding:.686em .862em .011em 0;content:"R"}mjx-c.mjx-c1D703.TEX-I::before{padding:.705em .469em .01em 0;content:"θ"}mjx-c.mjx-c63::before{padding:.448em .444em .011em 0;content:"c"}mjx-c.mjx-c6F::before{padding:.448em .5em .01em 0;content:"o"}mjx-c.mjx-c73::before{padding:.448em .394em .011em 0;content:"s"}mjx-c.mjx-c2061::before{padding:0;content:""}mjx-c.mjx-c69::before{padding:.669em .278em 0 0;content:"i"}mjx-c.mjx-c6E::before{padding:.442em .556em 0 0;content:"n"}mjx-c.mjx-c1D451.TEX-I::before{padding:.694em .52em .01em 0;content:"d"}mjx-c.mjx-c1D437.TEX-I::before{padding:.683em .828em 0 0;content:"D"}mjx-c.mjx-c1D447.TEX-I::before{padding:.677em .704em 0 0;content:"T"}mjx-c.mjx-c1D464.TEX-I::before{padding:.443em .716em .011em 0;content:"w"}mjx-c.mjx-c22C5::before{padding:.31em .278em 0 0;content:"⋅"}mjx-c.mjx-c1D412.TEX-B::before{padding:.697em .639em .011em 0;content:"S"}mjx-c.mjx-c1D6FC.TEX-I::before{padding:.442em .64em .011em 0;content:"α"}mjx-c.mjx-c1D445.TEX-I::before{padding:.683em .759em .021em 0;content:"R"}mjx-c.mjx-c34::before{padding:.677em .5em 0 0;content:"4"}mjx-c.mjx-c35::before{padding:.666em .5em .022em 0;content:"5"}mjx-c.mjx-c2218::before{padding:.444em .5em 0 0;content:"∘"}mjx-c.mjx-c1D434.TEX-I::before{padding:.716em .75em 0 0;content:"A"}mjx-c.mjx-c2026::before{padding:.12em 1.172em 0 0;content:"…"}mjx-c.mjx-c1D431.TEX-B::before{padding:.444em .607em 0 0;content:"x"}mjx-c.mjx-c1D400.TEX-B::before{padding:.698em .869em 0 0;content:"A"}mjx-c.mjx-c22EF::before{padding:.31em 1.172em 0 0;content:"⋯"}mjx-c.mjx-c1D413.TEX-B::before{padding:.675em .8em 0 0;content:"T"}mjx-c.mjx-c28.TEX-B::before{padding:.75em .447em .249em 0;content:"("}mjx-c.mjx-c1D41C.TEX-B::before{padding:.453em .511em .006em 0;content:"c"}mjx-c.mjx-c29.TEX-B::before{padding:.75em .447em .249em 0;content:")"}mjx-c.mjx-c2212.TEX-B::before{padding:.281em .894em 0 0;content:"−"}mjx-c.mjx-c33::before{padding:.665em .5em .022em 0;content:"3"}mjx-c.mjx-c44::before{padding:.683em .764em 0 0;content:"D"}mjx-c.mjx-cA0::before{padding:0 .25em 0 0;content:" "}mjx-c.mjx-c70::before{padding:.442em .556em .194em 0;content:"p"}mjx-c.mjx-c74::before{padding:.615em .389em .01em 0;content:"t"}mjx-c.mjx-c78::before{padding:.431em .528em 0 0;content:"x"}mjx-c.mjx-c79::before{padding:.431em .528em .204em 0;content:"y"}mjx-c.mjx-c7A::before{padding:.431em .444em 0 0;content:"z"}mjx-c.mjx-c54::before{padding:.677em .722em 0 0;content:"T"}mjx-c.mjx-c76::before{padding:.431em .528em .011em 0;content:"v"}mjx-c.mjx-c65::before{padding:.448em .444em .011em 0;content:"e"}mjx-c.mjx-c72::before{padding:.442em .392em 0 0;content:"r"}mjx-c.mjx-c1D467.TEX-I::before{padding:.442em .465em .011em 0;content:"z"}mjx-c.mjx-c1D453.TEX-I::before{padding:.705em .55em .205em 0;content:"f"}mjx-c.mjx-c1D6FD.TEX-I::before{padding:.705em .566em .194em 0;content:"β"}mjx-c.mjx-c1D6FE.TEX-I::before{padding:.441em .543em .216em 0;content:"γ"}mjx-c.mjx-c1D427.TEX-B::before{padding:.45em .639em 0 0;content:"n"}mjx-c.mjx-c1D408.TEX-B::before{padding:.686em .436em 0 0;content:"I"}mjx-c.mjx-c1D40D.TEX-B::before{padding:.686em .9em 0 0;content:"N"}mjx-c.mjx-c50::before{padding:.683em .681em 0 0;content:"P"}mjx-c.mjx-c20D7.TEX-V::before{padding:.714em .5em 0 0;content:"→"}mjx-c.mjx-c4C::before{padding:.683em .625em 0 0;content:"L"}mjx-c.mjx-c6B::before{padding:.694em .528em 0 0;content:"k"}mjx-c.mjx-c2D::before{padding:.252em .333em 0 0;content:"-"}mjx-c.mjx-c61::before{padding:.448em .5em .011em 0;content:"a"}mjx-c.mjx-c20::before{padding:0 .25em 0 0;content:" "}mjx-c.mjx-c2F::before{padding:.75em .5em .25em 0;content:"/"}mjx-c.mjx-c67::before{padding:.453em .5em .206em 0;content:"g"}mjx-c.mjx-c64::before{padding:.694em .556em .011em 0;content:"d"}mjx-c.mjx-c5E::before{padding:.694em .5em 0 0;content:"^"}mjx-c.mjx-c1D448.TEX-I::before{padding:.683em .767em .022em 0;content:"U"}mjx-c.mjx-cD7::before{padding:.491em .778em 0 0;content:"×"}mjx-c.mjx-c5B::before{padding:.75em .278em .25em 0;content:"["}mjx-c.mjx-c5D::before{padding:.75em .278em .25em 0;content:"]"}mjx-c.mjx-c21D2::before{padding:.525em 1em .024em 0;content:"⇒"}mjx-c.mjx-c75::before{padding:.442em .556em .011em 0;content:"u"}mjx-c.mjx-c77::before{padding:.431em .722em .011em 0;content:"w"}mjx-c.mjx-c6C::before{padding:.694em .278em 0 0;content:"l"}mjx-c.mjx-c1D440.TEX-I::before{padding:.683em 1.051em 0 0;content:"M"}mjx-c.mjx-c1D465.TEX-I::before{padding:.442em .572em .011em 0;content:"x"}mjx-c.mjx-cD7::before{padding:.491em .778em 0 0;content:"×"}mjx-c.mjx-c32::before{padding:.666em .5em 0 0;content:"2"}mjx-c.mjx-c1D463.TEX-I::before{padding:.443em .485em .011em 0;content:"v"}mjx-c.mjx-c1D45D.TEX-I::before{padding:.442em .503em .194em 0;content:"p"}mjx-c.mjx-c2192::before{padding:.511em 1em .011em 0;content:"→"}mjx-c.mjx-c1D44E.TEX-I::before{padding:.441em .529em .01em 0;content:"a"}mjx-c.mjx-c1D44F.TEX-I::before{padding:.694em .429em .011em 0;content:"b"}mjx-c.mjx-c1D459.TEX-I::before{padding:.694em .298em .011em 0;content:"l"}mjx-c.mjx-c1D452.TEX-I::before{padding:.442em .466em .011em 0;content:"e"}mjx-mn{display:inline-block;text-align:left}mjx-c.mjx-c1D442.TEX-I::before{padding:.704em .763em .022em 0;content:"O"}mjx-c.mjx-c31::before{padding:.666em .5em 0 0;content:"1"}mjx-container[jax=CHTML]{line-height:0}mjx-container [space="1"]{margin-left:.111em}mjx-container [space="2"]{margin-left:.167em}mjx-container [space="3"]{margin-left:.222em}mjx-container [space="4"]{margin-left:.278em}mjx-container [space="5"]{margin-left:.333em}mjx-container [rspace="1"]{margin-right:.111em}mjx-container [rspace="2"]{margin-right:.167em}mjx-container [rspace="3"]{margin-right:.222em}mjx-container [rspace="4"]{margin-right:.278em}mjx-container [rspace="5"]{margin-right:.333em}mjx-container [size="s"]{font-size:70.7%}mjx-container [size=ss]{font-size:50%}mjx-container [size=Tn]{font-size:60%}mjx-container [size=sm]{font-size:85%}mjx-container [size=lg]{font-size:120%}mjx-container [size=Lg]{font-size:144%}mjx-container [size=LG]{font-size:173%}mjx-container [size=hg]{font-size:207%}mjx-container [size=HG]{font-size:249%}mjx-container [width=full]{width:100%}mjx-box{display:inline-block}mjx-block{display:block}mjx-itable{display:inline-table}mjx-row{display:table-row}mjx-row>*{display:table-cell}mjx-mtext{display:inline-block}mjx-mstyle{display:inline-block}mjx-merror{display:inline-block;color:red;background-color:#ff0}mjx-mphantom{visibility:hidden}mjx-assistive-mml{top:0;left:0;clip:rect(1px,1px,1px,1px);user-select:none;position:absolute!important;padding:1px 0 0!important;border:0!important;display:block!important;width:auto!important;overflow:hidden!important}mjx-assistive-mml[display=block]{width:100%!important}mjx-math{display:inline-block;text-align:left;line-height:0;text-indent:0;font-style:normal;font-weight:400;font-size:100%;font-size-adjust:none;letter-spacing:normal;border-collapse:collapse;overflow-wrap:normal;word-spacing:normal;white-space:nowrap;direction:ltr;padding:1px 0}mjx-container[jax=CHTML][display=true]{display:block;text-align:center;margin:1em 0}mjx-container[jax=CHTML][display=true][width=full]{display:flex}mjx-container[jax=CHTML][display=true] mjx-math{padding:0}mjx-container[jax=CHTML][justify=left]{text-align:left}mjx-container[jax=CHTML][justify=right]{text-align:right}mjx-mi{display:inline-block;text-align:left}mjx-c{display:inline-block}mjx-utext{display:inline-block;padding:.75em 0 .2em}mjx-mo{display:inline-block;text-align:left}mjx-stretchy-h{display:inline-table;width:100%}mjx-stretchy-h>*{display:table-cell;width:0}mjx-stretchy-h>*>mjx-c{display:inline-block;transform:scaleX(1)}mjx-stretchy-h>*>mjx-c::before{display:inline-block;width:initial}mjx-stretchy-h>mjx-ext{overflow:clip visible;width:100%}mjx-stretchy-h>mjx-ext>mjx-c::before{transform:scaleX(500)}mjx-stretchy-h>mjx-ext>mjx-c{width:0}mjx-stretchy-h>mjx-beg>mjx-c{margin-right:-.1em}mjx-stretchy-h>mjx-end>mjx-c{margin-left:-.1em}mjx-stretchy-v{display:inline-block}mjx-stretchy-v>*{display:block}mjx-stretchy-v>mjx-beg{height:0}mjx-stretchy-v>mjx-end>mjx-c{display:block}mjx-stretchy-v>*>mjx-c{transform:scaleY(1);transform-origin:left center;overflow:hidden}mjx-stretchy-v>mjx-ext{display:block;height:100%;box-sizing:border-box;border:0 solid transparent;overflow:visible clip}mjx-stretchy-v>mjx-ext>mjx-c::before{width:initial;box-sizing:border-box}mjx-stretchy-v>mjx-ext>mjx-c{transform:scaleY(500) translateY(.075em);overflow:visible}mjx-mark{display:inline-block;height:0}mjx-msup{display:inline-block;text-align:left}mjx-c::before{display:block;width:0}.MJX-TEX{font-family:MJXZERO,MJXTEX}.TEX-B{font-family:MJXZERO,MJXTEX-B}.TEX-I{font-family:MJXZERO,MJXTEX-I}.TEX-MI{font-family:MJXZERO,MJXTEX-MI}.TEX-BI{font-family:MJXZERO,MJXTEX-BI}.TEX-S1{font-family:MJXZERO,MJXTEX-S1}.TEX-S2{font-family:MJXZERO,MJXTEX-S2}.TEX-S3{font-family:MJXZERO,MJXTEX-S3}.TEX-S4{font-family:MJXZERO,MJXTEX-S4}.TEX-A{font-family:MJXZERO,MJXTEX-A}.TEX-C{font-family:MJXZERO,MJXTEX-C}.TEX-CB{font-family:MJXZERO,MJXTEX-CB}.TEX-FR{font-family:MJXZERO,MJXTEX-FR}.TEX-FRB{font-family:MJXZERO,MJXTEX-FRB}.TEX-SS{font-family:MJXZERO,MJXTEX-SS}.TEX-SSB{font-family:MJXZERO,MJXTEX-SSB}.TEX-SSI{font-family:MJXZERO,MJXTEX-SSI}.TEX-SC{font-family:MJXZERO,MJXTEX-SC}.TEX-T{font-family:MJXZERO,MJXTEX-T}.TEX-V{font-family:MJXZERO,MJXTEX-V}.TEX-VB{font-family:MJXZERO,MJXTEX-VB}mjx-stretchy-h mjx-c,mjx-stretchy-v mjx-c{font-family:MJXZERO,MJXTEX-S1,MJXTEX-S4,MJXTEX,MJXTEX-A!important}@font-face{font-family:MJXZERO;src:url("lib/fonts/mathjax_zero.woff") format("woff")}@font-face{font-family:MJXTEX;src:url("lib/fonts/mathjax_main-regular.woff") format("woff")}@font-face{font-family:MJXTEX-B;src:url("lib/fonts/mathjax_main-bold.woff") format("woff")}@font-face{font-family:MJXTEX-I;src:url("lib/fonts/mathjax_math-italic.woff") format("woff")}@font-face{font-family:MJXTEX-MI;src:url("lib/fonts/mathjax_main-italic.woff") format("woff")}@font-face{font-family:MJXTEX-BI;src:url("lib/fonts/mathjax_math-bolditalic.woff") format("woff")}@font-face{font-family:MJXTEX-S1;src:url("lib/fonts/mathjax_size1-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S2;src:url("lib/fonts/mathjax_size2-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S3;src:url("lib/fonts/mathjax_size3-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S4;src:url("lib/fonts/mathjax_size4-regular.woff") format("woff")}@font-face{font-family:MJXTEX-A;src:url("lib/fonts/mathjax_ams-regular.woff") format("woff")}@font-face{font-family:MJXTEX-C;src:url("lib/fonts/mathjax_calligraphic-regular.woff") format("woff")}@font-face{font-family:MJXTEX-CB;src:url("lib/fonts/mathjax_calligraphic-bold.woff") format("woff")}@font-face{font-family:MJXTEX-FR;src:url("lib/fonts/mathjax_fraktur-regular.woff") format("woff")}@font-face{font-family:MJXTEX-FRB;src:url("lib/fonts/mathjax_fraktur-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SS;src:url("lib/fonts/mathjax_sansserif-regular.woff") format("woff")}@font-face{font-family:MJXTEX-SSB;src:url("lib/fonts/mathjax_sansserif-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SSI;src:url("lib/fonts/mathjax_sansserif-italic.woff") format("woff")}@font-face{font-family:MJXTEX-SC;src:url("lib/fonts/mathjax_script-regular.woff") format("woff")}@font-face{font-family:MJXTEX-T;src:url("lib/fonts/mathjax_typewriter-regular.woff") format("woff")}@font-face{font-family:MJXTEX-V;src:url("lib/fonts/mathjax_vector-regular.woff") format("woff")}@font-face{font-family:MJXTEX-VB;src:url("lib/fonts/mathjax_vector-bold.woff") format("woff")}mjx-c.mjx-c1D45F.TEX-I::before{padding:.442em .451em .011em 0;content:"r"}mjx-c.mjx-c210E.TEX-I::before{padding:.694em .576em .011em 0;content:"h"}mjx-c.mjx-c1D460.TEX-I::before{padding:.442em .469em .01em 0;content:"s"}mjx-c.mjx-c28::before{padding:.75em .389em .25em 0;content:"("}mjx-c.mjx-c29::before{padding:.75em .389em .25em 0;content:")"}mjx-c.mjx-c3D::before{padding:.583em .778em .082em 0;content:"="}mjx-c.mjx-c1D45A.TEX-I::before{padding:.442em .878em .011em 0;content:"m"}mjx-c.mjx-c1D456.TEX-I::before{padding:.661em .345em .011em 0;content:"i"}mjx-c.mjx-c1D45B.TEX-I::before{padding:.442em .6em .011em 0;content:"n"}mjx-c.mjx-c1D454.TEX-I::before{padding:.442em .477em .205em 0;content:"g"}mjx-c.mjx-c2032::before{padding:.56em .275em 0 0;content:"′"}mjx-c.mjx-c2B::before{padding:.583em .778em .082em 0;content:"+"}mjx-c.mjx-c1D450.TEX-I::before{padding:.442em .433em .011em 0;content:"c"}mjx-c.mjx-c1D45C.TEX-I::before{padding:.441em .485em .011em 0;content:"o"}mjx-c.mjx-c1D461.TEX-I::before{padding:.626em .361em .011em 0;content:"t"}mjx-c.mjx-c2C::before{padding:.121em .278em .194em 0;content:","}</style><div class="markdown-preview-sizer markdown-preview-section"><h1 class="page-title heading inline-title" id="Lecture 5：AssetDatabase 类"><p dir="auto">Lecture 5：AssetDatabase 类</p></h1><div class="el-h2 heading-wrapper"><h2 data-heading="前置知识" dir="auto" class="heading" id="前置知识"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>前置知识</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`GUID` 系统" dir="auto" class="heading" id="`GUID`_系统"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>GUID</code> 系统</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>GUID</code> 系统</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>GUID</code> (全局唯一标识符) 是 <code>Unity</code> 资源管理的核心机制，每个资源都有唯一的 <code>GUID</code>，存储在 <code>.meta</code> 文件中；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>GUID</code> 转路径
+<ul>
+<li data-line="3" dir="auto"><code>string path = AssetDatabase.GUIDToAssetPath("a5a31e6d725a1414e8a07b7d256d3a1a");</code></li>
+<li data-line="4" dir="auto">返回结果如："<code>Assets/Textures/icon.png</code>"</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：路径转 <code>GUID</code>
+<ul>
+<li data-line="6" dir="auto"><code>string guid=AssetDatabase.AssetPathToGUID("Assets/Prefabs/Character.prefab");</code></li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意：
+<ul>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="8" dir="auto">复制资源时连同 <code>meta</code> 文件一起拷贝可保留 <code>GUID</code> 和导入设置，使用 <code>Ctrl+D</code> 复制资源会生成新 <code>GUID</code>；</li>
+</ol>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="9" dir="auto">删除 <code>meta</code> 文件会导致 <code>GUID</code> 重新生成，破坏现有引用；</li>
+</ol>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="10" dir="auto">脚本中尽量使用 <code>AssetDatabase API</code> 而非文件 <code>I/O</code>；</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`AssetImporter` 资源导入设置" dir="auto" class="heading" id="`AssetImporter`_资源导入设置"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>AssetImporter</code> 资源导入设置</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>AssetImporter</code> 资源导入设置</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>AssetImporter</code> 是 <code>Unity</code> 中所有资源导入器的基类，当资源被导入到 <code>Unity</code> 项目时，<code>Unity</code> 会根据资源类型<strong>自动创建对应的 <code>AssetImporter</code></strong> 实例；</li>
+<li data-line="2" dir="auto">它类似于一个"资源解码器"，能够解析不同类型文件的数据，并提供访问和修改的功能；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>Unity</code> 中资源导入的流程
+<ul>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="4" dir="auto">资源被拷贝到 <code>Assets</code> 目录；</li>
+</ol>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="5" dir="auto"><code>AssetDatabase</code> 检测到变更；</li>
+</ol>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="6" dir="auto">调用对应类型的 <strong><code>AssetImporter</code></strong> 处理资源；</li>
+</ol>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="7" dir="auto">进行格式转换与优化；</li>
+</ol>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="5">
+<li data-line="8" dir="auto">生成 <code>.meta</code> 和 <code>Library</code> 缓存文件； </li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：不同类型的 <code>AssetImporter</code>
+<ul>
+<li data-line="10" dir="auto"><span alt="Pasted image 20250813165802.png" src="Pasted image 20250813165802.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250813165802.png" src="lib/media/pasted-image-20250813165802.png"></span></li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>AssetImporter</code> 核心方法
+<ul>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="12" dir="auto">通过资源的路径获得 <code>AssetImporter</code> 实例：</li>
+</ol>
+<ul>
+<li data-line="13" dir="auto"><code>AssetImporter importer = AssetImporter.GetAtPath("Assets/Textures/character.png");</code></li>
+</ul>
+</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="14" dir="auto">子资源重映射：</li>
+</ol>
+<ul>
+<li data-line="15" dir="auto"><code>AddRemap/RemoveRemap​</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意：
+<ul>
+<li data-line="17" dir="auto">使用 <code>AssetImporter</code> 修改完资源后，需要调用成员方法 <strong><code>SaveAndReimport()</code> 将资源的修改保存</strong>；</li>
+</ul>
+</li>
+<li data-line="18" dir="auto">示例：批量处理选中图片的压缩格式</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">[MenuItem("Assets/Batch Set Compression")]
+static void BatchSetCompression()
+{
+    foreach(Object obj in Selection.objects)
+    {
+	    // 得到 Unity 中的 Object 对象后，可以使用 AssetDatabase 来得到其路径
+        string path = AssetDatabase.GetAssetPath(obj);
+        
+        // 使用后缀来判断当前的文件类型
+        if(path.EndsWith(".png"))
+        {
+	        // 通过路径获得文本导入器
+            TextureImporter importer = (TextureImporter)AssetImporter.GetAtPath(path);
+            
+            // 设置贴图的压缩格式
+            importer.textureCompression = TextureImporterCompression.Compressed;
+            
+            // 保存修改
+            importer.SaveAndReimport();
+        }
+    }
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="1" dir="auto"><code>Selection</code> <code>-Object对象-&gt;</code> <code>AsesetDatabase</code> <code>-文件Path-&gt;</code> <code>AssetImporter</code> <code>-Importer实例-&gt;</code> 进行导入设置；</li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`AssetDatabase`" dir="auto" class="heading" id="`AssetDatabase`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>AssetDatabase</code></h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="基础概念" dir="auto" class="heading" id="基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>基础概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>AssetDatabase</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>AssetDatabase</code> 是 <code>Unity</code> 编辑器环境下最核心的资源管理 <code>API</code> 之一，是 <code>Unity</code> 编辑器内置的资源数据库管理系统，它作为 <code>Unity</code> 资源管道的核心组成部分，<strong>负责追踪和管理项目中所有资源文件及其元数据</strong>；</li>
+<li data-line="2" dir="auto">与直接使用文件系统操作不同，<code>AssetDatabase</code> 提供了一套更高层次的抽象接口，确保资源操作的安全性和一致性。<code>Unity</code> 会为每个资源维护元数据（存储在 <code>.meta</code> 文件中），使用 <code>AssetDatabase</code> 能确保这些元数据被正确更新；； </li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意：
+<ul>
+<li data-line="4" dir="auto"><code>AssetDatabase</code>&nbsp;仅限编辑器脚本使用，运行时需改用&nbsp;<code>Resources</code>&nbsp;或&nbsp;<code>AssetBundle</code>； </li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：使用 <code>AssetDatabase</code> 进行资源操作的优点
+<ul>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="6" dir="auto">维护资源文件的 <code>GUID</code>（全局唯一标识符）系统，确保<strong>资源引用不因路径改变而失效</strong>；</li>
+</ol>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="7" dir="auto">跟踪资源之间的依赖关系；</li>
+</ol>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="8" dir="auto">管理资源的导入和刷新流程；</li>
+</ol>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="9" dir="auto">提供事务性操作，确保复杂操作的安全性；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>AssetDatabase</code> 调用场合
+<ul>
+<li data-line="11" dir="auto">在 <code>Unity</code> 编辑器环境下，我们通常不需要将使用 <code>AssetDatabase</code> 的代码放在诸如 <code>void Start()</code> 这样的 <code>MonoBehaviour</code> 生命周期方法中，因为这些方法主要是在运行游戏时调用的；</li>
+<li data-line="12" dir="auto">对于使用 <code>AssetDatabase</code> 的代码，更常见的做法是<strong>将其放在自定义的 <code>Editor</code> 脚本中的静态方法</strong>中，或者在执行特定编辑器操作，比如菜单命令、<code>Inspector</code> 窗口中的按钮点击时调用；</li>
+<li data-line="13" dir="auto">这样可以确保这些代码只在 <code>Unity</code> 编辑器环境下运行，而不会在构建和运行游戏时被执行；</li>
+</ul>
+</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>AssetDatabase.Refresh()</code>
+<ul>
+<li data-line="15" dir="auto">强制刷新 <code>Unity</code> 资源数据库，使编辑器立即检测并应用项目文件夹中的变更（如新增、删除、修改资源文件）</li>
+<li data-line="16" dir="auto"><code>Unity</code> 通常会自动监测文件系统变化，但在脚本操作后需手动调用此方法以确保同步，其底层是重新扫描&nbsp;<code>Assets</code>&nbsp;目录下的文件结构，更新元数据，触发资源重新导入（<code>Reimport</code>），根据文件类型调用对应的导入器；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`AssetDatabase` 创建或删除文件" dir="auto" class="heading" id="`AssetDatabase`_创建或删除文件"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>AssetDatabase</code> 创建或删除文件</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>AssetDatabase</code> 常用方法</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">代码：存储 <code>Unity</code> 原生资源</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">[MenuItem("Assets/Create/New Material")]
+static void CreateNewMaterial()
+{
+    Material material = new Material(Shader.Find("Standard"));
+    
+    // 根据 Unity 原生资源实例，为其创建本地资源
+    AssetDatabase.CreateAsset(material, "Assets/Materials/NewMaterial.mat");
+    
+    // 保存资源并刷新资源数据库
+    AssetDatabase.SaveAssets();
+    AssetDatabase.Refresh();
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">代码：创建资源</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">[MenuItem("Assets/Create/New Asset")]
+static void CreateNewAsset()
+{
+	// 创建一个新的 ScriptableObject 类型资产
+    ScriptableObject newAsset = CreateInstance&lt;ScriptableObject&gt;();
+    
+    // 设置资产的名称
+    newAsset.name = "NewAsset";
+    
+    // 设置新资产的保存路径
+    string path = "Asset/MyAssets/NewAsset.asset";
+    
+    // 使用AssetDatabase方法创建Unity中的新资产
+    AssetDatabase.CreateAsset(newAsset,path);
+    AssetDatabase.SaveAssets();
+    AssetDatabase.Refresh();
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">代码：创建文件夹</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">[MenuItem("Assets/Create/New Folder")]
+static void CreateNewFolder()
+{
+	// 指定新文件夹的路径
+	string folderPath = "Assets/MyFolders/NewFolder";
+	
+	// 使用AssetDatabase.CreateFolder方法创建新文件夹
+	AssetDatabase.CreateFolder("Assets/MyFolders", "NewFolder");
+	
+	// 刷新资源数据库
+	AssetDatabase.SaveAssets();
+	AssetDatabase.Refresh();
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">代码：删除指定资产或文件夹</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">[MenuItem("Assets/Delete Selected Asset")]
+static void DeleteSelectedAsset()
+{
+	// 获取当前选中的资产的路径
+	string assetPath = AssetDatabase.GetAssetPath(Selection.activeObject);
+	
+	// 使用AssetDatabase.DeleteAsset方法删除资产
+	// 如果当前路径不为空，并且资产数据库当中包含选中的物体时，才会在资产数据库中进行删除
+	if (!string.IsNullOrEmpty(assetPath) &amp;&amp; AssetDatabase.Contains(Selection.activeObject))
+	{
+		AssetDatabase.DeleteAsset(assetPath);
+		AssetDatabase.SaveAssets();
+		AssetDatabase.Refresh();
+	}
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">代码：一次性删除多个资产或文件夹</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">[MenuItem("Assets/Delete Multiple Assets")]
+static void DeleteMultipleAssets()
+{
+	// 获取所有选中的资产的路径
+	string[] assetPaths = Selection.assetGUIDs.Select(AssetDatabase.GUIDToAssetPath).ToArray();
+	
+	// DeleteAssets方法传入string数组，数组里面的每一个元素都是一个路径，将其原本删除
+	AssetDatabase.DeleteAssets(assetPaths);
+	AssetDatabase.SaveAssets();
+	AssetDatabase.Refresh();
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`AssetDatabase` 获取物体" dir="auto" class="heading" id="`AssetDatabase`_获取物体"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>AssetDatabase</code> 获取物体</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>AssetDatabase</code> 获取物体</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：获得资产的路径
+<ul>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>第一步：获得某个资产的路径
+<ul>
+<li data-line="2" dir="auto"><code>string assetPath = AssetDatabase.GetAssetPath(someGameObject);</code></li>
+<li data-line="3" dir="auto">返回的结果是<strong>带后缀</strong>的完整路径；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>第二步：获得该资产所在的文件夹路径
+<ul>
+<li data-line="5" dir="auto"><code>string folderPath = Path.GetDirectoryName(assetPath);</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：按路径加载资源 - <code>LoadAssetAtPath</code>
+<ul>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>语法：
+<ul>
+<li data-line="8" dir="auto"><code>LoadAssetAtPath&lt;T&gt;(string path)</code></li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>解释：
+<ul>
+<li data-line="10" dir="auto">可以使用 <code>AssetDatabase.LoadAssetAtPath</code> 方法来获取 <code>Assets</code> 目录下的一个游戏物体（如 <code>GameObject</code>）。这个方法需要一个表示资源路径的字符串作为参数，并返回该路径下指定类型的资源；</li>
+<li data-line="11" dir="auto">直接加载指定路径资源，如纹理、材质等。适用于精确控制资源加载位置；</li>
+</ul>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>示例：
+<ul>
+<li data-line="13" dir="auto"><code>Texture2D tex = AssetDatabase.LoadAssetAtPath&lt;Texture2D&gt;("Assets/Textures/icon.png");</code></li>
+</ul>
+</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：
+<ul>
+<li data-line="15" dir="auto">也可以使用 <code>LoadAllAssetsAtPath</code>&nbsp;可加载同一文件中的多个子资源（如 <code>FBX</code> 中的多个网格）； </li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：按路径加载路径下所有资源
+<ul>
+<li data-line="17" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>示例：
+<ul>
+<li data-line="18" dir="auto"><code>object[] objs = AssetDatabase.LoadAllAssetsAtPath("Assets/Models/character.fbx");</code></li>
+</ul>
+</li>
+<li data-line="19" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>解释：
+<ul>
+<li data-line="20" dir="auto">加载路径下的所有资源，适用于处理包含多个子资源的文件（如 <code>FBX</code> 模型）；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="21" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：文件操作
+<ul>
+<li data-line="22" dir="auto">使用&nbsp;<code>MoveAsset</code>、<code>DeleteAsset</code>、<code>RenameAsset</code>&nbsp;等方法替代直接的文件操作，避免破坏 <code>Unity</code> 元数据一致性；</li>
+<li data-line="23" dir="auto"><code>string result = AssetDatabase.MoveAsset("Assets/OldPath.mat", "Assets/NewPath.mat");</code></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="资源查找" dir="auto" class="heading" id="资源查找"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>资源查找</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>AssetDatabase</code> 与资源查找</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>FindAssets</code> 方法
+<ul>
+<li data-line="1" dir="auto"><code>FindAssets</code> 是 <code>Unity Editor</code> 环境下用于搜索项目资源的静态方法，它基于 <code>Unity</code> 的资源数据库进行查询，返回匹配资源的 <code>GUID</code> 数组； </li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>定义：
+<ul>
+<li data-line="3" dir="auto"><span alt="Pasted image 20250813150824.png" src="Pasted image 20250813150824.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250813150824.png" src="lib/media/pasted-image-20250813150824.png"></span></li>
+<li data-line="4" dir="auto">参数一为"搜索过滤语法"，参数二为"限定搜索范围"；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：搜索过滤语法
+<ul>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="6" dir="auto">按照类型过滤：以 <code>t:</code> 开头</li>
+</ol>
+<ul>
+<li data-line="7" dir="auto">查找所有预制体：<code>string[] guids = AssetDatabase.FindAssets("t:Prefab");</code></li>
+<li data-line="8" dir="auto">查找所有材质：<code>string[] matGuids = AssetDatabase.FindAssets("t:Material");</code></li>
+<li data-line="9" dir="auto">支持的类型标识符包括：<code>Prefab</code>、<code>Scene</code>、<code>Material</code>、<code>Texture</code>、<code>Script</code>、<code>Shader</code> 等；</li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="10" dir="auto">按照标签过滤：以 <code>l:</code> 开头</li>
+</ol>
+<ul>
+<li data-line="11" dir="auto">查找所有标记为 <code>UI</code> 的资源：</li>
+<li data-line="12" dir="auto"><code>string[] uiGuids = AssetDatabase.FindAssets("l:UI");</code>；</li>
+</ul>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="13" dir="auto">按名称过滤：</li>
+</ol>
+<ul>
+<li data-line="14" dir="auto"><code>string[] heroGuids = AssetDatabase.FindAssets("hero");</code></li>
+<li data-line="15" dir="auto"><code>string[] iconGuids = AssetDatabase.FindAssets("icon*");</code></li>
+</ul>
+</li>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="16" dir="auto">组合条件：</li>
+</ol>
+<ul>
+<li data-line="17" dir="auto">查找名称包含 <code>go</code> 的所有 <code>GameObject</code> 预制体：</li>
+<li data-line="18" dir="auto"><code>string[] comboGuids = AssetDatabase.FindAssets("go t:GameObject");</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="19" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：限定搜索范围
+<ul>
+<li data-line="20" dir="auto">在指定的单个文件夹中查找：<code>string[] sceneGuids = AssetDatabase.FindAssets("t:Scene",new[] { "Assets/Scenes/Levels" });</code></li>
+<li data-line="21" dir="auto">在指定的多个文件夹中查找：<code>string[] prefabGuids = AssetDatabase.FindAssets("t:Prefab",new[] { "Assets/Prefabs/Characters", "Assets/Prefabs/Weapons" });</code></li>
+</ul>
+</li>
+<li data-line="22" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 查找所有名为"hero"的预制体
+string[] guids = AssetDatabase.FindAssets("hero t:Prefab");
+
+// 查找所有标签为"Environment"的纹理
+string[] envTextures = AssetDatabase.FindAssets("l:Environment t:Texture");
+
+// 在指定文件夹中查找
+string[] sceneGuids = AssetDatabase.FindAssets("t:Scene", new[] {"Assets/Scenes/Levels"});
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`AssetDatabase` 进阶知识" dir="auto" class="heading" id="`AssetDatabase`_进阶知识"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>AssetDatabase</code> 进阶知识</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="资源依赖关系与修改检测" dir="auto" class="heading" id="资源依赖关系与修改检测"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>资源依赖关系与修改检测</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：资源依赖关系</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：资源依赖的类型
+<ul>
+<li data-line="1" dir="auto"><code>Unity</code> 中的资源依赖主要分为两种： </li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="2" dir="auto">直接依赖​：</li>
+</ol>
+<ul>
+<li data-line="3" dir="auto">资源 <code>A</code> 直接引用资源 <code>B</code>，如材质直接引用纹理；</li>
+<li data-line="4" dir="auto">通过 <code>AssetDatabase.GetDependencies(path, false)</code> 可获取直接依赖列表；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="5" dir="auto">间接依赖：</li>
+</ol>
+<ul>
+<li data-line="6" dir="auto">资源 <code>A</code> 通过中间资源间接引用资源 <code>C</code>，如预制体引用材质，材质又引用纹理；</li>
+<li data-line="7" dir="auto">使用 <code>AssetDatabase.GetDependencies(path, true)</code> 可获取<strong>完整的依赖链</strong>；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="8" dir="auto">概念：<code>AssetDatabase.GetDependencies</code></li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 获得单个资源的依赖
+string[] deps = AssetDatabase.GetDependencies("Assets/Prefabs/Character.prefab");
+
+// 获得多个资源的共同依赖
+string[] paths = {"Assets/Prefabs/A.prefab","Assets/Prefabs/B.prefab"};
+string[] commonDeps = AssetDatabase.GetDependencies(paths);
+
+// 递归的查询完整依赖链
+// 注意：递归查询(recursive=true)会包含输入资源本身
+string[] allDeps = AssetDatabase.GetDependencies("Assets/Scene.unity",true);
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>概念</strong>：利用哈希计算检测资源是否更改</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>AssetDatabase.GetAssetDependencyHash</code>
+<ul>
+<li data-line="1" dir="auto"><code>AssetDatabase.GetAssetDependencyHash</code> 返回一个资源所有依赖项的聚合哈希值 (<code>Hash128</code>)，这个哈希值会随着原资源路径或内容、源文件更改、目标平台更改而发生变化；</li>
+<li data-line="2" dir="auto">当这个哈希值发生变化时，表明该资源的导入结果可能已经改变，相关的 <code>AssetBundle</code> 需要重新构建；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：哈希计算原理
+<ul>
+<li data-line="4" dir="auto"><code>Unity</code> 采用类似内容寻址的哈希计算方式，具体包含以下要素：</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="5" dir="auto">资源内容​：资源的实际二进制内容；</li>
+</ol>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="6" dir="auto">​依赖关系​：资源引用的其他资源及其版本；</li>
+</ol>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="7" dir="auto">导入设置​：在 <code>Import Settings</code> 中配置的参数；</li>
+</ol>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="8" dir="auto">平台特性​：不同平台下的资源处理差异；</li>
+</ol>
+</li>
+<li data-line="9" dir="auto">这种计算方式确保了只要资源或其依赖的任何部分发生变化，哈希值就会改变，从而实现精确的变更检测；</li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>定义：
+<ul>
+<li data-line="11" dir="auto"><span alt="Pasted image 20250813155044.png" src="Pasted image 20250813155044.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250813155044.png" src="lib/media/pasted-image-20250813155044.png"></span></li>
+</ul>
+</li>
+<li data-line="12" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">[MenuItem("TOols/Check Material Dependency Hash")]
+static void CheckMaterialHash()
+{
+	// 1. 使用AssetDatabase从本地加载资源
+	Material mat = AssetDatabase.LoadAssetAtPath&lt;Material&gt;("Assets/Materials/MyMat.mat");
+	
+	// 2. 获得加载资源的Hash值
+	Hash128 srcHash = AssetDatabase.GetAssetDependencyHash("Assets/Materials/MyMat.mat");
+	
+	// 3. 对资源进行修改，并保存
+	mat.color  = Color.red;
+	EditorUtility.SetDirty(mat);
+	AssetDatabase.SaveAssets();
+	
+	// 4. 读取新的哈希值
+	Hash128 newHash = AssetDatabase.GetAssetDependencyHash("Assets/Materials/MyMat.mat");
+	
+	Debug.Log($"Original Hash: {originalHash}");
+	Debug.Log($"New Hash: {newHash}");
+	Debug.Log($"Changed: {originalHash != newHash}");
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="资源批量处理" dir="auto" class="heading" id="资源批量处理"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>资源批量处理</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：资源批量处理</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>TextureImporterType</code> - 纹理导入类 
+<ul>
+<li data-line="1" dir="auto"><code>TextureImporterType</code> 定义了纹理在 <code>Unity</code> 中的使用方式，决定了 <code>Unity</code> 如何优化和处理该纹理资源；</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>主要分类如下：
+<ul>
+<li data-line="3" dir="auto"><code>Default</code>：通用纹理类型，适用于大多数标准贴图（如颜色贴图），关键参数包括 <code>sRGB</code>（颜色空间）和 <code>Mip Maps</code> 生成选项；</li>
+<li data-line="4" dir="auto"><code>Normal map</code> ​：专用于法线贴图，必须勾选"<code>Create from grayscale</code>"选项才能正确工作，<code>Unity</code> 会自动将灰度图转换为法线图的蓝色通道；</li>
+<li data-line="5" dir="auto"><code>Sprite</code>：用于 <code>2D</code> 精灵和 <code>UI</code> 元素，需要配置 <code>Sprite Mode</code>（<code>Single/Multiple</code>）和 <code>Pixels Per Unit</code> 等参数；</li>
+<li data-line="6" dir="auto"><code>Advanced</code> ​：提供完全自定义设置，允许手动配置所有纹理参数，适合特殊需求；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>TextureImporterFormat</code> - 纹理压缩格式
+<ul>
+<li data-line="8" dir="auto"><code>TextureImporterFormat</code> 定义了纹理在目标平台上的压缩存储格式，主要分为几大类：</li>
+<li data-line="9" dir="auto"><span alt="Pasted image 20250813163107.png" src="Pasted image 20250813163107.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250813163107.png" src="lib/media/pasted-image-20250813163107.png"></span></li>
+</ul>
+</li>
+<li data-line="10" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">using System.IO;
+using UnityEngine;
+using UnityEditor;
+using System.Collections.Generic;
+
+/// &lt;summary&gt;
+/// 图片资源批量处理器
+/// 功能：批量修改选中文件夹下所有图片的导入设置
+/// &lt;/summary&gt;
+public class TextureBatchProcessor : EditorWindow
+{
+    // 存储当前选中的文件夹路径
+    private string selectedFolderPath;
+    
+    // 纹理类型设置
+    private TextureImporterType textureType = TextureImporterType.Sprite;
+    
+    // 纹理压缩设置
+    private TextureImporterFormat androidFormat = TextureImporterFormat.ETC2_RGBA8;
+    private TextureImporterFormat iosFormat = TextureImporterFormat.ASTC_RGBA_6x6;
+    
+    // 是否生成MipMap
+    private bool generateMipMaps = false;
+    
+    // 是否可读写
+    private bool isReadable = false;
+    
+    // 滚动视图位置
+    private Vector2 scrollPos;
+    
+    // 处理进度(0-1)
+    private float progress = 0;
+    
+    // 添加菜单项
+    [MenuItem("Tools/资源处理/图片批量处理器")]
+    public static void ShowWindow()
+    {
+        // 创建窗口实例
+        var window = GetWindow&lt;TextureBatchProcessor&gt;();
+        
+        // 设置窗口标题
+        window.titleContent = new GUIContent("图片批量处理器");
+        
+        // 展示窗口
+        window.Show();
+    }
+    
+    // 绘制自定义窗口的GUI
+    private void OnGUI()
+    {
+	    // 创建可滚动视图区域，用scrollPos记录当前的滚动值
+        scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
+        
+        // 1. 文件夹选择区域
+        EditorGUILayout.Space();
+        // EditorStyles.boldLabel：将文本加粗渲染
+        EditorGUILayout.LabelField("文件夹选择", EditorStyles.boldLabel);
+        
+        // 显示当前选中的文件夹路径
+        EditorGUILayout.LabelField("当前文件夹:", selectedFolderPath ?? "未选择");
+        
+        // 选择文件夹按钮
+        if (GUILayout.Button("选择文件夹"))
+        {
+            // 获取 Project 窗口中选择的对象
+            var selection = Selection.GetFiltered(typeof(DefaultAsset), SelectionMode.Assets);
+            if (selection.Length &gt; 0)
+            {
+                // 获取选中对象的路径
+                selectedFolderPath = AssetDatabase.GetAssetPath(selection[0]);
+                
+                // 验证是否是文件夹
+                if (!AssetDatabase.IsValidFolder(selectedFolderPath))
+                {
+                    EditorUtility.DisplayDialog("错误", "请选择文件夹而不是文件!", "确定");
+                    selectedFolderPath = null;
+                }
+            }
+            else
+            {
+                EditorUtility.DisplayDialog("提示", "请在Project窗口中选择一个文件夹", "确定");
+            }
+        }
+        
+        // 2. 纹理设置区域
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("纹理设置", EditorStyles.boldLabel);
+        
+        // 纹理类型下拉菜单
+        textureType = (TextureImporterType)EditorGUILayout.EnumPopup("纹理类型:", textureType);
+        
+        // 平台特定设置
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("平台设置", EditorStyles.helpBox);
+        
+        // Android平台设置
+        androidFormat = (TextureImporterFormat)EditorGUILayout.EnumPopup("Android格式:", androidFormat);
+        
+        // iOS平台设置
+        iosFormat = (TextureImporterFormat)EditorGUILayout.EnumPopup("iOS格式:", iosFormat);
+        
+        // 其他设置
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("其他设置", EditorStyles.helpBox);
+        
+        generateMipMaps = EditorGUILayout.Toggle("生成MipMap:", generateMipMaps);
+        isReadable = EditorGUILayout.Toggle("可读写:", isReadable);
+        
+        // 3. 执行按钮区域
+        EditorGUILayout.Space();
+        if (GUILayout.Button("执行批量处理", GUILayout.Height(30)))
+        {
+            if (string.IsNullOrEmpty(selectedFolderPath))
+            {
+                EditorUtility.DisplayDialog("错误", "请先选择文件夹!", "确定");
+                return;
+            }
+            
+            // 确认对话框
+            if (EditorUtility.DisplayDialog("确认", 
+                $"确定要处理文件夹 {selectedFolderPath} 下的所有图片吗?", "确定", "取消"))
+            {
+                // 开始批量处理
+                BatchProcessTextures();
+            }
+        }
+        
+        // 显示处理进度
+        if (progress &gt; 0)
+        {
+            EditorGUILayout.Space();
+            EditorGUI.ProgressBar(EditorGUILayout.GetControlRect(), progress, "处理进度");
+        }
+        
+        EditorGUILayout.EndScrollView();
+    }
+    
+    // 批量处理纹理的核心方法
+    private void BatchProcessTextures()
+    {
+        try
+        {
+            // 1. 收集所有图片文件
+            List&lt;string&gt; imagePaths = CollectImageFiles(selectedFolderPath);
+            if (imagePaths.Count == 0)
+            {
+                EditorUtility.DisplayDialog("提示", "选择的文件夹中没有图片文件", "确定");
+                return;
+            }
+            
+            // 2. 开始资源编辑事务
+            AssetDatabase.StartAssetEditing();
+            
+            // 3. 处理每个图片文件
+            for (int i = 0; i &lt; imagePaths.Count; i++)
+            {
+                string path = imagePaths[i];
+                
+                // 更新进度
+                progress = (float)i / imagePaths.Count;
+                EditorUtility.DisplayProgressBar("处理中", $"正在处理: {Path.GetFileName(path)}", progress);
+                
+                // 获取纹理导入器
+                TextureImporter importer = AssetImporter.GetAtPath(path) as TextureImporter;
+                if (importer == null) continue;
+                
+                // 修改纹理设置
+                ModifyTextureSettings(importer);
+                
+                // 保存修改
+                importer.SaveAndReimport();
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"批量处理失败: {e.Message}");
+        }
+        finally
+        {
+            // 确保总是结束资源编辑和清理进度条
+            AssetDatabase.StopAssetEditing();
+            EditorUtility.ClearProgressBar();
+            progress = 0;
+            
+            // 刷新资源数据库
+            AssetDatabase.Refresh();
+            
+            EditorUtility.DisplayDialog("完成", "批量处理完成!", "确定");
+        }
+    }
+    
+    // 收集指定文件夹下的所有图片文件
+    private List&lt;string&gt; CollectImageFiles(string folderPath)
+    {
+        List&lt;string&gt; imagePaths = new List&lt;string&gt;();
+        
+        // 获取文件夹绝对路径
+        string fullPath = Path.Combine(Application.dataPath, folderPath.Replace("Assets/", ""));
+        
+        // 搜索所有图片文件
+        string[] extensions = { "*.png", "*.jpg", "*.jpeg", "*.tga", "*.psd" };
+        foreach (string ext in extensions)
+        {
+            foreach (string file in Directory.GetFiles(fullPath, ext, SearchOption.AllDirectories))
+            {
+                // 转换为Unity相对路径
+                string relativePath = "Assets" + file.Replace(Application.dataPath, "").Replace('\\', '/');
+                imagePaths.Add(relativePath);
+            }
+        }
+        
+        return imagePaths;
+    }
+    
+    // 修改纹理导入设置
+    private void ModifyTextureSettings(TextureImporter importer)
+    {
+        // 基本设置
+        importer.textureType = textureType;
+        importer.mipmapEnabled = generateMipMaps;
+        importer.isReadable = isReadable;
+        
+        // Android平台设置
+        TextureImporterPlatformSettings androidSettings = importer.GetPlatformTextureSettings("Android");
+        androidSettings.overridden = true;
+        androidSettings.format = androidFormat;
+        importer.SetPlatformTextureSettings(androidSettings);
+        
+        // iOS平台设置
+        TextureImporterPlatformSettings iosSettings = importer.GetPlatformTextureSettings("iPhone");
+        iosSettings.overridden = true;
+        iosSettings.format = iosFormat;
+        importer.SetPlatformTextureSettings(iosSettings);
+        
+        // 如果设置为Sprite类型，添加一些默认设置
+        if (textureType == TextureImporterType.Sprite)
+        {
+            importer.spritePixelsPerUnit = 100;
+            importer.spritePivot = Vector2.one * 0.5f;
+            importer.spriteImportMode = SpriteImportMode.Single;
+        }
+    }
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="mod-footer mod-ui"></div></div></div></div></div></div></div></div><div class="sidebar-right sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"></div><script defer="">let rs = document.querySelector(".sidebar-right"); rs.classList.add("is-collapsed"); if (window.innerWidth > 768) rs.classList.remove("is-collapsed"); rs.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-right-width"));</script></div></div></body></html>

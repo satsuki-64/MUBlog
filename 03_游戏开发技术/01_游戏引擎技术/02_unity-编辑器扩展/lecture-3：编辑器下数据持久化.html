@@ -1,0 +1,603 @@
+<!DOCTYPE html> <html><head>
+		<title>Lecture 3：编辑器下数据持久化</title>
+		<base href="..\..\../">
+		<meta id="root-path" root-path="..\..\../">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
+		<meta charset="UTF-8">
+		<meta name="description" content="MUBlog - Lecture 3：编辑器下数据持久化">
+		<meta property="og:title" content="Lecture 3：编辑器下数据持久化">
+		<meta property="og:description" content="MUBlog - Lecture 3：编辑器下数据持久化">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="03_游戏开发技术/01_游戏引擎技术/02_unity-编辑器扩展/lecture-3：编辑器下数据持久化.html">
+		<meta property="og:image" content="lib\media\pasted-image-20250812110105.png">
+		<meta property="og:site_name" content="MUBlog">
+		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="lib/rss.xml"><script async="" id="webpage-script" src="lib/scripts/webpage.js" onload="this.onload=null;this.setAttribute(&quot;loaded&quot;, &quot;true&quot;)"></script><link rel="icon" href="lib/media/favicon.png"><style>body{--line-width:40em;--line-width-adaptive:40em;--file-line-width:40em;--sidebar-width:min(20em, 80vw);--collapse-arrow-size:11px;--tree-horizontal-spacing:0.6em;--tree-vertical-spacing:0.6em;--sidebar-margin:12px}.sidebar{height:100%;min-width:calc(var(--sidebar-width) + var(--divider-width-hover));max-width:calc(var(--sidebar-width) + var(--divider-width-hover));font-size:14px;z-index:10;position:relative;overflow:hidden;transition:min-width ease-in-out,max-width ease-in-out;transition-duration:.2s;contain:size}.sidebar-left{left:0}.sidebar-right{right:0}.sidebar.is-collapsed{min-width:0;max-width:0}body.floating-sidebars .sidebar{position:absolute}.sidebar-content{height:100%;min-width:calc(var(--sidebar-width) - var(--divider-width-hover));top:0;padding:var(--sidebar-margin);padding-top:4em;line-height:var(--line-height-tight);background-color:var(--background-secondary);transition:background-color,border-right,border-left,box-shadow;transition-duration:var(--color-fade-speed);transition-timing-function:ease-in-out;position:absolute;display:flex;flex-direction:column}.sidebar:not(.is-collapsed) .sidebar-content{min-width:calc(max(100%,var(--sidebar-width)) - 3px);max-width:calc(max(100%,var(--sidebar-width)) - 3px)}.sidebar-left .sidebar-content{left:0;border-top-right-radius:var(--radius-l);border-bottom-right-radius:var(--radius-l)}.sidebar-right .sidebar-content{right:0;border-top-left-radius:var(--radius-l);border-bottom-left-radius:var(--radius-l)}.sidebar:has(.sidebar-content:empty):has(.topbar-content:empty){display:none}.sidebar-topbar{height:2em;width:var(--sidebar-width);top:var(--sidebar-margin);padding-inline:var(--sidebar-margin);z-index:1;position:fixed;display:flex;align-items:center;transition:width ease-in-out;transition-duration:inherit}.sidebar.is-collapsed .sidebar-topbar{width:calc(2.3em + var(--sidebar-margin) * 2)}.sidebar .sidebar-topbar.is-collapsed{width:0}.sidebar-left .sidebar-topbar{left:0}.sidebar-right .sidebar-topbar{right:0}.topbar-content{overflow:hidden;overflow:clip;width:100%;height:100%;display:flex;align-items:center;transition:inherit}.sidebar.is-collapsed .topbar-content{width:0;transition:inherit}.clickable-icon.sidebar-collapse-icon{background-color:transparent;color:var(--icon-color-focused);padding:0!important;margin:0!important;height:100%!important;width:2.3em!important;margin-inline:0.14em!important;position:absolute}.sidebar-left .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);right:var(--sidebar-margin)}.sidebar-right .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);left:var(--sidebar-margin)}.clickable-icon.sidebar-collapse-icon svg.svg-icon{width:100%;height:100%}.sidebar-section-header{margin:0 0 1em 0;text-transform:uppercase;letter-spacing:.06em;font-weight:600}body{transition:background-color var(--color-fade-speed) ease-in-out}.webpage-container{display:flex;flex-direction:row;height:100%;width:100%;align-items:stretch;justify-content:center}.document-container{opacity:1;flex-basis:100%;max-width:100%;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;transition:opacity .2s ease-in-out;contain:inline-size}.hide{opacity:0;transition:opacity .2s ease-in-out}.document-container>.markdown-preview-view{margin:var(--sidebar-margin);margin-bottom:0;width:100%;width:-webkit-fill-available;width:-moz-available;width:fill-available;background-color:var(--background-primary);transition:background-color var(--color-fade-speed) ease-in-out;border-top-right-radius:var(--window-radius,var(--radius-m));border-top-left-radius:var(--window-radius,var(--radius-m));overflow-x:hidden!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;contain:inline-size}.document-container>.markdown-preview-view>.markdown-preview-sizer{padding-bottom:80vh!important;width:100%!important;max-width:var(--line-width)!important;flex-basis:var(--line-width)!important;transition:background-color var(--color-fade-speed) ease-in-out;contain:inline-size}.markdown-rendered img:not([width]),.view-content img:not([width]){max-width:100%;outline:0}.document-container>.view-content.embed{display:flex;padding:1em;height:100%;width:100%;align-items:center;justify-content:center}.document-container>.view-content.embed>*{max-width:100%;max-height:100%;object-fit:contain}:has(> :is(.math,table)){overflow-x:auto!important}.document-container>.view-content{overflow-x:auto;contain:content;padding:0;margin:0;height:100%}.scroll-highlight{position:absolute;width:100%;height:100%;pointer-events:none;z-index:1000;background-color:hsla(var(--color-accent-hsl),.25);opacity:0;padding:1em;inset:50%;translate:-50% -50%;border-radius:var(--radius-s)}</style><script defer="">async function loadIncludes(){if("file:"!=location.protocol){let e=document.querySelectorAll("include");for(let t=0;t<e.length;t++){let o=e[t],l=o.getAttribute("src");try{const e=await fetch(l);if(!e.ok){console.log("Could not include file: "+l),o?.remove();continue}let t=await e.text(),n=document.createRange().createContextualFragment(t),i=Array.from(n.children);for(let e of i)e.classList.add("hide"),e.style.transition="opacity 0.5s ease-in-out",setTimeout((()=>{e.classList.remove("hide")}),10);o.before(n),o.remove(),console.log("Included file: "+l)}catch(e){o?.remove(),console.log("Could not include file: "+l,e);continue}}}else{if(document.querySelectorAll("include").length>0){var e=document.createElement("div");e.id="error",e.textContent="Web server exports must be hosted on an http / web server to be viewed correctly.",e.style.position="fixed",e.style.top="50%",e.style.left="50%",e.style.transform="translate(-50%, -50%)",e.style.fontSize="1.5em",e.style.fontWeight="bold",e.style.textAlign="center",document.body.appendChild(e),document.querySelector(".document-container")?.classList.remove("hide")}}}document.addEventListener("DOMContentLoaded",(()=>{loadIncludes()}));let isFileProtocol="file:"==location.protocol;function waitLoadScripts(e,t){let o=e.map((e=>document.getElementById(e+"-script"))),l=0;!function e(){let n=o[l];l++,n&&"true"!=n.getAttribute("loaded")||l<o.length&&e(),l<o.length?n.addEventListener("load",e):t()}()}</script><link rel="stylesheet" href="lib/styles/obsidian.css"><link rel="stylesheet" href="lib/styles/theme.css"><link rel="preload" href="lib/styles/global-variable-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/global-variable-styles.css"></noscript><link rel="preload" href="lib/styles/supported-plugins.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/supported-plugins.css"></noscript><link rel="preload" href="lib/styles/main-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/main-styles.css"></noscript><link rel="preload" href="lib/styles/snippets.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/snippets.css"></noscript></head><body class="publish css-settings-manager styled-scrollbars theme-light show-inline-title ctp-rosepine-light ctp-mocha ctp-accent-rosewater anuppuccin-accent-toggle anp-current-line-border anp-callout-color-toggle anp-codeblock-numbers anp-list-toggle anp-table-width anp-toggle-preview anp-color-transition-toggle anp-button-metadata-toggle anp-toggle-metadata anp-toggle-scrollbars anp-h1-red anp-h1-divider anp-h2-peach anp-h3-green anp-h4-teal anp-h5-lavender anp-h6-mauve anp-decoration-toggle anp-bold-maroon anp-italic-green anp-highlight-yellow anp-colorful-frame-icon-toggle-dark anp-simple-rainbow-color-toggle anp-rainbow-file-toggle anp-simple-rainbow-title-toggle anp-simple-rainbow-icon-folder-toggle anp-simple-rainbow-indentation-toggle anp-simple-rainbow-collapse-toggle anp-card-layout anp-card-shadows anp-card-layout-filebrowser anp-theme-ext-light anp-theme-ext-dark anp-theme-ext-amoled ctp-atom-light ctp-atom-dark table-type-three-line table-header-color-blue table-row-alt-background-option table-dark-mode"><script defer="">let theme=localStorage.getItem("theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");"dark"==theme?(document.body.classList.add("theme-dark"),document.body.classList.remove("theme-light")):(document.body.classList.add("theme-light"),document.body.classList.remove("theme-dark")),window.innerWidth<480?document.body.classList.add("is-phone"):window.innerWidth<768?document.body.classList.add("is-tablet"):window.innerWidth<1024?document.body.classList.add("is-small-screen"):document.body.classList.add("is-large-screen")</script><div class="webpage-container workspace"><div class="sidebar-left sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"><label class="theme-toggle-container" for="theme_toggle"><input class="theme-toggle-input" type="checkbox" id="theme_toggle"><div class="toggle-background"></div></label></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"><include src="lib/html/file-tree.html"></include></div><script defer="">let ls = document.querySelector(".sidebar-left"); ls.classList.add("is-collapsed"); if (window.innerWidth > 768) ls.classList.remove("is-collapsed"); ls.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-left-width"));</script></div><div class="document-container markdown-reading-view hide"><div class="markdown-preview-view markdown-rendered allow-fold-headings allow-fold-lists is-readable-line-width"><style id="MJX-CHTML-styles">mjx-c.mjx-c36::before{padding:.666em .5em .022em 0;content:"6"}mjx-c.mjx-c1D43E.TEX-I::before{padding:.683em .889em 0 0;content:"K"}mjx-c.mjx-c52::before{padding:.683em .736em .022em 0;content:"R"}mjx-c.mjx-c1D42B.TEX-B::before{padding:.45em .474em 0 0;content:"r"}mjx-c.mjx-c1D428.TEX-B::before{padding:.452em .575em .005em 0;content:"o"}mjx-c.mjx-c1D41D.TEX-B::before{padding:.694em .639em .006em 0;content:"d"}mjx-c.mjx-c3C::before{padding:.54em .778em .04em 0;content:"<"}mjx-c.mjx-c221E::before{padding:.442em 1em .011em 0;content:"∞"}mjx-c.mjx-c1D429.TEX-B::before{padding:.45em .639em .194em 0;content:"p"}mjx-c.mjx-cB1::before{padding:.666em .778em 0 0;content:"±"}mjx-c.mjx-c221A::before{padding:.8em .853em .2em 0;content:"√"}mjx-c.mjx-c47::before{padding:.705em .785em .022em 0;content:"G"}mjx-c.mjx-c66::before{padding:.705em .372em 0 0;content:"f"}mjx-c.mjx-c71::before{padding:.442em .528em .194em 0;content:"q"}mjx-c.mjx-c5E.TEX-B::before{padding:.694em .575em 0 0;content:"^"}mjx-c.mjx-c1D42D.TEX-B::before{padding:.635em .447em .005em 0;content:"t"}mjx-c.mjx-c1D40E.TEX-B::before{padding:.696em .864em .01em 0;content:"O"}mjx-c.mjx-c1D403.TEX-B::before{padding:.686em .882em 0 0;content:"D"}mjx-c.mjx-c1D40F.TEX-B::before{padding:.686em .786em 0 0;content:"P"}mjx-c.mjx-c2219::before{padding:.444em .5em 0 0;content:"∙"}mjx-c.mjx-c1D404.TEX-B::before{padding:.68em .756em 0 0;content:"E"}mjx-c.mjx-c20D7.TEX-VB::before{padding:.723em .575em 0 0;content:"→"}mjx-c.mjx-c7B::before{padding:.75em .5em .25em 0;content:"{"}mjx-c.mjx-c7D::before{padding:.75em .5em .25em 0;content:"}"}mjx-c.mjx-c26::before{padding:.716em .778em .022em 0;content:"&"}mjx-c.mjx-c2261::before{padding:.464em .778em 0 0;content:"≡"}mjx-c.mjx-c3A6::before{padding:.683em .722em 0 0;content:"Φ"}mjx-c.mjx-c57::before{padding:.683em 1.028em .022em 0;content:"W"}mjx-c.mjx-c2035.TEX-A::before{padding:.56em .275em 0 0;content:"‵"}mjx-c.mjx-c1D446.TEX-I::before{padding:.705em .645em .022em 0;content:"S"}mjx-c.mjx-c1D719.TEX-I::before{padding:.694em .596em .205em 0;content:"ϕ"}mjx-c.mjx-c7C::before{padding:.75em .278em .249em 0;content:"|"}.mjx-stretched mjx-c.mjx-c2013::before{content:"–"}mjx-stretchy-h.mjx-c2013 mjx-ext mjx-c::before{content:"–";padding:.285em 0 0}mjx-c.mjx-c1D52E.TEX-FR::before{padding:.479em .489em .219em 0;content:"q"}mjx-c.mjx-c1D52D.TEX-FR::before{padding:.541em .5em .212em 0;content:"p"}mjx-c.mjx-c1D43A.TEX-I::before{padding:.705em .786em .022em 0;content:"G"}mjx-c.mjx-c1D439.TEX-I::before{padding:.68em .749em 0 0;content:"F"}mjx-c.mjx-c3A9::before{padding:.704em .722em 0 0;content:"Ω"}mjx-c.mjx-c2248::before{padding:.483em .778em 0 0;content:"≈"}mjx-c.mjx-c222B.TEX-S1::before{padding:.805em .61em .306em 0;content:"∫"}mjx-c.mjx-c200B::before{padding:0;content:""}mjx-c.mjx-c1D44A.TEX-I::before{padding:.683em 1.048em .022em 0;content:"W"}mjx-c.mjx-c1D443.TEX-I::before{padding:.683em .751em 0 0;content:"P"}mjx-c.mjx-c1D45E.TEX-I::before{padding:.442em .46em .194em 0;content:"q"}mjx-c.mjx-c2208::before{padding:.54em .667em .04em 0;content:"∈"}mjx-c.mjx-c4E.TEX-C::before{padding:.789em .979em .05em 0;content:"N"}mjx-c.mjx-c1D712.TEX-I::before{padding:.442em .626em .204em 0;content:"χ"}mjx-c.mjx-c53::before{padding:.705em .556em .022em 0;content:"S"}mjx-c.mjx-c4D::before{padding:.683em .917em 0 0;content:"M"}mjx-c.mjx-c1D44B.TEX-I::before{padding:.683em .852em 0 0;content:"X"}mjx-c.mjx-c56::before{padding:.683em .75em .022em 0;content:"V"}mjx-c.mjx-c45::before{padding:.68em .681em 0 0;content:"E"}mjx-c.mjx-c2264::before{padding:.636em .778em .138em 0;content:"≤"}mjx-c.mjx-c1D70E.TEX-I::before{padding:.431em .571em .011em 0;content:"σ"}mjx-c.mjx-c1D707.TEX-I::before{padding:.442em .603em .216em 0;content:"μ"}mjx-c.mjx-c1D708.TEX-I::before{padding:.442em .53em 0 0;content:"ν"}mjx-c.mjx-c46::before{padding:.68em .653em 0 0;content:"F"}mjx-c.mjx-c7B.TEX-S3::before{padding:1.45em .75em .949em 0;content:"{"}mjx-c.mjx-c7D.TEX-S3::before{padding:1.45em .75em .949em 0;content:"}"}mjx-c.mjx-c1D438.TEX-I::before{padding:.68em .764em 0 0;content:"E"}mjx-c.mjx-c222B.TEX-S2::before{padding:1.36em .944em .862em 0;content:"∫"}mjx-c.mjx-c1D43B.TEX-I::before{padding:.683em .888em 0 0;content:"H"}mjx-c.mjx-c1D70C.TEX-I::before{padding:.442em .517em .216em 0;content:"ρ"}mjx-c.mjx-c1D702.TEX-I::before{padding:.442em .497em .216em 0;content:"η"}mjx-c.mjx-c221A.TEX-S2::before{padding:1.15em 1.02em .65em 0;content:"√"}mjx-c.mjx-c3E::before{padding:.54em .778em .04em 0;content:">"}mjx-munderover{display:inline-block;text-align:left}mjx-munderover:not([limits=false]){padding-top:.1em}mjx-munderover:not([limits=false])>*{display:block}mjx-c.mjx-c221A.TEX-S1::before{padding:.85em 1.02em .35em 0;content:"√"}mjx-c.mjx-c3A::before{padding:.43em .278em 0 0;content:":"}mjx-c.mjx-c211D.TEX-A::before{padding:.683em .722em 0 0;content:"R"}mjx-c.mjx-c3B::before{padding:.43em .278em .194em 0;content:";"}mjx-c.mjx-c21A6::before{padding:.511em 1em .011em 0;content:"↦"}mjx-c.mjx-c1D41B.TEX-B::before{padding:.694em .639em .006em 0;content:"b"}mjx-c.mjx-c2211.TEX-S2::before{padding:.95em 1.444em .45em 0;content:"∑"}mjx-c.mjx-c1D457.TEX-I::before{padding:.661em .412em .204em 0;content:"j"}mjx-c.mjx-c38::before{padding:.666em .5em .022em 0;content:"8"}mjx-c.mjx-c41::before{padding:.716em .75em 0 0;content:"A"}mjx-c.mjx-c43::before{padding:.705em .722em .021em 0;content:"C"}mjx-msqrt{display:inline-block;text-align:left}mjx-root{display:inline-block;white-space:nowrap}mjx-surd{display:inline-block;vertical-align:top}mjx-sqrt{display:inline-block;padding-top:.07em}mjx-sqrt>mjx-box{border-top:.07em solid}mjx-sqrt.mjx-tall>mjx-box{padding-left:.3em;margin-left:-.3em}mjx-c.mjx-c1D435.TEX-I::before{padding:.683em .759em 0 0;content:"B"}mjx-c.mjx-c1D436.TEX-I::before{padding:.705em .76em .022em 0;content:"C"}mjx-c.mjx-c28.TEX-S3::before{padding:1.45em .736em .949em 0;content:"("}mjx-c.mjx-c29.TEX-S3::before{padding:1.45em .736em .949em 0;content:")"}mjx-c.mjx-c42::before{padding:.683em .708em 0 0;content:"B"}mjx-c.mjx-c1D449.TEX-I::before{padding:.683em .769em .022em 0;content:"V"}mjx-c.mjx-c1D462.TEX-I::before{padding:.442em .572em .011em 0;content:"u"}mjx-c.mjx-c221A.TEX-S4::before{padding:1.75em 1.02em 1.25em 0;content:"√"}mjx-c.mjx-c22C6::before{padding:.486em .5em 0 0;content:"⋆"}mjx-c.mjx-c1D42E.TEX-B::before{padding:.45em .639em .006em 0;content:"u"}mjx-c.mjx-c2E::before{padding:.12em .278em 0 0;content:"."}mjx-c.mjx-c1D43C.TEX-I::before{padding:.683em .504em 0 0;content:"I"}mjx-c.mjx-c1D43F.TEX-I::before{padding:.683em .681em 0 0;content:"L"}mjx-c.mjx-c1D458.TEX-I::before{padding:.694em .521em .011em 0;content:"k"}mjx-c.mjx-c28.TEX-S1::before{padding:.85em .458em .349em 0;content:"("}mjx-c.mjx-c29.TEX-S1::before{padding:.85em .458em .349em 0;content:")"}mjx-c.mjx-c6D::before{padding:.442em .833em 0 0;content:"m"}mjx-c.mjx-c1D425.TEX-B::before{padding:.694em .319em 0 0;content:"l"}mjx-c.mjx-c1D421.TEX-B::before{padding:.694em .639em 0 0;content:"h"}mjx-c.mjx-c62::before{padding:.694em .556em .011em 0;content:"b"}mjx-c.mjx-c1D42F.TEX-B::before{padding:.444em .607em 0 0;content:"v"}mjx-c.mjx-c2225::before{padding:.75em .5em .25em 0;content:"∥"}mjx-c.mjx-c1D441.TEX-I::before{padding:.683em .888em 0 0;content:"N"}mjx-c.mjx-c2211.TEX-S1::before{padding:.75em 1.056em .25em 0;content:"∑"}mjx-stretchy-v.mjx-c7B mjx-beg mjx-c::before{content:"⎧";padding:.899em .889em .01em 0}mjx-stretchy-v.mjx-c7B mjx-ext mjx-c::before{content:"⎪";width:.889em}mjx-stretchy-v.mjx-c7B mjx-end mjx-c::before{content:"⎩";padding:.01em .889em .899em 0}mjx-stretchy-v.mjx-c7B mjx-mid mjx-c::before{content:"⎨";padding:1.16em .889em .66em 0}mjx-stretchy-v.mjx-c7B>mjx-mid{margin-top:-.91em;margin-bottom:-.91em}mjx-stretchy-v.mjx-c7B>mjx-end{margin-top:-.909em}mjx-stretchy-v.mjx-c7B>mjx-ext{height:50%;border-top-width:.879em;border-bottom-width:.879em}mjx-c.mjx-c2217::before{padding:.465em .5em 0 0;content:"∗"}mjx-c.mjx-c68::before{padding:.694em .556em 0 0;content:"h"}mjx-c.mjx-c1D70B.TEX-I::before{padding:.431em .57em .011em 0;content:"π"}mjx-c.mjx-c1D714.TEX-I::before{padding:.443em .622em .011em 0;content:"ω"}mjx-c.mjx-c37::before{padding:.676em .5em .022em 0;content:"7"}mjx-mtable{display:inline-block;text-align:center;vertical-align:.25em;position:relative;box-sizing:border-box;border-spacing:0px;border-collapse:collapse}mjx-mstyle[size="s"] mjx-mtable{vertical-align:.354em}mjx-labels{position:absolute;left:0;top:0}mjx-table{display:inline-block;vertical-align:-.5ex;box-sizing:border-box}mjx-table>mjx-itable{vertical-align:middle;text-align:left;box-sizing:border-box}mjx-labels>mjx-itable{position:absolute;top:0}mjx-mtable[justify=left]{text-align:left}mjx-mtable[justify=right]{text-align:right}mjx-mtable[justify=left][side=left]{padding-right:0!important}mjx-mtable[justify=left][side=right]{padding-left:0!important}mjx-mtable[justify=right][side=left]{padding-right:0!important}mjx-mtable[justify=right][side=right]{padding-left:0!important}mjx-mtable[align]{vertical-align:baseline}mjx-mtable[align=top]>mjx-table{vertical-align:top}mjx-mtable[align=bottom]>mjx-table{vertical-align:bottom}mjx-mtable[side=right] mjx-labels{min-width:100%}mjx-mtr{display:table-row;text-align:left}mjx-mtr[rowalign=top]>mjx-mtd{vertical-align:top}mjx-mtr[rowalign=center]>mjx-mtd{vertical-align:middle}mjx-mtr[rowalign=bottom]>mjx-mtd{vertical-align:bottom}mjx-mtr[rowalign=baseline]>mjx-mtd{vertical-align:baseline}mjx-mtr[rowalign=axis]>mjx-mtd{vertical-align:.25em}mjx-mtd{display:table-cell;text-align:center;padding:.215em .4em}mjx-mtd:first-child{padding-left:0}mjx-mtd:last-child{padding-right:0}mjx-mtable>*>mjx-itable>:first-child>mjx-mtd{padding-top:0}mjx-mtable>*>mjx-itable>:last-child>mjx-mtd{padding-bottom:0}mjx-tstrut{display:inline-block;height:1em;vertical-align:-.25em}mjx-labels[align=left]>mjx-mtr>mjx-mtd{text-align:left}mjx-labels[align=right]>mjx-mtr>mjx-mtd{text-align:right}mjx-mtd[extra]{padding:0}mjx-mtd[rowalign=top]{vertical-align:top}mjx-mtd[rowalign=center]{vertical-align:middle}mjx-mtd[rowalign=bottom]{vertical-align:bottom}mjx-mtd[rowalign=baseline]{vertical-align:baseline}mjx-mtd[rowalign=axis]{vertical-align:.25em}mjx-texatom{display:inline-block;text-align:left}mjx-mrow{display:inline-block;text-align:left}mjx-msub{display:inline-block;text-align:left}mjx-mspace{display:inline-block;text-align:left}mjx-mtext{display:inline-block;text-align:left}mjx-munder{display:inline-block;text-align:left}mjx-over{text-align:left}mjx-munder:not([limits=false]){display:inline-table}mjx-munder>mjx-row{text-align:left}mjx-under{padding-bottom:.1em}mjx-mover{display:inline-block;text-align:left}mjx-mover:not([limits=false]){padding-top:.1em}mjx-mover:not([limits=false])>*{display:block;text-align:left}mjx-msubsup{display:inline-block;text-align:left}mjx-script{display:inline-block;padding-right:.05em;padding-left:.033em}mjx-script>mjx-spacer{display:block}mjx-mfrac{display:inline-block;text-align:left}mjx-frac{display:inline-block;vertical-align:.17em;padding:0 .22em}mjx-frac[type="d"]{vertical-align:.04em}mjx-frac[delims]{padding:0 .1em}mjx-frac[atop]{padding:0 .12em}mjx-frac[atop][delims]{padding:0}mjx-dtable{display:inline-table;width:100%}mjx-dtable>*{font-size:2000%}mjx-dbox{display:block;font-size:5%}mjx-num{display:block;text-align:center}mjx-den{display:block;text-align:center}mjx-mfrac[bevelled]>mjx-num{display:inline-block}mjx-mfrac[bevelled]>mjx-den{display:inline-block}mjx-den[align=right],mjx-num[align=right]{text-align:right}mjx-den[align=left],mjx-num[align=left]{text-align:left}mjx-nstrut{display:inline-block;height:.054em;width:0;vertical-align:-.054em}mjx-nstrut[type="d"]{height:.217em;vertical-align:-.217em}mjx-dstrut{display:inline-block;height:.505em;width:0}mjx-dstrut[type="d"]{height:.726em}mjx-line{display:block;box-sizing:border-box;min-height:1px;height:.06em;border-top:.06em solid;margin:.06em -.1em;overflow:hidden}mjx-line[type="d"]{margin:.18em -.1em}mjx-stretchy-v.mjx-c28 mjx-beg mjx-c::before{content:"⎛";padding:1.154em .875em .655em 0}mjx-stretchy-v.mjx-c28 mjx-ext mjx-c::before{content:"⎜";width:.875em}mjx-stretchy-v.mjx-c28 mjx-end mjx-c::before{content:"⎝";padding:1.165em .875em .644em 0}mjx-stretchy-v.mjx-c28>mjx-end{margin-top:-1.809em}mjx-stretchy-v.mjx-c28>mjx-ext{border-top-width:1.779em;border-bottom-width:1.779em}mjx-stretchy-v.mjx-c29 mjx-beg mjx-c::before{content:"⎞";padding:1.154em .875em .655em 0}mjx-stretchy-v.mjx-c29 mjx-ext mjx-c::before{content:"⎟";width:.875em}mjx-stretchy-v.mjx-c29 mjx-end mjx-c::before{content:"⎠";padding:1.165em .875em .644em 0}mjx-stretchy-v.mjx-c29>mjx-end{margin-top:-1.809em}mjx-stretchy-v.mjx-c29>mjx-ext{border-top-width:1.779em;border-bottom-width:1.779em}mjx-stretchy-v.mjx-c5B mjx-beg mjx-c::before{content:"⎡";padding:1.154em .667em .645em 0}mjx-stretchy-v.mjx-c5B mjx-ext mjx-c::before{content:"⎢";width:.667em}mjx-stretchy-v.mjx-c5B mjx-end mjx-c::before{content:"⎣";padding:1.155em .667em .644em 0}mjx-stretchy-v.mjx-c5B>mjx-end{margin-top:-1.799em}mjx-stretchy-v.mjx-c5B>mjx-ext{border-top-width:1.769em;border-bottom-width:1.769em}mjx-stretchy-v.mjx-c5D mjx-beg mjx-c::before{content:"⎤";padding:1.154em .667em .645em 0}mjx-stretchy-v.mjx-c5D mjx-ext mjx-c::before{content:"⎥";width:.667em}mjx-stretchy-v.mjx-c5D mjx-end mjx-c::before{content:"⎦";padding:1.155em .667em .644em 0}mjx-stretchy-v.mjx-c5D>mjx-end{margin-top:-1.799em}mjx-stretchy-v.mjx-c5D>mjx-ext{border-top-width:1.769em;border-bottom-width:1.769em}mjx-stretchy-h.mjx-c23DF mjx-beg mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF mjx-ext mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF mjx-end mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF mjx-mid mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF>mjx-ext{width:50%}mjx-c.mjx-c1D466.TEX-I::before{padding:.442em .49em .205em 0;content:"y"}mjx-c.mjx-c5B.TEX-S3::before{padding:1.45em .528em .949em 0;content:"["}mjx-c.mjx-c5D.TEX-S3::before{padding:1.45em .528em .949em 0;content:"]"}mjx-c.mjx-c30::before{padding:.666em .5em .022em 0;content:"0"}mjx-c.mjx-c2212::before{padding:.583em .778em .082em 0;content:"−"}mjx-c.mjx-c1D411.TEX-B::before{padding:.686em .862em .011em 0;content:"R"}mjx-c.mjx-c1D703.TEX-I::before{padding:.705em .469em .01em 0;content:"θ"}mjx-c.mjx-c63::before{padding:.448em .444em .011em 0;content:"c"}mjx-c.mjx-c6F::before{padding:.448em .5em .01em 0;content:"o"}mjx-c.mjx-c73::before{padding:.448em .394em .011em 0;content:"s"}mjx-c.mjx-c2061::before{padding:0;content:""}mjx-c.mjx-c69::before{padding:.669em .278em 0 0;content:"i"}mjx-c.mjx-c6E::before{padding:.442em .556em 0 0;content:"n"}mjx-c.mjx-c1D451.TEX-I::before{padding:.694em .52em .01em 0;content:"d"}mjx-c.mjx-c1D437.TEX-I::before{padding:.683em .828em 0 0;content:"D"}mjx-c.mjx-c1D447.TEX-I::before{padding:.677em .704em 0 0;content:"T"}mjx-c.mjx-c1D464.TEX-I::before{padding:.443em .716em .011em 0;content:"w"}mjx-c.mjx-c22C5::before{padding:.31em .278em 0 0;content:"⋅"}mjx-c.mjx-c1D412.TEX-B::before{padding:.697em .639em .011em 0;content:"S"}mjx-c.mjx-c1D6FC.TEX-I::before{padding:.442em .64em .011em 0;content:"α"}mjx-c.mjx-c1D445.TEX-I::before{padding:.683em .759em .021em 0;content:"R"}mjx-c.mjx-c34::before{padding:.677em .5em 0 0;content:"4"}mjx-c.mjx-c35::before{padding:.666em .5em .022em 0;content:"5"}mjx-c.mjx-c2218::before{padding:.444em .5em 0 0;content:"∘"}mjx-c.mjx-c1D434.TEX-I::before{padding:.716em .75em 0 0;content:"A"}mjx-c.mjx-c2026::before{padding:.12em 1.172em 0 0;content:"…"}mjx-c.mjx-c1D431.TEX-B::before{padding:.444em .607em 0 0;content:"x"}mjx-c.mjx-c1D400.TEX-B::before{padding:.698em .869em 0 0;content:"A"}mjx-c.mjx-c22EF::before{padding:.31em 1.172em 0 0;content:"⋯"}mjx-c.mjx-c1D413.TEX-B::before{padding:.675em .8em 0 0;content:"T"}mjx-c.mjx-c28.TEX-B::before{padding:.75em .447em .249em 0;content:"("}mjx-c.mjx-c1D41C.TEX-B::before{padding:.453em .511em .006em 0;content:"c"}mjx-c.mjx-c29.TEX-B::before{padding:.75em .447em .249em 0;content:")"}mjx-c.mjx-c2212.TEX-B::before{padding:.281em .894em 0 0;content:"−"}mjx-c.mjx-c33::before{padding:.665em .5em .022em 0;content:"3"}mjx-c.mjx-c44::before{padding:.683em .764em 0 0;content:"D"}mjx-c.mjx-cA0::before{padding:0 .25em 0 0;content:" "}mjx-c.mjx-c70::before{padding:.442em .556em .194em 0;content:"p"}mjx-c.mjx-c74::before{padding:.615em .389em .01em 0;content:"t"}mjx-c.mjx-c78::before{padding:.431em .528em 0 0;content:"x"}mjx-c.mjx-c79::before{padding:.431em .528em .204em 0;content:"y"}mjx-c.mjx-c7A::before{padding:.431em .444em 0 0;content:"z"}mjx-c.mjx-c54::before{padding:.677em .722em 0 0;content:"T"}mjx-c.mjx-c76::before{padding:.431em .528em .011em 0;content:"v"}mjx-c.mjx-c65::before{padding:.448em .444em .011em 0;content:"e"}mjx-c.mjx-c72::before{padding:.442em .392em 0 0;content:"r"}mjx-c.mjx-c1D467.TEX-I::before{padding:.442em .465em .011em 0;content:"z"}mjx-c.mjx-c1D453.TEX-I::before{padding:.705em .55em .205em 0;content:"f"}mjx-c.mjx-c1D6FD.TEX-I::before{padding:.705em .566em .194em 0;content:"β"}mjx-c.mjx-c1D6FE.TEX-I::before{padding:.441em .543em .216em 0;content:"γ"}mjx-c.mjx-c1D427.TEX-B::before{padding:.45em .639em 0 0;content:"n"}mjx-c.mjx-c1D408.TEX-B::before{padding:.686em .436em 0 0;content:"I"}mjx-c.mjx-c1D40D.TEX-B::before{padding:.686em .9em 0 0;content:"N"}mjx-c.mjx-c50::before{padding:.683em .681em 0 0;content:"P"}mjx-c.mjx-c20D7.TEX-V::before{padding:.714em .5em 0 0;content:"→"}mjx-c.mjx-c4C::before{padding:.683em .625em 0 0;content:"L"}mjx-c.mjx-c6B::before{padding:.694em .528em 0 0;content:"k"}mjx-c.mjx-c2D::before{padding:.252em .333em 0 0;content:"-"}mjx-c.mjx-c61::before{padding:.448em .5em .011em 0;content:"a"}mjx-c.mjx-c20::before{padding:0 .25em 0 0;content:" "}mjx-c.mjx-c2F::before{padding:.75em .5em .25em 0;content:"/"}mjx-c.mjx-c67::before{padding:.453em .5em .206em 0;content:"g"}mjx-c.mjx-c64::before{padding:.694em .556em .011em 0;content:"d"}mjx-c.mjx-c5E::before{padding:.694em .5em 0 0;content:"^"}mjx-c.mjx-c1D448.TEX-I::before{padding:.683em .767em .022em 0;content:"U"}mjx-c.mjx-cD7::before{padding:.491em .778em 0 0;content:"×"}mjx-c.mjx-c5B::before{padding:.75em .278em .25em 0;content:"["}mjx-c.mjx-c5D::before{padding:.75em .278em .25em 0;content:"]"}mjx-c.mjx-c21D2::before{padding:.525em 1em .024em 0;content:"⇒"}mjx-c.mjx-c75::before{padding:.442em .556em .011em 0;content:"u"}mjx-c.mjx-c77::before{padding:.431em .722em .011em 0;content:"w"}mjx-c.mjx-c6C::before{padding:.694em .278em 0 0;content:"l"}mjx-c.mjx-c1D440.TEX-I::before{padding:.683em 1.051em 0 0;content:"M"}mjx-c.mjx-c1D465.TEX-I::before{padding:.442em .572em .011em 0;content:"x"}mjx-c.mjx-cD7::before{padding:.491em .778em 0 0;content:"×"}mjx-c.mjx-c32::before{padding:.666em .5em 0 0;content:"2"}mjx-c.mjx-c1D463.TEX-I::before{padding:.443em .485em .011em 0;content:"v"}mjx-c.mjx-c1D45D.TEX-I::before{padding:.442em .503em .194em 0;content:"p"}mjx-c.mjx-c2192::before{padding:.511em 1em .011em 0;content:"→"}mjx-c.mjx-c1D44E.TEX-I::before{padding:.441em .529em .01em 0;content:"a"}mjx-c.mjx-c1D44F.TEX-I::before{padding:.694em .429em .011em 0;content:"b"}mjx-c.mjx-c1D459.TEX-I::before{padding:.694em .298em .011em 0;content:"l"}mjx-c.mjx-c1D452.TEX-I::before{padding:.442em .466em .011em 0;content:"e"}mjx-mn{display:inline-block;text-align:left}mjx-c.mjx-c1D442.TEX-I::before{padding:.704em .763em .022em 0;content:"O"}mjx-c.mjx-c31::before{padding:.666em .5em 0 0;content:"1"}mjx-container[jax=CHTML]{line-height:0}mjx-container [space="1"]{margin-left:.111em}mjx-container [space="2"]{margin-left:.167em}mjx-container [space="3"]{margin-left:.222em}mjx-container [space="4"]{margin-left:.278em}mjx-container [space="5"]{margin-left:.333em}mjx-container [rspace="1"]{margin-right:.111em}mjx-container [rspace="2"]{margin-right:.167em}mjx-container [rspace="3"]{margin-right:.222em}mjx-container [rspace="4"]{margin-right:.278em}mjx-container [rspace="5"]{margin-right:.333em}mjx-container [size="s"]{font-size:70.7%}mjx-container [size=ss]{font-size:50%}mjx-container [size=Tn]{font-size:60%}mjx-container [size=sm]{font-size:85%}mjx-container [size=lg]{font-size:120%}mjx-container [size=Lg]{font-size:144%}mjx-container [size=LG]{font-size:173%}mjx-container [size=hg]{font-size:207%}mjx-container [size=HG]{font-size:249%}mjx-container [width=full]{width:100%}mjx-box{display:inline-block}mjx-block{display:block}mjx-itable{display:inline-table}mjx-row{display:table-row}mjx-row>*{display:table-cell}mjx-mtext{display:inline-block}mjx-mstyle{display:inline-block}mjx-merror{display:inline-block;color:red;background-color:#ff0}mjx-mphantom{visibility:hidden}mjx-assistive-mml{top:0;left:0;clip:rect(1px,1px,1px,1px);user-select:none;position:absolute!important;padding:1px 0 0!important;border:0!important;display:block!important;width:auto!important;overflow:hidden!important}mjx-assistive-mml[display=block]{width:100%!important}mjx-math{display:inline-block;text-align:left;line-height:0;text-indent:0;font-style:normal;font-weight:400;font-size:100%;font-size-adjust:none;letter-spacing:normal;border-collapse:collapse;overflow-wrap:normal;word-spacing:normal;white-space:nowrap;direction:ltr;padding:1px 0}mjx-container[jax=CHTML][display=true]{display:block;text-align:center;margin:1em 0}mjx-container[jax=CHTML][display=true][width=full]{display:flex}mjx-container[jax=CHTML][display=true] mjx-math{padding:0}mjx-container[jax=CHTML][justify=left]{text-align:left}mjx-container[jax=CHTML][justify=right]{text-align:right}mjx-mi{display:inline-block;text-align:left}mjx-c{display:inline-block}mjx-utext{display:inline-block;padding:.75em 0 .2em}mjx-mo{display:inline-block;text-align:left}mjx-stretchy-h{display:inline-table;width:100%}mjx-stretchy-h>*{display:table-cell;width:0}mjx-stretchy-h>*>mjx-c{display:inline-block;transform:scaleX(1)}mjx-stretchy-h>*>mjx-c::before{display:inline-block;width:initial}mjx-stretchy-h>mjx-ext{overflow:clip visible;width:100%}mjx-stretchy-h>mjx-ext>mjx-c::before{transform:scaleX(500)}mjx-stretchy-h>mjx-ext>mjx-c{width:0}mjx-stretchy-h>mjx-beg>mjx-c{margin-right:-.1em}mjx-stretchy-h>mjx-end>mjx-c{margin-left:-.1em}mjx-stretchy-v{display:inline-block}mjx-stretchy-v>*{display:block}mjx-stretchy-v>mjx-beg{height:0}mjx-stretchy-v>mjx-end>mjx-c{display:block}mjx-stretchy-v>*>mjx-c{transform:scaleY(1);transform-origin:left center;overflow:hidden}mjx-stretchy-v>mjx-ext{display:block;height:100%;box-sizing:border-box;border:0 solid transparent;overflow:visible clip}mjx-stretchy-v>mjx-ext>mjx-c::before{width:initial;box-sizing:border-box}mjx-stretchy-v>mjx-ext>mjx-c{transform:scaleY(500) translateY(.075em);overflow:visible}mjx-mark{display:inline-block;height:0}mjx-msup{display:inline-block;text-align:left}mjx-c::before{display:block;width:0}.MJX-TEX{font-family:MJXZERO,MJXTEX}.TEX-B{font-family:MJXZERO,MJXTEX-B}.TEX-I{font-family:MJXZERO,MJXTEX-I}.TEX-MI{font-family:MJXZERO,MJXTEX-MI}.TEX-BI{font-family:MJXZERO,MJXTEX-BI}.TEX-S1{font-family:MJXZERO,MJXTEX-S1}.TEX-S2{font-family:MJXZERO,MJXTEX-S2}.TEX-S3{font-family:MJXZERO,MJXTEX-S3}.TEX-S4{font-family:MJXZERO,MJXTEX-S4}.TEX-A{font-family:MJXZERO,MJXTEX-A}.TEX-C{font-family:MJXZERO,MJXTEX-C}.TEX-CB{font-family:MJXZERO,MJXTEX-CB}.TEX-FR{font-family:MJXZERO,MJXTEX-FR}.TEX-FRB{font-family:MJXZERO,MJXTEX-FRB}.TEX-SS{font-family:MJXZERO,MJXTEX-SS}.TEX-SSB{font-family:MJXZERO,MJXTEX-SSB}.TEX-SSI{font-family:MJXZERO,MJXTEX-SSI}.TEX-SC{font-family:MJXZERO,MJXTEX-SC}.TEX-T{font-family:MJXZERO,MJXTEX-T}.TEX-V{font-family:MJXZERO,MJXTEX-V}.TEX-VB{font-family:MJXZERO,MJXTEX-VB}mjx-stretchy-h mjx-c,mjx-stretchy-v mjx-c{font-family:MJXZERO,MJXTEX-S1,MJXTEX-S4,MJXTEX,MJXTEX-A!important}@font-face{font-family:MJXZERO;src:url("lib/fonts/mathjax_zero.woff") format("woff")}@font-face{font-family:MJXTEX;src:url("lib/fonts/mathjax_main-regular.woff") format("woff")}@font-face{font-family:MJXTEX-B;src:url("lib/fonts/mathjax_main-bold.woff") format("woff")}@font-face{font-family:MJXTEX-I;src:url("lib/fonts/mathjax_math-italic.woff") format("woff")}@font-face{font-family:MJXTEX-MI;src:url("lib/fonts/mathjax_main-italic.woff") format("woff")}@font-face{font-family:MJXTEX-BI;src:url("lib/fonts/mathjax_math-bolditalic.woff") format("woff")}@font-face{font-family:MJXTEX-S1;src:url("lib/fonts/mathjax_size1-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S2;src:url("lib/fonts/mathjax_size2-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S3;src:url("lib/fonts/mathjax_size3-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S4;src:url("lib/fonts/mathjax_size4-regular.woff") format("woff")}@font-face{font-family:MJXTEX-A;src:url("lib/fonts/mathjax_ams-regular.woff") format("woff")}@font-face{font-family:MJXTEX-C;src:url("lib/fonts/mathjax_calligraphic-regular.woff") format("woff")}@font-face{font-family:MJXTEX-CB;src:url("lib/fonts/mathjax_calligraphic-bold.woff") format("woff")}@font-face{font-family:MJXTEX-FR;src:url("lib/fonts/mathjax_fraktur-regular.woff") format("woff")}@font-face{font-family:MJXTEX-FRB;src:url("lib/fonts/mathjax_fraktur-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SS;src:url("lib/fonts/mathjax_sansserif-regular.woff") format("woff")}@font-face{font-family:MJXTEX-SSB;src:url("lib/fonts/mathjax_sansserif-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SSI;src:url("lib/fonts/mathjax_sansserif-italic.woff") format("woff")}@font-face{font-family:MJXTEX-SC;src:url("lib/fonts/mathjax_script-regular.woff") format("woff")}@font-face{font-family:MJXTEX-T;src:url("lib/fonts/mathjax_typewriter-regular.woff") format("woff")}@font-face{font-family:MJXTEX-V;src:url("lib/fonts/mathjax_vector-regular.woff") format("woff")}@font-face{font-family:MJXTEX-VB;src:url("lib/fonts/mathjax_vector-bold.woff") format("woff")}mjx-c.mjx-c1D45F.TEX-I::before{padding:.442em .451em .011em 0;content:"r"}mjx-c.mjx-c210E.TEX-I::before{padding:.694em .576em .011em 0;content:"h"}mjx-c.mjx-c1D460.TEX-I::before{padding:.442em .469em .01em 0;content:"s"}mjx-c.mjx-c28::before{padding:.75em .389em .25em 0;content:"("}mjx-c.mjx-c29::before{padding:.75em .389em .25em 0;content:")"}mjx-c.mjx-c3D::before{padding:.583em .778em .082em 0;content:"="}mjx-c.mjx-c1D45A.TEX-I::before{padding:.442em .878em .011em 0;content:"m"}mjx-c.mjx-c1D456.TEX-I::before{padding:.661em .345em .011em 0;content:"i"}mjx-c.mjx-c1D45B.TEX-I::before{padding:.442em .6em .011em 0;content:"n"}mjx-c.mjx-c1D454.TEX-I::before{padding:.442em .477em .205em 0;content:"g"}mjx-c.mjx-c2032::before{padding:.56em .275em 0 0;content:"′"}mjx-c.mjx-c2B::before{padding:.583em .778em .082em 0;content:"+"}mjx-c.mjx-c1D450.TEX-I::before{padding:.442em .433em .011em 0;content:"c"}mjx-c.mjx-c1D45C.TEX-I::before{padding:.441em .485em .011em 0;content:"o"}mjx-c.mjx-c1D461.TEX-I::before{padding:.626em .361em .011em 0;content:"t"}mjx-c.mjx-c2C::before{padding:.121em .278em .194em 0;content:","}</style><div class="markdown-preview-sizer markdown-preview-section"><h1 class="page-title heading inline-title" id="Lecture 3：编辑器下数据持久化"><p dir="auto">Lecture 3：编辑器下数据持久化</p></h1><div class="el-h2 heading-wrapper"><h2 data-heading="`EditorPrefs`" dir="auto" class="heading" id="`EditorPrefs`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>EditorPrefs</code></h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="基础概念" dir="auto" class="heading" id="基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>基础概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>EditorPrefs</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>EditorPrefs</code>&nbsp;是 <code>Unity</code> 提供的用于在<strong>编辑器环境</strong>下持久化<strong>存储键值对</strong>数据的工具类；</li>
+<li data-line="2" dir="auto">这是一种可以在项目之间共享的数据保存方式，适用于跨 <code>Unity</code> 编辑器共享数据而不受项目约束 </li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>其与 <code>PlayerPrefs</code> 的区别在于：
+<ul>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="4" dir="auto"><code>PlayerPrefs</code>：用于运行时（游戏内）数据存储，支持多平台；</li>
+</ol>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="5" dir="auto"><code>EditorPrefs</code>：仅限编辑器工具开发，存储路径和机制与平台无关；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><code>EditorPrefs</code> 支持 <code>string</code>、<code>int</code>、<code>float</code>、<code>bool</code> 等数据类型，不同操作系统下路径不同，比如 <code>Windows</code> 注册表、<code>macOS</code> 的 <code>plist</code> 文件； </li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：不同版本存储的 <code>EditorPrefs</code>
+<ul>
+<li data-line="8" dir="auto">保存的值可能会受到 <code>Unity</code> 大版本的影响，比如在 <code>Unity 4.x</code> 中保存的值只能在 <code>Unity 4.x</code> 中使用，<code>Unity 5.x</code> 也仅在 <code>Unity 5.x</code> 中可用；</li>
+<li data-line="9" dir="auto"><span alt="Pasted image 20250812110105.png" src="Pasted image 20250812110105.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250812110105.png" src="lib/media/pasted-image-20250812110105.png"></span></li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>特点：
+<ul>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="11" dir="auto">它不需要考虑运行时的效率问题，所以没有采用 <code>PlayerPrefs</code> 的优化方式，而是直接保存。<code>EditorPrefs</code> 中比 <code>PlayerPrefs</code> 多了一个 <code>Bool</code> 类型的键值对；</li>
+</ol>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="12" dir="auto">所有通过 <code>EditorPrefs</code> 保存的值均以明文形式保存，所以切勿保存重要信息；</li>
+</ol>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="13" dir="auto">在 <code>Unity</code> 编辑器环境中，谨慎调用 <code>EditorPrefs.DeleteAll()</code>。如果这样做下次打开 <code>Unity</code> 会发现以前保存的打开项目，全部消失了； </li>
+</ol>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="存储方法" dir="auto" class="heading" id="存储方法"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>存储方法</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：存储方法</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="0" dir="auto"><code>public static void SetString(string key, string value);</code></li>
+</ol>
+<ul>
+<li data-line="1" dir="auto"><code>key</code>：唯一标识数据的字符串（区分大小写）</li>
+<li data-line="2" dir="auto"><code>value</code>：要存储的字符串内容（不支持 <code>null</code>，若传入会转为空字符串）</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="3" dir="auto"><code>public static string GetString(string key, string defaultValue = "");</code></li>
+</ol>
+<ul>
+<li data-line="4" dir="auto"><code>key</code>：要检索的键名</li>
+<li data-line="5" dir="auto"><code>defaultValue</code>：键不存在时的返回值（默认空字符串）</li>
+</ul>
+</li>
+<li data-line="6" dir="auto">代码：存储数据</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 存储整型数据
+EditorPrefs.SetInt("EditorWindowWidth", 800);
+
+// 存储浮点型数据
+EditorPrefs.SetFloat("EditorSnapValue", 0.5f);
+
+// 存储字符串数据
+EditorPrefs.SetString("LastOpenedScene", "Assets/Scenes/Main.unity");
+
+// 存储布尔值数据(EditorPrefs特有，PlayerPrefs没有)
+EditorPrefs.SetBool("ShowWelcomeScreen", false);
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">代码：读取数据</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 读取数据时需要提供键名和可选的默认值(当键不存在时返回)
+
+// 读取整型数据(带默认值)
+int windowWidth = EditorPrefs.GetInt("EditorWindowWidth", 1024);
+
+// 读取浮点型数据(带默认值)
+float snapValue = EditorPrefs.GetFloat("EditorSnapValue", 1.0f);
+
+// 读取字符串数据(带默认值)
+string lastScene = EditorPrefs.GetString("LastOpenedScene", "");
+
+// 读取布尔值数据(带默认值)
+bool showWelcome = EditorPrefs.GetBool("ShowWelcomeScreen", true);
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">代码：检查数据存在</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 检查键是否存在
+if(EditorPrefs.HasKey("EditorWindowWidth")) {
+    // 键存在时的处理
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="代码示例" dir="auto" class="heading" id="代码示例"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>代码示例</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>代码</strong></p></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">using UnityEditor;
+using UnityEngine;
+
+public class MyCustomWindow : EditorWindow
+{
+    private static MyCustomWindow window;
+    private string someText = "";
+	
+	// 创建一个窗口并展示
+    [MenuItem("Window/My Custom Window")]
+    private static void ShowWindow()
+    {
+	    // GetWindow&lt;MyCustomWindow&gt; 中的泛型参数 &lt;MyCustomWindow&gt;​ 明确指定了你要获取或创建的窗口类型
+	    // 这个方法会在当前所有打开的编辑器窗口中寻找第一个类型为 MyCustomWindow 的窗口实例
+        window = GetWindow&lt;MyCustomWindow&gt;("Custom Window");
+        window.Show();
+    }
+    
+    // 开启窗口时，先读取之前保存的窗口名称与位置信息
+    private void OnEnable()
+    {
+        // 读取保存的数据
+        // 先检查在EditorPrefs中是否有MyCustomWindow_SomeText，如果有的话则获取
+        if(EditorPrefs.HasKey("MyCustomWindow_SomeText"))
+        {
+            someText = EditorPrefs.GetString("MyCustomWindow_SomeText");
+        }
+        
+        // 读取窗口位置
+        if(EditorPrefs.HasKey("MyCustomWindow_PosX"))
+        {
+            position = new Rect(
+                EditorPrefs.GetFloat("MyCustomWindow_PosX"),
+                EditorPrefs.GetFloat("MyCustomWindow_PosY"),
+                EditorPrefs.GetFloat("MyCustomWindow_Width", 400), // 后背的 “400” 表示默认值
+                EditorPrefs.GetFloat("MyCustomWindow_Height", 300)
+            );
+        }
+    }
+    
+    // 绘制GUI时，使用在OnEnable中从EditorPrefs中读取的数据
+    private void OnGUI()
+    {
+        someText = EditorGUILayout.TextField("Some Text", someText);
+        
+        if(GUILayout.Button("Save"))
+        {
+            EditorPrefs.SetString("MyCustomWindow_SomeText", someText);
+        }
+    }
+    
+    private void OnDestroy()
+    {
+        // 保存窗口位置和大小
+        EditorPrefs.SetFloat("MyCustomWindow_PosX", position.x);
+        EditorPrefs.SetFloat("MyCustomWindow_PosY", position.y);
+        EditorPrefs.SetFloat("MyCustomWindow_Width", position.width);
+        EditorPrefs.SetFloat("MyCustomWindow_Height", position.height);
+    }
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`EditorUserSetting`" dir="auto" class="heading" id="`EditorUserSetting`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>EditorUserSetting</code></h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>EditorUserSetting</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>EditorUserSettings</code> 是 <code>Unity</code> 编辑器提供的一种数据存储机制，专门用于在项目内部保存和共享加密数据，特别适合存储敏感信息如密码、访问令牌等；</li>
+<li data-line="2" dir="auto">与 <code>EditorPrefs</code> 不同，<code>EditorUserSettings</code> 以<strong>二进制形式存储数据</strong>，提供了基本的安全保障；</li>
+<li data-line="3" dir="auto">保存的数据会持久存储在项目文件中，即使关闭并重新打开 <code>Unity</code> 编辑器也会保留；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：存储位置
+<ul>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="5" dir="auto"><code>Unity 2021</code> 及更新版本​：</li>
+</ol>
+<ul>
+<li data-line="6" dir="auto">存储在项目目录的 <code>UserSettings</code> 文件夹下的 <code>EditorUserSettings.asset</code> 文件中，以文本格式；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="7" dir="auto">旧版本 <code>Unity</code>：</li>
+</ol>
+<ul>
+<li data-line="8" dir="auto">存储在项目 <code>Library</code> 目录下的 <code>EditorUserSettings.asset</code> 文件中（二进制格式）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结：
+<ul>
+<li data-line="10" dir="auto"><span alt="Pasted image 20250812111250.png" src="Pasted image 20250812111250.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250812111250.png" src="lib/media/pasted-image-20250812111250.png"></span></li>
+</ul>
+</li>
+<li data-line="11" dir="auto">代码：使用方法</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">using UnityEditor;
+
+// 注意：和EditorPrefs 直接存储加载不同，其方法中间的标识为 Config
+public class EditorUserSettingsExample
+{
+    [InitializeOnLoadMethod]
+    static void SaveSettings()
+    {
+        // 存储字符串值
+        EditorUserSettings.SetConfigValue("UserEmail", "user@example.com");
+        
+        // 存储密码或令牌
+        EditorUserSettings.SetConfigValue("AccessToken", "encrypted_token_here");
+    }
+}
+
+// 读取数据
+string email = EditorUserSettings.GetConfigValue("UserEmail");
+string token = EditorUserSettings.GetConfigValue("AccessToken");
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`SerializedObject` 类" dir="auto" class="heading" id="`SerializedObject`_类"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>SerializedObject</code> 类</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="基础概念" dir="auto" class="heading" id="基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>基础概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>SerializedObject</code> 类</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>SerializedObject</code> 是 <code>UnityEditor</code> 命名空间下的类，用于以通用方式编辑 <code>Unity</code> 对象的序列化字段；</li>
+<li data-line="2" dir="auto">它与 <code>SerializedProperty</code> 配合使用，可以自动处理撤销操作、<code>Prefab</code> 覆盖以及在 <code>Inspector</code> 中的正确样式显示； </li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>SerializedObject</code> 实现原理
+<ul>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="4" dir="auto">使用 <code>SerializedObject</code> 类得到一个<strong>目标 <code>Unity</code> 对象的数据流</strong>，允许同时编辑对象共享的序列化数据；</li>
+</ol>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="5" dir="auto"><code>Unity</code> 将对象序列化为二进制或 <code>YAML</code> 文本数据，<code>SerializedObject</code> 负责这些序列化操作；</li>
+</ol>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="6" dir="auto"><code>SerializedObject</code> 在内部进行缓存，需要手动调用 <code>Update</code> 方法同步最新数据；</li>
+</ol>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="7" dir="auto">自动注册撤销操作，而直接修改 <code>UnityEngine.Object</code> 需要手动实现撤销； </li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：创建 <code>SerializedObject</code> 对象
+<ul>
+<li data-line="9" dir="auto"><span alt="Pasted image 20250811162452.png" src="Pasted image 20250811162452.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250811162452.png" src="lib/media/pasted-image-20250811162452.png"></span></li>
+<li data-line="10" dir="auto">注意在多目标编辑时，只能编辑这些对象<strong>共有的序列化字段</strong>；</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>void Update();</code>
+<ul>
+<li data-line="12" dir="auto">更新序列化对象的状态，确保它反映目标对象的当前状态；</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>当保持对 <code>SerializedObject</code> 的引用超过一帧时，必须手动调用此方法；
+<ul>
+<li data-line="14" dir="auto"><span alt="Pasted image 20250811171051.png" src="Pasted image 20250811171051.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250811171051.png" src="lib/media/pasted-image-20250811171051.png"></span></li>
+</ul>
+</li>
+<li data-line="15" dir="auto">如图所示是在访问 <code>SerializedObject</code> 之前先对其进行更新，以使其保持最新状态；</li>
+</ul>
+</li>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>bool ApplyModifiedProperties();</code>
+<ul>
+<li data-line="17" dir="auto">将更改应用到内部缓存，使其保持最新；</li>
+<li data-line="18" dir="auto">通过 <code>ApplyModifiedProperties</code> 应用更改，这样将此视为一组；</li>
+<li data-line="19" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>除非有特定的条件可以应用更改，否则<strong>将 <code>Update</code> 放在方法的第一行上，并将 <code>ApplyModifiedProperties</code> 放在方法的最后一行</strong>；
+<ul>
+<li data-line="20" dir="auto"><span alt="Pasted image 20250811171155.png" src="Pasted image 20250811171155.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250811171155.png" src="lib/media/pasted-image-20250811171155.png"></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="21" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：<code>Unity</code> 中可序列化的对象
+<ul>
+<li data-line="22" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>UnityEngine.Object</code> 的派生类（我们经常使用的 <code>MonoBehaviour</code>，<code>ScriptableObject</code>，<code>Editor</code>，<code>EditorWindow</code> 等）中字段是否可以序列化要看一下几点：
+<ul>
+<li data-line="23" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="23" dir="auto">必须是<strong>公共变量</strong>或具有 <strong><code>Seri​​alizeField</code> 属性的字段</strong>；</li>
+</ol>
+</li>
+<li data-line="24" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="24" dir="auto">必须是 <code>Unity</code> 支持可序列化的类型，比如 <code>sbyte，short，int，long，byte，ushort，uint，ulong，float，double，bool，char，string，UnityEngine.Object</code>，具有 <code>Seri​​alizable</code> 属性和结构的类等； </li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="25" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>不能序列化的常见情况：
+<ul>
+<li data-line="26" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="26" dir="auto">变量不能带 <strong><code>static</code>，<code>const</code>，<code>readonly</code></strong> 修饰符；</li>
+</ol>
+</li>
+<li data-line="27" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="27" dir="auto">不能是抽象类；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="28" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：
+<ul>
+<li data-line="29" dir="auto">我们经常看到一些书中说把需要在监视器中展示的字段设成公共变量，这只是为了方便非程序员更容易理解，而使其成为公共变量只是序列化的条件之一，有时候给私有变量添加 <code>SerializeField</code> 属性是更加合理的解决方案； </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`Object` 和 `SerializedObject` 的关系" dir="auto" class="heading" id="`Object`_和_`SerializedObject`_的关系"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Object</code> 和 <code>SerializedObject</code> 的关系</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>分析</strong>：<code>UnityEngine.Object</code> 和 <code>SerializedObject</code> 的关系</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结：
+<ul>
+<li data-line="1" dir="auto">在 <code>Unity</code> 编辑器中，<strong>所有的游戏对象（<code>UnityEngine.Object</code>）都会被转换为 <code>SerializedObject</code> 并进行处理</strong>；</li>
+<li data-line="2" dir="auto">当我们在 <code>Inspector</code> 中编辑组件的值时，不是在编辑 <code>Component</code> 组件的实例、或者其中某个字段的实例，而是在编辑其序列化对象，即 <code>SerializedObject</code> 的实例；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="4" dir="auto">将 <code>UnityEngine.Object</code> 保存为资源时，会将其另存为二进制或 <code>YAML</code> 文本数据，而 <code>SerializedObject</code> 负责这些序列化;</li>
+<li data-line="5" dir="auto">要将 <code>UnityEngine.Object</code> 保存为资源，必须将其先转为 <code>SerializedObject</code>，然后转换后的 <code>SerializedObject</code> 会创建两个文件：一个资源文件和一个 <code>.meta</code> 文件；</li>
+<li data-line="6" dir="auto">资源文件是真实对象的序列化版本，而 <code>.meta</code> 文件保存导入的相关设置等；</li>
+<li data-line="7" dir="auto">而什么是导入的相关设置？假设当前序列化了一个 <code>Texture2D</code> 的对象，当转换为 <code>SerializedObject</code> 时，<code>Texture2D</code> 对象也带有很多导入相关的设置。将 <code>Texture2D</code> 保存为资源时，是无法将这些设置写入纹理文件的，因此只能将其写入 <code>.meta</code> 文件，也就是元数据；</li>
+<li data-line="8" dir="auto">同样，导入资源时，会从资源和 <code>.meta</code> 文件（如果没有 <code>.meta</code> 文件，默认情况下会自动生成）生成 <code>SerializedObject</code>，并将其转换为 <code>UnityEngine.Object</code>； </li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：为什么要使用 <code>SerializedObject</code>
+<ul>
+<li data-line="10" dir="auto">在 <code>Unity</code> 编辑器中或者在编辑器扩展中，所有对象的操作应该尽可能用 <code>SerializedObject</code>，这是因为 <code>SerializedObject</code> 不仅能处理序列化的数据，而且还能处理 <strong><code>Undo</code></strong> 和 <strong><code>Selection</code></strong> 的操作；</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="11" dir="auto"><code>Undo</code>：</li>
+</ol>
+<ul>
+<li data-line="12" dir="auto">当使用 <code>SerializedObject</code> 编辑值时，撤消过程可以自动注册。如果直接编辑 <code>UnityEngine.Object</code> 实例，则必须自己实现撤消过程；</li>
+</ul>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="13" dir="auto"><code>Selection</code>：</li>
+</ol>
+<ul>
+<li data-line="14" dir="auto">当我们在项目窗口中选择资源时，它会立即对其进行反序列化以获取 <code>UnityEngine.Object</code> 的实例，并在 <code>Inspector</code> 中显示它的值。这样处理的主要用处是可以允许我们在选择多个对象的时候同时进行编辑；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`FindProperty` 方法" dir="auto" class="heading" id="`FindProperty`_方法"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>FindProperty</code> 方法</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>FindProperty</code> 方法</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>FindProperty</code> 方法
+<ul>
+<li data-line="1" dir="auto">使用 <code>FindProperty</code> 方法获得序列化对象的属性之后，通过 <code>vector3Value</code>、<code>intValue</code>、<code>floatValue</code> 等来对其属性值进行设置；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>特点：
+<ul>
+<li data-line="3" dir="auto"><span alt="Pasted image 20250803192043.png" src="Pasted image 20250803192043.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250803192043.png" src="lib/media/pasted-image-20250803192043.png"></span></li>
+</ul>
+</li>
+<li data-line="4" dir="auto">代码：用 <code>SerializedObject</code> 重置选中游戏对象位置 </li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">using UnityEditor;
+using UnityEngine;
+using System.Linq;
+
+static class GameObjectPositionResetter
+{
+    [MenuItem("Edit/Reset Selected Objects Position")]
+    static void ResetPosition()
+    {
+        // 1. 获取UnityEngine.Object对象实例
+        // 获取所有选中对象的Transform组件
+        var transforms = Selection.gameObjects.Select(go =&gt; go.transform).ToArray();
+        
+        // 2. 创建 SerializedObject 实例
+        var serializedObject = new SerializedObject(transforms);
+        
+        // 3. 调用 SerializedObject 的成员被方法，获取要更改的属性
+        // 查找并修改localPosition属性
+        // 注意：可以Shift+右键点击Inspector中的属性名查看其路径
+        var positionProperty = serializedObject.FindProperty("m_LocalPosition");
+        
+        // 4. 更改属性的值
+        positionProperty.vector3Value = Vector3.zero;
+        
+        // 5. 应用修改
+        serializedObject.ApplyModifiedProperties();
+    }
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">代码：在一个 <code>SerializedObject</code> 中处理多个 <code>UnityEngine.Objects</code></li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">Rigidbody[] rigidbodies = /* 获取组件 */;
+
+var serializedObject = new SerializedObject(rigidbodies);
+
+serializedObject.FindProperty("m_UseGravity").boolValue = true;
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="迭代器处理序列化对象" dir="auto" class="heading" id="迭代器处理序列化对象"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>迭代器处理序列化对象</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：迭代器处理序列化对象</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>GetIterator()</code> 迭代器
+<ul>
+<li data-line="1" dir="auto"><code>GetIterator()</code> 是 <code>SerializedObject</code> 类的方法，返回一个 <code>SerializedProperty</code> 对象，该对象指向序列化对象的第一个属性；</li>
+<li data-line="2" dir="auto">这个初始的 <code>SerializedProperty</code> 实际上位于"根"位置（<code>depth</code> 为 <code>-1</code>），并不直接对应任何可见属性。相比直接使用 <code>FindProperty</code> 查找特定属性，<code>GetIterator</code> 更适合需要遍历未知属性结构的场景； </li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>NextVisible(bool enterChildren)</code> 方法
+<ul>
+<li data-line="4" dir="auto"><code>NextVisible(bool enterChildren)</code> 是 <code>SerializedProperty</code> 的方法，将迭代器移动到下一个可见属性；</li>
+<li data-line="5" dir="auto">参数 <code>enterChildren</code> 为 <code>true</code> 时，会进入复合类型（如结构体、数组等）的子属性； </li>
+<li data-line="6" dir="auto">返回 <code>false</code> 时表示没有更多属性可供遍历，循环终止；</li>
+<li data-line="7" dir="auto">对于数组元素，<code>NextVisible(true)</code> 会逐个访问数组元素及其子属性；</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意：
+<ul>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="9" dir="auto"><code>NextVisible</code> 方法与 <code>Next()</code> 方法不同，<code>NextVisible()</code> 会<strong>跳过 <code>Unity</code> 内部隐藏</strong>的属性；</li>
+</ol>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="10" dir="auto"><code>enterChildren</code> 参数​仅在需要时设置为 <code>true</code>，避免不必要的深度遍历；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结：
+<ul>
+<li data-line="12" dir="auto"><span alt="Pasted image 20250811163711.png" src="Pasted image 20250811163711.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250811163711.png" src="lib/media/pasted-image-20250811163711.png"></span></li>
+</ul>
+</li>
+<li data-line="13" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">SerializedProperty prop = serializedObject.GetIterator();
+while (prop.NextVisible(true))
+{
+	// 将读取得到的对象逐个以字段的形式显示出来
+    EditorGUILayout.PropertyField(prop);
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>分析</strong>：迭代器处理数组与列表</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：数组、列表属性识别
+<ul>
+<li data-line="1" dir="auto">在遍历过程中，可以通过以下属性识别数组/列表类型：</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="2" dir="auto"><code>isArray</code>：判断是否为数组类型；</li>
+</ol>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="3" dir="auto"><code>arraySize</code>：获取数组元素数量；</li>
+</ol>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="4" dir="auto"><code>propertyType</code>：检查是否为 <code>SerializedPropertyType.ArraySize</code>；</li>
+</ol>
+</li>
+<li data-line="5" dir="auto"><span alt="Pasted image 20250811164405.png" src="Pasted image 20250811164405.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250811164405.png" src="lib/media/pasted-image-20250811164405.png"></span></li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：数组元素访问
+<ul>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>方法一：使用 <code>for</code> 循环访问
+<ul>
+<li data-line="8" dir="auto"><span alt="Pasted image 20250811164437.png" src="Pasted image 20250811164437.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250811164437.png" src="lib/media/pasted-image-20250811164437.png"></span></li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>方法二：使用 <code>Next</code> 遍历数组元素
+<ul>
+<li data-line="10" dir="auto"><span alt="Pasted image 20250811165137.png" src="Pasted image 20250811165137.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250811165137.png" src="lib/media/pasted-image-20250811165137.png"></span></li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>方法三：直接访问指定的下标
+<ul>
+<li data-line="12" dir="auto"><code>serializedObject.FindProperty("数组变量").GetArrayElementAtIndex(1);</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`PrefabUtility` 类" dir="auto" class="heading" id="`PrefabUtility`_类"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>PrefabUtility</code> 类</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>PrefabUtility</code> 类</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>PrefabUtility</code> 是 <code>Unity</code> 编辑器 <code>API</code> 中处理预制体 (<code>Prefab</code>) 的核心类，它为开发者提供了创建、修改、实例化和管理预制体的强大功能集；</li>
+<li data-line="2" dir="auto">预制体文件并不直接包含资源内容，而是通过 <code>GUID</code> (全局唯一标识符) ​和本地 <code>ID</code> 建立与外部资源 (如纹理、材质、网格等) 的引用关系。这种设计使得预制体能够灵活适应资源位置的变化，同时保持轻量级；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>PrefabUtility</code> 的实现
+<ul>
+<li data-line="4" dir="auto"><code>PrefabUtility</code> 类作为 <code>Unity</code> 编辑器 <code>API</code> 的一部分，​<strong>桥接</strong>了编辑器用户界面与预制体的底层数据管理系统。它直接操作预制体资源文件 (<code>.prefab</code>) 和场景中的预制体实例，维护着复杂的引用关系网络；</li>
+<li data-line="5" dir="auto">每个预制体资源都有唯一的 <code>GUID</code>，存储在 <code>.meta</code> 文件中，用于唯一标识资源而不依赖路径。除了会有 <code>GUID</code> 外，还会有运行时生成的实例 <code>ID</code>，其作为运行时生成的临时标识符，用于高效管理预制体实例；</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>当生成一个预制体时，<code>Unity</code> 会：
+<ul>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="7" dir="auto">加载预制体资源并解析其结构；</li>
+</ol>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="8" dir="auto">为每个对象和组件生成运行时实例的实例 <code>ID</code>；</li>
+</ol>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="9" dir="auto">应用所有属性值；</li>
+</ol>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="10" dir="auto">建立与原始预制体的连接关系；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>而 <code>PrefabUtility</code> 维护着一个<strong>变更追踪系统</strong>，当原始预制体被修改时，它会：
+<ul>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="12" dir="auto">检测所有受影响的实例；</li>
+</ol>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="13" dir="auto">识别哪些修改可以安全传播 (未被实例覆盖的属性)；</li>
+</ol>
+</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="14" dir="auto">自动更新符合条件的实例；</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>方法：
+<ul>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="16" dir="auto">预制体的创建于保存 - 非连接版本</li>
+</ol>
+<ul>
+<li data-line="17" dir="auto">将场景中的 <code>GameObject</code> 保存为预制体资源，如果路径已存在则覆盖；</li>
+<li data-line="18" dir="auto"><span alt="Pasted image 20250803194042.png" src="Pasted image 20250803194042.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250803194042.png" src="lib/media/pasted-image-20250803194042.png"></span></li>
+</ul>
+</li>
+<li data-line="19" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="19" dir="auto">预制体的创建于保存 - 连接版本</li>
+</ol>
+<ul>
+<li data-line="20" dir="auto">保存预制体并保持与场景实例的连接，支持撤销操作；</li>
+<li data-line="21" dir="auto"><span alt="Pasted image 20250803194149.png" src="Pasted image 20250803194149.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250803194149.png" src="lib/media/pasted-image-20250803194149.png"></span></li>
+</ul>
+</li>
+<li data-line="22" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="22" dir="auto">预制体加载与编辑：</li>
+</ol>
+<ul>
+<li data-line="23" dir="auto"><code>GameObject prefabContents = PrefabUtility.LoadPrefabContents("Assets/Prefabs/MyPrefab.prefab");</code></li>
+<li data-line="24" dir="auto">将预制体加载到内存中进行编辑，返回可修改的 <code>GameObject</code>；</li>
+<li data-line="25" dir="auto">注意必须与 <code>UnloadPrefabContents</code> 配对使用以避免内存泄漏； </li>
+</ul>
+</li>
+<li data-line="26" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="26" dir="auto">预制体卸载：</li>
+</ol>
+<ul>
+<li data-line="27" dir="auto"><code>PrefabUtility.UnloadPrefabContents(prefabContents);</code></li>
+<li data-line="28" dir="auto">释放由 <code>LoadPrefabContents</code> 加载的预制体内存；</li>
+</ul>
+</li>
+<li data-line="29" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="5">
+<li data-line="29" dir="auto">预制体的实例化：</li>
+</ol>
+<ul>
+<li data-line="30" dir="auto"><code>GameObject instance = PrefabUtility.InstantiatePrefab(prefabAsset) as GameObject;</code></li>
+<li data-line="31" dir="auto">实例化预制体资源，其相比于 <code>Object.Instantiate</code>，可以正确的处理预制体连接关系，- 支持后续的预制体更新传播；</li>
+</ul>
+</li>
+<li data-line="32" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="6">
+<li data-line="32" dir="auto">预制体的修改：</li>
+</ol>
+<ul>
+<li data-line="33" dir="auto">将实例上的修改应用回原始预制体；</li>
+<li data-line="34" dir="auto"><span alt="Pasted image 20250803194406.png" src="Pasted image 20250803194406.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250803194406.png" src="lib/media/pasted-image-20250803194406.png"></span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div><div class="mod-footer mod-ui"></div></div></div></div></div></div><div class="sidebar-right sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"></div><script defer="">let rs = document.querySelector(".sidebar-right"); rs.classList.add("is-collapsed"); if (window.innerWidth > 768) rs.classList.remove("is-collapsed"); rs.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-right-width"));</script></div></div></body></html>

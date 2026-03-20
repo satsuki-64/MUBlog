@@ -1,0 +1,1284 @@
+<!DOCTYPE html> <html><head>
+		<title>Lecture 2：CG 语法</title>
+		<base href="..\..\../">
+		<meta id="root-path" root-path="..\..\../">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
+		<meta charset="UTF-8">
+		<meta name="description" content="MUBlog - Lecture 2：CG 语法">
+		<meta property="og:title" content="Lecture 2：CG 语法">
+		<meta property="og:description" content="MUBlog - Lecture 2：CG 语法">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="03_游戏开发技术/03_游戏渲染技术/01_shader-基础/lecture-2：cg-语法.html">
+		<meta property="og:image" content="lib\media\pasted-image-20250714233315.png">
+		<meta property="og:site_name" content="MUBlog">
+		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="lib/rss.xml"><script async="" id="webpage-script" src="lib/scripts/webpage.js" onload="this.onload=null;this.setAttribute(&quot;loaded&quot;, &quot;true&quot;)"></script><link rel="icon" href="lib/media/favicon.png"><style>body{--line-width:40em;--line-width-adaptive:40em;--file-line-width:40em;--sidebar-width:min(20em, 80vw);--collapse-arrow-size:11px;--tree-horizontal-spacing:0.6em;--tree-vertical-spacing:0.6em;--sidebar-margin:12px}.sidebar{height:100%;min-width:calc(var(--sidebar-width) + var(--divider-width-hover));max-width:calc(var(--sidebar-width) + var(--divider-width-hover));font-size:14px;z-index:10;position:relative;overflow:hidden;transition:min-width ease-in-out,max-width ease-in-out;transition-duration:.2s;contain:size}.sidebar-left{left:0}.sidebar-right{right:0}.sidebar.is-collapsed{min-width:0;max-width:0}body.floating-sidebars .sidebar{position:absolute}.sidebar-content{height:100%;min-width:calc(var(--sidebar-width) - var(--divider-width-hover));top:0;padding:var(--sidebar-margin);padding-top:4em;line-height:var(--line-height-tight);background-color:var(--background-secondary);transition:background-color,border-right,border-left,box-shadow;transition-duration:var(--color-fade-speed);transition-timing-function:ease-in-out;position:absolute;display:flex;flex-direction:column}.sidebar:not(.is-collapsed) .sidebar-content{min-width:calc(max(100%,var(--sidebar-width)) - 3px);max-width:calc(max(100%,var(--sidebar-width)) - 3px)}.sidebar-left .sidebar-content{left:0;border-top-right-radius:var(--radius-l);border-bottom-right-radius:var(--radius-l)}.sidebar-right .sidebar-content{right:0;border-top-left-radius:var(--radius-l);border-bottom-left-radius:var(--radius-l)}.sidebar:has(.sidebar-content:empty):has(.topbar-content:empty){display:none}.sidebar-topbar{height:2em;width:var(--sidebar-width);top:var(--sidebar-margin);padding-inline:var(--sidebar-margin);z-index:1;position:fixed;display:flex;align-items:center;transition:width ease-in-out;transition-duration:inherit}.sidebar.is-collapsed .sidebar-topbar{width:calc(2.3em + var(--sidebar-margin) * 2)}.sidebar .sidebar-topbar.is-collapsed{width:0}.sidebar-left .sidebar-topbar{left:0}.sidebar-right .sidebar-topbar{right:0}.topbar-content{overflow:hidden;overflow:clip;width:100%;height:100%;display:flex;align-items:center;transition:inherit}.sidebar.is-collapsed .topbar-content{width:0;transition:inherit}.clickable-icon.sidebar-collapse-icon{background-color:transparent;color:var(--icon-color-focused);padding:0!important;margin:0!important;height:100%!important;width:2.3em!important;margin-inline:0.14em!important;position:absolute}.sidebar-left .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);right:var(--sidebar-margin)}.sidebar-right .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);left:var(--sidebar-margin)}.clickable-icon.sidebar-collapse-icon svg.svg-icon{width:100%;height:100%}.sidebar-section-header{margin:0 0 1em 0;text-transform:uppercase;letter-spacing:.06em;font-weight:600}body{transition:background-color var(--color-fade-speed) ease-in-out}.webpage-container{display:flex;flex-direction:row;height:100%;width:100%;align-items:stretch;justify-content:center}.document-container{opacity:1;flex-basis:100%;max-width:100%;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;transition:opacity .2s ease-in-out;contain:inline-size}.hide{opacity:0;transition:opacity .2s ease-in-out}.document-container>.markdown-preview-view{margin:var(--sidebar-margin);margin-bottom:0;width:100%;width:-webkit-fill-available;width:-moz-available;width:fill-available;background-color:var(--background-primary);transition:background-color var(--color-fade-speed) ease-in-out;border-top-right-radius:var(--window-radius,var(--radius-m));border-top-left-radius:var(--window-radius,var(--radius-m));overflow-x:hidden!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;contain:inline-size}.document-container>.markdown-preview-view>.markdown-preview-sizer{padding-bottom:80vh!important;width:100%!important;max-width:var(--line-width)!important;flex-basis:var(--line-width)!important;transition:background-color var(--color-fade-speed) ease-in-out;contain:inline-size}.markdown-rendered img:not([width]),.view-content img:not([width]){max-width:100%;outline:0}.document-container>.view-content.embed{display:flex;padding:1em;height:100%;width:100%;align-items:center;justify-content:center}.document-container>.view-content.embed>*{max-width:100%;max-height:100%;object-fit:contain}:has(> :is(.math,table)){overflow-x:auto!important}.document-container>.view-content{overflow-x:auto;contain:content;padding:0;margin:0;height:100%}.scroll-highlight{position:absolute;width:100%;height:100%;pointer-events:none;z-index:1000;background-color:hsla(var(--color-accent-hsl),.25);opacity:0;padding:1em;inset:50%;translate:-50% -50%;border-radius:var(--radius-s)}</style><script defer="">async function loadIncludes(){if("file:"!=location.protocol){let e=document.querySelectorAll("include");for(let t=0;t<e.length;t++){let o=e[t],l=o.getAttribute("src");try{const e=await fetch(l);if(!e.ok){console.log("Could not include file: "+l),o?.remove();continue}let t=await e.text(),n=document.createRange().createContextualFragment(t),i=Array.from(n.children);for(let e of i)e.classList.add("hide"),e.style.transition="opacity 0.5s ease-in-out",setTimeout((()=>{e.classList.remove("hide")}),10);o.before(n),o.remove(),console.log("Included file: "+l)}catch(e){o?.remove(),console.log("Could not include file: "+l,e);continue}}}else{if(document.querySelectorAll("include").length>0){var e=document.createElement("div");e.id="error",e.textContent="Web server exports must be hosted on an http / web server to be viewed correctly.",e.style.position="fixed",e.style.top="50%",e.style.left="50%",e.style.transform="translate(-50%, -50%)",e.style.fontSize="1.5em",e.style.fontWeight="bold",e.style.textAlign="center",document.body.appendChild(e),document.querySelector(".document-container")?.classList.remove("hide")}}}document.addEventListener("DOMContentLoaded",(()=>{loadIncludes()}));let isFileProtocol="file:"==location.protocol;function waitLoadScripts(e,t){let o=e.map((e=>document.getElementById(e+"-script"))),l=0;!function e(){let n=o[l];l++,n&&"true"!=n.getAttribute("loaded")||l<o.length&&e(),l<o.length?n.addEventListener("load",e):t()}()}</script><link rel="stylesheet" href="lib/styles/obsidian.css"><link rel="stylesheet" href="lib/styles/theme.css"><link rel="preload" href="lib/styles/global-variable-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/global-variable-styles.css"></noscript><link rel="preload" href="lib/styles/supported-plugins.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/supported-plugins.css"></noscript><link rel="preload" href="lib/styles/main-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/main-styles.css"></noscript><link rel="preload" href="lib/styles/snippets.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/snippets.css"></noscript></head><body class="publish css-settings-manager styled-scrollbars theme-light show-inline-title ctp-rosepine-light ctp-mocha ctp-accent-rosewater anuppuccin-accent-toggle anp-current-line-border anp-callout-color-toggle anp-codeblock-numbers anp-list-toggle anp-table-width anp-toggle-preview anp-color-transition-toggle anp-button-metadata-toggle anp-toggle-metadata anp-toggle-scrollbars anp-h1-red anp-h1-divider anp-h2-peach anp-h3-green anp-h4-teal anp-h5-lavender anp-h6-mauve anp-decoration-toggle anp-bold-maroon anp-italic-green anp-highlight-yellow anp-colorful-frame-icon-toggle-dark anp-simple-rainbow-color-toggle anp-rainbow-file-toggle anp-simple-rainbow-title-toggle anp-simple-rainbow-icon-folder-toggle anp-simple-rainbow-indentation-toggle anp-simple-rainbow-collapse-toggle anp-card-layout anp-card-shadows anp-card-layout-filebrowser anp-theme-ext-light anp-theme-ext-dark anp-theme-ext-amoled ctp-atom-light ctp-atom-dark table-type-three-line table-header-color-blue table-row-alt-background-option table-dark-mode"><script defer="">let theme=localStorage.getItem("theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");"dark"==theme?(document.body.classList.add("theme-dark"),document.body.classList.remove("theme-light")):(document.body.classList.add("theme-light"),document.body.classList.remove("theme-dark")),window.innerWidth<480?document.body.classList.add("is-phone"):window.innerWidth<768?document.body.classList.add("is-tablet"):window.innerWidth<1024?document.body.classList.add("is-small-screen"):document.body.classList.add("is-large-screen")</script><div class="webpage-container workspace"><div class="sidebar-left sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"><label class="theme-toggle-container" for="theme_toggle"><input class="theme-toggle-input" type="checkbox" id="theme_toggle"><div class="toggle-background"></div></label></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"><include src="lib/html/file-tree.html"></include></div><script defer="">let ls = document.querySelector(".sidebar-left"); ls.classList.add("is-collapsed"); if (window.innerWidth > 768) ls.classList.remove("is-collapsed"); ls.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-left-width"));</script></div><div class="document-container markdown-reading-view hide"><div class="markdown-preview-view markdown-rendered allow-fold-headings allow-fold-lists is-readable-line-width"><style id="MJX-CHTML-styles">mjx-c.mjx-c36::before{padding:.666em .5em .022em 0;content:"6"}mjx-c.mjx-c1D43E.TEX-I::before{padding:.683em .889em 0 0;content:"K"}mjx-c.mjx-c52::before{padding:.683em .736em .022em 0;content:"R"}mjx-c.mjx-c1D42B.TEX-B::before{padding:.45em .474em 0 0;content:"r"}mjx-c.mjx-c1D428.TEX-B::before{padding:.452em .575em .005em 0;content:"o"}mjx-c.mjx-c1D41D.TEX-B::before{padding:.694em .639em .006em 0;content:"d"}mjx-c.mjx-c3C::before{padding:.54em .778em .04em 0;content:"<"}mjx-c.mjx-c221E::before{padding:.442em 1em .011em 0;content:"∞"}mjx-c.mjx-c1D429.TEX-B::before{padding:.45em .639em .194em 0;content:"p"}mjx-c.mjx-cB1::before{padding:.666em .778em 0 0;content:"±"}mjx-c.mjx-c221A::before{padding:.8em .853em .2em 0;content:"√"}mjx-c.mjx-c47::before{padding:.705em .785em .022em 0;content:"G"}mjx-c.mjx-c66::before{padding:.705em .372em 0 0;content:"f"}mjx-c.mjx-c71::before{padding:.442em .528em .194em 0;content:"q"}mjx-c.mjx-c5E.TEX-B::before{padding:.694em .575em 0 0;content:"^"}mjx-c.mjx-c1D42D.TEX-B::before{padding:.635em .447em .005em 0;content:"t"}mjx-c.mjx-c1D40E.TEX-B::before{padding:.696em .864em .01em 0;content:"O"}mjx-c.mjx-c1D403.TEX-B::before{padding:.686em .882em 0 0;content:"D"}mjx-c.mjx-c1D40F.TEX-B::before{padding:.686em .786em 0 0;content:"P"}mjx-c.mjx-c2219::before{padding:.444em .5em 0 0;content:"∙"}mjx-c.mjx-c1D404.TEX-B::before{padding:.68em .756em 0 0;content:"E"}mjx-c.mjx-c20D7.TEX-VB::before{padding:.723em .575em 0 0;content:"→"}mjx-c.mjx-c7B::before{padding:.75em .5em .25em 0;content:"{"}mjx-c.mjx-c7D::before{padding:.75em .5em .25em 0;content:"}"}mjx-c.mjx-c26::before{padding:.716em .778em .022em 0;content:"&"}mjx-c.mjx-c2261::before{padding:.464em .778em 0 0;content:"≡"}mjx-c.mjx-c3A6::before{padding:.683em .722em 0 0;content:"Φ"}mjx-c.mjx-c57::before{padding:.683em 1.028em .022em 0;content:"W"}mjx-c.mjx-c2035.TEX-A::before{padding:.56em .275em 0 0;content:"‵"}mjx-c.mjx-c1D446.TEX-I::before{padding:.705em .645em .022em 0;content:"S"}mjx-c.mjx-c1D719.TEX-I::before{padding:.694em .596em .205em 0;content:"ϕ"}mjx-c.mjx-c7C::before{padding:.75em .278em .249em 0;content:"|"}.mjx-stretched mjx-c.mjx-c2013::before{content:"–"}mjx-stretchy-h.mjx-c2013 mjx-ext mjx-c::before{content:"–";padding:.285em 0 0}mjx-c.mjx-c1D52E.TEX-FR::before{padding:.479em .489em .219em 0;content:"q"}mjx-c.mjx-c1D52D.TEX-FR::before{padding:.541em .5em .212em 0;content:"p"}mjx-c.mjx-c1D43A.TEX-I::before{padding:.705em .786em .022em 0;content:"G"}mjx-c.mjx-c1D439.TEX-I::before{padding:.68em .749em 0 0;content:"F"}mjx-c.mjx-c3A9::before{padding:.704em .722em 0 0;content:"Ω"}mjx-c.mjx-c2248::before{padding:.483em .778em 0 0;content:"≈"}mjx-c.mjx-c222B.TEX-S1::before{padding:.805em .61em .306em 0;content:"∫"}mjx-c.mjx-c200B::before{padding:0;content:""}mjx-c.mjx-c1D44A.TEX-I::before{padding:.683em 1.048em .022em 0;content:"W"}mjx-c.mjx-c1D443.TEX-I::before{padding:.683em .751em 0 0;content:"P"}mjx-c.mjx-c1D45E.TEX-I::before{padding:.442em .46em .194em 0;content:"q"}mjx-c.mjx-c2208::before{padding:.54em .667em .04em 0;content:"∈"}mjx-c.mjx-c4E.TEX-C::before{padding:.789em .979em .05em 0;content:"N"}mjx-c.mjx-c1D712.TEX-I::before{padding:.442em .626em .204em 0;content:"χ"}mjx-c.mjx-c53::before{padding:.705em .556em .022em 0;content:"S"}mjx-c.mjx-c4D::before{padding:.683em .917em 0 0;content:"M"}mjx-c.mjx-c1D44B.TEX-I::before{padding:.683em .852em 0 0;content:"X"}mjx-c.mjx-c56::before{padding:.683em .75em .022em 0;content:"V"}mjx-c.mjx-c45::before{padding:.68em .681em 0 0;content:"E"}mjx-c.mjx-c2264::before{padding:.636em .778em .138em 0;content:"≤"}mjx-c.mjx-c1D70E.TEX-I::before{padding:.431em .571em .011em 0;content:"σ"}mjx-c.mjx-c1D707.TEX-I::before{padding:.442em .603em .216em 0;content:"μ"}mjx-c.mjx-c1D708.TEX-I::before{padding:.442em .53em 0 0;content:"ν"}mjx-c.mjx-c46::before{padding:.68em .653em 0 0;content:"F"}mjx-c.mjx-c7B.TEX-S3::before{padding:1.45em .75em .949em 0;content:"{"}mjx-c.mjx-c7D.TEX-S3::before{padding:1.45em .75em .949em 0;content:"}"}mjx-c.mjx-c1D438.TEX-I::before{padding:.68em .764em 0 0;content:"E"}mjx-c.mjx-c222B.TEX-S2::before{padding:1.36em .944em .862em 0;content:"∫"}mjx-c.mjx-c1D43B.TEX-I::before{padding:.683em .888em 0 0;content:"H"}mjx-c.mjx-c1D70C.TEX-I::before{padding:.442em .517em .216em 0;content:"ρ"}mjx-c.mjx-c1D702.TEX-I::before{padding:.442em .497em .216em 0;content:"η"}mjx-c.mjx-c221A.TEX-S2::before{padding:1.15em 1.02em .65em 0;content:"√"}mjx-c.mjx-c3E::before{padding:.54em .778em .04em 0;content:">"}mjx-munderover{display:inline-block;text-align:left}mjx-munderover:not([limits=false]){padding-top:.1em}mjx-munderover:not([limits=false])>*{display:block}mjx-c.mjx-c221A.TEX-S1::before{padding:.85em 1.02em .35em 0;content:"√"}mjx-c.mjx-c3A::before{padding:.43em .278em 0 0;content:":"}mjx-c.mjx-c211D.TEX-A::before{padding:.683em .722em 0 0;content:"R"}mjx-c.mjx-c3B::before{padding:.43em .278em .194em 0;content:";"}mjx-c.mjx-c21A6::before{padding:.511em 1em .011em 0;content:"↦"}mjx-c.mjx-c1D41B.TEX-B::before{padding:.694em .639em .006em 0;content:"b"}mjx-c.mjx-c2211.TEX-S2::before{padding:.95em 1.444em .45em 0;content:"∑"}mjx-c.mjx-c1D457.TEX-I::before{padding:.661em .412em .204em 0;content:"j"}mjx-c.mjx-c38::before{padding:.666em .5em .022em 0;content:"8"}mjx-c.mjx-c41::before{padding:.716em .75em 0 0;content:"A"}mjx-c.mjx-c43::before{padding:.705em .722em .021em 0;content:"C"}mjx-msqrt{display:inline-block;text-align:left}mjx-root{display:inline-block;white-space:nowrap}mjx-surd{display:inline-block;vertical-align:top}mjx-sqrt{display:inline-block;padding-top:.07em}mjx-sqrt>mjx-box{border-top:.07em solid}mjx-sqrt.mjx-tall>mjx-box{padding-left:.3em;margin-left:-.3em}mjx-c.mjx-c1D435.TEX-I::before{padding:.683em .759em 0 0;content:"B"}mjx-c.mjx-c1D436.TEX-I::before{padding:.705em .76em .022em 0;content:"C"}mjx-c.mjx-c28.TEX-S3::before{padding:1.45em .736em .949em 0;content:"("}mjx-c.mjx-c29.TEX-S3::before{padding:1.45em .736em .949em 0;content:")"}mjx-c.mjx-c42::before{padding:.683em .708em 0 0;content:"B"}mjx-c.mjx-c1D449.TEX-I::before{padding:.683em .769em .022em 0;content:"V"}mjx-c.mjx-c1D462.TEX-I::before{padding:.442em .572em .011em 0;content:"u"}mjx-c.mjx-c221A.TEX-S4::before{padding:1.75em 1.02em 1.25em 0;content:"√"}mjx-c.mjx-c22C6::before{padding:.486em .5em 0 0;content:"⋆"}mjx-c.mjx-c1D42E.TEX-B::before{padding:.45em .639em .006em 0;content:"u"}mjx-c.mjx-c2E::before{padding:.12em .278em 0 0;content:"."}mjx-c.mjx-c1D43C.TEX-I::before{padding:.683em .504em 0 0;content:"I"}mjx-c.mjx-c1D43F.TEX-I::before{padding:.683em .681em 0 0;content:"L"}mjx-c.mjx-c1D458.TEX-I::before{padding:.694em .521em .011em 0;content:"k"}mjx-c.mjx-c28.TEX-S1::before{padding:.85em .458em .349em 0;content:"("}mjx-c.mjx-c29.TEX-S1::before{padding:.85em .458em .349em 0;content:")"}mjx-c.mjx-c6D::before{padding:.442em .833em 0 0;content:"m"}mjx-c.mjx-c1D425.TEX-B::before{padding:.694em .319em 0 0;content:"l"}mjx-c.mjx-c1D421.TEX-B::before{padding:.694em .639em 0 0;content:"h"}mjx-c.mjx-c62::before{padding:.694em .556em .011em 0;content:"b"}mjx-c.mjx-c1D42F.TEX-B::before{padding:.444em .607em 0 0;content:"v"}mjx-c.mjx-c2225::before{padding:.75em .5em .25em 0;content:"∥"}mjx-c.mjx-c1D441.TEX-I::before{padding:.683em .888em 0 0;content:"N"}mjx-c.mjx-c2211.TEX-S1::before{padding:.75em 1.056em .25em 0;content:"∑"}mjx-stretchy-v.mjx-c7B mjx-beg mjx-c::before{content:"⎧";padding:.899em .889em .01em 0}mjx-stretchy-v.mjx-c7B mjx-ext mjx-c::before{content:"⎪";width:.889em}mjx-stretchy-v.mjx-c7B mjx-end mjx-c::before{content:"⎩";padding:.01em .889em .899em 0}mjx-stretchy-v.mjx-c7B mjx-mid mjx-c::before{content:"⎨";padding:1.16em .889em .66em 0}mjx-stretchy-v.mjx-c7B>mjx-mid{margin-top:-.91em;margin-bottom:-.91em}mjx-stretchy-v.mjx-c7B>mjx-end{margin-top:-.909em}mjx-stretchy-v.mjx-c7B>mjx-ext{height:50%;border-top-width:.879em;border-bottom-width:.879em}mjx-c.mjx-c2217::before{padding:.465em .5em 0 0;content:"∗"}mjx-c.mjx-c68::before{padding:.694em .556em 0 0;content:"h"}mjx-c.mjx-c1D70B.TEX-I::before{padding:.431em .57em .011em 0;content:"π"}mjx-c.mjx-c1D714.TEX-I::before{padding:.443em .622em .011em 0;content:"ω"}mjx-c.mjx-c37::before{padding:.676em .5em .022em 0;content:"7"}mjx-mtable{display:inline-block;text-align:center;vertical-align:.25em;position:relative;box-sizing:border-box;border-spacing:0px;border-collapse:collapse}mjx-mstyle[size="s"] mjx-mtable{vertical-align:.354em}mjx-labels{position:absolute;left:0;top:0}mjx-table{display:inline-block;vertical-align:-.5ex;box-sizing:border-box}mjx-table>mjx-itable{vertical-align:middle;text-align:left;box-sizing:border-box}mjx-labels>mjx-itable{position:absolute;top:0}mjx-mtable[justify=left]{text-align:left}mjx-mtable[justify=right]{text-align:right}mjx-mtable[justify=left][side=left]{padding-right:0!important}mjx-mtable[justify=left][side=right]{padding-left:0!important}mjx-mtable[justify=right][side=left]{padding-right:0!important}mjx-mtable[justify=right][side=right]{padding-left:0!important}mjx-mtable[align]{vertical-align:baseline}mjx-mtable[align=top]>mjx-table{vertical-align:top}mjx-mtable[align=bottom]>mjx-table{vertical-align:bottom}mjx-mtable[side=right] mjx-labels{min-width:100%}mjx-mtr{display:table-row;text-align:left}mjx-mtr[rowalign=top]>mjx-mtd{vertical-align:top}mjx-mtr[rowalign=center]>mjx-mtd{vertical-align:middle}mjx-mtr[rowalign=bottom]>mjx-mtd{vertical-align:bottom}mjx-mtr[rowalign=baseline]>mjx-mtd{vertical-align:baseline}mjx-mtr[rowalign=axis]>mjx-mtd{vertical-align:.25em}mjx-mtd{display:table-cell;text-align:center;padding:.215em .4em}mjx-mtd:first-child{padding-left:0}mjx-mtd:last-child{padding-right:0}mjx-mtable>*>mjx-itable>:first-child>mjx-mtd{padding-top:0}mjx-mtable>*>mjx-itable>:last-child>mjx-mtd{padding-bottom:0}mjx-tstrut{display:inline-block;height:1em;vertical-align:-.25em}mjx-labels[align=left]>mjx-mtr>mjx-mtd{text-align:left}mjx-labels[align=right]>mjx-mtr>mjx-mtd{text-align:right}mjx-mtd[extra]{padding:0}mjx-mtd[rowalign=top]{vertical-align:top}mjx-mtd[rowalign=center]{vertical-align:middle}mjx-mtd[rowalign=bottom]{vertical-align:bottom}mjx-mtd[rowalign=baseline]{vertical-align:baseline}mjx-mtd[rowalign=axis]{vertical-align:.25em}mjx-texatom{display:inline-block;text-align:left}mjx-mrow{display:inline-block;text-align:left}mjx-msub{display:inline-block;text-align:left}mjx-mspace{display:inline-block;text-align:left}mjx-mtext{display:inline-block;text-align:left}mjx-munder{display:inline-block;text-align:left}mjx-over{text-align:left}mjx-munder:not([limits=false]){display:inline-table}mjx-munder>mjx-row{text-align:left}mjx-under{padding-bottom:.1em}mjx-mover{display:inline-block;text-align:left}mjx-mover:not([limits=false]){padding-top:.1em}mjx-mover:not([limits=false])>*{display:block;text-align:left}mjx-msubsup{display:inline-block;text-align:left}mjx-script{display:inline-block;padding-right:.05em;padding-left:.033em}mjx-script>mjx-spacer{display:block}mjx-mfrac{display:inline-block;text-align:left}mjx-frac{display:inline-block;vertical-align:.17em;padding:0 .22em}mjx-frac[type="d"]{vertical-align:.04em}mjx-frac[delims]{padding:0 .1em}mjx-frac[atop]{padding:0 .12em}mjx-frac[atop][delims]{padding:0}mjx-dtable{display:inline-table;width:100%}mjx-dtable>*{font-size:2000%}mjx-dbox{display:block;font-size:5%}mjx-num{display:block;text-align:center}mjx-den{display:block;text-align:center}mjx-mfrac[bevelled]>mjx-num{display:inline-block}mjx-mfrac[bevelled]>mjx-den{display:inline-block}mjx-den[align=right],mjx-num[align=right]{text-align:right}mjx-den[align=left],mjx-num[align=left]{text-align:left}mjx-nstrut{display:inline-block;height:.054em;width:0;vertical-align:-.054em}mjx-nstrut[type="d"]{height:.217em;vertical-align:-.217em}mjx-dstrut{display:inline-block;height:.505em;width:0}mjx-dstrut[type="d"]{height:.726em}mjx-line{display:block;box-sizing:border-box;min-height:1px;height:.06em;border-top:.06em solid;margin:.06em -.1em;overflow:hidden}mjx-line[type="d"]{margin:.18em -.1em}mjx-stretchy-v.mjx-c28 mjx-beg mjx-c::before{content:"⎛";padding:1.154em .875em .655em 0}mjx-stretchy-v.mjx-c28 mjx-ext mjx-c::before{content:"⎜";width:.875em}mjx-stretchy-v.mjx-c28 mjx-end mjx-c::before{content:"⎝";padding:1.165em .875em .644em 0}mjx-stretchy-v.mjx-c28>mjx-end{margin-top:-1.809em}mjx-stretchy-v.mjx-c28>mjx-ext{border-top-width:1.779em;border-bottom-width:1.779em}mjx-stretchy-v.mjx-c29 mjx-beg mjx-c::before{content:"⎞";padding:1.154em .875em .655em 0}mjx-stretchy-v.mjx-c29 mjx-ext mjx-c::before{content:"⎟";width:.875em}mjx-stretchy-v.mjx-c29 mjx-end mjx-c::before{content:"⎠";padding:1.165em .875em .644em 0}mjx-stretchy-v.mjx-c29>mjx-end{margin-top:-1.809em}mjx-stretchy-v.mjx-c29>mjx-ext{border-top-width:1.779em;border-bottom-width:1.779em}mjx-stretchy-v.mjx-c5B mjx-beg mjx-c::before{content:"⎡";padding:1.154em .667em .645em 0}mjx-stretchy-v.mjx-c5B mjx-ext mjx-c::before{content:"⎢";width:.667em}mjx-stretchy-v.mjx-c5B mjx-end mjx-c::before{content:"⎣";padding:1.155em .667em .644em 0}mjx-stretchy-v.mjx-c5B>mjx-end{margin-top:-1.799em}mjx-stretchy-v.mjx-c5B>mjx-ext{border-top-width:1.769em;border-bottom-width:1.769em}mjx-stretchy-v.mjx-c5D mjx-beg mjx-c::before{content:"⎤";padding:1.154em .667em .645em 0}mjx-stretchy-v.mjx-c5D mjx-ext mjx-c::before{content:"⎥";width:.667em}mjx-stretchy-v.mjx-c5D mjx-end mjx-c::before{content:"⎦";padding:1.155em .667em .644em 0}mjx-stretchy-v.mjx-c5D>mjx-end{margin-top:-1.799em}mjx-stretchy-v.mjx-c5D>mjx-ext{border-top-width:1.769em;border-bottom-width:1.769em}mjx-stretchy-h.mjx-c23DF mjx-beg mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF mjx-ext mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF mjx-end mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF mjx-mid mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF>mjx-ext{width:50%}mjx-c.mjx-c1D466.TEX-I::before{padding:.442em .49em .205em 0;content:"y"}mjx-c.mjx-c5B.TEX-S3::before{padding:1.45em .528em .949em 0;content:"["}mjx-c.mjx-c5D.TEX-S3::before{padding:1.45em .528em .949em 0;content:"]"}mjx-c.mjx-c30::before{padding:.666em .5em .022em 0;content:"0"}mjx-c.mjx-c2212::before{padding:.583em .778em .082em 0;content:"−"}mjx-c.mjx-c1D411.TEX-B::before{padding:.686em .862em .011em 0;content:"R"}mjx-c.mjx-c1D703.TEX-I::before{padding:.705em .469em .01em 0;content:"θ"}mjx-c.mjx-c63::before{padding:.448em .444em .011em 0;content:"c"}mjx-c.mjx-c6F::before{padding:.448em .5em .01em 0;content:"o"}mjx-c.mjx-c73::before{padding:.448em .394em .011em 0;content:"s"}mjx-c.mjx-c2061::before{padding:0;content:""}mjx-c.mjx-c69::before{padding:.669em .278em 0 0;content:"i"}mjx-c.mjx-c6E::before{padding:.442em .556em 0 0;content:"n"}mjx-c.mjx-c1D451.TEX-I::before{padding:.694em .52em .01em 0;content:"d"}mjx-c.mjx-c1D437.TEX-I::before{padding:.683em .828em 0 0;content:"D"}mjx-c.mjx-c1D447.TEX-I::before{padding:.677em .704em 0 0;content:"T"}mjx-c.mjx-c1D464.TEX-I::before{padding:.443em .716em .011em 0;content:"w"}mjx-c.mjx-c22C5::before{padding:.31em .278em 0 0;content:"⋅"}mjx-c.mjx-c1D412.TEX-B::before{padding:.697em .639em .011em 0;content:"S"}mjx-c.mjx-c1D6FC.TEX-I::before{padding:.442em .64em .011em 0;content:"α"}mjx-c.mjx-c1D445.TEX-I::before{padding:.683em .759em .021em 0;content:"R"}mjx-c.mjx-c34::before{padding:.677em .5em 0 0;content:"4"}mjx-c.mjx-c35::before{padding:.666em .5em .022em 0;content:"5"}mjx-c.mjx-c2218::before{padding:.444em .5em 0 0;content:"∘"}mjx-c.mjx-c1D434.TEX-I::before{padding:.716em .75em 0 0;content:"A"}mjx-c.mjx-c2026::before{padding:.12em 1.172em 0 0;content:"…"}mjx-c.mjx-c1D431.TEX-B::before{padding:.444em .607em 0 0;content:"x"}mjx-c.mjx-c1D400.TEX-B::before{padding:.698em .869em 0 0;content:"A"}mjx-c.mjx-c22EF::before{padding:.31em 1.172em 0 0;content:"⋯"}mjx-c.mjx-c1D413.TEX-B::before{padding:.675em .8em 0 0;content:"T"}mjx-c.mjx-c28.TEX-B::before{padding:.75em .447em .249em 0;content:"("}mjx-c.mjx-c1D41C.TEX-B::before{padding:.453em .511em .006em 0;content:"c"}mjx-c.mjx-c29.TEX-B::before{padding:.75em .447em .249em 0;content:")"}mjx-c.mjx-c2212.TEX-B::before{padding:.281em .894em 0 0;content:"−"}mjx-c.mjx-c33::before{padding:.665em .5em .022em 0;content:"3"}mjx-c.mjx-c44::before{padding:.683em .764em 0 0;content:"D"}mjx-c.mjx-cA0::before{padding:0 .25em 0 0;content:" "}mjx-c.mjx-c70::before{padding:.442em .556em .194em 0;content:"p"}mjx-c.mjx-c74::before{padding:.615em .389em .01em 0;content:"t"}mjx-c.mjx-c78::before{padding:.431em .528em 0 0;content:"x"}mjx-c.mjx-c79::before{padding:.431em .528em .204em 0;content:"y"}mjx-c.mjx-c7A::before{padding:.431em .444em 0 0;content:"z"}mjx-c.mjx-c54::before{padding:.677em .722em 0 0;content:"T"}mjx-c.mjx-c76::before{padding:.431em .528em .011em 0;content:"v"}mjx-c.mjx-c65::before{padding:.448em .444em .011em 0;content:"e"}mjx-c.mjx-c72::before{padding:.442em .392em 0 0;content:"r"}mjx-c.mjx-c1D467.TEX-I::before{padding:.442em .465em .011em 0;content:"z"}mjx-c.mjx-c1D453.TEX-I::before{padding:.705em .55em .205em 0;content:"f"}mjx-c.mjx-c1D6FD.TEX-I::before{padding:.705em .566em .194em 0;content:"β"}mjx-c.mjx-c1D6FE.TEX-I::before{padding:.441em .543em .216em 0;content:"γ"}mjx-c.mjx-c1D427.TEX-B::before{padding:.45em .639em 0 0;content:"n"}mjx-c.mjx-c1D408.TEX-B::before{padding:.686em .436em 0 0;content:"I"}mjx-c.mjx-c1D40D.TEX-B::before{padding:.686em .9em 0 0;content:"N"}mjx-c.mjx-c50::before{padding:.683em .681em 0 0;content:"P"}mjx-c.mjx-c20D7.TEX-V::before{padding:.714em .5em 0 0;content:"→"}mjx-c.mjx-c4C::before{padding:.683em .625em 0 0;content:"L"}mjx-c.mjx-c6B::before{padding:.694em .528em 0 0;content:"k"}mjx-c.mjx-c2D::before{padding:.252em .333em 0 0;content:"-"}mjx-c.mjx-c61::before{padding:.448em .5em .011em 0;content:"a"}mjx-c.mjx-c20::before{padding:0 .25em 0 0;content:" "}mjx-c.mjx-c2F::before{padding:.75em .5em .25em 0;content:"/"}mjx-c.mjx-c67::before{padding:.453em .5em .206em 0;content:"g"}mjx-c.mjx-c64::before{padding:.694em .556em .011em 0;content:"d"}mjx-c.mjx-c5E::before{padding:.694em .5em 0 0;content:"^"}mjx-c.mjx-c1D448.TEX-I::before{padding:.683em .767em .022em 0;content:"U"}mjx-c.mjx-cD7::before{padding:.491em .778em 0 0;content:"×"}mjx-c.mjx-c5B::before{padding:.75em .278em .25em 0;content:"["}mjx-c.mjx-c5D::before{padding:.75em .278em .25em 0;content:"]"}mjx-c.mjx-c21D2::before{padding:.525em 1em .024em 0;content:"⇒"}mjx-c.mjx-c75::before{padding:.442em .556em .011em 0;content:"u"}mjx-c.mjx-c77::before{padding:.431em .722em .011em 0;content:"w"}mjx-c.mjx-c6C::before{padding:.694em .278em 0 0;content:"l"}mjx-c.mjx-c1D440.TEX-I::before{padding:.683em 1.051em 0 0;content:"M"}mjx-c.mjx-c1D465.TEX-I::before{padding:.442em .572em .011em 0;content:"x"}mjx-c.mjx-cD7::before{padding:.491em .778em 0 0;content:"×"}mjx-c.mjx-c32::before{padding:.666em .5em 0 0;content:"2"}mjx-c.mjx-c1D463.TEX-I::before{padding:.443em .485em .011em 0;content:"v"}mjx-c.mjx-c1D45D.TEX-I::before{padding:.442em .503em .194em 0;content:"p"}mjx-c.mjx-c2192::before{padding:.511em 1em .011em 0;content:"→"}mjx-c.mjx-c1D44E.TEX-I::before{padding:.441em .529em .01em 0;content:"a"}mjx-c.mjx-c1D44F.TEX-I::before{padding:.694em .429em .011em 0;content:"b"}mjx-c.mjx-c1D459.TEX-I::before{padding:.694em .298em .011em 0;content:"l"}mjx-c.mjx-c1D452.TEX-I::before{padding:.442em .466em .011em 0;content:"e"}mjx-mn{display:inline-block;text-align:left}mjx-c.mjx-c1D442.TEX-I::before{padding:.704em .763em .022em 0;content:"O"}mjx-c.mjx-c31::before{padding:.666em .5em 0 0;content:"1"}mjx-container[jax=CHTML]{line-height:0}mjx-container [space="1"]{margin-left:.111em}mjx-container [space="2"]{margin-left:.167em}mjx-container [space="3"]{margin-left:.222em}mjx-container [space="4"]{margin-left:.278em}mjx-container [space="5"]{margin-left:.333em}mjx-container [rspace="1"]{margin-right:.111em}mjx-container [rspace="2"]{margin-right:.167em}mjx-container [rspace="3"]{margin-right:.222em}mjx-container [rspace="4"]{margin-right:.278em}mjx-container [rspace="5"]{margin-right:.333em}mjx-container [size="s"]{font-size:70.7%}mjx-container [size=ss]{font-size:50%}mjx-container [size=Tn]{font-size:60%}mjx-container [size=sm]{font-size:85%}mjx-container [size=lg]{font-size:120%}mjx-container [size=Lg]{font-size:144%}mjx-container [size=LG]{font-size:173%}mjx-container [size=hg]{font-size:207%}mjx-container [size=HG]{font-size:249%}mjx-container [width=full]{width:100%}mjx-box{display:inline-block}mjx-block{display:block}mjx-itable{display:inline-table}mjx-row{display:table-row}mjx-row>*{display:table-cell}mjx-mtext{display:inline-block}mjx-mstyle{display:inline-block}mjx-merror{display:inline-block;color:red;background-color:#ff0}mjx-mphantom{visibility:hidden}mjx-assistive-mml{top:0;left:0;clip:rect(1px,1px,1px,1px);user-select:none;position:absolute!important;padding:1px 0 0!important;border:0!important;display:block!important;width:auto!important;overflow:hidden!important}mjx-assistive-mml[display=block]{width:100%!important}mjx-math{display:inline-block;text-align:left;line-height:0;text-indent:0;font-style:normal;font-weight:400;font-size:100%;font-size-adjust:none;letter-spacing:normal;border-collapse:collapse;overflow-wrap:normal;word-spacing:normal;white-space:nowrap;direction:ltr;padding:1px 0}mjx-container[jax=CHTML][display=true]{display:block;text-align:center;margin:1em 0}mjx-container[jax=CHTML][display=true][width=full]{display:flex}mjx-container[jax=CHTML][display=true] mjx-math{padding:0}mjx-container[jax=CHTML][justify=left]{text-align:left}mjx-container[jax=CHTML][justify=right]{text-align:right}mjx-mi{display:inline-block;text-align:left}mjx-c{display:inline-block}mjx-utext{display:inline-block;padding:.75em 0 .2em}mjx-mo{display:inline-block;text-align:left}mjx-stretchy-h{display:inline-table;width:100%}mjx-stretchy-h>*{display:table-cell;width:0}mjx-stretchy-h>*>mjx-c{display:inline-block;transform:scaleX(1)}mjx-stretchy-h>*>mjx-c::before{display:inline-block;width:initial}mjx-stretchy-h>mjx-ext{overflow:clip visible;width:100%}mjx-stretchy-h>mjx-ext>mjx-c::before{transform:scaleX(500)}mjx-stretchy-h>mjx-ext>mjx-c{width:0}mjx-stretchy-h>mjx-beg>mjx-c{margin-right:-.1em}mjx-stretchy-h>mjx-end>mjx-c{margin-left:-.1em}mjx-stretchy-v{display:inline-block}mjx-stretchy-v>*{display:block}mjx-stretchy-v>mjx-beg{height:0}mjx-stretchy-v>mjx-end>mjx-c{display:block}mjx-stretchy-v>*>mjx-c{transform:scaleY(1);transform-origin:left center;overflow:hidden}mjx-stretchy-v>mjx-ext{display:block;height:100%;box-sizing:border-box;border:0 solid transparent;overflow:visible clip}mjx-stretchy-v>mjx-ext>mjx-c::before{width:initial;box-sizing:border-box}mjx-stretchy-v>mjx-ext>mjx-c{transform:scaleY(500) translateY(.075em);overflow:visible}mjx-mark{display:inline-block;height:0}mjx-msup{display:inline-block;text-align:left}mjx-c::before{display:block;width:0}.MJX-TEX{font-family:MJXZERO,MJXTEX}.TEX-B{font-family:MJXZERO,MJXTEX-B}.TEX-I{font-family:MJXZERO,MJXTEX-I}.TEX-MI{font-family:MJXZERO,MJXTEX-MI}.TEX-BI{font-family:MJXZERO,MJXTEX-BI}.TEX-S1{font-family:MJXZERO,MJXTEX-S1}.TEX-S2{font-family:MJXZERO,MJXTEX-S2}.TEX-S3{font-family:MJXZERO,MJXTEX-S3}.TEX-S4{font-family:MJXZERO,MJXTEX-S4}.TEX-A{font-family:MJXZERO,MJXTEX-A}.TEX-C{font-family:MJXZERO,MJXTEX-C}.TEX-CB{font-family:MJXZERO,MJXTEX-CB}.TEX-FR{font-family:MJXZERO,MJXTEX-FR}.TEX-FRB{font-family:MJXZERO,MJXTEX-FRB}.TEX-SS{font-family:MJXZERO,MJXTEX-SS}.TEX-SSB{font-family:MJXZERO,MJXTEX-SSB}.TEX-SSI{font-family:MJXZERO,MJXTEX-SSI}.TEX-SC{font-family:MJXZERO,MJXTEX-SC}.TEX-T{font-family:MJXZERO,MJXTEX-T}.TEX-V{font-family:MJXZERO,MJXTEX-V}.TEX-VB{font-family:MJXZERO,MJXTEX-VB}mjx-stretchy-h mjx-c,mjx-stretchy-v mjx-c{font-family:MJXZERO,MJXTEX-S1,MJXTEX-S4,MJXTEX,MJXTEX-A!important}@font-face{font-family:MJXZERO;src:url("lib/fonts/mathjax_zero.woff") format("woff")}@font-face{font-family:MJXTEX;src:url("lib/fonts/mathjax_main-regular.woff") format("woff")}@font-face{font-family:MJXTEX-B;src:url("lib/fonts/mathjax_main-bold.woff") format("woff")}@font-face{font-family:MJXTEX-I;src:url("lib/fonts/mathjax_math-italic.woff") format("woff")}@font-face{font-family:MJXTEX-MI;src:url("lib/fonts/mathjax_main-italic.woff") format("woff")}@font-face{font-family:MJXTEX-BI;src:url("lib/fonts/mathjax_math-bolditalic.woff") format("woff")}@font-face{font-family:MJXTEX-S1;src:url("lib/fonts/mathjax_size1-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S2;src:url("lib/fonts/mathjax_size2-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S3;src:url("lib/fonts/mathjax_size3-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S4;src:url("lib/fonts/mathjax_size4-regular.woff") format("woff")}@font-face{font-family:MJXTEX-A;src:url("lib/fonts/mathjax_ams-regular.woff") format("woff")}@font-face{font-family:MJXTEX-C;src:url("lib/fonts/mathjax_calligraphic-regular.woff") format("woff")}@font-face{font-family:MJXTEX-CB;src:url("lib/fonts/mathjax_calligraphic-bold.woff") format("woff")}@font-face{font-family:MJXTEX-FR;src:url("lib/fonts/mathjax_fraktur-regular.woff") format("woff")}@font-face{font-family:MJXTEX-FRB;src:url("lib/fonts/mathjax_fraktur-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SS;src:url("lib/fonts/mathjax_sansserif-regular.woff") format("woff")}@font-face{font-family:MJXTEX-SSB;src:url("lib/fonts/mathjax_sansserif-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SSI;src:url("lib/fonts/mathjax_sansserif-italic.woff") format("woff")}@font-face{font-family:MJXTEX-SC;src:url("lib/fonts/mathjax_script-regular.woff") format("woff")}@font-face{font-family:MJXTEX-T;src:url("lib/fonts/mathjax_typewriter-regular.woff") format("woff")}@font-face{font-family:MJXTEX-V;src:url("lib/fonts/mathjax_vector-regular.woff") format("woff")}@font-face{font-family:MJXTEX-VB;src:url("lib/fonts/mathjax_vector-bold.woff") format("woff")}mjx-c.mjx-c1D45F.TEX-I::before{padding:.442em .451em .011em 0;content:"r"}mjx-c.mjx-c210E.TEX-I::before{padding:.694em .576em .011em 0;content:"h"}mjx-c.mjx-c1D460.TEX-I::before{padding:.442em .469em .01em 0;content:"s"}mjx-c.mjx-c28::before{padding:.75em .389em .25em 0;content:"("}mjx-c.mjx-c29::before{padding:.75em .389em .25em 0;content:")"}mjx-c.mjx-c3D::before{padding:.583em .778em .082em 0;content:"="}mjx-c.mjx-c1D45A.TEX-I::before{padding:.442em .878em .011em 0;content:"m"}mjx-c.mjx-c1D456.TEX-I::before{padding:.661em .345em .011em 0;content:"i"}mjx-c.mjx-c1D45B.TEX-I::before{padding:.442em .6em .011em 0;content:"n"}mjx-c.mjx-c1D454.TEX-I::before{padding:.442em .477em .205em 0;content:"g"}mjx-c.mjx-c2032::before{padding:.56em .275em 0 0;content:"′"}mjx-c.mjx-c2B::before{padding:.583em .778em .082em 0;content:"+"}mjx-c.mjx-c1D450.TEX-I::before{padding:.442em .433em .011em 0;content:"c"}mjx-c.mjx-c1D45C.TEX-I::before{padding:.441em .485em .011em 0;content:"o"}mjx-c.mjx-c1D461.TEX-I::before{padding:.626em .361em .011em 0;content:"t"}mjx-c.mjx-c2C::before{padding:.121em .278em .194em 0;content:","}</style><div class="markdown-preview-sizer markdown-preview-section"><h1 class="page-title heading inline-title" id="Lecture 2：CG 语法"><p dir="auto">Lecture 2：CG 语法</p></h1><div class="el-h2 heading-wrapper"><h2 data-heading="`CG` 语法基础知识" dir="auto" class="heading" id="`CG`_语法基础知识"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>CG</code> 语法基础知识</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="语句编写位置" dir="auto" class="heading" id="语句编写位置"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>语句编写位置</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>CG</code> 语句编写位置</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">对于 <code>顶点\片元着色器</code> 来说 <code>CG</code> 语句需要写在 <code>Pass</code> 渲染通道语句块中；</li>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>我们需要在 <code>Pass</code> 语句块中加入指令：
+<ul>
+<li data-line="2" dir="auto"><code>CGPROGRAM</code></li>
+<li data-line="3" dir="auto"><code>//...</code></li>
+<li data-line="4" dir="auto"><code>ENDCG</code></li>
+</ul>
+</li>
+<li data-line="5" dir="auto">在这两个指令之间，就是我们书写 <code>CG</code> 代码的地方；</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="编译指令" dir="auto" class="heading" id="编译指令"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>编译指令</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：重要的编译指令 - 指定着色器函数</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">在真正书写 <code>CG</code> 代码之前我们需要先使用 <code>#pragma</code> 声明编译指令； </li>
+<li data-line="2" dir="auto">下面这两个编译指令的作用，是将 <code>顶点\片元着色器</code> 实现定位到两个函数中，之后我们只需要在这两个函数中书写 <code>shader</code> 逻辑即可；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>语法：定义实现顶点/片元着色器代码的函数名称
+<ul>
+<li data-line="4" dir="auto"><code>#pragma vertex XXXName</code>：其中的名称为顶点着色器的函数名；</li>
+<li data-line="5" dir="auto"><code>#pragma fragment XXXName</code>：其中的名称为片元着色器的函数名；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto">举例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">SubShader
+{
+	Tags {"RenderType"="Opaque"}
+	LOD 100
+	
+	Pass
+	{
+		CGPROGRAM
+		#pragma vertex vert
+		#pragma fragment frag
+		
+		#include "UnityCG.cginc"
+		
+		struct appdata
+		{
+			// ...
+		}
+		
+		struct v2f
+		{
+			// ...
+		}
+		
+		v2f vert(appdata v)
+		{
+			v2f o;
+			return o;
+		}
+		
+		fixed frag()
+		{
+			fixed4 col;
+			return col;
+		}
+		ENDCG
+	}
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="变体" dir="auto" class="heading" id="变体"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>变体</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="什么是变体" dir="auto" class="heading" id="什么是变体"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>什么是变体</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：什么是变体</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>Shader</code> 的变体，就是其编译得到的各个 <code>Shader</code> 的集合，每一个 <code>Shader</code> 变体对应一个材质的实例；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>特点：
+<ul>
+<li data-line="3" dir="auto">可将多个功能与效果集成到一个 <code>Shader</code> 内，便于使用与管理；</li>
+<li data-line="4" dir="auto">比如：可以将很多一个功能都写到一个 <code>Shader</code> 当中，然后通过为 <code>Shader</code> 的不同变体、只是要其中的某几个功能，使得当前的 <code>Shader</code> 适用不同环境；</li>
+<li data-line="5" dir="auto">同时，如果变体数量过多，会导致加载时间过长与内存占用增加</li>
+<li data-line="6" dir="auto">在游戏一开始的时候，就会将 <code>Shader</code> 加载进来，因此如果单个 <code>Shader</code> 很大的话、可能在一开始加载时需要很久；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>Shader</code> 变体的类型
+<ul>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="8" dir="auto">无论如何都会被编译的变体；</li>
+</ol>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="9" dir="auto">通过材质的使用情况来决定是否编译的变体；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="11" dir="auto"><span alt="Pasted image 20250714233315.png" src="Pasted image 20250714233315.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250714233315.png" src="lib/media/pasted-image-20250714233315.png"></span></li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>#pragma multi_compile [选项1] [选项2]</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">生成多个 <code>Shader</code> 变体以支持不同功能组合（如雾效、阴影）；</li>
+<li data-line="2" dir="auto"><code>Unity</code> 会为<strong>所有可能的组合</strong>编译独立变体；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">#pragma multi_compile _ USE_FOG USE_SHADOWS
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>#pragma shader_feature [选项]</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">类似 <code>multi_compile</code>，但仅编译<strong>实际使用</strong>的变体，减少冗余代码，适用于材质面板可开关的功能；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">#pragma shader_feature _USE_SPECULAR
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="变体的声明与使用" dir="auto" class="heading" id="变体的声明与使用"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>变体的声明与使用</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：变体的声明与使用</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：变体的声明
+<ul>
+<li data-line="1" dir="auto"><code>#pragma multi_compile _ NAME</code>：变体名必须为全大写，可通过添加 <code>_</code> 来定义一个默认空的变体；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：当前 <code>Shader</code> 的变体数量
+<ul>
+<li data-line="3" dir="auto"><span alt="Pasted image 20250714234059.png" src="Pasted image 20250714234059.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250714234059.png" src="lib/media/pasted-image-20250714234059.png"></span></li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：空变体
+<ul>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="6" dir="auto">空变体 (<code>Empty Variant</code>)是 <code>Unity Shader</code> 变体系统中的一种特殊设计，通过在 <code>#pragma multi_compile</code> 或 <code>#pragma shader_feature</code> 指令中使用下划线 <code>_</code> 来表示；</li>
+<li data-line="7" dir="auto">空变体通过复用"无关键字"状态作为默认关闭状态，避免了为每个功能开关都定义两个独立关键字（如同时定义 <code>_DISSOLVEENABLED_OFF</code> 和 <code>_DISSOLVEENABLED_ON</code>），从而显著节省关键字资源； </li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>示例：
+<ul>
+<li data-line="9" dir="auto"><code>#pragma multi_compile _ _DISSOLVEENABLED_ON</code> 中的下划线 <code>_</code> 表示<strong>默认变体</strong>​（无关键字定义）</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>在材质 <code>Inspector</code> 面板中，<code>Toggle</code> 类型的属性，如 <code>[Toggle]_DISSOLVEENABLED("Disslove Enabled", int) = 0</code> 会自动映射到空变体机制：
+<ul>
+<li data-line="11" dir="auto">关闭状态（值为 0）：使用空变体 <code>_</code></li>
+<li data-line="12" dir="auto">开启状态（值为1）：使用带关键字的变体 <code>_DISSOLVEENABLED_ON</code>； </li>
+</ul>
+</li>
+<li data-line="13" dir="auto">因此 <code>_</code> 表示空变体，对应功能关闭状态；<code>_DISSOLVEENABLED_ON</code> 表示功能开启状态；</li>
+<li data-line="14" dir="auto">这种设计源于 <code>Unity</code> 对 <code>Shader</code> 关键字数量的严格限制（全局关键字上限 <code>256</code> 个），空变体机制允许开发者在不消耗额外关键字的情况下实现功能开关；  </li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：变体名与 <code>Material Property</code> 的 <code>Toggle</code> 属性联动
+<ul>
+<li data-line="16" dir="auto">当 <code>Shader</code> 的 <code>Properties</code> 中定义了 <code>[Toggle]_DissolveEnabled("DissolveEnabled",int) = 0</code> 时，<code>Unity</code> 会自动生成一个名为 <code>_DISSOLVEENABLED_ON</code> 的全局关键字（<code>Keyword</code>）；</li>
+<li data-line="17" dir="auto">若要在 <code>Shader</code> 代码中通过预处理器（如 <code>#ifdef</code>）响应此 <code>Toggle</code> 开关，必须使用<strong>完全相同的变量名</strong>​（区分大小写）并在末尾追加 <code>_ON</code>； </li>
+<li data-line="18" dir="auto"><code>Toggle</code> 属性值为 <code>1</code> 时，<code>Unity</code> 会启用 <code>_DISSOLVEENABLED_ON</code> 关键字；为 <code>0</code> 时则禁用。<code>multi_compile</code> 定义的变体会根据此关键字状态动态切换； </li>
+<li data-line="19" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Unity</code> 会根据 <code>Material</code> 当前启用的关键字选择对应的变体；
+<ul>
+<li data-line="20" dir="auto">若未启用 <code>_DISSOLVEENABLED_ON</code>，则使用默认变体（<code>_</code>）；</li>
+<li data-line="21" dir="auto">若启用，则切换到定义了 <code>_DISSOLVEENABLED_ON</code> 的变体； </li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="22" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">Shader "taecg/Character Unlit"
+{
+    Properties
+    {
+	    [Header(Base)]
+		[NoScaleOffset]_MainTex("MainTex",2D) = "white"{}
+		_Color("Color",Color) = {0,0,0,0}
+
+		[Space(10)]
+		[Header(DissolveTex)]
+		[Toggle]_DissolveEnabled("DissolveEnabled",int) = 0
+		_Clip("Clip",Range(0,1)) = 0
+		[NoScaleOffset]_DissolveTex("_DissolveTex",2D) = "white"{}
+		_RampTex("RampTex(RGB)",2D) = "white"{}
+    }
+    
+    SubShader
+    {        
+        Pass
+        {
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            
+            // 定义 Shader 变体，这里使用了空格，因此默认使用的是空变体
+            // 这里有一个规则，就是其变体如果想要被属性中的Toggle控制，这里必须名字一致，并再在最后加上一个ON
+            #pragma multi_compile _ _DISSOLVEENABLED_ON
+            
+            #include "UnityCG.cginc"
+            
+            sampler2D _MainTex;
+            sampler2D _DissolveTex; float _DissolveTex_ST;
+            sampler _RampTex;
+            
+            fixed4 _Color;
+            fixed4 _Clip;
+
+            struct appdata
+            {
+				float4 vertex : POSITION;
+				float4 uv : TEXCOORD0;
+            };
+
+            struct v2f
+            {
+				float4 pos : SV_POSITION;
+				float4 uv : TEXCOORD0;
+            };
+            
+            v2f vert(appdata v)
+            {
+				v2f o;
+				o.pos = UnityObjectToClipPos(v.vertex);
+				o.uv.xy = v.uv.xy;
+				o.uv.zw = v.uv * _DissolveTex_ST.xy + _DissolveTex_ST.zw;
+				return o;
+            }
+            
+            fixed4 frag (v2f i) : SV_Target
+            {
+	            fixed4 c;
+	            fixed4 tex = tex2D(_Tex,i.uv.xy);
+	            c = tex;
+	            c += _Color;
+	            
+	            // 用If来判断是否使用变体
+	            #if _DISSOLVEENABLED_ON
+			        fixed4 dis = tex2D(_DissolveTex,i.uv.zw)
+		            clip(dis.r-_Clip);
+			        fixed dissolveValue = saturate(dissolveTex.r - _Clip)/(_Clip + 0.1 - _Clip); 
+			        fixed4 rampTex = tex1D(_RampTex,dissolveValue);
+			        C += rampTex;
+		        #endif
+		        
+				return tex;
+            }
+            ENDCG
+        }
+    }
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="其他常见编译指令" dir="auto" class="heading" id="其他常见编译指令"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>其他常见编译指令</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：其他常见编译指令</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>#pragma multi_compile_fog</code>
+<ul>
+<li data-line="1" dir="auto">自动生成雾效的变体，包含线性/指数/指数平方三种衰减方式，配合 <code>UNITY_FOG_COORDS</code> 等宏实现雾效混合；</li>
+<li data-line="2" dir="auto">可以在 <code>Unity</code> 中的 <code>RenderSettings.fogMode</code> 中动态选择雾效计算方式；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：几何着色器 - <code>#pragma geometry [函数名]</code>
+<ul>
+<li data-line="4" dir="auto">启用几何着色器，用于动态生成或修改图元（如将点扩展为三角形）</li>
+<li data-line="5" dir="auto"><span alt="Pasted image 20250814215349.png" src="Pasted image 20250814215349.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250814215349.png" src="lib/media/pasted-image-20250814215349.png"></span></li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：曲面细分着色器 - <code>#pragma hull/ #pragma domain</code>
+<ul>
+<li data-line="7" dir="auto">启用曲面细分着色器，用于动态增加模型细节（如地形 <code>LOD</code>） </li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：限定特定渲染平台的编译 - <code>#pragma exclude_renderers/ #pragma only_renderers</code>
+<ul>
+<li data-line="9" dir="auto">限制 Shader 在特定渲染平台（如 D 3 D 11、GLES）的编译，优化包体大小；</li>
+<li data-line="10" dir="auto">比如：<code>#pragma only_renderers d3d11  // 仅DirectX 11平台</code></li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="数据类型" dir="auto" class="heading" id="数据类型"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>数据类型</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="基础数据类型" dir="auto" class="heading" id="基础数据类型"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>基础数据类型</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：基础数据类型</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：基础数据类型
+<ul>
+<li data-line="1" dir="auto"><span alt="Pasted image 20250708212359.png" src="Pasted image 20250708212359.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250708212359.png" src="lib/media/pasted-image-20250708212359.png"></span></li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意：
+<ul>
+<li data-line="3" dir="auto">其中的 <code>fixed</code> 类型在浮点类型中用的最多，其默认不需要加符号，另外两种需要添加符号； </li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：纹理采样器类型
+<ul>
+<li data-line="5" dir="auto"><span alt="Pasted image 20250708212429.png" src="Pasted image 20250708212429.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250708212429.png" src="lib/media/pasted-image-20250708212429.png"></span></li>
+<li data-line="6" dir="auto"><code>sampler</code>：通用的纹理采样器，可以用于处理各种不同维度和类型的纹理；</li>
+<li data-line="7" dir="auto"><code>sampler 1D</code>：用于一维纹理，通常用于对一维纹理进行采样，例如从左到右的渐变色；</li>
+<li data-line="8" dir="auto"><code>sampler 2D</code>：用于二维纹理，最常见的纹理类型之一。它用于处理二维图像纹理，例如贴图；</li>
+<li data-line="9" dir="auto"><code>sampler 3D</code>：用于三维纹理，通常用于体积纹理，例如体积渲染；</li>
+<li data-line="10" dir="auto"><code>samplerCUBE</code>：用于立方体纹理，通常用于处理环境映射等需要立方体贴图的情况；</li>
+<li data-line="11" dir="auto"><code>samplerRECT</code>：用于处理矩形纹理，通常用于一些非标准的纹理映射需求；</li>
+<li data-line="12" dir="auto">他们都是用于处理纹理 (<code>Texture</code>) 数据的数据类型，他们的主要区别是纹理的维度和类型；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="基础复合数据类型" dir="auto" class="heading" id="基础复合数据类型"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>基础复合数据类型</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：基础复合数据类型</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：一维数组
+<ul>
+<li data-line="1" dir="auto">和 <code>C#</code> 中类似；</li>
+<li data-line="2" dir="auto"><code>int a[4] = {12,3,4,5};</code></li>
+<li data-line="3" dir="auto">长度：<code>a.length</code></li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：二维数组
+<ul>
+<li data-line="5" dir="auto"><code>int b[2][3] = {{12,34,56}{1,2,3}}</code></li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：结构体
+<ul>
+<li data-line="7" dir="auto">和 <code>C#</code> 基本一样，但有以下区别；</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="8" dir="auto">其没有访问修饰符；</li>
+</ol>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="9" dir="auto">结构体声明结束时需要添加分号；</li>
+</ol>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="10" dir="auto">一般在函数体外声明；</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="向量类型" dir="auto" class="heading" id="向量类型"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>向量类型</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：向量类型</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">向量类型属于 <code>CG</code> 语言的内置数据类型，内置的向量类型是基于基础数据类型声明的；</li>
+<li data-line="2" dir="auto">向量的最大维度不超过 <code>4</code> 维，数据类型可以是任意数值类型；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>语法：
+<ul>
+<li data-line="4" dir="auto">二维：<code>数据类型2 = 数据类型2(n1,n2)</code></li>
+<li data-line="5" dir="auto">三维：<code>数据类型3 = 数据类型3(n1,n2,n3)</code></li>
+<li data-line="6" dir="auto">四维：<code>数据类型4 = 数据类型4(n1,n2,n3,n4)</code></li>
+</ul>
+</li>
+<li data-line="7" dir="auto">举例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">fixed2 f2 = fixed2(3.4,6.1);
+fixed3 f2 = fixed3(120.23,213.2,124.56);
+int4 i4 = int4(1,2,3,4);
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="矩阵类型" dir="auto" class="heading" id="矩阵类型"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>矩阵类型</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：矩阵类型</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">矩阵类型属于 <code>CG</code> 语言的内置数据类型，矩阵的最大行列不大于 <code>4</code>，不小于 <code>1</code>；</li>
+<li data-line="2" dir="auto">数据类型可以是任意数值类型；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>语法：
+<ul>
+<li data-line="4" dir="auto">类似于向量类型；</li>
+<li data-line="5" dir="auto"><code>数据类型2*2</code></li>
+<li data-line="6" dir="auto"><code>数据类型3*3</code></li>
+<li data-line="7" dir="auto"><code>数据类型4*4</code></li>
+</ul>
+</li>
+<li data-line="8" dir="auto">举例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 注意：需要自己认为的将不同的行分清楚，因为不同行之间没有什么特殊的语法来进行分割，因此最好人为分清除
+int2*3 mInt2*3 = {1,2,3,
+				  4,5,6	}
+
+fixed4*4 f44 = {1,2,3,4,
+				1,2,3,4,
+				1,2,3,4,
+				1,2,3,4}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="布尔类型的特殊使用" dir="auto" class="heading" id="布尔类型的特殊使用"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>布尔类型的特殊使用</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：布尔类型的特殊使用</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>bool</code> 类型同样可以用于如同向量一样声明，它可以用于存储一些逻辑判断结果；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto">举例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">float3 a = float3(0.3,1.3,4.5);
+float3 b = float3(0.43,1.32,4.51);
+bool3 c = a &lt; b
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`Swizzle` 操作符" dir="auto" class="heading" id="`Swizzle`_操作符"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Swizzle</code> 操作符</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="什么是 `Swizzle` 操作符" dir="auto" class="heading" id="什么是_`Swizzle`_操作符"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>什么是 <code>Swizzle</code> 操作符</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：什么是 <code>Swizzle</code> 操作符</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">如何获取向量中某元素？<code>Swizzle</code> 操作符就可以用于获取向量中元素；</li>
+<li data-line="2" dir="auto"><code>Swizzle</code> 操作符通常以点号 (<code>.</code>) 的形式使用，后面跟着所需的分量顺序；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>语法：
+<ul>
+<li data-line="4" dir="auto">对于四维向量来说我们可以通过：<code>向量.xyzw</code> 或 <code>向量.rgba</code> 两种分量的写法，来表示向量中的四个值；</li>
+<li data-line="5" dir="auto">其中 <code>xyzw</code> 和 <code>rgba</code> 分别代表四维向量中的四个元素，在此的意义就是向量一般可以用来表示坐标和颜色；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结：
+<ul>
+<li data-line="7" dir="auto"><span alt="Pasted image 20250708215628.png" src="Pasted image 20250708215628.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250708215628.png" src="lib/media/pasted-image-20250708215628.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="如何使用 `Swizzle` 操作符" dir="auto" class="heading" id="如何使用_`Swizzle`_操作符"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>如何使用 <code>Swizzle</code> 操作符</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：如何使用 <code>Swizzle</code> 操作符</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">概念：利用 <code>Swizzle</code> 操作符提取分量</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">fixed4 f4 = fixed4(1,2,3,4)
+fixed f = f4.w; // xyzw
+f = f4.a; // rgba
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">概念：利用 <code>Swizzle</code> 操作符重新排列分量</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">f4 = f4.yzxw;
+f4 = f4.abgr;
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">概念：利用 <code>Swizzle</code> 操作符创建新的向量</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 高 -&gt; 低
+fixed3 f3 = f4.xyz;
+fixed2 f2 = f4.rg;
+
+// 高 -&gt; 低
+// 只要满足目标元素的维度即可创建
+fixed4 f4_2 = fixed4(f2,4,5)
+f4_2 = fixed4(f2,f2)
+f4_2 = fixed4(f3,7)
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="向量和矩阵的更多用法" dir="auto" class="heading" id="向量和矩阵的更多用法"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>向量和矩阵的更多用法</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：向量和矩阵的更多用法</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：配合向量来声明矩阵
+<ul>
+<li data-line="1" dir="auto">矩阵可以理解为好几行的向量组合在一起；</li>
+</ul>
+</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">fixed4*4 f44_1 = {1,2,3,4,
+				1,2,3,4,
+				1,2,3,4,
+				1,2,3,4}
+// 利用向量
+fixed4*4 f44_2 = {fixed4(1,2,3,4),
+				1,2,3,4,
+				1,2,3,4,
+				fixed4(1,2,3,4)}
+// 向量在外部声明
+fixed4 f4 = {1,2,3,4};
+fixed4*4 f44_2 = {f4,
+				  f4,
+				  f4,
+				  f4}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：获取矩阵中的元素
+<ul>
+<li data-line="1" dir="auto">其方法和二维数组的方法一样；</li>
+</ul>
+</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">fixed4*4 f44_2 = {f4,
+				  f4,
+				  f4,
+				  f4}
+		
+float f = f44_2[0][0]
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">概念：利用向量获取矩阵某一行</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">fixed4*4 f44_2 = {f4,
+				  f4,
+				  f4,
+				  f4}
+fixed4 f4_1 = f44_2[0]
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">概念：高维转低纬</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 低维 &lt;- 高维
+// 如果不明确写元素，会自动取出前面的元素
+fixed3 f3_2 = f4;
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="其他语法" dir="auto" class="heading" id="其他语法"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>其他语法</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="运算符" dir="auto" class="heading" id="运算符"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>运算符</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：加法/乘法运算符</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：贴图和颜色的加法
+<ul>
+<li data-line="1" dir="auto">贴图和颜色的加法会使颜色值<strong>向白色方向靠近</strong>，整体效果变得更亮；</li>
+<li data-line="2" dir="auto">当两个颜色相加时，每个通道 <code>(R,G,B)</code> 的值会直接相加，可能导致值超过 <code>1.0</code>，因此直接被截断；</li>
+<li data-line="3" dir="auto">此效果可以用于多光源贡献叠加计算 (环境光+漫反射+镜面反射)，或者 <code>HDR</code> 高光增强；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：贴图和颜色的乘法
+<ul>
+<li data-line="5" dir="auto">乘法操作会产生颜色相互抵消的效果，整体变暗；</li>
+<li data-line="6" dir="auto">当贴图和黑色相乘时，最后得到的结果为黑色，如果贴图和白色相乘时，最后的结果为原本的贴图的颜色（即不变）；</li>
+<li data-line="7" dir="auto">常用于颜色调制、阴影计算或颜色过滤；</li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：运算符与短路现象</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>C#</code> 语言中的短路现象
+<ul>
+<li data-line="1" dir="auto">短路 (<code>Short-circuiting</code>)是 <code>C#</code> 中逻辑运算符 <code>&amp;&amp;</code> (逻辑与)和 <code>||</code> (逻辑或)的一个重要特性，它能够显著提高代码的效率和安全性； </li>
+<li data-line="2" dir="auto">短路是指在逻辑表达式的求值过程中，如果根据已经计算的部分已经能够确定整个表达式的结果，那么将不再计算剩余的部分，这种特性使得程序可以避免不必要的计算，从而提高性能并防止潜在的错误；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：<code>C#</code> 中的 <code>&amp;&amp;</code> 的短路特性
+<ul>
+<li data-line="4" dir="auto">对于逻辑与运算符 <code>&amp;&amp;</code>，如果第一个操作数的结果为 <code>false</code>，那么整个表达式的结果必然为 <code>false</code>，因为无论第二个操作数的结果是什么，都无法改变整个表达式的结果为 <code>false</code>；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>举例：
+<ul>
+<li data-line="6" dir="auto">在下面代码中，由于 <code>a</code> 是 <code>false</code>，所以 <code>b</code> 的值并不重要，整个表达式 <code>a &amp;&amp; b</code> 的结果肯定是 <code>false</code>；</li>
+<li data-line="7" dir="auto">因此，<code>SomeMethodThatMayThrowException()</code> 方法不会被调用，从而避免了可能发生的异常；</li>
+</ul>
+</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">bool a = false;
+bool b = SomeMethodThatMayThrowException();
+if (a &amp;&amp; b) 
+{
+    // 这段代码永远不会执行，因为a是false，所以b不会被评估
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：<code>C#</code> 中的 <code>||</code> 的短路特性
+<ul>
+<li data-line="1" dir="auto">对于逻辑或运算符 <code>||</code>，如果第一个操作数的结果为 <code>true</code>，那么整个表达式的结果必然为 <code>true</code>，因为无论第二个操作数的结果是什么，都无法改变整个表达式的结果为 <code>false</code>；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>举例：
+<ul>
+<li data-line="3" dir="auto">由于<code>a</code>是<code>true</code>，所以<code>b</code>的值并不重要，整个表达式<code>a || b</code>的结果肯定是<code>true</code>。因此，<code>SomeMethodThatMayThrowException()</code>方法不会被调用</li>
+</ul>
+</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">bool a = true;
+bool b = SomeMethodThatMayThrowException();
+if (a || b) 
+{
+    // 这段代码会执行，因为a是true，所以b不会被评估
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：短路现象的技术原理
+<ul>
+<li data-line="1" dir="auto">逻辑运算符总是先对左侧的表达式求值，再对右边的表达式求值，这个顺序是保证的，因此对于 <code>&amp;&amp;</code>，如果左边的表达式结果为 <code>false</code>，就不再对右边的表达式求值；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>结论：
+<ul>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="3" dir="auto">总是使用短路版本​：</li>
+</ol>
+<ul>
+<li data-line="4" dir="auto">在大多数情况下，应该优先使用 <code>&amp;&amp;</code> 和 <code>||</code> 而不是非短路版本的 <code>&amp;</code> 和 <code>|</code>，因为前者更高效且更安全；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="5" dir="auto">利用短路进行空值检查​：</li>
+</ol>
+<ul>
+<li data-line="6" dir="auto">短路特性常用于安全地检查对象是否为 <code>null</code> 后再访问其成员；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>区别：短路和非短路运算符
+<ul>
+<li data-line="8" dir="auto"><code>C#</code> 中除了短路逻辑运算符 <code>&amp;&amp;</code> 和 <code>||</code> 外，还有非短路的 <code>&amp;</code> 和 <code>|</code> 运算符；</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="9" dir="auto"><code>&amp;&amp;</code> 和 <code>||</code> 会短路，而 <code>&amp;</code> 和 <code>|</code> 会对所有操作数进行求值；</li>
+</ol>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="10" dir="auto"><code>&amp;&amp;</code> 和 <code>||</code> 只能用于布尔操作数，而 <code>&amp;</code> 和 <code>|</code> 可以用于整数类型的位运算； </li>
+</ol>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="11" dir="auto">在布尔上下文中，<code>&amp;</code> 和 <code>|</code> 会计算所有操作数，即使结果已经确定；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：
+<ul>
+<li data-line="13" dir="auto"><code>CG</code> 语句当中的运算符，不存在短路现象</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="函数" dir="auto" class="heading" id="函数"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>函数</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>CG</code> 语法当中的函数 - 无返回值</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">语法：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">void name(in 参数类型 参数名, out 参数类型 参数名)
+{
+	// 函数体
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>参数：
+<ul>
+<li data-line="1" dir="auto"><code>void</code>：无返回值；</li>
+<li data-line="2" dir="auto"><code>name</code>：函数名；</li>
+<li data-line="3" dir="auto"><code>in</code>：表示是输入参数，表示由函数外部传递给函数内部，内部不会修改该参数，只会使用该参数进行计算，允许有多个；</li>
+<li data-line="4" dir="auto"><code>out</code>：表示是输出参数，表示由函数内部传递给函数的调用者，在函数内部必须对该参数值进行初始化或修改，允许有多个；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto">举例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">void test(int fixed inF, out fixed outF)
+{
+	outF = inF + 10;
+}
+
+v2f vert(appdata v)
+{
+	fixed f = 10;
+	fixed f2;
+	test(f,f2);
+	// 之后：f2的值为20
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意：
+<ul>
+<li data-line="1" dir="auto"><code>in</code> 和 <code>out</code> 都可以省略，省略后就没有了 <code>in</code> 和 <code>out</code> 相关的限制；</li>
+<li data-line="2" dir="auto">虽然可以省略，但是建议大家在编写 <code>shader</code> 时不要省略 <code>in</code> 和 <code>out</code>，因为他们可以明确参数的传递方式，提高代码的可读性和可维护，可以让我们更容易的理解函数是如何与参数交互的，减少潜在的误解可能； </li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>CG</code> 语法当中的函数 - 有返回值</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">语法：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">type name(in 参数类型 参数名)
+{
+	// 函数体
+	return 返回值;
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意：
+<ul>
+<li data-line="1" dir="auto">虽然可以在有返回值的函数中使用 <code>out</code> 参数，但是这并不是常见做法；</li>
+<li data-line="2" dir="auto">除非是一些自定义逻辑函数，对于 <code>顶点/片元着色器函数</code> 只会使用单返回值的方式进行处理；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto">举例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">float test2(in float inF)
+{
+	return inF * 2;
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="顶点与片元着色器语法" dir="auto" class="heading" id="顶点与片元着色器语法"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>顶点与片元着色器语法</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="顶点与片元着色器基本结构" dir="auto" class="heading" id="顶点与片元着色器基本结构"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>顶点与片元着色器基本结构</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>代码</strong></p></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">Shader "Unlit/Test"
+{
+	Properies
+	{
+	
+	}
+	SubShader
+	{
+		Pass
+		{
+			CGPROGRAM
+			#prama vertex myVert
+			#prama fragment myFrag
+			
+			// 这是一个顶点着色器的回调函数
+			// 顶点着色器返回的结果是一个四维的坐标
+			// 这里用到了“语义”的语法，表示当前的变量 v 是模型顶点的坐标，如果没有这些语义，那么渲染器就完全不知道渲染器输入输出的是什么，因此 Shader 就完全没有作用
+			// POSITION：把模型的顶点坐标填充到输入的参数 v 当中，其会将模型顶底的坐标传递到这个 v 变量上
+			// SV_POSITION：用于表示顶点着色器输出的内容，是裁剪空间中的顶点坐标
+			float4 myVert(float4 v : POSITION) : SV_POSITION
+			{
+				// 老版本：
+				// 用系统自带的内置函数 mul，而 MVP 矩阵是模型内置的矩阵，将其得到在裁剪空间的坐标
+				// return mul(UNITY_MATRIX_MVP,v)
+				
+				// 新版本：
+				// 和上面的老版本的矩阵乘法的效果一样，新版本只是将其封装了起来
+				return UnityObjectToClipPos(v);
+			}
+			
+			// 片元着色器回调函数
+			// SV_Target：告诉渲染器，把用户输出颜色存储到一个渲染目标中，这里将输出到默认的帧缓存中
+			fixed4 myFrag() : SV_Target
+			{
+				// 返回红色
+				return fixed4(1,0,0,1);
+			}
+			
+			ENDCG
+		}
+	}
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="语义" dir="auto" class="heading" id="语义"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>语义</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：语义</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>CG</code> 语言中提供了语义这种特殊关键字，用于修饰函数中的传入参数和返回值；</li>
+<li data-line="2" dir="auto">它的主要作用是让 <code>Shader</code> 知道从哪里读取数据，并把数据输出到哪里，让我们在 <code>Shader</code> 开发当中可以获取到想要的数据，并且可以把数据传递出去；</li>
+<li data-line="3" dir="auto">即：语义是赋给 <code>Shader</code> 输入和输出的字符串标识，用于表达参数的含义和数据流向；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意：
+<ul>
+<li data-line="5" dir="auto"><code>Unity</code> 中只支持 <code>CG</code> 当中的部分语义；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto">语法：语义通常附加在变量声明之后，使用冒号分隔 </li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">struct a2v {
+    float4 vertex : POSITION;    // 使用POSITION语义声明顶点位置
+    float3 normal : NORMAL;      // 使用NORMAL语义声明法线
+    float4 texcoord : TEXCOORD0; // 使用TEXCOORD0语义声明纹理坐标
+};
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>概念</strong>：常用语义 - 应用阶段 <code>-&gt;</code> 顶点着色器</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>CPU</code> 准备模型数据（顶点位置、法线、<code>UV</code> 等），这些数据通过语义标记后传递给 <code>GPU</code>； </li>
+<li data-line="2" dir="auto">应用阶段传递模型数据给顶点着色器时 <code>Unity</code> 支持的语义； </li>
+<li data-line="3" dir="auto">一般在顶点着色器回调函数的传入参数中应用；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分类：
+<ul>
+<li data-line="5" dir="auto"><code>POSITION</code>：模型空间中的顶点位置，通常是 <code>float4</code> 类型；</li>
+<li data-line="6" dir="auto"><code>NORMAL</code>：顶点法线，通常是 <code>float3</code> 类型；</li>
+<li data-line="7" dir="auto"><code>TANGENT</code>：顶点切线，通常是 <code>float4</code> 类型；</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>TEXCOORDn</code>：比如 <code>TEXCOORD0</code>, <code>TEXCOORD1</code>、<code>....</code>
+<ul>
+<li data-line="9" dir="auto">该顶点的纹理坐标，通常是 <code>float2</code> 或者 <code>float4</code> 类型；</li>
+<li data-line="10" dir="auto"><code>TEXCOORD0</code>、<code>TEXCOORD1</code> 等语义的本质是<strong>声明一个插值寄存器</strong>，用于在顶点着色器和片元着色器之间传递数据，​<strong>不限制数据类型的具体维度</strong>；</li>
+<li data-line="11" dir="auto">例如，<code>TEXCOORD2</code> 可以存储 <code>float3</code>、<code>float4</code> 甚至 <code>float2</code>，只要总数据量不超过寄存器容量（通常为4个浮点数）； </li>
+<li data-line="12" dir="auto"><code>TEXCOORD0</code> 表示第一组纹理坐标，依次类推；</li>
+<li data-line="13" dir="auto">纹理坐标：也称 <code>UV</code> 坐标，表示该顶点对应纹理图像上的位置；</li>
+</ul>
+</li>
+<li data-line="14" dir="auto"><code>COLOR</code>：顶点颜色，通常是 <code>fixed2</code> 或者 <code>fixed4</code> 类型； </li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：常用语义 - 顶点着色器 <code>-&gt;</code> 片元着色器</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">顶点着色器处理带 <code>POSITION</code> 语义的顶点数据，进行坐标空间转换（模型空间→世界空间→视图空间→裁剪空间），输出带 <code>SV_POSITION</code> 语义的裁剪空间坐标；</li>
+<li data-line="2" dir="auto">从顶点着色器传递数据给片元着色器时 <code>Unity</code> 支持的语义；</li>
+<li data-line="3" dir="auto">一般在顶点着色器回调函数的返回值中应用；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分类：
+<ul>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>SV_POSITION</code>：
+<ul>
+<li data-line="6" dir="auto">裁剪空间中的顶点坐标 (<strong>必备</strong>)；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>COLOR0</code>：
+<ul>
+<li data-line="8" dir="auto">有时候可能会在顶点着色器阶段处理一些颜色相关的数据，因此可以用此 <code>COLOR0</code>，通常用于输出第一组顶点颜色，不是必须的；</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>COLOR1</code>：
+<ul>
+<li data-line="10" dir="auto">通常用于输出第二组顶点颜色 (不是必须的)；</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>TEXCOORD0~7</code>：
+<ul>
+<li data-line="12" dir="auto">通常输出纹理坐标，不是必须的；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：常用语义 - 片元着色器的输出</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">片元着色器输出时 <code>Unity</code> 支持的常用语义；</li>
+<li data-line="2" dir="auto">一般在片元着色器回调函数的返回值中应用；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分类：
+<ul>
+<li data-line="4" dir="auto"><code>SV_Target</code>：输出值会存储到渲染目标中；</li>
+<li data-line="5" dir="auto"><code>SV_Depth</code>：数据类型为 <code>float</code>，表示自定义深度值（可选）；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="顶点与片元着色器传递更多参数" dir="auto" class="heading" id="顶点与片元着色器传递更多参数"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>顶点与片元着色器传递更多参数</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：顶点着色器获取更多参数</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">当我们在顶点着色器当中想要获取更多模型相关信息时，可以使用结构体对数据进行封装，通过对结构体中成员变量加语义的方式，来定义想要获取的信息；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">Shader "Unlit/Test"
+{
+	Properies
+	{
+	
+	}
+	SubShader
+	{
+		Pass
+		{
+			CGPROGRAM
+			#prama vertex vert
+			#prama fragment frag
+			
+			// a：应用阶段 v：顶点阶段 a2v：从应用阶段拿数据输入到顶点阶段
+			struct a2v
+			{
+				// 顶点坐标
+				float4 vertex : POSITION; 
+				
+				// 顶点法线
+				float3 normal : NORMAL;
+				
+				// 纹理坐标(uv坐标)
+				float2 uv : TEXTCOOD0;
+			};
+			
+			float4 vert(a2v data) : SV_POSITION
+			{
+				// 获得数据要通过点的方式获得
+				return UnityObjectToClipPos(data.vertex);
+			}
+			
+			fixed4 frag() : SV_Target
+			{
+				// 返回红色
+				return fixed4(1,0,0,1);
+			}
+			
+			ENDCG
+		}
+	}
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>概念</strong>：片元着色器获取更多参数</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">和顶点着色器一样，需要更多参数时、需要封装结构体；</li>
+<li data-line="2" dir="auto">但需要注意的是，片元着色器中获取的数据基本上都是由顶点着色器传递过来的，所以我们封装的结构体还需要作为顶点着色器的返回值类型；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">Shader "Unlit/Test"
+{
+	Properies
+	{
+	
+	}
+	SubShader
+	{
+		Pass
+		{
+			CGPROGRAM
+			#prama vertex vert
+			#prama fragment frag
+			
+			// a：应用阶段 v：顶点阶段 a2v：从应用阶段拿数据输入到顶点阶段
+			struct a2v
+			{
+				// 顶点坐标
+				float4 vertex : POSITION; 
+				
+				// 顶点法线
+				float3 normal : NORMAL;
+				
+				// 纹理坐标(uv坐标)
+				float2 uv : TEXCOORD0;
+			};
+			
+			// 从顶点着色器传递给片元着色器的 结构体数据同样这里面的成员也需要用语义去进行修饰
+			struct v2f
+			{
+				// 裁剪空间下的坐标
+				float4 position : SV_POSITION;
+				
+				// 顶点法线
+				float3 normal : NORMAL;
+				
+				// 纹理坐标
+				float2 uv : TEXCOORD0;
+			};
+			
+			// 更改返回值类型，在函数当中去存储需要传递过去的值
+			v2f vert(a2v data)
+			{
+				// 需要传递给片元着色器的数据
+				v2f v2fdata;
+				v2fdata.vertex = UnityObjectToClipPos(data.vertex); 
+				
+				// 这两个数据直接转存
+				v2fdata.normal = data.normal;
+				v2fdata.uv = data.uv;
+				
+				return v2fdata;
+			}
+			
+			// 在调用顶点着色器时，其返回值会传递到这个v2f的参数data当中
+			fixed4 frag(v2f data) : SV_Target
+			{
+				// 返回红色
+				return fixed4(1,0,0,1);
+			}
+			
+			ENDCG
+		}
+	}
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结：
+<ul>
+<li data-line="1" dir="auto">如果顶点/片元着色器想要传递更多参数我们需要通过结构体进行封装，用语义修饰结构体成员变量来达到目的</li>
+<li data-line="2" dir="auto">注意只有顶点/片元着色器的回调函数相关参数和返回值才需要通过语义修饰，一般的自定义函数是不需要语义的，因为我们自己调用自己的自定义函数是可以明确知道每个参数的作用的；</li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>Unity</code> 内置结构体</p></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 基础顶点输入结构体（适用于简单漫反射/高光着色器）
+struct appdata_base {
+    float4 vertex : POSITION;     // 顶点位置（模型空间）
+    float3 normal : NORMAL;      // 顶点法线（模型空间）
+    float4 texcoord : TEXCOORD0; // 第一组UV坐标
+    UNITY_VERTEX_INPUT_INSTANCE_ID // 实例化ID（用于GPU Instancing）
+};
+
+// 带切线的顶点输入结构体（适用于法线贴图计算）
+struct appdata_tan {
+    float4 vertex : POSITION;     // 顶点位置
+    float4 tangent : TANGENT;     // 顶点切线（w分量存储副切线方向）
+    float3 normal : NORMAL;      // 顶点法线
+    float4 texcoord : TEXCOORD0; // 基础UV坐标
+    UNITY_VERTEX_INPUT_INSTANCE_ID
+};
+
+// 完整顶点输入结构体（适用于复杂效果如顶点动画/多UV材质）
+struct appdata_full {
+    float4 vertex : POSITION;     // 顶点位置
+    float4 tangent : TANGENT;     // 顶点切线
+    float3 normal : NORMAL;       // 顶点法线
+    float4 texcoord : TEXCOORD0;  // UV通道0
+    float4 texcoord1 : TEXCOORD1; // UV通道1（常用于光照贴图）
+    float4 texcoord2 : TEXCOORD2; // UV通道2（可选用途）
+    float4 texcoord3 : TEXCOORD3; // UV通道3（可选用途）
+    fixed4 color : COLOR;        // 顶点颜色（如植被风动画权重）
+    UNITY_VERTEX_INPUT_INSTANCE_ID
+};
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`ShaderLab` 属性类型和 `CG` 变量类型的匹配关系" dir="auto" class="heading" id="`ShaderLab`_属性类型和_`CG`_变量类型的匹配关系"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>ShaderLab</code> 属性类型和 <code>CG</code> 变量类型的匹配关系</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>分析</strong>：<code>ShaderLab</code> 属性类型和 <code>CG</code> 变量类型的匹配关系</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：两种类型
+<ul>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="1" dir="auto"><code>ShaderLab</code> 属性：<code>ShaderLab</code>&nbsp;是 <code>Unity</code> 的材质属性声明语言，用于在 <code>Inspector</code> 面板中定义可调节的材质参数，面向美术和设计师，提供直观的 <code>UI</code> 控件，与 <code>Unity</code> 的材质系统（<code>Material</code>）绑定，可以在运行时动态修改；</li>
+</ol>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="2" dir="auto"><code>CG/HLSL</code>：<code>CG/HLSL</code>&nbsp;是 <code>GPU</code> 着色器编程语言，用于编写顶点/片元着色器的计算逻辑，直接运行在 <code>GPU</code> 上，需要精确控制数据类型（如精度&nbsp;<code>float</code> / <code>half</code> / <code>fixed</code>）； </li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>CG</code> 中变量类型的对应 <code>ShaderLab</code> 的属性类型
+<ul>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="5" dir="auto"><code>Unity</code> 在编译 <code>Shader</code> 时，会自动将&nbsp;<code>ShaderLab</code>&nbsp;属性转换为&nbsp;<code>CG/HLSL</code>&nbsp;变量，以便在着色器代码中使用；</li>
+<li data-line="6" dir="auto">例如：<code>ShaderLab</code>&nbsp;的&nbsp;<code>Color</code>&nbsp;对应&nbsp;<code>CG</code>&nbsp;的&nbsp;<code>float4</code>，<code>2D</code>&nbsp;对应&nbsp;<code>sampler2D</code>；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结：
+<ul>
+<li data-line="8" dir="auto"><span alt="Pasted image 20250712145532.png" src="Pasted image 20250712145532.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250712145532.png" src="lib/media/pasted-image-20250712145532.png"></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：如何在 <code>CG</code> 语句块中使用 <code>ShaderLab</code> 属性
+<ul>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="11" dir="auto">直接在 <code>Pass</code> 中声明对应 <code>ShaderLab</code> 属性的同名变量即可；</li>
+<li data-line="12" dir="auto">只要 Pass 中声明的变量和 <code>ShaderLab</code> 属性同名，则下面就可以直接使用；</li>
+</ul>
+</li>
+<li data-line="13" dir="auto">示例：</li>
+</ul>
+</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">Shader "Unlit/Test"
+{
+    Properties
+    {
+        _MyInt("MyInt",Int) = 1
+        _MyFloat("MyFloat",Float) = 1
+        _MyRange("MyRange",Range(0,5)) = 1
+
+        _MyColor("MyColor",Color) = (0,0,0,0)
+        _MyVector("MyVector",Vector) = (1,2,0,0)
+
+        _My2D("My2D",2D) = ""{}
+        _My2DArray("My2DArray",2DArray) = ""{}
+        _MyCube("MyCube",Cube) = ""{}
+    }
+    SubShader
+    {
+        Tags { "RenderType"="Transparent" }
+        LOD 100
+
+        Pass
+        {
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #include "UnityCG.cginc"
+            
+			float _MyInt;
+			float _MyFloat;
+			fixed _MyRange;
+            
+            fixed4 _MyColor;
+            float4 _MyVector;
+            
+            sampler2D My2D;
+            samplerCUBE _MyCube;
+            
+            struct a2v
+            {
+                float4 vertex : POSITION;
+                float3 normal : NORMAL;
+                float2 uv : TEXCOORD0;
+            };
+
+            struct v2f
+            {
+                float4 position : SV_POSITION;
+                float3 normal : NORMAL;
+                float2 uv : TEXCOORD0;
+            };
+            
+            v2f vert(a2v data)
+            {
+                v2f v2fdata;
+                v2fdata.position = UnityObjectToClipPos(data.vertex);
+                v2fdata.normal = data.normal;
+                v2fdata.uv = data.uv;
+                return v2fdata;
+            }
+
+            fixed4 frag(v2f data) : SV_Target
+            {
+                return _MyColor; 
+            }
+
+            ENDCG
+        }
+    }
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`CG` 内置函数与文件" dir="auto" class="heading" id="`CG`_内置函数与文件"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>CG</code> 内置函数与文件</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`CG` 内置函数" dir="auto" class="heading" id="`CG`_内置函数"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>CG</code> 内置函数</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>CG</code> 内置函数</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>CG</code> 内置函数是什么
+<ul>
+<li data-line="1" dir="auto"><code>Unity</code> 中的 <code>CG</code> (或 <code>HLSL</code>)内置函数是 <code>GPU</code> 着色器编程中预先定义好的函数库，它们为开发者提供了高效的数学运算、几何计算、纹理操作等功能，可以直接在 <code>Shader</code> 中使用而无需自行实现；</li>
+<li data-line="2" dir="auto">这些函数通常与 <code>GPU</code> 指令直接对应，执行效率非常高；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：数学函数相关
+<ul>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>三角函数：
+<ul>
+<li data-line="5" dir="auto"><span alt="Pasted image 20250712150552.png" src="Pasted image 20250712150552.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250712150552.png" src="lib/media/pasted-image-20250712150552.png"></span></li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：<code>sincos</code> 函数特性
+<ul>
+<li data-line="7" dir="auto">唯一同时输出两个结果的函数，通过引用参数返回；</li>
+<li data-line="8" dir="auto"><code>float s, c; sincos (x, s, c);</code></li>
+<li data-line="9" dir="auto">其中 <code>s=sin (x), c=cos (x)</code>； </li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>向量|矩阵：
+<ul>
+<li data-line="11" dir="auto"><span alt="Pasted image 20250712150913.png" src="Pasted image 20250712150913.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250712150913.png" src="lib/media/pasted-image-20250712150913.png"></span></li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：
+<ul>
+<li data-line="13" dir="auto">乘仅支持三维向量，其他函数（如点乘）支持任意相同维度向量； </li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>数值相关：
+<ul>
+<li data-line="15" dir="auto"><span alt="Pasted image 20250712151101.png" src="Pasted image 20250712151101.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250712151101.png" src="lib/media/pasted-image-20250712151101.png"></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：纹理函数
+<ul>
+<li data-line="17" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>二维纹理：
+<ul>
+<li data-line="18" dir="auto">这些纹理采样函数返回值为 <code>fixed4</code> 类型的颜色值；</li>
+<li data-line="19" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="19" dir="auto"><code>tex2D(sampler2D tex, float2 s)</code>：二维纹理查询；</li>
+</ol>
+</li>
+<li data-line="20" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="20" dir="auto"><code>tex2D(sampler2D tex, float2 s, float2 dsdx, float2 dsdy)</code>：使用导数值查询纹理采样（自动计算 <code>mipmap</code> 层级）；</li>
+</ol>
+</li>
+<li data-line="21" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="21" dir="auto"><code>tex2D(sampler2D tex, float3 sz)</code>：二维纹理查询+深度值比较（需硬件支持）；</li>
+</ol>
+</li>
+<li data-line="22" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="22" dir="auto"><code>tex2D(sampler2D tex, float3 sz, float2 dsdx, float2 dsdy)</code>：带导数的深度比较纹理采样；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="23" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>立方体纹理：
+<ul>
+<li data-line="24" dir="auto"><code>texCUBE(samplerCUBE tex,float3 s)</code>：查询立方体纹理；</li>
+<li data-line="25" dir="auto"><code>texCUBE(samplerCUBE tex,float3 s,float3 dsdx, float3 dsdy)</code>：查询立方体纹理；</li>
+</ul>
+</li>
+<li data-line="26" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>其他纹理：
+<ul>
+<li data-line="27" dir="auto"><code>tex1D(sampler1D tex, float s)</code>：基础一维纹理查询；</li>
+<li data-line="28" dir="auto"><code>tex1D(sampler1D tex, float s, float dsdx, float dsdy)</code>：使用导数值（<code>dsdx/dsdy</code>）查询一维纹理；</li>
+<li data-line="29" dir="auto"><code>tex1D(sampler1D tex, float2 sz)</code>：一维纹理查询+深度值比较（<code>sz.z</code> 为比较值）；</li>
+</ul>
+</li>
+<li data-line="30" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结：方法规律
+<ul>
+<li data-line="31" dir="auto"><code>texXXX(samplerXXX,floatX,[dsdx,dsdy],[depth])</code>；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="32" dir="auto">举例：从纹理中提取颜色</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">fixed4 frag(v2f data) : SV_Target
+{
+	// 从一个二维纹理当中，根据UV坐标、取出颜色
+	fixed COLOR = tex2D(_My2D,data.uv)
+	return color;
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`CG` 内置文件" dir="auto" class="heading" id="`CG`_内置文件"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>CG</code> 内置文件</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>CG</code> 内置文件</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">我们可以在 <code>Unity</code> 的安装目录中找到 <code>CG</code> 内置文件，在 <code>Editor-&gt;Data-&gt;CGIncludes</code> 中可以找到；</li>
+<li data-line="2" dir="auto">后缀为 <code>cginc</code> 的文件，其为 <code>CG</code> 语言内置文件后缀；</li>
+<li data-line="3" dir="auto">后缀为 <code>glslinc</code> 的文件，其为 <code>GLSL</code> 语言的内置文件；</li>
+<li data-line="4" dir="auto">他们是预定义的 <code>Shader</code> 文件，里面包含了一些已经写好的 <code>Shader</code> 相关逻辑；</li>
+<li data-line="5" dir="auto">其作用和 <code>CG</code> 内置函数一样，可以提升我们的 <code>shader</code> 开发效率，可以直接使用其中的方法等内容来进行逻辑开发；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>cginc</code> 文件
+<ul>
+<li data-line="7" dir="auto">专为 <code>NVIDIA</code> 的 <code>C for Graphics</code> (<code>CG</code>)​ 语言设计，是一种面向 <code>GPU</code> 编程的高级着色器语言，语法类似 <code>C</code> 语言但针对图形渲染优化；</li>
+<li data-line="8" dir="auto">包含预定义的<strong>结构体、辅助函数、宏</strong>​（如坐标变换、光照计算等）以及<strong>全局变量</strong>​（如&nbsp;<code>UNITY_MATRIX_MVP</code>&nbsp;用于模型-视图-投影矩阵变换）； </li>
+<li data-line="9" dir="auto">比如 <code>Unity Shader</code> 开发通过&nbsp;<code>#include "UnityCG.cginc"</code>&nbsp;引入，简化顶点/片元着色器编写；</li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>glslinc</code> 文件
+<ul>
+<li data-line="11" dir="auto">用于 <code>OpenGL Shading Language</code> (GLSL)​，是 <code>OpenGL/WebGL</code> 的标准着色器语言， <code>OpenGL/WebGL</code>开发通过&nbsp;<code>#include "common.glslinc"</code>&nbsp;引入共享代码；</li>
+</ul>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="13" dir="auto"><span alt="Pasted image 20250712162157.png" src="Pasted image 20250712162157.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250712162157.png" src="lib/media/pasted-image-20250712162157.png"></span></li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：常用内置文件</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>UnityCG.cginc</code>
+<ul>
+<li data-line="1" dir="auto">包含最常用的帮助函数、宏和结构体等；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>Lighting.cginc</code>
+<ul>
+<li data-line="3" dir="auto">包含各种<strong>内置光照模型</strong>；</li>
+<li data-line="4" dir="auto">如果编写的是 <code>surface shader</code> (标准表面着色器)，会自动包含进来；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>UnityShaderVariables.cginc</code>
+<ul>
+<li data-line="6" dir="auto">编译 <code>Unityshader</code> 时，会自动包含进来。包含许多内置的全局变量；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>HLSLSupport.cginc</code>
+<ul>
+<li data-line="8" dir="auto">编译 <code>Unityshader</code> 时会自动包含进来。声明了很多用于跨平台编译的宏和定义；</li>
+<li data-line="9" dir="auto"><code>HLSLSupport.cginc</code>&nbsp;自动处理不同平台的宏定义差异（如 <code>DirectX/OpenGL</code>）；  </li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：使用 <code>CG</code> 内置文件</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">在 <code>CG</code> 语句块中进行引用，通过编译指令：<code>#include "内置文件.cginc"</code> 的形式来进行引用；</li>
+<li data-line="2" dir="auto">接下来就可以在 <code>CG</code> 语音中使用其中内容；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>举例：
+<ul>
+<li data-line="4" dir="auto"><code>#include "UnityCG.cginc"</code></li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>CG</code> 内置文件常用内容</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：常用方法 - <code>UnityCG.cginc</code>
+<ul>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="1" dir="auto"><code>float3 WorldSpaceViewDir(float4 v)</code>：</li>
+</ol>
+<ul>
+<li data-line="2" dir="auto">输入一个模型空间中的顶点位置，返回世界空间中从该点到摄像机的观察方向；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="3" dir="auto"><code>float3 ObjSpaceViewDir(float4 v)</code>：</li>
+</ol>
+<ul>
+<li data-line="4" dir="auto">输入一个模型空间中的顶点位置，返回模型空间中从该点到摄像机的观察方向；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="5" dir="auto"><code>float3 WorldSpaceLightDir(float4 v)</code>：</li>
+</ol>
+<ul>
+<li data-line="6" dir="auto">仅用于向前渲染中，输入一个模型空间中的顶点位置，返回世界空间中从该点到光源的光服方向；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="7" dir="auto"><code>float3 ObjSpaceLightDir(float4 v)</code>：</li>
+</ol>
+<ul>
+<li data-line="8" dir="auto">仅用于向前渲染中，输入一个模型空间中的顶点位置，返回模型空间中从该点到光源的光方向；</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="5">
+<li data-line="9" dir="auto"><code>float3 UnityObjectToWorldNormal(float3 norm)</code>：</li>
+</ol>
+<ul>
+<li data-line="10" dir="auto">把法线方向从模型空间转换到世界空间中；</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="6">
+<li data-line="11" dir="auto"><code>float 3 UnityobjectToWorldDir (in float 3 dir)</code>：</li>
+</ol>
+<ul>
+<li data-line="12" dir="auto">把方向矢量从模型空间转换到世界空间中；</li>
+</ul>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="7">
+<li data-line="13" dir="auto"><code>float 3 UnityWorldToobjectDir (float 3 dir)</code>：</li>
+</ol>
+<ul>
+<li data-line="14" dir="auto">把方向矢量从世界空间转换到模型空间中；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：常用结构体 - <code>UnityCG.cginc</code>
+<ul>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="16" dir="auto"><code>appdata_base</code>：用于顶点着色器输入，顶点位置、顶点法线、第一组纹理坐标；</li>
+</ol>
+</li>
+<li data-line="17" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="17" dir="auto"><code>appdata_tan</code>：用于顶点着色器输入，顶点位置、顶点法线、顶点切线、第一组纹理坐标；</li>
+</ol>
+</li>
+<li data-line="18" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="18" dir="auto"><code>appdata_full</code>：用于顶点着色器输入，顶点位置、顶点法线、顶点切线、四组 (或更多)纹理坐标；</li>
+</ol>
+</li>
+<li data-line="19" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="19" dir="auto"><code>appdata_img</code>：用于顶点着色器输入顶点位置、第一组纹理坐标；</li>
+</ol>
+</li>
+<li data-line="20" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="5">
+<li data-line="20" dir="auto"><code>v2f_img</code>：用于顶点着色器输出，裁剪空间中的位置，纹理坐标；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="21" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：常用矩阵
+<ul>
+<li data-line="22" dir="auto"><span alt="Pasted image 20250712164852.png" src="Pasted image 20250712164852.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250712164852.png" src="lib/media/pasted-image-20250712164852.png"></span></li>
+</ul>
+</li>
+<li data-line="23" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：
+<ul>
+<li data-line="24" dir="auto"><code>Object2World</code>：当前的模型矩阵，用于将顶点/方向矢量从模型空间变换到世界空间；</li>
+<li data-line="25" dir="auto"><code>World2Object</code>：<code>Object2World</code> 逆矩阵，用于将顶点/方向矢量从世界空间变换到模型空间； </li>
+</ul>
+</li>
+</ul></div><div class="mod-footer mod-ui"></div></div></div></div></div></div></div></div><div class="sidebar-right sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"></div><script defer="">let rs = document.querySelector(".sidebar-right"); rs.classList.add("is-collapsed"); if (window.innerWidth > 768) rs.classList.remove("is-collapsed"); rs.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-right-width"));</script></div></div></body></html>

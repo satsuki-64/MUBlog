@@ -1,0 +1,1330 @@
+<!DOCTYPE html> <html><head>
+		<title>Lecture 4：Global Illumination - 全局光照</title>
+		<base href="..\../">
+		<meta id="root-path" root-path="..\../">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
+		<meta charset="UTF-8">
+		<meta name="description" content="MUBlog - Lecture 4：Global Illumination - 全局光照">
+		<meta property="og:title" content="Lecture 4：Global Illumination - 全局光照">
+		<meta property="og:description" content="MUBlog - Lecture 4：Global Illumination - 全局光照">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="02_图形相关技术/02_实时渲染/lecture-4：global-illumination-全局光照.html">
+		<meta property="og:image" content="lib\media\pasted-image-20250507130642.png">
+		<meta property="og:site_name" content="MUBlog">
+		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="lib/rss.xml"><script async="" id="webpage-script" src="lib/scripts/webpage.js" onload="this.onload=null;this.setAttribute(&quot;loaded&quot;, &quot;true&quot;)"></script><link rel="icon" href="lib/media/favicon.png"><style>body{--line-width:40em;--line-width-adaptive:40em;--file-line-width:40em;--sidebar-width:min(20em, 80vw);--collapse-arrow-size:11px;--tree-horizontal-spacing:0.6em;--tree-vertical-spacing:0.6em;--sidebar-margin:12px}.sidebar{height:100%;min-width:calc(var(--sidebar-width) + var(--divider-width-hover));max-width:calc(var(--sidebar-width) + var(--divider-width-hover));font-size:14px;z-index:10;position:relative;overflow:hidden;transition:min-width ease-in-out,max-width ease-in-out;transition-duration:.2s;contain:size}.sidebar-left{left:0}.sidebar-right{right:0}.sidebar.is-collapsed{min-width:0;max-width:0}body.floating-sidebars .sidebar{position:absolute}.sidebar-content{height:100%;min-width:calc(var(--sidebar-width) - var(--divider-width-hover));top:0;padding:var(--sidebar-margin);padding-top:4em;line-height:var(--line-height-tight);background-color:var(--background-secondary);transition:background-color,border-right,border-left,box-shadow;transition-duration:var(--color-fade-speed);transition-timing-function:ease-in-out;position:absolute;display:flex;flex-direction:column}.sidebar:not(.is-collapsed) .sidebar-content{min-width:calc(max(100%,var(--sidebar-width)) - 3px);max-width:calc(max(100%,var(--sidebar-width)) - 3px)}.sidebar-left .sidebar-content{left:0;border-top-right-radius:var(--radius-l);border-bottom-right-radius:var(--radius-l)}.sidebar-right .sidebar-content{right:0;border-top-left-radius:var(--radius-l);border-bottom-left-radius:var(--radius-l)}.sidebar:has(.sidebar-content:empty):has(.topbar-content:empty){display:none}.sidebar-topbar{height:2em;width:var(--sidebar-width);top:var(--sidebar-margin);padding-inline:var(--sidebar-margin);z-index:1;position:fixed;display:flex;align-items:center;transition:width ease-in-out;transition-duration:inherit}.sidebar.is-collapsed .sidebar-topbar{width:calc(2.3em + var(--sidebar-margin) * 2)}.sidebar .sidebar-topbar.is-collapsed{width:0}.sidebar-left .sidebar-topbar{left:0}.sidebar-right .sidebar-topbar{right:0}.topbar-content{overflow:hidden;overflow:clip;width:100%;height:100%;display:flex;align-items:center;transition:inherit}.sidebar.is-collapsed .topbar-content{width:0;transition:inherit}.clickable-icon.sidebar-collapse-icon{background-color:transparent;color:var(--icon-color-focused);padding:0!important;margin:0!important;height:100%!important;width:2.3em!important;margin-inline:0.14em!important;position:absolute}.sidebar-left .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);right:var(--sidebar-margin)}.sidebar-right .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);left:var(--sidebar-margin)}.clickable-icon.sidebar-collapse-icon svg.svg-icon{width:100%;height:100%}.sidebar-section-header{margin:0 0 1em 0;text-transform:uppercase;letter-spacing:.06em;font-weight:600}body{transition:background-color var(--color-fade-speed) ease-in-out}.webpage-container{display:flex;flex-direction:row;height:100%;width:100%;align-items:stretch;justify-content:center}.document-container{opacity:1;flex-basis:100%;max-width:100%;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;transition:opacity .2s ease-in-out;contain:inline-size}.hide{opacity:0;transition:opacity .2s ease-in-out}.document-container>.markdown-preview-view{margin:var(--sidebar-margin);margin-bottom:0;width:100%;width:-webkit-fill-available;width:-moz-available;width:fill-available;background-color:var(--background-primary);transition:background-color var(--color-fade-speed) ease-in-out;border-top-right-radius:var(--window-radius,var(--radius-m));border-top-left-radius:var(--window-radius,var(--radius-m));overflow-x:hidden!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;contain:inline-size}.document-container>.markdown-preview-view>.markdown-preview-sizer{padding-bottom:80vh!important;width:100%!important;max-width:var(--line-width)!important;flex-basis:var(--line-width)!important;transition:background-color var(--color-fade-speed) ease-in-out;contain:inline-size}.markdown-rendered img:not([width]),.view-content img:not([width]){max-width:100%;outline:0}.document-container>.view-content.embed{display:flex;padding:1em;height:100%;width:100%;align-items:center;justify-content:center}.document-container>.view-content.embed>*{max-width:100%;max-height:100%;object-fit:contain}:has(> :is(.math,table)){overflow-x:auto!important}.document-container>.view-content{overflow-x:auto;contain:content;padding:0;margin:0;height:100%}.scroll-highlight{position:absolute;width:100%;height:100%;pointer-events:none;z-index:1000;background-color:hsla(var(--color-accent-hsl),.25);opacity:0;padding:1em;inset:50%;translate:-50% -50%;border-radius:var(--radius-s)}</style><script defer="">async function loadIncludes(){if("file:"!=location.protocol){let e=document.querySelectorAll("include");for(let t=0;t<e.length;t++){let o=e[t],l=o.getAttribute("src");try{const e=await fetch(l);if(!e.ok){console.log("Could not include file: "+l),o?.remove();continue}let t=await e.text(),n=document.createRange().createContextualFragment(t),i=Array.from(n.children);for(let e of i)e.classList.add("hide"),e.style.transition="opacity 0.5s ease-in-out",setTimeout((()=>{e.classList.remove("hide")}),10);o.before(n),o.remove(),console.log("Included file: "+l)}catch(e){o?.remove(),console.log("Could not include file: "+l,e);continue}}}else{if(document.querySelectorAll("include").length>0){var e=document.createElement("div");e.id="error",e.textContent="Web server exports must be hosted on an http / web server to be viewed correctly.",e.style.position="fixed",e.style.top="50%",e.style.left="50%",e.style.transform="translate(-50%, -50%)",e.style.fontSize="1.5em",e.style.fontWeight="bold",e.style.textAlign="center",document.body.appendChild(e),document.querySelector(".document-container")?.classList.remove("hide")}}}document.addEventListener("DOMContentLoaded",(()=>{loadIncludes()}));let isFileProtocol="file:"==location.protocol;function waitLoadScripts(e,t){let o=e.map((e=>document.getElementById(e+"-script"))),l=0;!function e(){let n=o[l];l++,n&&"true"!=n.getAttribute("loaded")||l<o.length&&e(),l<o.length?n.addEventListener("load",e):t()}()}</script><link rel="stylesheet" href="lib/styles/obsidian.css"><link rel="stylesheet" href="lib/styles/theme.css"><link rel="preload" href="lib/styles/global-variable-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/global-variable-styles.css"></noscript><link rel="preload" href="lib/styles/supported-plugins.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/supported-plugins.css"></noscript><link rel="preload" href="lib/styles/main-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/main-styles.css"></noscript><link rel="preload" href="lib/styles/snippets.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/snippets.css"></noscript></head><body class="publish css-settings-manager styled-scrollbars theme-light show-inline-title ctp-rosepine-light ctp-mocha ctp-accent-rosewater anuppuccin-accent-toggle anp-current-line-border anp-callout-color-toggle anp-codeblock-numbers anp-list-toggle anp-table-width anp-toggle-preview anp-color-transition-toggle anp-button-metadata-toggle anp-toggle-metadata anp-toggle-scrollbars anp-h1-red anp-h1-divider anp-h2-peach anp-h3-green anp-h4-teal anp-h5-lavender anp-h6-mauve anp-decoration-toggle anp-bold-maroon anp-italic-green anp-highlight-yellow anp-colorful-frame-icon-toggle-dark anp-simple-rainbow-color-toggle anp-rainbow-file-toggle anp-simple-rainbow-title-toggle anp-simple-rainbow-icon-folder-toggle anp-simple-rainbow-indentation-toggle anp-simple-rainbow-collapse-toggle anp-card-layout anp-card-shadows anp-card-layout-filebrowser anp-theme-ext-light anp-theme-ext-dark anp-theme-ext-amoled ctp-atom-light ctp-atom-dark table-type-three-line table-header-color-blue table-row-alt-background-option table-dark-mode"><script defer="">let theme=localStorage.getItem("theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");"dark"==theme?(document.body.classList.add("theme-dark"),document.body.classList.remove("theme-light")):(document.body.classList.add("theme-light"),document.body.classList.remove("theme-dark")),window.innerWidth<480?document.body.classList.add("is-phone"):window.innerWidth<768?document.body.classList.add("is-tablet"):window.innerWidth<1024?document.body.classList.add("is-small-screen"):document.body.classList.add("is-large-screen")</script><div class="webpage-container workspace"><div class="sidebar-left sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"><label class="theme-toggle-container" for="theme_toggle"><input class="theme-toggle-input" type="checkbox" id="theme_toggle"><div class="toggle-background"></div></label></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"><include src="lib/html/file-tree.html"></include></div><script defer="">let ls = document.querySelector(".sidebar-left"); ls.classList.add("is-collapsed"); if (window.innerWidth > 768) ls.classList.remove("is-collapsed"); ls.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-left-width"));</script></div><div class="document-container markdown-reading-view hide"><div class="markdown-preview-view markdown-rendered allow-fold-headings allow-fold-lists is-readable-line-width"><style id="MJX-CHTML-styles">.mjx-stretched mjx-c.mjx-c2013::before { content: "–"; }
+mjx-stretchy-h.mjx-c2013 mjx-ext mjx-c::before { content: "–"; padding: 0.285em 0px 0px; }
+mjx-c.mjx-c1D52E.TEX-FR::before { padding: 0.479em 0.489em 0.219em 0px; content: "q"; }
+mjx-c.mjx-c1D52D.TEX-FR::before { padding: 0.541em 0.5em 0.212em 0px; content: "p"; }
+mjx-c.mjx-c1D43A.TEX-I::before { padding: 0.705em 0.786em 0.022em 0px; content: "G"; }
+mjx-c.mjx-c1D439.TEX-I::before { padding: 0.68em 0.749em 0px 0px; content: "F"; }
+mjx-c.mjx-c3A9::before { padding: 0.704em 0.722em 0px 0px; content: "Ω"; }
+mjx-c.mjx-c2248::before { padding: 0.483em 0.778em 0px 0px; content: "≈"; }
+mjx-c.mjx-c222B.TEX-S1::before { padding: 0.805em 0.61em 0.306em 0px; content: "∫"; }
+mjx-c.mjx-c200B::before { padding: 0px; content: ""; }
+mjx-c.mjx-c1D44A.TEX-I::before { padding: 0.683em 1.048em 0.022em 0px; content: "W"; }
+mjx-c.mjx-c1D443.TEX-I::before { padding: 0.683em 0.751em 0px 0px; content: "P"; }
+mjx-c.mjx-c1D45E.TEX-I::before { padding: 0.442em 0.46em 0.194em 0px; content: "q"; }
+mjx-c.mjx-c2208::before { padding: 0.54em 0.667em 0.04em 0px; content: "∈"; }
+mjx-c.mjx-c4E.TEX-C::before { padding: 0.789em 0.979em 0.05em 0px; content: "N"; }
+mjx-c.mjx-c1D712.TEX-I::before { padding: 0.442em 0.626em 0.204em 0px; content: "χ"; }
+mjx-c.mjx-c53::before { padding: 0.705em 0.556em 0.022em 0px; content: "S"; }
+mjx-c.mjx-c4D::before { padding: 0.683em 0.917em 0px 0px; content: "M"; }
+mjx-c.mjx-c1D44B.TEX-I::before { padding: 0.683em 0.852em 0px 0px; content: "X"; }
+mjx-c.mjx-c56::before { padding: 0.683em 0.75em 0.022em 0px; content: "V"; }
+mjx-c.mjx-c45::before { padding: 0.68em 0.681em 0px 0px; content: "E"; }
+mjx-c.mjx-c2264::before { padding: 0.636em 0.778em 0.138em 0px; content: "≤"; }
+mjx-c.mjx-c1D70E.TEX-I::before { padding: 0.431em 0.571em 0.011em 0px; content: "σ"; }
+mjx-c.mjx-c1D707.TEX-I::before { padding: 0.442em 0.603em 0.216em 0px; content: "μ"; }
+mjx-c.mjx-c1D708.TEX-I::before { padding: 0.442em 0.53em 0px 0px; content: "ν"; }
+mjx-c.mjx-c46::before { padding: 0.68em 0.653em 0px 0px; content: "F"; }
+mjx-c.mjx-c7B.TEX-S3::before { padding: 1.45em 0.75em 0.949em 0px; content: "{"; }
+mjx-c.mjx-c7D.TEX-S3::before { padding: 1.45em 0.75em 0.949em 0px; content: "}"; }
+mjx-c.mjx-c1D438.TEX-I::before { padding: 0.68em 0.764em 0px 0px; content: "E"; }
+mjx-c.mjx-c222B.TEX-S2::before { padding: 1.36em 0.944em 0.862em 0px; content: "∫"; }
+mjx-c.mjx-c1D43B.TEX-I::before { padding: 0.683em 0.888em 0px 0px; content: "H"; }
+mjx-c.mjx-c1D70C.TEX-I::before { padding: 0.442em 0.517em 0.216em 0px; content: "ρ"; }
+mjx-c.mjx-c1D702.TEX-I::before { padding: 0.442em 0.497em 0.216em 0px; content: "η"; }
+mjx-c.mjx-c221A.TEX-S2::before { padding: 1.15em 1.02em 0.65em 0px; content: "√"; }
+mjx-c.mjx-c3E::before { padding: 0.54em 0.778em 0.04em 0px; content: ">"; }
+mjx-munderover { display: inline-block; text-align: left; }
+mjx-munderover:not([limits="false"]) { padding-top: 0.1em; }
+mjx-munderover:not([limits="false"]) > * { display: block; }
+mjx-c.mjx-c221A.TEX-S1::before { padding: 0.85em 1.02em 0.35em 0px; content: "√"; }
+mjx-c.mjx-c3A::before { padding: 0.43em 0.278em 0px 0px; content: ":"; }
+mjx-c.mjx-c211D.TEX-A::before { padding: 0.683em 0.722em 0px 0px; content: "R"; }
+mjx-c.mjx-c3B::before { padding: 0.43em 0.278em 0.194em 0px; content: ";"; }
+mjx-c.mjx-c21A6::before { padding: 0.511em 1em 0.011em 0px; content: "↦"; }
+mjx-c.mjx-c1D41B.TEX-B::before { padding: 0.694em 0.639em 0.006em 0px; content: "b"; }
+mjx-c.mjx-c2211.TEX-S2::before { padding: 0.95em 1.444em 0.45em 0px; content: "∑"; }
+mjx-c.mjx-c1D457.TEX-I::before { padding: 0.661em 0.412em 0.204em 0px; content: "j"; }
+mjx-c.mjx-c38::before { padding: 0.666em 0.5em 0.022em 0px; content: "8"; }
+mjx-c.mjx-c41::before { padding: 0.716em 0.75em 0px 0px; content: "A"; }
+mjx-c.mjx-c43::before { padding: 0.705em 0.722em 0.021em 0px; content: "C"; }
+mjx-msqrt { display: inline-block; text-align: left; }
+mjx-root { display: inline-block; white-space: nowrap; }
+mjx-surd { display: inline-block; vertical-align: top; }
+mjx-sqrt { display: inline-block; padding-top: 0.07em; }
+mjx-sqrt > mjx-box { border-top: 0.07em solid; }
+mjx-sqrt.mjx-tall > mjx-box { padding-left: 0.3em; margin-left: -0.3em; }
+mjx-c.mjx-c1D435.TEX-I::before { padding: 0.683em 0.759em 0px 0px; content: "B"; }
+mjx-c.mjx-c1D436.TEX-I::before { padding: 0.705em 0.76em 0.022em 0px; content: "C"; }
+mjx-c.mjx-c28.TEX-S3::before { padding: 1.45em 0.736em 0.949em 0px; content: "("; }
+mjx-c.mjx-c29.TEX-S3::before { padding: 1.45em 0.736em 0.949em 0px; content: ")"; }
+mjx-c.mjx-c42::before { padding: 0.683em 0.708em 0px 0px; content: "B"; }
+mjx-c.mjx-c1D449.TEX-I::before { padding: 0.683em 0.769em 0.022em 0px; content: "V"; }
+mjx-c.mjx-c1D462.TEX-I::before { padding: 0.442em 0.572em 0.011em 0px; content: "u"; }
+mjx-c.mjx-c221A.TEX-S4::before { padding: 1.75em 1.02em 1.25em 0px; content: "√"; }
+mjx-c.mjx-c22C6::before { padding: 0.486em 0.5em 0px 0px; content: "⋆"; }
+mjx-c.mjx-c1D42E.TEX-B::before { padding: 0.45em 0.639em 0.006em 0px; content: "u"; }
+mjx-c.mjx-c2E::before { padding: 0.12em 0.278em 0px 0px; content: "."; }
+mjx-c.mjx-c1D43C.TEX-I::before { padding: 0.683em 0.504em 0px 0px; content: "I"; }
+mjx-c.mjx-c1D43F.TEX-I::before { padding: 0.683em 0.681em 0px 0px; content: "L"; }
+mjx-c.mjx-c1D458.TEX-I::before { padding: 0.694em 0.521em 0.011em 0px; content: "k"; }
+mjx-c.mjx-c28.TEX-S1::before { padding: 0.85em 0.458em 0.349em 0px; content: "("; }
+mjx-c.mjx-c29.TEX-S1::before { padding: 0.85em 0.458em 0.349em 0px; content: ")"; }
+mjx-c.mjx-c6D::before { padding: 0.442em 0.833em 0px 0px; content: "m"; }
+mjx-c.mjx-c1D425.TEX-B::before { padding: 0.694em 0.319em 0px 0px; content: "l"; }
+mjx-c.mjx-c1D421.TEX-B::before { padding: 0.694em 0.639em 0px 0px; content: "h"; }
+mjx-c.mjx-c62::before { padding: 0.694em 0.556em 0.011em 0px; content: "b"; }
+mjx-c.mjx-c1D42F.TEX-B::before { padding: 0.444em 0.607em 0px 0px; content: "v"; }
+mjx-c.mjx-c2225::before { padding: 0.75em 0.5em 0.25em 0px; content: "∥"; }
+mjx-c.mjx-c1D441.TEX-I::before { padding: 0.683em 0.888em 0px 0px; content: "N"; }
+mjx-c.mjx-c2211.TEX-S1::before { padding: 0.75em 1.056em 0.25em 0px; content: "∑"; }
+mjx-stretchy-v.mjx-c7B mjx-beg mjx-c::before { content: "⎧"; padding: 0.899em 0.889em 0.01em 0px; }
+mjx-stretchy-v.mjx-c7B mjx-ext mjx-c::before { content: "⎪"; width: 0.889em; }
+mjx-stretchy-v.mjx-c7B mjx-end mjx-c::before { content: "⎩"; padding: 0.01em 0.889em 0.899em 0px; }
+mjx-stretchy-v.mjx-c7B mjx-mid mjx-c::before { content: "⎨"; padding: 1.16em 0.889em 0.66em 0px; }
+mjx-stretchy-v.mjx-c7B > mjx-mid { margin-top: -0.91em; margin-bottom: -0.91em; }
+mjx-stretchy-v.mjx-c7B > mjx-end { margin-top: -0.909em; }
+mjx-stretchy-v.mjx-c7B > mjx-ext { height: 50%; border-top-width: 0.879em; border-bottom-width: 0.879em; }
+mjx-c.mjx-c2217::before { padding: 0.465em 0.5em 0px 0px; content: "∗"; }
+mjx-c.mjx-c68::before { padding: 0.694em 0.556em 0px 0px; content: "h"; }
+mjx-c.mjx-c1D70B.TEX-I::before { padding: 0.431em 0.57em 0.011em 0px; content: "π"; }
+mjx-c.mjx-c1D714.TEX-I::before { padding: 0.443em 0.622em 0.011em 0px; content: "ω"; }
+mjx-c.mjx-c37::before { padding: 0.676em 0.5em 0.022em 0px; content: "7"; }
+mjx-mtable { display: inline-block; text-align: center; vertical-align: 0.25em; position: relative; box-sizing: border-box; border-spacing: 0px; border-collapse: collapse; }
+mjx-mstyle[size="s"] mjx-mtable { vertical-align: 0.354em; }
+mjx-labels { position: absolute; left: 0px; top: 0px; }
+mjx-table { display: inline-block; vertical-align: -0.5ex; box-sizing: border-box; }
+mjx-table > mjx-itable { vertical-align: middle; text-align: left; box-sizing: border-box; }
+mjx-labels > mjx-itable { position: absolute; top: 0px; }
+mjx-mtable[justify="left"] { text-align: left; }
+mjx-mtable[justify="right"] { text-align: right; }
+mjx-mtable[justify="left"][side="left"] { padding-right: 0px !important; }
+mjx-mtable[justify="left"][side="right"] { padding-left: 0px !important; }
+mjx-mtable[justify="right"][side="left"] { padding-right: 0px !important; }
+mjx-mtable[justify="right"][side="right"] { padding-left: 0px !important; }
+mjx-mtable[align] { vertical-align: baseline; }
+mjx-mtable[align="top"] > mjx-table { vertical-align: top; }
+mjx-mtable[align="bottom"] > mjx-table { vertical-align: bottom; }
+mjx-mtable[side="right"] mjx-labels { min-width: 100%; }
+mjx-mtr { display: table-row; text-align: left; }
+mjx-mtr[rowalign="top"] > mjx-mtd { vertical-align: top; }
+mjx-mtr[rowalign="center"] > mjx-mtd { vertical-align: middle; }
+mjx-mtr[rowalign="bottom"] > mjx-mtd { vertical-align: bottom; }
+mjx-mtr[rowalign="baseline"] > mjx-mtd { vertical-align: baseline; }
+mjx-mtr[rowalign="axis"] > mjx-mtd { vertical-align: 0.25em; }
+mjx-mtd { display: table-cell; text-align: center; padding: 0.215em 0.4em; }
+mjx-mtd:first-child { padding-left: 0px; }
+mjx-mtd:last-child { padding-right: 0px; }
+mjx-mtable > * > mjx-itable > :first-child > mjx-mtd { padding-top: 0px; }
+mjx-mtable > * > mjx-itable > :last-child > mjx-mtd { padding-bottom: 0px; }
+mjx-tstrut { display: inline-block; height: 1em; vertical-align: -0.25em; }
+mjx-labels[align="left"] > mjx-mtr > mjx-mtd { text-align: left; }
+mjx-labels[align="right"] > mjx-mtr > mjx-mtd { text-align: right; }
+mjx-mtd[extra] { padding: 0px; }
+mjx-mtd[rowalign="top"] { vertical-align: top; }
+mjx-mtd[rowalign="center"] { vertical-align: middle; }
+mjx-mtd[rowalign="bottom"] { vertical-align: bottom; }
+mjx-mtd[rowalign="baseline"] { vertical-align: baseline; }
+mjx-mtd[rowalign="axis"] { vertical-align: 0.25em; }
+mjx-texatom { display: inline-block; text-align: left; }
+mjx-mrow { display: inline-block; text-align: left; }
+mjx-msub { display: inline-block; text-align: left; }
+mjx-mspace { display: inline-block; text-align: left; }
+mjx-mtext { display: inline-block; text-align: left; }
+mjx-munder { display: inline-block; text-align: left; }
+mjx-over { text-align: left; }
+mjx-munder:not([limits="false"]) { display: inline-table; }
+mjx-munder > mjx-row { text-align: left; }
+mjx-under { padding-bottom: 0.1em; }
+mjx-mover { display: inline-block; text-align: left; }
+mjx-mover:not([limits="false"]) { padding-top: 0.1em; }
+mjx-mover:not([limits="false"]) > * { display: block; text-align: left; }
+mjx-msubsup { display: inline-block; text-align: left; }
+mjx-script { display: inline-block; padding-right: 0.05em; padding-left: 0.033em; }
+mjx-script > mjx-spacer { display: block; }
+mjx-mfrac { display: inline-block; text-align: left; }
+mjx-frac { display: inline-block; vertical-align: 0.17em; padding: 0px 0.22em; }
+mjx-frac[type="d"] { vertical-align: 0.04em; }
+mjx-frac[delims] { padding: 0px 0.1em; }
+mjx-frac[atop] { padding: 0px 0.12em; }
+mjx-frac[atop][delims] { padding: 0px; }
+mjx-dtable { display: inline-table; width: 100%; }
+mjx-dtable > * { font-size: 2000%; }
+mjx-dbox { display: block; font-size: 5%; }
+mjx-num { display: block; text-align: center; }
+mjx-den { display: block; text-align: center; }
+mjx-mfrac[bevelled] > mjx-num { display: inline-block; }
+mjx-mfrac[bevelled] > mjx-den { display: inline-block; }
+mjx-den[align="right"], mjx-num[align="right"] { text-align: right; }
+mjx-den[align="left"], mjx-num[align="left"] { text-align: left; }
+mjx-nstrut { display: inline-block; height: 0.054em; width: 0px; vertical-align: -0.054em; }
+mjx-nstrut[type="d"] { height: 0.217em; vertical-align: -0.217em; }
+mjx-dstrut { display: inline-block; height: 0.505em; width: 0px; }
+mjx-dstrut[type="d"] { height: 0.726em; }
+mjx-line { display: block; box-sizing: border-box; min-height: 1px; height: 0.06em; border-top: 0.06em solid; margin: 0.06em -0.1em; overflow: hidden; }
+mjx-line[type="d"] { margin: 0.18em -0.1em; }
+mjx-stretchy-v.mjx-c28 mjx-beg mjx-c::before { content: "⎛"; padding: 1.154em 0.875em 0.655em 0px; }
+mjx-stretchy-v.mjx-c28 mjx-ext mjx-c::before { content: "⎜"; width: 0.875em; }
+mjx-stretchy-v.mjx-c28 mjx-end mjx-c::before { content: "⎝"; padding: 1.165em 0.875em 0.644em 0px; }
+mjx-stretchy-v.mjx-c28 > mjx-end { margin-top: -1.809em; }
+mjx-stretchy-v.mjx-c28 > mjx-ext { border-top-width: 1.779em; border-bottom-width: 1.779em; }
+mjx-stretchy-v.mjx-c29 mjx-beg mjx-c::before { content: "⎞"; padding: 1.154em 0.875em 0.655em 0px; }
+mjx-stretchy-v.mjx-c29 mjx-ext mjx-c::before { content: "⎟"; width: 0.875em; }
+mjx-stretchy-v.mjx-c29 mjx-end mjx-c::before { content: "⎠"; padding: 1.165em 0.875em 0.644em 0px; }
+mjx-stretchy-v.mjx-c29 > mjx-end { margin-top: -1.809em; }
+mjx-stretchy-v.mjx-c29 > mjx-ext { border-top-width: 1.779em; border-bottom-width: 1.779em; }
+mjx-stretchy-v.mjx-c5B mjx-beg mjx-c::before { content: "⎡"; padding: 1.154em 0.667em 0.645em 0px; }
+mjx-stretchy-v.mjx-c5B mjx-ext mjx-c::before { content: "⎢"; width: 0.667em; }
+mjx-stretchy-v.mjx-c5B mjx-end mjx-c::before { content: "⎣"; padding: 1.155em 0.667em 0.644em 0px; }
+mjx-stretchy-v.mjx-c5B > mjx-end { margin-top: -1.799em; }
+mjx-stretchy-v.mjx-c5B > mjx-ext { border-top-width: 1.769em; border-bottom-width: 1.769em; }
+mjx-stretchy-v.mjx-c5D mjx-beg mjx-c::before { content: "⎤"; padding: 1.154em 0.667em 0.645em 0px; }
+mjx-stretchy-v.mjx-c5D mjx-ext mjx-c::before { content: "⎥"; width: 0.667em; }
+mjx-stretchy-v.mjx-c5D mjx-end mjx-c::before { content: "⎦"; padding: 1.155em 0.667em 0.644em 0px; }
+mjx-stretchy-v.mjx-c5D > mjx-end { margin-top: -1.799em; }
+mjx-stretchy-v.mjx-c5D > mjx-ext { border-top-width: 1.769em; border-bottom-width: 1.769em; }
+mjx-stretchy-h.mjx-c23DF mjx-beg mjx-c::before { content: ""; padding: 0.32em 0px 0.2em; }
+mjx-stretchy-h.mjx-c23DF mjx-ext mjx-c::before { content: ""; padding: 0.32em 0px 0.2em; }
+mjx-stretchy-h.mjx-c23DF mjx-end mjx-c::before { content: ""; padding: 0.32em 0px 0.2em; }
+mjx-stretchy-h.mjx-c23DF mjx-mid mjx-c::before { content: ""; padding: 0.32em 0px 0.2em; }
+mjx-stretchy-h.mjx-c23DF > mjx-ext { width: 50%; }
+mjx-c.mjx-c1D466.TEX-I::before { padding: 0.442em 0.49em 0.205em 0px; content: "y"; }
+mjx-c.mjx-c5B.TEX-S3::before { padding: 1.45em 0.528em 0.949em 0px; content: "["; }
+mjx-c.mjx-c5D.TEX-S3::before { padding: 1.45em 0.528em 0.949em 0px; content: "]"; }
+mjx-c.mjx-c30::before { padding: 0.666em 0.5em 0.022em 0px; content: "0"; }
+mjx-c.mjx-c2212::before { padding: 0.583em 0.778em 0.082em 0px; content: "−"; }
+mjx-c.mjx-c1D411.TEX-B::before { padding: 0.686em 0.862em 0.011em 0px; content: "R"; }
+mjx-c.mjx-c1D703.TEX-I::before { padding: 0.705em 0.469em 0.01em 0px; content: "θ"; }
+mjx-c.mjx-c63::before { padding: 0.448em 0.444em 0.011em 0px; content: "c"; }
+mjx-c.mjx-c6F::before { padding: 0.448em 0.5em 0.01em 0px; content: "o"; }
+mjx-c.mjx-c73::before { padding: 0.448em 0.394em 0.011em 0px; content: "s"; }
+mjx-c.mjx-c2061::before { padding: 0px; content: ""; }
+mjx-c.mjx-c69::before { padding: 0.669em 0.278em 0px 0px; content: "i"; }
+mjx-c.mjx-c6E::before { padding: 0.442em 0.556em 0px 0px; content: "n"; }
+mjx-c.mjx-c1D451.TEX-I::before { padding: 0.694em 0.52em 0.01em 0px; content: "d"; }
+mjx-c.mjx-c1D437.TEX-I::before { padding: 0.683em 0.828em 0px 0px; content: "D"; }
+mjx-c.mjx-c1D447.TEX-I::before { padding: 0.677em 0.704em 0px 0px; content: "T"; }
+mjx-c.mjx-c1D464.TEX-I::before { padding: 0.443em 0.716em 0.011em 0px; content: "w"; }
+mjx-c.mjx-c22C5::before { padding: 0.31em 0.278em 0px 0px; content: "⋅"; }
+mjx-c.mjx-c1D412.TEX-B::before { padding: 0.697em 0.639em 0.011em 0px; content: "S"; }
+mjx-c.mjx-c1D6FC.TEX-I::before { padding: 0.442em 0.64em 0.011em 0px; content: "α"; }
+mjx-c.mjx-c1D445.TEX-I::before { padding: 0.683em 0.759em 0.021em 0px; content: "R"; }
+mjx-c.mjx-c34::before { padding: 0.677em 0.5em 0px 0px; content: "4"; }
+mjx-c.mjx-c35::before { padding: 0.666em 0.5em 0.022em 0px; content: "5"; }
+mjx-c.mjx-c2218::before { padding: 0.444em 0.5em 0px 0px; content: "∘"; }
+mjx-c.mjx-c1D434.TEX-I::before { padding: 0.716em 0.75em 0px 0px; content: "A"; }
+mjx-c.mjx-c2026::before { padding: 0.12em 1.172em 0px 0px; content: "…"; }
+mjx-c.mjx-c1D431.TEX-B::before { padding: 0.444em 0.607em 0px 0px; content: "x"; }
+mjx-c.mjx-c1D400.TEX-B::before { padding: 0.698em 0.869em 0px 0px; content: "A"; }
+mjx-c.mjx-c22EF::before { padding: 0.31em 1.172em 0px 0px; content: "⋯"; }
+mjx-c.mjx-c1D413.TEX-B::before { padding: 0.675em 0.8em 0px 0px; content: "T"; }
+mjx-c.mjx-c28.TEX-B::before { padding: 0.75em 0.447em 0.249em 0px; content: "("; }
+mjx-c.mjx-c1D41C.TEX-B::before { padding: 0.453em 0.511em 0.006em 0px; content: "c"; }
+mjx-c.mjx-c29.TEX-B::before { padding: 0.75em 0.447em 0.249em 0px; content: ")"; }
+mjx-c.mjx-c2212.TEX-B::before { padding: 0.281em 0.894em 0px 0px; content: "−"; }
+mjx-c.mjx-c33::before { padding: 0.665em 0.5em 0.022em 0px; content: "3"; }
+mjx-c.mjx-c44::before { padding: 0.683em 0.764em 0px 0px; content: "D"; }
+mjx-c.mjx-cA0::before { padding: 0px 0.25em 0px 0px; content: " "; }
+mjx-c.mjx-c70::before { padding: 0.442em 0.556em 0.194em 0px; content: "p"; }
+mjx-c.mjx-c74::before { padding: 0.615em 0.389em 0.01em 0px; content: "t"; }
+mjx-c.mjx-c78::before { padding: 0.431em 0.528em 0px 0px; content: "x"; }
+mjx-c.mjx-c79::before { padding: 0.431em 0.528em 0.204em 0px; content: "y"; }
+mjx-c.mjx-c7A::before { padding: 0.431em 0.444em 0px 0px; content: "z"; }
+mjx-c.mjx-c54::before { padding: 0.677em 0.722em 0px 0px; content: "T"; }
+mjx-c.mjx-c76::before { padding: 0.431em 0.528em 0.011em 0px; content: "v"; }
+mjx-c.mjx-c65::before { padding: 0.448em 0.444em 0.011em 0px; content: "e"; }
+mjx-c.mjx-c72::before { padding: 0.442em 0.392em 0px 0px; content: "r"; }
+mjx-c.mjx-c1D467.TEX-I::before { padding: 0.442em 0.465em 0.011em 0px; content: "z"; }
+mjx-c.mjx-c1D453.TEX-I::before { padding: 0.705em 0.55em 0.205em 0px; content: "f"; }
+mjx-c.mjx-c1D6FD.TEX-I::before { padding: 0.705em 0.566em 0.194em 0px; content: "β"; }
+mjx-c.mjx-c1D6FE.TEX-I::before { padding: 0.441em 0.543em 0.216em 0px; content: "γ"; }
+mjx-c.mjx-c1D427.TEX-B::before { padding: 0.45em 0.639em 0px 0px; content: "n"; }
+mjx-c.mjx-c1D408.TEX-B::before { padding: 0.686em 0.436em 0px 0px; content: "I"; }
+mjx-c.mjx-c1D40D.TEX-B::before { padding: 0.686em 0.9em 0px 0px; content: "N"; }
+mjx-c.mjx-c50::before { padding: 0.683em 0.681em 0px 0px; content: "P"; }
+mjx-c.mjx-c20D7.TEX-V::before { padding: 0.714em 0.5em 0px 0px; content: "→"; }
+mjx-c.mjx-c4C::before { padding: 0.683em 0.625em 0px 0px; content: "L"; }
+mjx-c.mjx-c6B::before { padding: 0.694em 0.528em 0px 0px; content: "k"; }
+mjx-c.mjx-c2D::before { padding: 0.252em 0.333em 0px 0px; content: "-"; }
+mjx-c.mjx-c61::before { padding: 0.448em 0.5em 0.011em 0px; content: "a"; }
+mjx-c.mjx-c20::before { padding: 0px 0.25em 0px 0px; content: " "; }
+mjx-c.mjx-c2F::before { padding: 0.75em 0.5em 0.25em 0px; content: "/"; }
+mjx-c.mjx-c67::before { padding: 0.453em 0.5em 0.206em 0px; content: "g"; }
+mjx-c.mjx-c64::before { padding: 0.694em 0.556em 0.011em 0px; content: "d"; }
+mjx-c.mjx-c5E::before { padding: 0.694em 0.5em 0px 0px; content: "^"; }
+mjx-c.mjx-c1D448.TEX-I::before { padding: 0.683em 0.767em 0.022em 0px; content: "U"; }
+mjx-c.mjx-cD7::before { padding: 0.491em 0.778em 0px 0px; content: "×"; }
+mjx-c.mjx-c5B::before { padding: 0.75em 0.278em 0.25em 0px; content: "["; }
+mjx-c.mjx-c5D::before { padding: 0.75em 0.278em 0.25em 0px; content: "]"; }
+mjx-c.mjx-c21D2::before { padding: 0.525em 1em 0.024em 0px; content: "⇒"; }
+mjx-c.mjx-c75::before { padding: 0.442em 0.556em 0.011em 0px; content: "u"; }
+mjx-c.mjx-c77::before { padding: 0.431em 0.722em 0.011em 0px; content: "w"; }
+mjx-c.mjx-c6C::before { padding: 0.694em 0.278em 0px 0px; content: "l"; }
+mjx-c.mjx-c1D440.TEX-I::before { padding: 0.683em 1.051em 0px 0px; content: "M"; }
+mjx-c.mjx-c1D465.TEX-I::before { padding: 0.442em 0.572em 0.011em 0px; content: "x"; }
+mjx-c.mjx-cD7::before { padding: 0.491em 0.778em 0px 0px; content: "×"; }
+mjx-c.mjx-c32::before { padding: 0.666em 0.5em 0px 0px; content: "2"; }
+mjx-c.mjx-c1D463.TEX-I::before { padding: 0.443em 0.485em 0.011em 0px; content: "v"; }
+mjx-c.mjx-c1D45D.TEX-I::before { padding: 0.442em 0.503em 0.194em 0px; content: "p"; }
+mjx-c.mjx-c2192::before { padding: 0.511em 1em 0.011em 0px; content: "→"; }
+mjx-c.mjx-c1D44E.TEX-I::before { padding: 0.441em 0.529em 0.01em 0px; content: "a"; }
+mjx-c.mjx-c1D44F.TEX-I::before { padding: 0.694em 0.429em 0.011em 0px; content: "b"; }
+mjx-c.mjx-c1D459.TEX-I::before { padding: 0.694em 0.298em 0.011em 0px; content: "l"; }
+mjx-c.mjx-c1D452.TEX-I::before { padding: 0.442em 0.466em 0.011em 0px; content: "e"; }
+mjx-mn { display: inline-block; text-align: left; }
+mjx-c.mjx-c1D442.TEX-I::before { padding: 0.704em 0.763em 0.022em 0px; content: "O"; }
+mjx-c.mjx-c31::before { padding: 0.666em 0.5em 0px 0px; content: "1"; }
+mjx-container[jax="CHTML"] { line-height: 0; }
+mjx-container [space="1"] { margin-left: 0.111em; }
+mjx-container [space="2"] { margin-left: 0.167em; }
+mjx-container [space="3"] { margin-left: 0.222em; }
+mjx-container [space="4"] { margin-left: 0.278em; }
+mjx-container [space="5"] { margin-left: 0.333em; }
+mjx-container [rspace="1"] { margin-right: 0.111em; }
+mjx-container [rspace="2"] { margin-right: 0.167em; }
+mjx-container [rspace="3"] { margin-right: 0.222em; }
+mjx-container [rspace="4"] { margin-right: 0.278em; }
+mjx-container [rspace="5"] { margin-right: 0.333em; }
+mjx-container [size="s"] { font-size: 70.7%; }
+mjx-container [size="ss"] { font-size: 50%; }
+mjx-container [size="Tn"] { font-size: 60%; }
+mjx-container [size="sm"] { font-size: 85%; }
+mjx-container [size="lg"] { font-size: 120%; }
+mjx-container [size="Lg"] { font-size: 144%; }
+mjx-container [size="LG"] { font-size: 173%; }
+mjx-container [size="hg"] { font-size: 207%; }
+mjx-container [size="HG"] { font-size: 249%; }
+mjx-container [width="full"] { width: 100%; }
+mjx-box { display: inline-block; }
+mjx-block { display: block; }
+mjx-itable { display: inline-table; }
+mjx-row { display: table-row; }
+mjx-row > * { display: table-cell; }
+mjx-mtext { display: inline-block; }
+mjx-mstyle { display: inline-block; }
+mjx-merror { display: inline-block; color: red; background-color: yellow; }
+mjx-mphantom { visibility: hidden; }
+mjx-assistive-mml { top: 0px; left: 0px; clip: rect(1px, 1px, 1px, 1px); user-select: none; position: absolute !important; padding: 1px 0px 0px !important; border: 0px !important; display: block !important; width: auto !important; overflow: hidden !important; }
+mjx-assistive-mml[display="block"] { width: 100% !important; }
+mjx-math { display: inline-block; text-align: left; line-height: 0; text-indent: 0px; font-style: normal; font-weight: normal; font-size: 100%; font-size-adjust: none; letter-spacing: normal; border-collapse: collapse; overflow-wrap: normal; word-spacing: normal; white-space: nowrap; direction: ltr; padding: 1px 0px; }
+mjx-container[jax="CHTML"][display="true"] { display: block; text-align: center; margin: 1em 0px; }
+mjx-container[jax="CHTML"][display="true"][width="full"] { display: flex; }
+mjx-container[jax="CHTML"][display="true"] mjx-math { padding: 0px; }
+mjx-container[jax="CHTML"][justify="left"] { text-align: left; }
+mjx-container[jax="CHTML"][justify="right"] { text-align: right; }
+mjx-mi { display: inline-block; text-align: left; }
+mjx-c { display: inline-block; }
+mjx-utext { display: inline-block; padding: 0.75em 0px 0.2em; }
+mjx-mo { display: inline-block; text-align: left; }
+mjx-stretchy-h { display: inline-table; width: 100%; }
+mjx-stretchy-h > * { display: table-cell; width: 0px; }
+mjx-stretchy-h > * > mjx-c { display: inline-block; transform: scaleX(1); }
+mjx-stretchy-h > * > mjx-c::before { display: inline-block; width: initial; }
+mjx-stretchy-h > mjx-ext { overflow: clip visible; width: 100%; }
+mjx-stretchy-h > mjx-ext > mjx-c::before { transform: scaleX(500); }
+mjx-stretchy-h > mjx-ext > mjx-c { width: 0px; }
+mjx-stretchy-h > mjx-beg > mjx-c { margin-right: -0.1em; }
+mjx-stretchy-h > mjx-end > mjx-c { margin-left: -0.1em; }
+mjx-stretchy-v { display: inline-block; }
+mjx-stretchy-v > * { display: block; }
+mjx-stretchy-v > mjx-beg { height: 0px; }
+mjx-stretchy-v > mjx-end > mjx-c { display: block; }
+mjx-stretchy-v > * > mjx-c { transform: scaleY(1); transform-origin: left center; overflow: hidden; }
+mjx-stretchy-v > mjx-ext { display: block; height: 100%; box-sizing: border-box; border: 0px solid transparent; overflow: visible clip; }
+mjx-stretchy-v > mjx-ext > mjx-c::before { width: initial; box-sizing: border-box; }
+mjx-stretchy-v > mjx-ext > mjx-c { transform: scaleY(500) translateY(0.075em); overflow: visible; }
+mjx-mark { display: inline-block; height: 0px; }
+mjx-msup { display: inline-block; text-align: left; }
+mjx-c::before { display: block; width: 0px; }
+.MJX-TEX { font-family: MJXZERO, MJXTEX; }
+.TEX-B { font-family: MJXZERO, MJXTEX-B; }
+.TEX-I { font-family: MJXZERO, MJXTEX-I; }
+.TEX-MI { font-family: MJXZERO, MJXTEX-MI; }
+.TEX-BI { font-family: MJXZERO, MJXTEX-BI; }
+.TEX-S1 { font-family: MJXZERO, MJXTEX-S1; }
+.TEX-S2 { font-family: MJXZERO, MJXTEX-S2; }
+.TEX-S3 { font-family: MJXZERO, MJXTEX-S3; }
+.TEX-S4 { font-family: MJXZERO, MJXTEX-S4; }
+.TEX-A { font-family: MJXZERO, MJXTEX-A; }
+.TEX-C { font-family: MJXZERO, MJXTEX-C; }
+.TEX-CB { font-family: MJXZERO, MJXTEX-CB; }
+.TEX-FR { font-family: MJXZERO, MJXTEX-FR; }
+.TEX-FRB { font-family: MJXZERO, MJXTEX-FRB; }
+.TEX-SS { font-family: MJXZERO, MJXTEX-SS; }
+.TEX-SSB { font-family: MJXZERO, MJXTEX-SSB; }
+.TEX-SSI { font-family: MJXZERO, MJXTEX-SSI; }
+.TEX-SC { font-family: MJXZERO, MJXTEX-SC; }
+.TEX-T { font-family: MJXZERO, MJXTEX-T; }
+.TEX-V { font-family: MJXZERO, MJXTEX-V; }
+.TEX-VB { font-family: MJXZERO, MJXTEX-VB; }
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c { font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A !important; }
+@font-face { font-family: MJXZERO; src: url("lib/fonts/mathjax_zero.woff") format("woff"); }
+@font-face { font-family: MJXTEX; src: url("lib/fonts/mathjax_main-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-B; src: url("lib/fonts/mathjax_main-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-I; src: url("lib/fonts/mathjax_math-italic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-MI; src: url("lib/fonts/mathjax_main-italic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-BI; src: url("lib/fonts/mathjax_math-bolditalic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S1; src: url("lib/fonts/mathjax_size1-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S2; src: url("lib/fonts/mathjax_size2-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S3; src: url("lib/fonts/mathjax_size3-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S4; src: url("lib/fonts/mathjax_size4-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-A; src: url("lib/fonts/mathjax_ams-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-C; src: url("lib/fonts/mathjax_calligraphic-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-CB; src: url("lib/fonts/mathjax_calligraphic-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-FR; src: url("lib/fonts/mathjax_fraktur-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-FRB; src: url("lib/fonts/mathjax_fraktur-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SS; src: url("lib/fonts/mathjax_sansserif-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SSB; src: url("lib/fonts/mathjax_sansserif-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SSI; src: url("lib/fonts/mathjax_sansserif-italic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SC; src: url("lib/fonts/mathjax_script-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-T; src: url("lib/fonts/mathjax_typewriter-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-V; src: url("lib/fonts/mathjax_vector-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-VB; src: url("lib/fonts/mathjax_vector-bold.woff") format("woff"); }
+mjx-c.mjx-c1D45F.TEX-I::before { padding: 0.442em 0.451em 0.011em 0px; content: "r"; }
+mjx-c.mjx-c210E.TEX-I::before { padding: 0.694em 0.576em 0.011em 0px; content: "h"; }
+mjx-c.mjx-c1D460.TEX-I::before { padding: 0.442em 0.469em 0.01em 0px; content: "s"; }
+mjx-c.mjx-c28::before { padding: 0.75em 0.389em 0.25em 0px; content: "("; }
+mjx-c.mjx-c29::before { padding: 0.75em 0.389em 0.25em 0px; content: ")"; }
+mjx-c.mjx-c3D::before { padding: 0.583em 0.778em 0.082em 0px; content: "="; }
+mjx-c.mjx-c1D45A.TEX-I::before { padding: 0.442em 0.878em 0.011em 0px; content: "m"; }
+mjx-c.mjx-c1D456.TEX-I::before { padding: 0.661em 0.345em 0.011em 0px; content: "i"; }
+mjx-c.mjx-c1D45B.TEX-I::before { padding: 0.442em 0.6em 0.011em 0px; content: "n"; }
+mjx-c.mjx-c1D454.TEX-I::before { padding: 0.442em 0.477em 0.205em 0px; content: "g"; }
+mjx-c.mjx-c2032::before { padding: 0.56em 0.275em 0px 0px; content: "′"; }
+mjx-c.mjx-c2B::before { padding: 0.583em 0.778em 0.082em 0px; content: "+"; }
+mjx-c.mjx-c1D450.TEX-I::before { padding: 0.442em 0.433em 0.011em 0px; content: "c"; }
+mjx-c.mjx-c1D45C.TEX-I::before { padding: 0.441em 0.485em 0.011em 0px; content: "o"; }
+mjx-c.mjx-c1D461.TEX-I::before { padding: 0.626em 0.361em 0.011em 0px; content: "t"; }
+mjx-c.mjx-c2C::before { padding: 0.121em 0.278em 0.194em 0px; content: ","; }
+</style><div class="markdown-preview-sizer markdown-preview-section"><h1 class="page-title heading inline-title" id="什么是全局光照"><p dir="auto">什么是全局光照</p></h1><div class="el-h1 heading-wrapper"><div class="heading-children"><div class="el-h2 heading-wrapper"><h2 data-heading="全局光照基本概念" dir="auto" class="heading" id="全局光照基本概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>全局光照基本概念</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：什么是全局光照</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>全局光照 = 直接光照 + 间接光照</code>；</li>
+<li data-line="2" dir="auto">其中：直接光照来自于原始光源，间接光照来自于原始光源打在某些物体上后、反射出来的次级光源；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="4" dir="auto"><span alt="Pasted image 20250507130642.png" src="Pasted image 20250507130642.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250507130642.png" src="lib/media/pasted-image-20250507130642.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="技术实现分析" dir="auto" class="heading" id="技术实现分析"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>技术实现分析</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>补充</strong></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><span alt="Pasted image 20250507131514.png" src="Pasted image 20250507131514.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250507131514.png" src="lib/media/pasted-image-20250507131514.png"></span></li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：全局光照技术实现分析</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="0" dir="auto">哪些物体表面处可以被直接照亮，成为次级光源？</li>
+</ol>
+<ul>
+<li data-line="1" dir="auto">即：哪些物体可以被光源照到？</li>
+<li data-line="2" dir="auto">这个可以使用 <code>ShadowMap</code> 解决 <code>-&gt;</code> 假设当前的 <code>ShadowMap</code> 的大小为 <code>512*512</code>，则当前光源照向场景后、应当就有 <code>512*512</code> 个次级光源；</li>
+<li data-line="3" dir="auto">可以将每一个像素当作场景中的小片；</li>
+<li data-line="4" dir="auto">这里需要一个假设：所有的次级光源的反射物，都是 <code>Diffuse</code> 的，此时反射的面就是一个范围的球面，因此此时<strong>不依赖于当前相机观察的角度</strong>；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="5" dir="auto">可以将所有次级光源贡献的光源，求和加到某个被间接光源照射到的地方；</li>
+</ol>
+<ul>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>即：算一个物体表面，多个次级光源贡献的光源的求和；
+<ul>
+<li data-line="7" dir="auto"><span alt="Pasted image 20250507131554.png" src="Pasted image 20250507131554.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250507131554.png" src="lib/media/pasted-image-20250507131554.png"></span></li>
+</ul>
+</li>
+<li data-line="8" dir="auto">此时可以使用 <code>RSM</code> 反射阴影贴图的技术；</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>当前 <code>q</code> 反射到 <code>p</code> 的光照，此时公式为：
+<ul>
+<li data-line="10" dir="auto"><span class="math math-block is-loaded"><mjx-container class="MathJax" jax="CHTML" display="true"><mjx-math display="true" class="MJX-TEX" style="margin-left: 0px; margin-right: 0px;"><mjx-mtable style="min-width: 28.961em;"><mjx-table><mjx-itable><mjx-mtr><mjx-mtd style="text-align: right; padding-right: 0px; padding-bottom: 0.15em;"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D43F TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D45C TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D45C TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-tstrut></mjx-tstrut></mjx-mtd><mjx-mtd style="text-align: left; padding-left: 0px; padding-bottom: 0.15em;"><mjx-mi class="mjx-n"></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-msub space="4"><mjx-mo class="mjx-lop"><mjx-c class="mjx-c222B TEX-S2"></mjx-c></mjx-mo><mjx-script style="vertical-align: -0.896em; margin-left: -0.388em;"><mjx-texatom size="s" texclass="ORD"><mjx-msub><mjx-mi class="mjx-n"><mjx-c class="mjx-c3A9"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-texatom size="s" texclass="ORD"><mjx-texatom texclass="ORD"><mjx-mi class="mjx-n"><mjx-c class="mjx-c70"></mjx-c><mjx-c class="mjx-c61"></mjx-c><mjx-c class="mjx-c74"></mjx-c><mjx-c class="mjx-c63"></mjx-c><mjx-c class="mjx-c68"></mjx-c></mjx-mi></mjx-texatom></mjx-texatom></mjx-script></mjx-msub></mjx-texatom></mjx-script></mjx-msub><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D43F TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mi class="mjx-n"><mjx-c class="mjx-c70"></mjx-c></mjx-mi></mjx-texatom><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D449 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mi class="mjx-n"><mjx-c class="mjx-c70"></mjx-c></mjx-mi></mjx-texatom><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.06em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D45F TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mi class="mjx-n"><mjx-c class="mjx-c70"></mjx-c></mjx-mi></mjx-texatom><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D45C TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-mi class="mjx-n" space="2"><mjx-c class="mjx-c63"></mjx-c><mjx-c class="mjx-c6F"></mjx-c><mjx-c class="mjx-c73"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c2061"></mjx-c></mjx-mo><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D703 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-texatom texclass="ORD"><mjx-mi class="mjx-n"><mjx-c class="mjx-c64"></mjx-c></mjx-mi></mjx-texatom><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-tstrut></mjx-tstrut></mjx-mtd></mjx-mtr><mjx-mtr><mjx-mtd style="text-align: right; padding-right: 0px; padding-top: 0.15em;"><mjx-tstrut></mjx-tstrut></mjx-mtd><mjx-mtd style="text-align: left; padding-left: 0px; padding-top: 0.15em;"><mjx-mi class="mjx-n"></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-msub space="4"><mjx-mo class="mjx-lop"><mjx-c class="mjx-c222B TEX-S2"></mjx-c></mjx-mo><mjx-script style="vertical-align: -0.896em; margin-left: -0.388em;"><mjx-texatom size="s" texclass="ORD"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D434 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-texatom size="s" texclass="ORD"><mjx-texatom texclass="ORD"><mjx-mi class="mjx-n"><mjx-c class="mjx-c70"></mjx-c><mjx-c class="mjx-c61"></mjx-c><mjx-c class="mjx-c74"></mjx-c><mjx-c class="mjx-c63"></mjx-c><mjx-c class="mjx-c68"></mjx-c></mjx-mi></mjx-texatom></mjx-texatom></mjx-script></mjx-msub></mjx-texatom></mjx-script></mjx-msub><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D43F TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mi class="mjx-fr"><mjx-c class="mjx-c1D52E TEX-FR"></mjx-c></mjx-mi></mjx-texatom><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c2192"></mjx-c></mjx-mo><mjx-texatom space="4" texclass="ORD"><mjx-mi class="mjx-fr"><mjx-c class="mjx-c1D52D TEX-FR"></mjx-c></mjx-mi></mjx-texatom><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D449 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mi class="mjx-fr"><mjx-c class="mjx-c1D52D TEX-FR"></mjx-c></mjx-mi></mjx-texatom><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.06em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D45F TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mi class="mjx-fr"><mjx-c class="mjx-c1D52D TEX-FR"></mjx-c></mjx-mi></mjx-texatom><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-texatom space="2" texclass="ORD"><mjx-mi class="mjx-fr"><mjx-c class="mjx-c1D52E TEX-FR"></mjx-c></mjx-mi></mjx-texatom><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c2192"></mjx-c></mjx-mo><mjx-texatom space="4" texclass="ORD"><mjx-mi class="mjx-fr"><mjx-c class="mjx-c1D52D TEX-FR"></mjx-c></mjx-mi></mjx-texatom><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D45C TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-mfrac><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mrow><mjx-mi class="mjx-n"><mjx-c class="mjx-c63"></mjx-c><mjx-c class="mjx-c6F"></mjx-c><mjx-c class="mjx-c73"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c2061"></mjx-c></mjx-mo><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D703 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mi class="mjx-n" space="2"><mjx-c class="mjx-c63"></mjx-c><mjx-c class="mjx-c6F"></mjx-c><mjx-c class="mjx-c73"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c2061"></mjx-c></mjx-mo><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D703 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D45E TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-mrow></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-mrow><mjx-mo class="mjx-n"><mjx-c class="mjx-c2225"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45E TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c2212"></mjx-c></mjx-mo><mjx-mi class="mjx-i" space="3"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi><mjx-msup><mjx-mo class="mjx-n"><mjx-c class="mjx-c2225"></mjx-c></mjx-mo><mjx-script style="vertical-align: 0.289em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-script></mjx-msup></mjx-mrow></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac><mjx-texatom texclass="ORD"><mjx-mi class="mjx-n"><mjx-c class="mjx-c64"></mjx-c></mjx-mi></mjx-texatom><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D434 TEX-I"></mjx-c></mjx-mi><mjx-tstrut></mjx-tstrut></mjx-mtd></mjx-mtr></mjx-itable></mjx-table></mjx-mtable></mjx-math></mjx-container></span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h1 heading-wrapper"><h1 data-heading="基于 `3D` 空间的全局光照" dir="auto" class="heading" id="基于_`3D`_空间的全局光照">基于 <code>3D</code> 空间的全局光照</h1><div class="heading-children"><div class="el-h2 heading-wrapper"><h2 data-heading="`RSM`​" dir="auto" class="heading" id="`RSM`​"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>RSM</code>​</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`RSM` 基础概念" dir="auto" class="heading" id="`RSM`_基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>RSM</code> 基础概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>RSM</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>RSM</code>（反射阴影贴图）是一种全局光照技术，通过记录光源直接照射表面的位置、法线和通量信息，间接模拟光线在场景中的多次反射（间接光照）；</li>
+<li data-line="2" dir="auto">分为两部分：​<strong>直接光照积分</strong>和<strong>漫反射面片的简化模型</strong>；</li>
+<li data-line="3" dir="auto"><code>RMS</code> 技术通过存储光源直接照射的信息（比如位置、法线、通量信息），可以快速计算间接光照，避免复杂的光线追踪计算；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>特点：
+<ul>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="5" dir="auto"><code>RSM</code> 实现简单；</li>
+</ol>
+<ul>
+<li data-line="6" dir="auto"><code>RSM</code> 就是 <code>ShaderMap</code> 的流程；</li>
+<li data-line="7" dir="auto">第一轮生成 <code>RSM</code>，第二轮就进行一次观察、计算贡献；</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="8" dir="auto"><code>RSM</code> 的问题很多：</li>
+</ol>
+<ul>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（1）<code>ShaderMap</code> 的问题，<code>RSM</code> 都有；
+<ul>
+<li data-line="10" dir="auto">比如：有多少直接光源，就有多少 <code>ShaderMap</code>；</li>
+<li data-line="11" dir="auto">并且，每个次级光源反射到物体后可能产生的阴影；</li>
+</ul>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（2）做了很多假设；
+<ul>
+<li data-line="13" dir="auto">比如认为 <code>ShaderMap</code> 的距离为其世界坐标中的距离；</li>
+</ul>
+</li>
+<li data-line="14" dir="auto">（3）做更多的 <code>Sample</code> 效果就好，但性能就更差；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：要存储的信息
+<ul>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="16" dir="auto">​<strong>深度值（<code>Depth</code>）​</strong>​：记录从光源视角看到的场景深度，用于判断遮挡关系；</li>
+</ol>
+</li>
+<li data-line="17" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="17" dir="auto">​<strong>世界坐标（<code>World Position</code>）​</strong>​：存储每个像素的世界空间坐标，用于计算间接光照的传播路径；</li>
+</ol>
+</li>
+<li data-line="18" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="18" dir="auto">​<strong>法线（<code>Normal</code>）​</strong>​：记录表面的法线方向，用于计算光照反射方向；</li>
+</ol>
+</li>
+<li data-line="19" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="19" dir="auto">​<strong>通量（<code>Flux</code>）​</strong>​：存储光源的直接光照贡献（即辐射通量），用于模拟间接光照的强度；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="20" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：出射光公式
+<ul>
+<li data-line="21" dir="auto"><span alt="Pasted image 20250507132706.png" src="Pasted image 20250507132706.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250507132706.png" src="lib/media/pasted-image-20250507132706.png"></span></li>
+</ul>
+</li>
+<li data-line="22" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>RSM</code> 的替代积分形式
+<ul>
+<li data-line="23" dir="auto"><span alt="Pasted image 20250507132810.png" src="Pasted image 20250507132810.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250507132810.png" src="lib/media/pasted-image-20250507132810.png"></span></li>
+<li data-line="24" dir="auto">其意义是将积分从方向域转换为对 <code>RSM</code> 记录的表面区域积分，通过虚拟点光源（<code>VPL</code>）近似间接光照；</li>
+</ul>
+</li>
+<li data-line="25" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：当次级光源平面为 <code>Diffuse</code> 情况下的 <code>RSM</code> 公式 
+<ul>
+<li data-line="26" dir="auto">当次级光源平面为 <code>Diffuse</code> 时，当前所有入射的光线进行的反射规律是一样的，都是往所有方向反射，因此 <code>BRDF</code> 可以被简化为常数；</li>
+<li data-line="27" dir="auto"><span alt="Pasted image 20250507132954.png" src="Pasted image 20250507132954.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250507132954.png" src="lib/media/pasted-image-20250507132954.png"></span></li>
+<li data-line="28" dir="auto">最大的特点就是：当次级光源平面为 <code>Diffuse</code> 情况下时，<code>BRDF</code> 为常数；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`RSM` 的优化" dir="auto" class="heading" id="`RSM`_的优化"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>RSM</code> 的优化</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>RSM</code> 的优化</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="1" dir="auto">被物体遮挡的点，不需要计算 <code>RSM</code>；</li>
+</ol>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="2" dir="auto">距离非常远的点，不需要计算 <code>RSM</code>；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="4" dir="auto"><span alt="Pasted image 20250507150000.png" src="Pasted image 20250507150000.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250507150000.png" src="lib/media/pasted-image-20250507150000.png"></span></li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>RSM</code> 优化技巧</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>技巧：
+<ul>
+<li data-line="1" dir="auto">给定一个 <code>Shading Point</code>，想找世界坐标系下两个点是否接近不好找，那就将 <code>Shading Point</code> 投影到 <code>ShaderMap</code> 上去，在 <code>ShaderMap</code> 上周围一圈找、看近不近，以其作为世界坐标里面的远近；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="3" dir="auto"><span alt="Pasted image 20250507150252.png" src="Pasted image 20250507150252.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250507150252.png" src="lib/media/pasted-image-20250507150252.png"></span></li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>解释：
+<ul>
+<li data-line="5" dir="auto"><code>RSM</code> 算法从光源视角渲染场景，存储位置、法线、通量至反射阴影贴图（<code>RSM</code>）当中，然后再在计算间接光照时、对每个着色点（<code>Shading Point</code>），从 <code>RSM</code> 中采样虚拟点光源（<code>VPL</code>）的贡献值；</li>
+<li data-line="6" dir="auto">但是在判断世界空间中两点是否接近时，其需要计算 <code>3D</code> 距离，因此计算量大且难以优化；</li>
+<li data-line="7" dir="auto">因此可以优化此计算方法，将着色点（<code>Shading Point</code>）​投影到 <code>RSM</code> 贴图空间，得到纹理坐标 <code>(s,t)</code>，此时 <code>RSM</code> 贴图上的像素距离直接对应场景深度的相对关系； </li>
+</ul>
+</li>
+<li data-line="8" dir="auto">代码：伪代码示例</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 输入 P 为当前的着色点的世界坐标
+float3 ComputeIndirectLighting(float3 P)
+{
+	// 1. 将 着色点P 的位置投影至RSM的贴图纹理空间中
+	float2 st = ProjectToRSM(P);
+	
+	// 2. 生成自适应采样模式
+	SamplePattern samples = GenerateAdaptiveSamples(st);
+	
+	// 3. 累加，计算各个间接光源的贡献
+	float3 indirect = 0;
+	foreach(var sample in samples)
+	{
+		// 3.1 获取RSM中存储的位置、法线、通量等信息
+		VPL vpl = GetVPLFromRSM(sample.position);
+		
+		// 3.2 计算权重，其与圆盘面积成反比
+		float weight = 1.0 / sample.diskArea;
+		
+		// 3.3 BRDF计算
+		indirect += weight * BRDF(P,vpl);
+	}
+	
+	return indirect;
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`LPV`" dir="auto" class="heading" id="`LPV`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>LPV</code></h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`LPV` 基本概念" dir="auto" class="heading" id="`LPV`_基本概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>LPV</code> 基本概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>LPV</code> - <code>Light Propagation Volumes</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：核心步骤
+<ul>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="1" dir="auto">计算哪些点可以作为次级光源；</li>
+</ol>
+<ul>
+<li data-line="2" dir="auto">即：哪些点可以被直接光照照射到；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="3" dir="auto">将当前产生次级光源的平面或者点，注入到三维空间中的一个个体素里面；</li>
+</ol>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="4" dir="auto">在三维的体素中，传播 <code>Radiance</code>；</li>
+</ol>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="5" dir="auto">传播完成后，在场景中进行渲染；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意：
+<ul>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="7" dir="auto">在 <code>LPV</code> 传播过程中，不考虑 <code>Visible</code>；</li>
+</ol>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="8" dir="auto">斜对角的体素、不计算传播，因为先右再上和直接右上结果是一样的；</li>
+</ol>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="9" dir="auto">在 <code>LPV</code> 中的体素里面进行传播时，会达到一个稳定的状态（收敛）；</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`LPV` 核心步骤" dir="auto" class="heading" id="`LPV`_核心步骤"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>LPV</code> 核心步骤</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>LPV</code> 核心步骤</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：第一步 - 生成间接光源
+<ul>
+<li data-line="1" dir="auto">还是使用类似 <code>RSM</code> 的方法；</li>
+<li data-line="2" dir="auto">找到场景中所有直接光源照射到的表面；</li>
+<li data-line="3" dir="auto">可以考虑在其中采样一些，减少数量；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：第二步 - 光照注入
+<ul>
+<li data-line="5" dir="auto">将上一步生成的虚拟光源注入到 <code>3D</code> 体素网格中，将场景空间划分为均匀的 <code>3D</code> 网格(体素)，典型分辨率为 <code>32x32x32</code> 到 <code>128x128x128</code>； </li>
+<li data-line="6" dir="auto">对于每个虚拟光源，计算其对周围体素的辐射贡献，使用球谐函数(<code>SH</code>)压缩表示辐射方向分布，通常采用二阶 <code>SH</code>(4个系数)；</li>
+<li data-line="7" dir="auto">求和，计算出来其在空间中各个位置反射出去的 <code>Radiance</code>；</li>
+<li data-line="8" dir="auto"><span alt="Pasted image 20250507153528.png" src="Pasted image 20250507153528.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250507153528.png" src="lib/media/pasted-image-20250507153528.png"></span></li>
+<li data-line="9" dir="auto">可以使用两阶的 <code>SH</code> 来表示这个各自往四面八方的 <code>Radiance</code> 的分布；</li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：第三步 - 传播
+<ul>
+<li data-line="11" dir="auto">得到了 <code>Radiance</code> 后，计算其传播；</li>
+<li data-line="12" dir="auto">采用类似流体模拟的传播方式，辐射从每个体素向其 6 个邻接体素 (上、下、左、右、前、后)传播，每次传播迭代，体素收集来自相邻体素的辐射贡献并更新自身存储的 <code>SH</code> 系数，传播不考虑遮挡关系，假设辐射可以自由穿过几何体；</li>
+<li data-line="13" dir="auto"><span alt="Pasted image 20250507153656.png" src="Pasted image 20250507153656.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250507153656.png" src="lib/media/pasted-image-20250507153656.png"></span></li>
+<li data-line="14" dir="auto">对于每一个体素，收集其在周围（<code>3D</code> 空间中）六个面中、接触到的表面；</li>
+<li data-line="15" dir="auto">将其传播到接触到的表面当中；</li>
+<li data-line="16" dir="auto">对于其他的格子，照样使用 <code>SH</code> 表示；</li>
+<li data-line="17" dir="auto">直到最后、所有的体素计算完成；</li>
+<li data-line="18" dir="auto">一般迭代个四、五次就完成了；</li>
+</ul>
+</li>
+<li data-line="19" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：第四步
+<ul>
+<li data-line="20" dir="auto">将传播完成的 LPV 结果应用于场景渲染，计算每个着色点的间接光照，对于任意的 <code>Shading Point</code> 进行渲染；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`LPV` 的问题" dir="auto" class="heading" id="`LPV`_的问题"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>LPV</code> 的问题</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>LPV</code> 的问题 - 漏光问题</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">假设在墙面的 <code>P</code> 点上，反射的内容肯定不可逆照亮右边的一面墙；</li>
+<li data-line="2" dir="auto">但因为是按照体素传播，所以可能照亮右面被遮挡区域的墙面；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="4" dir="auto"><span alt="Pasted image 20250507153950.png" src="Pasted image 20250507153950.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250507153950.png" src="lib/media/pasted-image-20250507153950.png"></span></li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="6" dir="auto"><span alt="Pasted image 20250507154046.png" src="Pasted image 20250507154046.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250507154046.png" src="lib/media/pasted-image-20250507154046.png"></span></li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>本质：
+<ul>
+<li data-line="8" dir="auto">当一个模型的大小比 <code>LPV</code> 中一个体素的大小还要小时，此时就可能产生这个问题；</li>
+<li data-line="9" dir="auto">如果体素无限小，则不会有这个问题，但存储很大、效率很低；</li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`VXGI`" dir="auto" class="heading" id="`VXGI`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>VXGI</code></h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="基本概念" dir="auto" class="heading" id="基本概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>基本概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>VXGI</code> 基本概念</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>VXGI</code> 是一种基于体素化（<code>Voxelization</code>）​的全局光照（<code>Global Illumination, GI</code>）技术，由 <code>NVIDIA</code> 提出；</li>
+<li data-line="2" dir="auto">其核心思想是将场景转换为 <code>3D</code> 体素网格，通过追踪体素中的光线传播模拟间接光照；</li>
+<li data-line="3" dir="auto"><code>VXGI</code> 的算法主要分为两个部分，第一部分是场景体素化，第二部分是圆锥追踪；</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>第一部分当中：
+<ul>
+<li data-line="5" dir="auto">将动态/静态场景离散化为 <code>3D</code> 体素网格（类似 <code>Minecraft</code> 的方块结构）；</li>
+<li data-line="6" dir="auto">每个体素存储辐射度（<code>Radiance</code>）、法线、材质等信息；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>第二部分当中：
+<ul>
+<li data-line="8" dir="auto">对每个着色点发射多方向的圆锥形光线，沿圆锥路径累积体素中的光照贡献；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：<code>VXGI</code> 和 <code>LPV</code>、<code>RSM</code> 的区别
+<ul>
+<li data-line="10" dir="auto"><span alt="Pasted image 20250508181343.png" src="Pasted image 20250508181343.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250508181343.png" src="lib/media/pasted-image-20250508181343.png"></span></li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="12" dir="auto"><span alt="Pasted image 20250508181539.png" src="Pasted image 20250508181539.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250508181539.png" src="lib/media/pasted-image-20250508181539.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`VXGI` 过程" dir="auto" class="heading" id="`VXGI`_过程"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>VXGI</code> 过程</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>VXGI</code> 过程</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>VXGI</code>（<code>Voxel Global Illumination</code>）是一种基于体素化和圆锥追踪的实时全局光照技术，其核心流程可分为两个阶段：​<strong>体素化阶段</strong>和<strong>光照传播阶段</strong>；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：第一步 - 体素化阶段
+<ul>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="3" dir="auto">划分体素：</li>
+</ol>
+<ul>
+<li data-line="4" dir="auto">将 <code>3D</code> 场景均匀划分为体素网格（类似立方体像素），每个体素存储法线、材质、辐射度（<code>radiance</code>）等信息； </li>
+<li data-line="5" dir="auto">一个体素中存储了更多的信息，包括存储辐射度（<code>Radiance</code>）的范围、法线的范围、亮度的范围、材质等信息；</li>
+<li data-line="6" dir="auto">这样就可以实时的根据这些法线、辐射度等信息，计算出来当前体素当中是 <code>Diffuse</code> 的还是 <code>Glossy</code> 的，而不需要使用 <code>SH</code>；</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="8" dir="auto"><span alt="Pasted image 20250508184209.png" src="Pasted image 20250508184209.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250508184209.png" src="lib/media/pasted-image-20250508184209.png"></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="9" dir="auto">进行 <code>Light Pass</code>：</li>
+</ol>
+<ul>
+<li data-line="10" dir="auto">从直接光源（如平行光、点光源）生成阴影贴图（<code>Shadow Map</code>），并将光照能量（<code>radiance</code>）注入对应体素，决定哪些体素可以被照亮；</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="12" dir="auto"><span alt="Pasted image 20250508181602.png" src="Pasted image 20250508181602.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250508181602.png" src="lib/media/pasted-image-20250508181602.png"></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：第二步
+<ul>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="14" dir="auto">圆锥追踪：</li>
+</ol>
+<ul>
+<li data-line="15" dir="auto">对每个着色点发射多方向圆锥形光线（假设是 <code>Glossy</code> 物体），沿圆锥路径累积体素中的光照贡献；</li>
+<li data-line="16" dir="auto">光线越传播越大，使得找到的对应的曾经大概覆盖层级；</li>
+</ul>
+</li>
+<li data-line="17" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="17" dir="auto">光能衰减和混合：</li>
+</ol>
+<ul>
+<li data-line="18" dir="auto">光线步进（<code>Ray Marching</code>）时，根据体素透明度（<code>opacity</code>）计算光能透射率，模拟半透明材质（如玻璃）；</li>
+<li data-line="19" dir="auto">粗糙表面（高漫反射）使用宽圆锥（半球采样），光滑表面（高镜面反射）使用窄圆锥（沿反射方向）；</li>
+</ul>
+</li>
+<li data-line="20" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="21" dir="auto"><span alt="Pasted image 20250508181932.png" src="Pasted image 20250508181932.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250508181932.png" src="lib/media/pasted-image-20250508181932.png"></span></li>
+<li data-line="22" dir="auto"><span alt="Pasted image 20250508184307.png" src="Pasted image 20250508184307.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250508184307.png" src="lib/media/pasted-image-20250508184307.png"></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="23" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：<code>Diffuse</code> 物体
+<ul>
+<li data-line="24" dir="auto"><code>Diffuse</code> 物体是往四面八方都投射；</li>
+<li data-line="25" dir="auto">此时 <code>VXGI</code> 可以将其认为是一个超大的圆锥；</li>
+<li data-line="26" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="27" dir="auto"><span alt="Pasted image 20250508182640.png" src="Pasted image 20250508182640.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250508182640.png" src="lib/media/pasted-image-20250508182640.png"></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="28" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="29" dir="auto"><code>VXGI</code> 是早期很好的技术，但是其代价还是比较大；</li>
+<li data-line="30" dir="auto">虽然 <code>VXGI</code> 代价很大，但是其效果还是比较好，很像 <code>Photon Mapping</code> 的效果；</li>
+</ul>
+</li>
+</ul></div></div></div></div></div></div></div><div class="el-h1 heading-wrapper"><h1 data-heading="基于屏幕空间的全局光照" dir="auto" class="heading" id="基于屏幕空间的全局光照">基于屏幕空间的全局光照</h1><div class="heading-children"><div class="el-h2 heading-wrapper"><h2 data-heading="基础概念" dir="auto" class="heading" id="基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>基础概念</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="什么是屏幕空间" dir="auto" class="heading" id="什么是屏幕空间"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>什么是屏幕空间</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：什么是屏幕空间</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">屏幕空间，就是你能在屏幕上看到的信息；</li>
+<li data-line="1" dir="auto">比如在屏幕上能看到直接光照，也就是从 <code>Camera</code> 角度来看整个场景，只能看到 <code>Camera</code> 看到的信息；</li>
+<li data-line="2" dir="auto">也就是相当于对当前这张 <code>Camera</code> 看到的图像进行 <code>Post-Process</code>；</li>
+<li data-line="3" dir="auto">类似于：给你直接光照，把全局光照（其中的间接光照）猜出来；</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="什么是 `AO`" dir="auto" class="heading" id="什么是_`AO`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>什么是 <code>AO</code></h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：什么是 <code>AO</code> </p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>AO</code>（<code>Ambient Occlusion</code>，环境光遮蔽）​是一种用于增强 <code>3D</code> 场景真实感的渲染技术，其核心是通过模拟物体表面因环境光被遮挡而产生的柔和阴影效果；</li>
+<li data-line="2" dir="auto"><code>AO</code> 通过计算物体表面各点周围几何体的遮挡程度，确定环境光（即间接光）的衰减情况；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="4" dir="auto">比如下图中，能接收到的地方就更亮一点，不能接收到的地方就更暗一点；</li>
+<li data-line="5" dir="auto"><strong>遮挡关系</strong>​：当两个物体靠近或存在缝隙时，<code>AO</code> 会模拟光线因被阻挡而无法充分照射的区域，使这些区域变暗； </li>
+<li data-line="6" dir="auto"><strong>效果表现</strong>​：<code>AO</code> 能改善漏光、增强细节（如墙角、褶皱处的阴影），提升画面的层次感和空间深度； </li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="8" dir="auto"><span alt="Pasted image 20250508184936.png" src="Pasted image 20250508184936.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250508184936.png" src="lib/media/pasted-image-20250508184936.png"></span></li>
+<li data-line="9" dir="auto">左边是有环境光遮蔽（<code>AO</code>），右边是没有环境光遮蔽的效果；</li>
+<li data-line="10" dir="auto">有 <code>AO</code> 的效果后，可以看到其中间的部分地方更暗一些，不同的物体之间、有一些阴影在其中，通过这些阴影、让物体之间的相对位置感更加强（立体感）；</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="12" dir="auto"><span alt="Pasted image 20250508185539.png" src="Pasted image 20250508185539.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250508185539.png" src="lib/media/pasted-image-20250508185539.png"></span></li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>AO</code> 和 <code>SSAO</code> 的关系</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><code>SSAO</code> 是 <code>AO</code> 的实时渲染优化版本，其特点包括：</li>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="1" dir="auto">屏幕空间计算：</li>
+</ol>
+<ul>
+<li data-line="2" dir="auto">仅利用当前屏幕的深度缓冲（<code>Depth Buffer</code>）和法线缓冲（<code>Normal Buffer</code>）信息，通过采样像素周围点的遮挡情况来近似 <code>AO</code> 效果；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="3" dir="auto">性能与局限​：</li>
+</ol>
+<ul>
+<li data-line="4" dir="auto"><code>SSAO</code> 无需预计算，适合实时渲染，但可能因采样不足产生噪点或忽略屏幕外的遮挡信息；</li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`SSAO`" dir="auto" class="heading" id="`SSAO`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>SSAO</code></h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`SSAO` 基础概念" dir="auto" class="heading" id="`SSAO`_基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>SSAO</code> 基础概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：什么是 <code>SSAO</code> - <code>Screen Space Ambient Occlusion</code> </p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>引入：
+<ul>
+<li data-line="1" dir="auto"><code>SSAO</code> 是一种基于屏幕空间的后处理技术，用于模拟环境光在场景物体表面凹陷处 (如角落、缝隙) 被周围几何体遮挡而变暗的效果。它由 <code>Crytek</code> 公司在 <code>2007</code> 年首次提出并应用于《孤岛危机》游戏，成为实时渲染中环境光遮蔽的标准实现方式；</li>
+<li data-line="2" dir="auto"><code>SSAO</code> 是对全局光照中间接光照部分的简化近似，专注于模拟<strong>一次反弹</strong>的环境光遮蔽效果；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="4" dir="auto"><code>SSAO</code> 表示基于屏幕空间的环境光遮蔽；</li>
+<li data-line="5" dir="auto"><code>SSAO</code> 就是对于全局光照的一种近似；</li>
+<li data-line="6" dir="auto">屏幕空间就是只有屏幕上的信息；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>SSAO</code>
+<ul>
+<li data-line="8" dir="auto"><code>SSAO</code> 的核心在于，其​完全利用当前屏幕缓冲区（主要是深度缓冲 - <code>Depth Buffer</code> 和法线缓冲 - <code>Normal Buffer</code>）中的信息，在屏幕空间（即二维像素空间）中来估算三维世界中某个着色点（<code>Shading Point</code>）周围环境光被遮挡的程度；</li>
+<li data-line="9" dir="auto">它避免了对整个场景进行复杂的全局光照计算，因此速度很快，是现代实时渲染（如游戏）中实现 <code>AO</code> 的主流技术； </li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：前提假设
+<ul>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>假设一：假设间接光照都是一个常数；
+<ul>
+<li data-line="12" dir="auto">想法：虽然假设四面八方的间接光（<code>AO</code>）是一个常数，但是并不表示所有的位置都可以接收到这种间接光照；</li>
+<li data-line="13" dir="auto">即：考虑不同的可见性对于 <code>AO</code> 的效果；</li>
+</ul>
+</li>
+<li data-line="14" dir="auto">假设二：假设都是 <code>Diffuse</code> 材质的物体；</li>
+</ul>
+</li>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>原理：
+<ul>
+<li data-line="16" dir="auto">对于屏幕上的每一个片段，会根据周边深度值计算一个遮蔽因子 <code>(Occlusion Factor</code>)；</li>
+<li data-line="17" dir="auto">这个遮蔽因子之后会被用来决定片段的环境光分量。遮蔽因子是通过<strong>采集片段周围球型核心 (<code>Kernel</code>) 的多个深度样本，并和当前片段深度值对比</strong>而得到的，高于片段深度值样本的个数就是我们想要的遮蔽因子；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`AO` 环境光原理" dir="auto" class="heading" id="`AO`_环境光原理"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>AO</code> 环境光原理</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>SSAO</code> 原理分析</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>从渲染方程的角度：
+<ul>
+<li data-line="2" dir="auto"><span alt="Pasted image 20250508185711.png" src="Pasted image 20250508185711.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250508185711.png" src="lib/media/pasted-image-20250508185711.png"></span></li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>由之前的内容可知，有一个积分的近似方程：
+<ul>
+<li data-line="4" dir="auto"><span alt="Pasted image 20250508185731.png" src="Pasted image 20250508185731.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250508185731.png" src="lib/media/pasted-image-20250508185731.png"></span></li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>因此参考这个积分的近似方程，可以考虑将渲染方程其中的可视（<code>V</code> 函数）的部分拆出来：
+<ul>
+<li data-line="6" dir="auto"><span alt="Pasted image 20250508185823.png" src="Pasted image 20250508185823.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250508185823.png" src="lib/media/pasted-image-20250508185823.png"></span></li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>将这些拆成两项，其中左边的部分，下半部分就是对于半球的积分：
+<ul>
+<li data-line="8" dir="auto">下半部分是对于半球的积分，但是因为当前对半球积分的被积函数为 <code>1</code>，因此对球面积分后其结果就为 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D70B TEX-I"></mjx-c></mjx-mi></mjx-math></mjx-container></span></li>
+<li data-line="9" dir="auto"><span alt="Pasted image 20250508185906.png" src="Pasted image 20250508185906.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250508185906.png" src="lib/media/pasted-image-20250508185906.png"></span></li>
+<li data-line="10" dir="auto">而其中的 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D458 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.153em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D434 TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-script></mjx-msub></mjx-math></mjx-container></span> 的真实含义，表示的就是半球上面，对于<strong>可视函数的平均值</strong>；</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>对于渲染方程的右边的部分，其中间接光照的强度 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D43F TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math></mjx-container></span> 因为当前的 <code>SSAO</code> 的环境光假设为固定的光照大小和角度，因此其可以视为是一个常数；
+<ul>
+<li data-line="12" dir="auto"><span alt="Pasted image 20250508190025.png" src="Pasted image 20250508190025.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250508190025.png" src="lib/media/pasted-image-20250508190025.png"></span></li>
+</ul>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>并且其中的 <code>BRDF</code> 反射部分，由于当前 <code>SSAO</code> 技术当中，假设当前的所有物体都是 <code>Diffuse</code> 的，因此其是朝向所有四面八方的所有方向进行反射，因此也可以认为是常数； 
+<ul>
+<li data-line="14" dir="auto">所以右边的部分都是常数相乘；</li>
+</ul>
+</li>
+<li data-line="15" dir="auto">因此当前公式当中，关键的就是 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D458 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.153em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D434 TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-script></mjx-msub></mjx-math></mjx-container></span> 的值；</li>
+</ul>
+</li>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结：什么是 <code>AO</code> 
+<ul>
+<li data-line="17" dir="auto"><code>AO = 平均的可视 V * 任何一项你给定的数（由环境光常量决定）</code> </li>
+<li data-line="18" dir="auto">直接来进行推理，得到的结果就是：</li>
+<li data-line="19" dir="auto"><span class="math math-block is-loaded"><mjx-container class="MathJax" jax="CHTML" display="true"><mjx-math display="true" class="MJX-TEX" style="margin-left: 0px; margin-right: 0px;"><mjx-mtable style="min-width: 23.348em;"><mjx-table><mjx-itable><mjx-mtr><mjx-mtd style="padding-bottom: 0.15em;"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D43F TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D45C TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mi class="mjx-n"><mjx-c class="mjx-c70"></mjx-c></mjx-mi></mjx-texatom><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D45C TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-msub space="4"><mjx-mo class="mjx-lop"><mjx-c class="mjx-c222B TEX-S2"></mjx-c></mjx-mo><mjx-script style="vertical-align: -0.896em; margin-left: -0.388em;"><mjx-texatom size="s" texclass="ORD"><mjx-msup><mjx-mi class="mjx-n"><mjx-c class="mjx-c3A9"></mjx-c></mjx-mi><mjx-script style="vertical-align: 0.289em;"><mjx-mo class="mjx-n" size="s"><mjx-c class="mjx-c2B"></mjx-c></mjx-mo></mjx-script></mjx-msup></mjx-texatom></mjx-script></mjx-msub><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D43F TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mi class="mjx-n"><mjx-c class="mjx-c70"></mjx-c></mjx-mi></mjx-texatom><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.06em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D45F TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mi class="mjx-n"><mjx-c class="mjx-c70"></mjx-c></mjx-mi></mjx-texatom><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D45C TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D449 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mi class="mjx-n"><mjx-c class="mjx-c70"></mjx-c></mjx-mi></mjx-texatom><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-mi class="mjx-n" space="2"><mjx-c class="mjx-c63"></mjx-c><mjx-c class="mjx-c6F"></mjx-c><mjx-c class="mjx-c73"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c2061"></mjx-c></mjx-mo><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D703 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-texatom texclass="ORD"><mjx-mi class="mjx-n"><mjx-c class="mjx-c64"></mjx-c></mjx-mi></mjx-texatom><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-tstrut></mjx-tstrut></mjx-mtd></mjx-mtr><mjx-mtr><mjx-mtd style="padding-top: 0.15em;"><mjx-mo class="mjx-n"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mfrac space="4"><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D70C TEX-I"></mjx-c></mjx-mi></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D70B TEX-I"></mjx-c></mjx-mi></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c22C5"></mjx-c></mjx-mo><mjx-msub space="3"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D43F TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c22C5"></mjx-c></mjx-mo><mjx-msub space="3"><mjx-mo class="mjx-lop"><mjx-c class="mjx-c222B TEX-S2"></mjx-c></mjx-mo><mjx-script style="vertical-align: -0.896em; margin-left: -0.388em;"><mjx-texatom size="s" texclass="ORD"><mjx-msup><mjx-mi class="mjx-n"><mjx-c class="mjx-c3A9"></mjx-c></mjx-mi><mjx-script style="vertical-align: 0.289em;"><mjx-mo class="mjx-n" size="s"><mjx-c class="mjx-c2B"></mjx-c></mjx-mo></mjx-script></mjx-msup></mjx-texatom></mjx-script></mjx-msub><mjx-mi class="mjx-i" space="2"><mjx-c class="mjx-c1D449 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mi class="mjx-n"><mjx-c class="mjx-c70"></mjx-c></mjx-mi></mjx-texatom><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-mi class="mjx-n" space="2"><mjx-c class="mjx-c63"></mjx-c><mjx-c class="mjx-c6F"></mjx-c><mjx-c class="mjx-c73"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c2061"></mjx-c></mjx-mo><mjx-msub space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D703 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-texatom texclass="ORD"><mjx-mi class="mjx-n"><mjx-c class="mjx-c64"></mjx-c></mjx-mi></mjx-texatom><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-tstrut></mjx-tstrut></mjx-mtd></mjx-mtr></mjx-itable></mjx-table></mjx-mtable></mjx-math></mjx-container></span></li>
+<li data-line="20" dir="auto">其中 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mfrac><mjx-frac><mjx-num><mjx-nstrut></mjx-nstrut><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D70C TEX-I"></mjx-c></mjx-mi></mjx-num><mjx-dbox><mjx-dtable><mjx-line></mjx-line><mjx-row><mjx-den><mjx-dstrut></mjx-dstrut><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D70B TEX-I"></mjx-c></mjx-mi></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c22C5"></mjx-c></mjx-mo><mjx-msub space="3"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D43F TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math></mjx-container></span> 的部分就是 <code>Diffuse</code> 的 <code>BRDF</code> 乘以常量的间接光； </li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>补充</strong>：对于积分近似的更深理解</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>对于一个近似积分：
+<ul>
+<li data-line="1" dir="auto"><span class="math math-block is-loaded"><mjx-container class="MathJax" jax="CHTML" display="true"><mjx-math display="true" class="MJX-TEX" style="margin-left: 0px; margin-right: 0px;"><mjx-msub><mjx-mo class="mjx-lop"><mjx-c class="mjx-c222B TEX-S2"></mjx-c></mjx-mo><mjx-script style="vertical-align: -0.896em; margin-left: -0.388em;"><mjx-mi class="mjx-n" size="s"><mjx-c class="mjx-c3A9"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mi class="mjx-i" space="2"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D454 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mtext class="mjx-n"><mjx-c class="mjx-cA0"></mjx-c></mjx-mtext><mjx-mi class="mjx-n"><mjx-c class="mjx-c64"></mjx-c></mjx-mi></mjx-texatom><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c2248"></mjx-c></mjx-mo><mjx-mfrac space="4"><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mrow><mjx-msub><mjx-mo class="mjx-sop"><mjx-c class="mjx-c222B TEX-S1"></mjx-c></mjx-mo><mjx-script style="vertical-align: -0.341em; margin-left: -0.138em;"><mjx-texatom size="s" texclass="ORD"><mjx-msub><mjx-mi class="mjx-n"><mjx-c class="mjx-c3A9"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D43A TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-texatom></mjx-script></mjx-msub><mjx-mi class="mjx-i" space="2"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mtext class="mjx-n"><mjx-c class="mjx-cA0"></mjx-c></mjx-mtext><mjx-mi class="mjx-n"><mjx-c class="mjx-c64"></mjx-c></mjx-mi></mjx-texatom><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi></mjx-mrow></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-mrow><mjx-msub><mjx-mo class="mjx-sop"><mjx-c class="mjx-c222B TEX-S1"></mjx-c></mjx-mo><mjx-script style="vertical-align: -0.341em; margin-left: -0.138em;"><mjx-texatom size="s" texclass="ORD"><mjx-msub><mjx-mi class="mjx-n"><mjx-c class="mjx-c3A9"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D43A TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-texatom></mjx-script></mjx-msub><mjx-texatom space="2" texclass="ORD"><mjx-mtext class="mjx-n"><mjx-c class="mjx-cA0"></mjx-c></mjx-mtext><mjx-mi class="mjx-n"><mjx-c class="mjx-c64"></mjx-c></mjx-mi></mjx-texatom><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi></mjx-mrow></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c22C5"></mjx-c></mjx-mo><mjx-msub space="3"><mjx-mo class="mjx-lop"><mjx-c class="mjx-c222B TEX-S2"></mjx-c></mjx-mo><mjx-script style="vertical-align: -0.896em; margin-left: -0.388em;"><mjx-mi class="mjx-n" size="s"><mjx-c class="mjx-c3A9"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mi class="mjx-i" space="2"><mjx-c class="mjx-c1D454 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mtext class="mjx-n"><mjx-c class="mjx-cA0"></mjx-c></mjx-mtext><mjx-mi class="mjx-n"><mjx-c class="mjx-c64"></mjx-c></mjx-mi></mjx-texatom><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi></mjx-math></mjx-container></span></li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>其可以理解为是：<span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math></mjx-container></span> 函数，在 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D454 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math></mjx-container></span> 函数能够覆盖到的范围上、求 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math></mjx-container></span> 的平均值：
+<ul>
+<li data-line="3" dir="auto"><span class="math math-block is-loaded"><mjx-container class="MathJax" jax="CHTML" display="true"><mjx-math display="true" class="MJX-TEX" style="margin-left: 0px; margin-right: 0px;"><mjx-mtable style="min-width: 17.373em;"><mjx-table><mjx-itable><mjx-mtr><mjx-mtd style="text-align: right; padding-right: 0px; padding-bottom: 0.15em;"><mjx-msub><mjx-mo class="mjx-lop"><mjx-c class="mjx-c222B TEX-S2"></mjx-c></mjx-mo><mjx-script style="vertical-align: -0.896em; margin-left: -0.388em;"><mjx-mi class="mjx-n" size="s"><mjx-c class="mjx-c3A9"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mi class="mjx-i" space="2"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D454 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mi class="mjx-n"><mjx-c class="mjx-c64"></mjx-c></mjx-mi></mjx-texatom><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-tstrut></mjx-tstrut></mjx-mtd><mjx-mtd style="text-align: left; padding-left: 0px; padding-bottom: 0.15em;"><mjx-mtable justify="left" style="min-width: 11.201em;"><mjx-table><mjx-itable><mjx-mtr><mjx-mtd style="text-align: right;"><mjx-mo class="mjx-n"><mjx-c class="mjx-c2248"></mjx-c></mjx-mo><mjx-mfrac space="4"><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mrow><mjx-msub><mjx-mo class="mjx-sop"><mjx-c class="mjx-c222B TEX-S1"></mjx-c></mjx-mo><mjx-script style="vertical-align: -0.341em; margin-left: -0.138em;"><mjx-texatom size="s" texclass="ORD"><mjx-msub><mjx-mi class="mjx-n"><mjx-c class="mjx-c3A9"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D43A TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-texatom></mjx-script></mjx-msub><mjx-mi class="mjx-i" space="2"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mi class="mjx-n"><mjx-c class="mjx-c64"></mjx-c></mjx-mi></mjx-texatom><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi></mjx-mrow></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-mrow><mjx-msub><mjx-mo class="mjx-sop"><mjx-c class="mjx-c222B TEX-S1"></mjx-c></mjx-mo><mjx-script style="vertical-align: -0.341em; margin-left: -0.138em;"><mjx-texatom size="s" texclass="ORD"><mjx-msub><mjx-mi class="mjx-n"><mjx-c class="mjx-c3A9"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D43A TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-texatom></mjx-script></mjx-msub><mjx-texatom space="2" texclass="ORD"><mjx-mi class="mjx-n"><mjx-c class="mjx-c64"></mjx-c></mjx-mi></mjx-texatom><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi></mjx-mrow></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c22C5"></mjx-c></mjx-mo><mjx-msub space="3"><mjx-mo class="mjx-lop"><mjx-c class="mjx-c222B TEX-S2"></mjx-c></mjx-mo><mjx-script style="vertical-align: -0.896em; margin-left: -0.388em;"><mjx-mi class="mjx-n" size="s"><mjx-c class="mjx-c3A9"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mi class="mjx-i" space="2"><mjx-c class="mjx-c1D454 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mi class="mjx-n"><mjx-c class="mjx-c64"></mjx-c></mjx-mi></mjx-texatom><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-tstrut></mjx-tstrut></mjx-mtd></mjx-mtr></mjx-itable></mjx-table></mjx-mtable><mjx-tstrut></mjx-tstrut></mjx-mtd></mjx-mtr><mjx-mtr><mjx-mtd style="text-align: right; padding-right: 0px; padding-top: 0.15em;"><mjx-tstrut></mjx-tstrut></mjx-mtd><mjx-mtd style="text-align: left; padding-left: 0px; padding-top: 0.15em;"><mjx-mi class="mjx-n"></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mover space="4"><mjx-over style="padding-bottom: 0.18em; margin-bottom: -0.248em;"><mjx-mo class="mjx-n"><mjx-stretchy-h class="mjx-c2013" style="width: 1.9em;"><mjx-ext><mjx-c></mjx-c></mjx-ext></mjx-stretchy-h></mjx-mo></mjx-over><mjx-base><mjx-mrow><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-mrow></mjx-base></mjx-mover><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c22C5"></mjx-c></mjx-mo><mjx-msub space="3"><mjx-mo class="mjx-lop"><mjx-c class="mjx-c222B TEX-S2"></mjx-c></mjx-mo><mjx-script style="vertical-align: -0.896em; margin-left: -0.388em;"><mjx-mi class="mjx-n" size="s"><mjx-c class="mjx-c3A9"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mi class="mjx-i" space="2"><mjx-c class="mjx-c1D454 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mi class="mjx-n"><mjx-c class="mjx-c64"></mjx-c></mjx-mi></mjx-texatom><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-tstrut></mjx-tstrut></mjx-mtd></mjx-mtr></mjx-itable></mjx-table></mjx-mtable></mjx-math></mjx-container></span></li>
+</ul>
+</li>
+<li data-line="4" dir="auto">加权和乘以权和，就是一个级数上的标准的加权平均的过程；</li>
+<li data-line="5" dir="auto">而在 <code>SSAO</code> 的情况下，由于光照亮度和 <code>BRDF</code> 都是常数，因此这个拆分就是一个准确的拆分，而不是一个近似；</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="如何在屏幕空间计算 `AO`" dir="auto" class="heading" id="如何在屏幕空间计算_`AO`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>如何在屏幕空间计算 <code>AO</code></h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>分析</strong>：如何在屏幕空间计算 <code>AO</code>  </p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>问题：
+<ul>
+<li data-line="1" dir="auto">对于任何一个 <code>ShadingPoint</code>，其往四面八方看时，如何计算在屏幕空间发射后、多少方向是挡住的、多少方向是没有挡住的；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>SSAO</code> 的方法
+<ul>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>第一步：随机采样和可见性测试
+<ul>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>目的：
+<ul>
+<li data-line="5" dir="auto">针对当前正在处理的像素（即图示中的&nbsp;<code>ShadingPoint</code>），估算其周围有多少区域是“可被直接看到的”（即不被其他物体遮挡）；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>过程：
+<ul>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>确定半球采样区域：
+<ul>
+<li data-line="8" dir="auto">首先，根据&nbsp;<code>ShadingPoint</code>&nbsp;的法线方向在三维空间中定义一个半球形区域（<code>Region</code>&nbsp;<code>R</code>）；</li>
+<li data-line="9" dir="auto">这个半球以着色点为中心，开口朝向法线所指的方向；</li>
+<li data-line="10" dir="auto">注意：图示中的区域&nbsp;<code>R</code>&nbsp;被投影到了屏幕空间，简化展示了其范围；</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>屏幕空间随机采样：
+<ul>
+<li data-line="12" dir="auto">在这个半球区域&nbsp;<code>R</code>&nbsp;内，​在三维空间中随机生成一系列的采样点，然后将这些采样点也<strong>投影回屏幕空间</strong>，得到它们在屏幕上的像素坐标；</li>
+</ul>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>深度测试判断可见性：
+<ul>
+<li data-line="14" dir="auto">对于每一个投影到屏幕空间的采样点，获取其在深度缓冲区（<code>Depth Buffer</code>）中对应位置的<strong>存储深度值</strong>，将这个<strong>存储深度值</strong>与<strong>采样点在三维空间中的实际深度值</strong>​（根据它在半球中的位置计算得到）进行比较：</li>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="15" dir="auto">采样点的实际深度 &lt; 存储深度值 (绿色点)：​ </li>
+</ol>
+<ul>
+<li data-line="16" dir="auto">这意味着采样点位于场景表面的“前方”（更靠近相机）；</li>
+<li data-line="17" dir="auto">理论上，从&nbsp;<code>ShadingPoint</code>&nbsp;看过去，它可以“看到”这个采样点的位置（没有物体挡在&nbsp;<code>ShadingPoint</code>&nbsp;和这个采样点之间）</li>
+</ul>
+</li>
+<li data-line="18" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="18" dir="auto">采样点的实际深度 &gt; 存储深度值 (红色点)：​</li>
+</ol>
+<ul>
+<li data-line="19" dir="auto">这意味着采样点的位置已经被其他物体挡住了（遮挡物在场景表面的“后方”，距离相机更远）；</li>
+<li data-line="20" dir="auto">也就是说，<code>ShadingPoint</code>&nbsp;​<strong>不能</strong>直接看到这个采样点，该方向存在遮挡；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="21" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>第二步：射线深度查询和内外判断
+<ul>
+<li data-line="22" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>从屏幕空间开始，从屏幕的观察角度位置发射出一个直线，记录下其打到的位置的温度；
+<ul>
+<li data-line="23" dir="auto"><span alt="Pasted image 20250519170907.png" src="Pasted image 20250519170907.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250519170907.png" src="lib/media/pasted-image-20250519170907.png"></span></li>
+</ul>
+</li>
+<li data-line="24" dir="auto">然后如果要判断一个点（比如其中扣个绿地）是否在物体内部还是物体外部，只需要查询这个物体的深度；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="25" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：<code>SSAO</code> 的方法
+<ul>
+<li data-line="26" dir="auto"><span alt="Pasted image 20250519170456.png" src="Pasted image 20250519170456.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250519170456.png" src="lib/media/pasted-image-20250519170456.png"></span></li>
+</ul>
+</li>
+<li data-line="27" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意：
+<ul>
+<li data-line="28" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="28" dir="auto">部分地方无法采点：</li>
+</ol>
+<ul>
+<li data-line="29" dir="auto"><span alt="Pasted image 20250519171059.png" src="Pasted image 20250519171059.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250519171059.png" src="lib/media/pasted-image-20250519171059.png"></span></li>
+</ul>
+</li>
+<li data-line="30" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="30" dir="auto">由于 <code>AO</code> 假设 <code>BRDF</code> 为 <code>Diffuse</code>，因此可见的区域只有半球</li>
+</ol>
+<ul>
+<li data-line="31" dir="auto"><span alt="Pasted image 20250519171335.png" src="Pasted image 20250519171335.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250519171335.png" src="lib/media/pasted-image-20250519171335.png"></span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`HBAO`" dir="auto" class="heading" id="`HBAO`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>HBAO</code></h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：什么是 <code>HBAO</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>HBAO</code> 是一种基于<strong>水平线检测</strong>的环境光遮蔽技术；</li>
+<li data-line="2" dir="auto"><code>HBAO</code> 通过分析像素周围的<strong>深度和法线信息</strong>，计算几何体对水平线的遮挡角度（如图中可能标注的“半球”或“角度 <code>θ</code>”），从而更精确地模拟遮蔽强度；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>解释：
+<ul>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="5" dir="auto"><span alt="Pasted image 20250519174920.png" src="Pasted image 20250519174920.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250519174920.png" src="lib/media/pasted-image-20250519174920.png"></span></li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>解释：
+<ul>
+<li data-line="7" dir="auto">采样半径（<code>R</code>）​：限制局部计算范围，平衡性能与精度；</li>
+<li data-line="8" dir="auto">水平角（<code>Horizon Angle</code>）​：通过比较采样点与当前点的深度差，确定光线被遮挡的最大角度，遮蔽强度与角度正相关；</li>
+<li data-line="9" dir="auto">通过水平角积分模拟光线遮挡，避免 <code>SSAO</code> 的随机性误差，对曲面和倾斜表面（如斜坡、管道）的遮蔽计算更精准（如图中可能的“平滑阴影过渡”）；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`SSDO`" dir="auto" class="heading" id="`SSDO`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>SSDO</code></h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`SSDO` 基础概念" dir="auto" class="heading" id="`SSDO`_基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>SSDO</code> 基础概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>SSDO</code> 基础概念</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>引入：
+<ul>
+<li data-line="1" dir="auto">能够提供光照信息的就是次级光源，<code>SSAO</code> 中所有被直接照亮的光源就是次级光源；</li>
+<li data-line="2" dir="auto">而 <code>SSDO</code> 包括两个部分，第一部分就是算出间接光照（所有图中被直接光照照亮的部分，都可以作为次级光源，因此可以提供信息），所有次级光源的信息来自于屏幕（相机）；</li>
+<li data-line="3" dir="auto"><code>SSDO</code> 是一种更为精准的可以计算全局光照；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="5" dir="auto"><code>SSDO</code>（<code>Screen Space Directional Occlusion</code>）是一种基于屏幕空间的实时环境光遮蔽技术；</li>
+<li data-line="6" dir="auto"><code>SSDO</code> 通过分析屏幕空间的深度和法线信息，计算光线在场景中的遮蔽效应，但更注重<strong>方向性遮蔽</strong>的模拟；</li>
+<li data-line="7" dir="auto">具体而言，其相对于 <code>SSAO</code> 而言，<code>SSDO</code> 不仅统计遮挡点数量（如 <code>SSAO</code>），还模拟光线在遮挡物间的多次反弹，间接补充了 <code>SSAO</code> 缺失的<strong>间接光照能量</strong>​（如橙色区域贡献）；</li>
+<li data-line="8" dir="auto"><code>SSDO</code> 和光线追踪更像，并且 <code>SSDO</code> 和 <code>SSAO</code> 是完全相反的两个假设；</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：<code>SSDO</code> 效果
+<ul>
+<li data-line="10" dir="auto"><span alt="Pasted image 20250520164659.png" src="Pasted image 20250520164659.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520164659.png" src="lib/media/pasted-image-20250520164659.png"></span></li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>分析</strong>：<code>SSDO</code> 和 <code>SSAO</code> 区别</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">对于 <code>SSAO</code> 中，图中只有红圈部分具有效果，红圈部分表示具有间接光照的效果；</li>
+<li data-line="2" dir="auto">而对 <code>SSDO</code> 中，图中红圈的部分表示没有间接光照，而黄圈的部分才表示具有间接光照；</li>
+<li data-line="3" dir="auto">因为比如 <code>SSDO</code> 的红色区域内，这个部分是没有间接光照，因为其作为射线发射出去后，不会打到某个物体上，因此反而没有间接光照。而黄色区域则表示会打到某个表面，因此有间接光照；</li>
+<li data-line="4" dir="auto">因此 <code>(SSDO可见性) = (1-SSAO可见性)</code></li>
+<li data-line="5" dir="auto">而之所以产生这种区别，是因为 <code>SSAO</code> 和 <code>SSDO</code> 中间接光照的来源不一样；</li>
+<li data-line="6" dir="auto"><code>SSAO</code> 当中的光照来自于非常远的地方，而 <code>SSDO</code> 当中则来自于次级光源反射出来的光照效果；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>区别：
+<ul>
+<li data-line="8" dir="auto"><span alt="Pasted image 20250520163136.png" src="Pasted image 20250520163136.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520163136.png" src="lib/media/pasted-image-20250520163136.png"></span></li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="10" dir="auto"><span alt="Pasted image 20250520163318.png" src="Pasted image 20250520163318.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520163318.png" src="lib/media/pasted-image-20250520163318.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`SSDO` 原理分析" dir="auto" class="heading" id="`SSDO`_原理分析"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>SSDO</code> 原理分析</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>分析</strong>：<code>SSDO</code> 原理分析</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>公式：直接光照
+<ul>
+<li data-line="1" dir="auto"><span alt="Pasted image 20250520163854.png" src="Pasted image 20250520163854.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520163854.png" src="lib/media/pasted-image-20250520163854.png"></span></li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>公式：间接光照
+<ul>
+<li data-line="3" dir="auto"><span alt="Pasted image 20250520163905.png" src="Pasted image 20250520163905.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520163905.png" src="lib/media/pasted-image-20250520163905.png"></span></li>
+<li data-line="4" dir="auto">需要关注的就是被挡住的部分；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：<code>DO</code> 的计算
+<ul>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>第一步：从相机视角，随机打出若干点，分析遮挡情况
+<ul>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="8" dir="auto"><span alt="Pasted image 20250520164237.png" src="Pasted image 20250520164237.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520164237.png" src="lib/media/pasted-image-20250520164237.png"></span></li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="10" dir="auto">如图所示当中有 <code>ABCD</code> 四个点，其中：<code>ABD</code> 三个点的位置都被遮挡物遮挡（即有更浅的深度记录），而 <code>C</code> 点的深度则更浅，因此没有被遮挡；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>第二步：将遮挡物作为次级光源，利用其已有信息，累加求和得到 P 点的间接光大小
+<ul>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="13" dir="auto"><span alt="Pasted image 20250520164404.png" src="Pasted image 20250520164404.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520164404.png" src="lib/media/pasted-image-20250520164404.png"></span></li>
+</ul>
+</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="15" dir="auto">由于可知当中的 <code>ABD</code> 三个点分别具有其对应的法线信息，因此可知 <code>A</code> 点无法照射到 <code>P</code> 点，只需要求和 <code>B</code> 点和 <code>D</code> 点到 <code>P</code> 点的间接光照之和；</li>
+<li data-line="16" dir="auto">而 <code>C</code> 点不会被挡住，因此不会有间接光照；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="17" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：可能出现的问题
+<ul>
+<li data-line="18" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="19" dir="auto"><span alt="Pasted image 20250520164618.png" src="Pasted image 20250520164618.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520164618.png" src="lib/media/pasted-image-20250520164618.png"></span></li>
+</ul>
+</li>
+<li data-line="20" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="21" dir="auto">如果有遮挡物，则 <code>A</code> 点的计算可能出现问题；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`SSDO` 的问题：屏幕空间" dir="auto" class="heading" id="`SSDO`_的问题：屏幕空间"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>SSDO</code> 的问题：屏幕空间</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>SSDO</code> 的问题 - 屏幕空间</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">由于所有的信息都是屏幕空间提供的，因此当前屏幕后面的信息就全然无知，因此可能就会丢失信息；</li>
+<li data-line="1" dir="auto"><span alt="Pasted image 20250520164832.png" src="Pasted image 20250520164832.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520164832.png" src="lib/media/pasted-image-20250520164832.png"></span></li>
+<li data-line="2" dir="auto">比如图中的第一张图是正确的，就是黄色的光可以被反射；</li>
+<li data-line="3" dir="auto">但是第二张图的时候，背面就几乎无法知道，因此黄色就很难有效果，而到了后背两张图就几乎没效果了；</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`SSR`" dir="auto" class="heading" id="`SSR`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>SSR</code></h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`SSR` 基础概念" dir="auto" class="heading" id="`SSR`_基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>SSR</code> 基础概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：什么是 <code>SSR</code> </p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>SSR</code> 就是在屏幕空间上做光线追踪；</li>
+<li data-line="2" dir="auto"><code>SSR</code>（<code>Screen Space Reflections</code>）是一种<strong>屏幕空间反射技术</strong>，用于实时渲染中模拟物体表面的反射效果；</li>
+<li data-line="3" dir="auto">它通过分析屏幕空间的深度和颜色信息，计算光线在场景中的反射路径，从而生成逼真的反射效果；</li>
+<li data-line="4" dir="auto">因此 <code>SSR</code> 不需要整个场景的信息，只需要屏幕空间上已有的信息；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>目标：
+<ul>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="6" dir="auto">给定任何的光线和场景（<code>Camera</code> 能看见的场景）能够和光线求交；</li>
+</ol>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="7" dir="auto">能够将不同像素的求交计算出来，得到对于 <code>Shadings Point</code> 的贡献；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="9" dir="auto"><span alt="Pasted image 20250520165418.png" src="Pasted image 20250520165418.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520165418.png" src="lib/media/pasted-image-20250520165418.png"></span></li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="11" dir="auto"><span alt="Pasted image 20250520165605.png" src="Pasted image 20250520165605.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520165605.png" src="lib/media/pasted-image-20250520165605.png"></span></li>
+<li data-line="12" dir="auto">白色的部分是将场景中已有的东西反射到地面上；</li>
+<li data-line="13" dir="auto">对于任何一个像素后，从 <code>Shading Point</code> 开始发射出去，进行求交，求交得到的点得到反射光（最简单的思路）；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`SSR` 原理分析" dir="auto" class="heading" id="`SSR`_原理分析"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>SSR</code> 原理分析</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>分析</strong>：<code>SSR</code> 原理分析</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="1" dir="auto"><span alt="Pasted image 20250520165953.png" src="Pasted image 20250520165953.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520165953.png" src="lib/media/pasted-image-20250520165953.png"></span></li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="3" dir="auto"><span alt="Pasted image 20250520175101.png" src="Pasted image 20250520175101.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520175101.png" src="lib/media/pasted-image-20250520175101.png"></span></li>
+<li data-line="4" dir="auto">每一根射线的检测，是按次级光源反射得到的射线、每一次按照一定的步长，每次走一步的距离，走有限步长后判断是否接触；</li>
+<li data-line="5" dir="auto">步长太大、可能不准确，步长太小、可能性能消耗太大；</li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>分析</strong>：动态大小的射线发射步长</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="1" dir="auto"><span alt="Pasted image 20250520175405.png" src="Pasted image 20250520175405.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520175405.png" src="lib/media/pasted-image-20250520175405.png"></span></li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="3" dir="auto">没必要每一次都走很小的一段距离，比如在图中一次走四格、五格都可以；</li>
+<li data-line="4" dir="auto">因此可以使用一些技术，决定走的步长；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="6" dir="auto"><span alt="Pasted image 20250520175506.png" src="Pasted image 20250520175506.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520175506.png" src="lib/media/pasted-image-20250520175506.png"></span></li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="8" dir="auto">对屏幕空间建立加速结构，进而可以在 <code>RayMatch</code> 时、一下跳过很多部分；</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>原理：
+<ul>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="11" dir="auto"><span alt="Pasted image 20250520175623.png" src="Pasted image 20250520175623.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520175623.png" src="lib/media/pasted-image-20250520175623.png"></span></li>
+<li data-line="12" dir="auto">基本思想就是“试探步”，一开始先尝试走一定步骤，如果没事、则下次就走更大的步骤（<code>TCP</code> 的拥塞控制）；</li>
+</ul>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>步骤：
+<ul>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>试探着走一步：
+<ul>
+<li data-line="15" dir="auto"><span alt="Pasted image 20250520184623.png" src="Pasted image 20250520184623.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520184623.png" src="lib/media/pasted-image-20250520184623.png"></span></li>
+</ul>
+</li>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>然后此时没交点，因此下一次走两步；
+<ul>
+<li data-line="17" dir="auto"><span alt="Pasted image 20250520184703.png" src="Pasted image 20250520184703.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520184703.png" src="lib/media/pasted-image-20250520184703.png"></span></li>
+</ul>
+</li>
+<li data-line="18" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>此时依然没有交点，因此下一次走四个格子：
+<ul>
+<li data-line="19" dir="auto"><span alt="Pasted image 20250520185034.png" src="Pasted image 20250520185034.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520185034.png" src="lib/media/pasted-image-20250520185034.png"></span></li>
+</ul>
+</li>
+<li data-line="20" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>而此时当前格子当中拥有交点，因此下一次走的步骤更谨慎一些：
+<ul>
+<li data-line="21" dir="auto"><span alt="Pasted image 20250520185119.png" src="Pasted image 20250520185119.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520185119.png" src="lib/media/pasted-image-20250520185119.png"></span></li>
+</ul>
+</li>
+<li data-line="22" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>然后再往前走一格，找到了交点：
+<ul>
+<li data-line="23" dir="auto"><span alt="Pasted image 20250520185217.png" src="Pasted image 20250520185217.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520185217.png" src="lib/media/pasted-image-20250520185217.png"></span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="SSR 的问题" dir="auto" class="heading" id="SSR_的问题"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>SSR 的问题</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>分析</strong>：<code>SSR</code> 的问题</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>SSR</code> 的问题还是因为屏幕空间的问题；
+<ul>
+<li data-line="1" dir="auto"><span alt="Pasted image 20250520185650.png" src="Pasted image 20250520185650.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520185650.png" src="lib/media/pasted-image-20250520185650.png"></span></li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>由于屏幕空间的问题导致，其认为所有反射出来的物体都在屏幕里面，比如下图中的物体：
+<ul>
+<li data-line="3" dir="auto"><span alt="Pasted image 20250520185736.png" src="Pasted image 20250520185736.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520185736.png" src="lib/media/pasted-image-20250520185736.png"></span></li>
+</ul>
+</li>
+<li data-line="4" dir="auto">原本整个物体大小更大，但是因为这个摊子的一部分在屏幕之外，因此光线在 <code>Match</code> 的时候无法 <code>Match</code> 屏幕外，所以无法反射到屏幕外的、上面的部分；</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`SSR` 的 `Shading` 计算" dir="auto" class="heading" id="`SSR`_的_`Shading`_计算"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>SSR</code> 的 <code>Shading</code> 计算</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>分析</strong>：<code>SSR</code> 的 <code>Shading</code> 计算</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>公式：
+<ul>
+<li data-line="1" dir="auto"><code>SSR</code> 的反射光照计算模型：</li>
+<li data-line="2" dir="auto"><span alt="Pasted image 20250520190611.png" src="Pasted image 20250520190611.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250520190611.png" src="lib/media/pasted-image-20250520190611.png"></span></li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="4" dir="auto">此公式和 <code>Diffuse</code> 反射的公式类似，在立体角的范围内算 <code>RayTracing</code>；</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>对于可见性的处理，对于 <code>ShadingPoint</code> 需要考虑的东西都是具有可见性的，因此就不需要专门的 <code>V</code> 函数；
+<ul>
+<li data-line="6" dir="auto">因为 <code>SSR</code> 的反射光线仅在屏幕空间内追踪，​<strong>默认所有采样点可见</strong>​（因深度检测已隐含可见性判断）； </li>
+</ul>
+</li>
+<li data-line="7" dir="auto">所以 <code>SSR</code> 本质就是<strong>屏幕空间的 <code>RayTracing</code></strong>；</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>解释：
+<ul>
+<li data-line="9" dir="auto"><code>Li​(p,ωi​)</code>：入射方向&nbsp;<code>ωi​</code>&nbsp;上的光源亮度（来自屏幕空间）；</li>
+<li data-line="10" dir="auto"><code>fr</code> ​：<code>BRDF</code>（双向反射分布函数），决定材质如何反射光线；</li>
+<li data-line="11" dir="auto">其和 <code>Diffuse</code> 一样，均基于立体角积分（<code>∫Ω+</code>​），计算所有入射方向的贡献；</li>
+</ul>
+</li>
+</ul></div><div class="mod-footer mod-ui"></div></div></div></div></div></div></div></div></div></div><div class="sidebar-right sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"></div><script defer="">let rs = document.querySelector(".sidebar-right"); rs.classList.add("is-collapsed"); if (window.innerWidth > 768) rs.classList.remove("is-collapsed"); rs.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-right-width"));</script></div></div></body></html>

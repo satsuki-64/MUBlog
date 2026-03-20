@@ -1,0 +1,1165 @@
+<!DOCTYPE html> <html><head>
+		<title>Lecture 2：编队移动转向系统</title>
+		<base href="..\..\../">
+		<meta id="root-path" root-path="..\..\../">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
+		<meta charset="UTF-8">
+		<meta name="description" content="MUBlog - Lecture 2：编队移动转向系统">
+		<meta property="og:title" content="Lecture 2：编队移动转向系统">
+		<meta property="og:description" content="MUBlog - Lecture 2：编队移动转向系统">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="03_游戏开发技术/06_游戏人工智能/01_寻路算法/lecture-2：编队移动转向系统.html">
+		<meta property="og:image" content="lib\media\pasted-image-20260310202034.png">
+		<meta property="og:site_name" content="MUBlog">
+		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="lib/rss.xml"><script async="" id="webpage-script" src="lib/scripts/webpage.js" onload="this.onload=null;this.setAttribute(&quot;loaded&quot;, &quot;true&quot;)"></script><link rel="icon" href="lib/media/favicon.png"><style>body{--line-width:40em;--line-width-adaptive:40em;--file-line-width:40em;--sidebar-width:min(20em, 80vw);--collapse-arrow-size:11px;--tree-horizontal-spacing:0.6em;--tree-vertical-spacing:0.6em;--sidebar-margin:12px}.sidebar{height:100%;min-width:calc(var(--sidebar-width) + var(--divider-width-hover));max-width:calc(var(--sidebar-width) + var(--divider-width-hover));font-size:14px;z-index:10;position:relative;overflow:hidden;transition:min-width ease-in-out,max-width ease-in-out;transition-duration:.2s;contain:size}.sidebar-left{left:0}.sidebar-right{right:0}.sidebar.is-collapsed{min-width:0;max-width:0}body.floating-sidebars .sidebar{position:absolute}.sidebar-content{height:100%;min-width:calc(var(--sidebar-width) - var(--divider-width-hover));top:0;padding:var(--sidebar-margin);padding-top:4em;line-height:var(--line-height-tight);background-color:var(--background-secondary);transition:background-color,border-right,border-left,box-shadow;transition-duration:var(--color-fade-speed);transition-timing-function:ease-in-out;position:absolute;display:flex;flex-direction:column}.sidebar:not(.is-collapsed) .sidebar-content{min-width:calc(max(100%,var(--sidebar-width)) - 3px);max-width:calc(max(100%,var(--sidebar-width)) - 3px)}.sidebar-left .sidebar-content{left:0;border-top-right-radius:var(--radius-l);border-bottom-right-radius:var(--radius-l)}.sidebar-right .sidebar-content{right:0;border-top-left-radius:var(--radius-l);border-bottom-left-radius:var(--radius-l)}.sidebar:has(.sidebar-content:empty):has(.topbar-content:empty){display:none}.sidebar-topbar{height:2em;width:var(--sidebar-width);top:var(--sidebar-margin);padding-inline:var(--sidebar-margin);z-index:1;position:fixed;display:flex;align-items:center;transition:width ease-in-out;transition-duration:inherit}.sidebar.is-collapsed .sidebar-topbar{width:calc(2.3em + var(--sidebar-margin) * 2)}.sidebar .sidebar-topbar.is-collapsed{width:0}.sidebar-left .sidebar-topbar{left:0}.sidebar-right .sidebar-topbar{right:0}.topbar-content{overflow:hidden;overflow:clip;width:100%;height:100%;display:flex;align-items:center;transition:inherit}.sidebar.is-collapsed .topbar-content{width:0;transition:inherit}.clickable-icon.sidebar-collapse-icon{background-color:transparent;color:var(--icon-color-focused);padding:0!important;margin:0!important;height:100%!important;width:2.3em!important;margin-inline:0.14em!important;position:absolute}.sidebar-left .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);right:var(--sidebar-margin)}.sidebar-right .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);left:var(--sidebar-margin)}.clickable-icon.sidebar-collapse-icon svg.svg-icon{width:100%;height:100%}.sidebar-section-header{margin:0 0 1em 0;text-transform:uppercase;letter-spacing:.06em;font-weight:600}body{transition:background-color var(--color-fade-speed) ease-in-out}.webpage-container{display:flex;flex-direction:row;height:100%;width:100%;align-items:stretch;justify-content:center}.document-container{opacity:1;flex-basis:100%;max-width:100%;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;transition:opacity .2s ease-in-out;contain:inline-size}.hide{opacity:0;transition:opacity .2s ease-in-out}.document-container>.markdown-preview-view{margin:var(--sidebar-margin);margin-bottom:0;width:100%;width:-webkit-fill-available;width:-moz-available;width:fill-available;background-color:var(--background-primary);transition:background-color var(--color-fade-speed) ease-in-out;border-top-right-radius:var(--window-radius,var(--radius-m));border-top-left-radius:var(--window-radius,var(--radius-m));overflow-x:hidden!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;contain:inline-size}.document-container>.markdown-preview-view>.markdown-preview-sizer{padding-bottom:80vh!important;width:100%!important;max-width:var(--line-width)!important;flex-basis:var(--line-width)!important;transition:background-color var(--color-fade-speed) ease-in-out;contain:inline-size}.markdown-rendered img:not([width]),.view-content img:not([width]){max-width:100%;outline:0}.document-container>.view-content.embed{display:flex;padding:1em;height:100%;width:100%;align-items:center;justify-content:center}.document-container>.view-content.embed>*{max-width:100%;max-height:100%;object-fit:contain}:has(> :is(.math,table)){overflow-x:auto!important}.document-container>.view-content{overflow-x:auto;contain:content;padding:0;margin:0;height:100%}.scroll-highlight{position:absolute;width:100%;height:100%;pointer-events:none;z-index:1000;background-color:hsla(var(--color-accent-hsl),.25);opacity:0;padding:1em;inset:50%;translate:-50% -50%;border-radius:var(--radius-s)}</style><script defer="">async function loadIncludes(){if("file:"!=location.protocol){let e=document.querySelectorAll("include");for(let t=0;t<e.length;t++){let o=e[t],l=o.getAttribute("src");try{const e=await fetch(l);if(!e.ok){console.log("Could not include file: "+l),o?.remove();continue}let t=await e.text(),n=document.createRange().createContextualFragment(t),i=Array.from(n.children);for(let e of i)e.classList.add("hide"),e.style.transition="opacity 0.5s ease-in-out",setTimeout((()=>{e.classList.remove("hide")}),10);o.before(n),o.remove(),console.log("Included file: "+l)}catch(e){o?.remove(),console.log("Could not include file: "+l,e);continue}}}else{if(document.querySelectorAll("include").length>0){var e=document.createElement("div");e.id="error",e.textContent="Web server exports must be hosted on an http / web server to be viewed correctly.",e.style.position="fixed",e.style.top="50%",e.style.left="50%",e.style.transform="translate(-50%, -50%)",e.style.fontSize="1.5em",e.style.fontWeight="bold",e.style.textAlign="center",document.body.appendChild(e),document.querySelector(".document-container")?.classList.remove("hide")}}}document.addEventListener("DOMContentLoaded",(()=>{loadIncludes()}));let isFileProtocol="file:"==location.protocol;function waitLoadScripts(e,t){let o=e.map((e=>document.getElementById(e+"-script"))),l=0;!function e(){let n=o[l];l++,n&&"true"!=n.getAttribute("loaded")||l<o.length&&e(),l<o.length?n.addEventListener("load",e):t()}()}</script><link rel="stylesheet" href="lib/styles/obsidian.css"><link rel="stylesheet" href="lib/styles/theme.css"><link rel="preload" href="lib/styles/global-variable-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/global-variable-styles.css"></noscript><link rel="preload" href="lib/styles/supported-plugins.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/supported-plugins.css"></noscript><link rel="preload" href="lib/styles/main-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/main-styles.css"></noscript><link rel="preload" href="lib/styles/snippets.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/snippets.css"></noscript></head><body class="publish css-settings-manager styled-scrollbars theme-light show-inline-title ctp-rosepine-light ctp-mocha ctp-accent-rosewater anuppuccin-accent-toggle anp-current-line-border anp-callout-color-toggle anp-codeblock-numbers anp-list-toggle anp-table-width anp-toggle-preview anp-color-transition-toggle anp-button-metadata-toggle anp-toggle-metadata anp-toggle-scrollbars anp-h1-red anp-h1-divider anp-h2-peach anp-h3-green anp-h4-teal anp-h5-lavender anp-h6-mauve anp-decoration-toggle anp-bold-maroon anp-italic-green anp-highlight-yellow anp-colorful-frame-icon-toggle-dark anp-simple-rainbow-color-toggle anp-rainbow-file-toggle anp-simple-rainbow-title-toggle anp-simple-rainbow-icon-folder-toggle anp-simple-rainbow-indentation-toggle anp-simple-rainbow-collapse-toggle anp-card-layout anp-card-shadows anp-card-layout-filebrowser anp-theme-ext-light anp-theme-ext-dark anp-theme-ext-amoled ctp-atom-light ctp-atom-dark table-type-three-line table-header-color-blue table-row-alt-background-option table-dark-mode"><script defer="">let theme=localStorage.getItem("theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");"dark"==theme?(document.body.classList.add("theme-dark"),document.body.classList.remove("theme-light")):(document.body.classList.add("theme-light"),document.body.classList.remove("theme-dark")),window.innerWidth<480?document.body.classList.add("is-phone"):window.innerWidth<768?document.body.classList.add("is-tablet"):window.innerWidth<1024?document.body.classList.add("is-small-screen"):document.body.classList.add("is-large-screen")</script><div class="webpage-container workspace"><div class="sidebar-left sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"><label class="theme-toggle-container" for="theme_toggle"><input class="theme-toggle-input" type="checkbox" id="theme_toggle"><div class="toggle-background"></div></label></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"><include src="lib/html/file-tree.html"></include></div><script defer="">let ls = document.querySelector(".sidebar-left"); ls.classList.add("is-collapsed"); if (window.innerWidth > 768) ls.classList.remove("is-collapsed"); ls.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-left-width"));</script></div><div class="document-container markdown-reading-view hide"><div class="markdown-preview-view markdown-rendered allow-fold-headings allow-fold-lists is-readable-line-width"><style id="MJX-CHTML-styles">mjx-mlabeledtr { display: table-row; text-align: left; }
+mjx-mlabeledtr[rowalign="top"] > mjx-mtd { vertical-align: top; }
+mjx-mlabeledtr[rowalign="center"] > mjx-mtd { vertical-align: middle; }
+mjx-mlabeledtr[rowalign="bottom"] > mjx-mtd { vertical-align: bottom; }
+mjx-mlabeledtr[rowalign="baseline"] > mjx-mtd { vertical-align: baseline; }
+mjx-mlabeledtr[rowalign="axis"] > mjx-mtd { vertical-align: 0.25em; }
+mjx-c.mjx-c21::before { padding: 0.716em 0.278em 0px 0px; content: "!"; }
+mjx-mpadded { display: inline-block; text-align: left; }
+mjx-rbox { display: inline-block; position: relative; }
+mjx-stretchy-h.mjx-c2192 mjx-ext mjx-c::before { content: "−"; padding: 0.583em 0px 0.082em; }
+mjx-stretchy-h.mjx-c2192 mjx-end mjx-c::before { content: "→"; padding: 0.583em 0px 0.082em; }
+mjx-c.mjx-c39::before { padding: 0.666em 0.5em 0.022em 0px; content: "9"; }
+mjx-c.mjx-c1D44D.TEX-I::before { padding: 0.683em 0.723em 0px 0px; content: "Z"; }
+mjx-c.mjx-c58::before { padding: 0.683em 0.75em 0px 0px; content: "X"; }
+mjx-c.mjx-c59::before { padding: 0.683em 0.75em 0px 0px; content: "Y"; }
+mjx-c.mjx-c5A::before { padding: 0.683em 0.611em 0px 0px; content: "Z"; }
+mjx-c.mjx-c28.TEX-S2::before { padding: 1.15em 0.597em 0.649em 0px; content: "("; }
+mjx-c.mjx-c29.TEX-S2::before { padding: 1.15em 0.597em 0.649em 0px; content: ")"; }
+mjx-c.mjx-c4E::before { padding: 0.683em 0.75em 0px 0px; content: "N"; }
+mjx-c.mjx-c22A4::before { padding: 0.668em 0.778em 0px 0px; content: "⊤"; }
+mjx-c.mjx-cB7::before { padding: 0.31em 0.278em 0px 0px; content: "⋅"; }
+mjx-c.mjx-c36::before { padding: 0.666em 0.5em 0.022em 0px; content: "6"; }
+mjx-c.mjx-c1D43E.TEX-I::before { padding: 0.683em 0.889em 0px 0px; content: "K"; }
+mjx-c.mjx-c52::before { padding: 0.683em 0.736em 0.022em 0px; content: "R"; }
+mjx-c.mjx-c1D42B.TEX-B::before { padding: 0.45em 0.474em 0px 0px; content: "r"; }
+mjx-c.mjx-c1D428.TEX-B::before { padding: 0.452em 0.575em 0.005em 0px; content: "o"; }
+mjx-c.mjx-c1D41D.TEX-B::before { padding: 0.694em 0.639em 0.006em 0px; content: "d"; }
+mjx-c.mjx-c3C::before { padding: 0.54em 0.778em 0.04em 0px; content: "<"; }
+mjx-c.mjx-c221E::before { padding: 0.442em 1em 0.011em 0px; content: "∞"; }
+mjx-c.mjx-c1D429.TEX-B::before { padding: 0.45em 0.639em 0.194em 0px; content: "p"; }
+mjx-c.mjx-cB1::before { padding: 0.666em 0.778em 0px 0px; content: "±"; }
+mjx-c.mjx-c221A::before { padding: 0.8em 0.853em 0.2em 0px; content: "√"; }
+mjx-c.mjx-c47::before { padding: 0.705em 0.785em 0.022em 0px; content: "G"; }
+mjx-c.mjx-c66::before { padding: 0.705em 0.372em 0px 0px; content: "f"; }
+mjx-c.mjx-c71::before { padding: 0.442em 0.528em 0.194em 0px; content: "q"; }
+mjx-c.mjx-c5E.TEX-B::before { padding: 0.694em 0.575em 0px 0px; content: "^"; }
+mjx-c.mjx-c1D42D.TEX-B::before { padding: 0.635em 0.447em 0.005em 0px; content: "t"; }
+mjx-c.mjx-c1D40E.TEX-B::before { padding: 0.696em 0.864em 0.01em 0px; content: "O"; }
+mjx-c.mjx-c1D403.TEX-B::before { padding: 0.686em 0.882em 0px 0px; content: "D"; }
+mjx-c.mjx-c1D40F.TEX-B::before { padding: 0.686em 0.786em 0px 0px; content: "P"; }
+mjx-c.mjx-c2219::before { padding: 0.444em 0.5em 0px 0px; content: "∙"; }
+mjx-c.mjx-c1D404.TEX-B::before { padding: 0.68em 0.756em 0px 0px; content: "E"; }
+mjx-c.mjx-c20D7.TEX-VB::before { padding: 0.723em 0.575em 0px 0px; content: "→"; }
+mjx-c.mjx-c7B::before { padding: 0.75em 0.5em 0.25em 0px; content: "{"; }
+mjx-c.mjx-c7D::before { padding: 0.75em 0.5em 0.25em 0px; content: "}"; }
+mjx-c.mjx-c26::before { padding: 0.716em 0.778em 0.022em 0px; content: "&"; }
+mjx-c.mjx-c2261::before { padding: 0.464em 0.778em 0px 0px; content: "≡"; }
+mjx-c.mjx-c3A6::before { padding: 0.683em 0.722em 0px 0px; content: "Φ"; }
+mjx-c.mjx-c57::before { padding: 0.683em 1.028em 0.022em 0px; content: "W"; }
+mjx-c.mjx-c2035.TEX-A::before { padding: 0.56em 0.275em 0px 0px; content: "‵"; }
+mjx-c.mjx-c1D446.TEX-I::before { padding: 0.705em 0.645em 0.022em 0px; content: "S"; }
+mjx-c.mjx-c1D719.TEX-I::before { padding: 0.694em 0.596em 0.205em 0px; content: "ϕ"; }
+mjx-c.mjx-c7C::before { padding: 0.75em 0.278em 0.249em 0px; content: "|"; }
+.mjx-stretched mjx-c.mjx-c2013::before { content: "–"; }
+mjx-stretchy-h.mjx-c2013 mjx-ext mjx-c::before { content: "–"; padding: 0.285em 0px 0px; }
+mjx-c.mjx-c1D52E.TEX-FR::before { padding: 0.479em 0.489em 0.219em 0px; content: "q"; }
+mjx-c.mjx-c1D52D.TEX-FR::before { padding: 0.541em 0.5em 0.212em 0px; content: "p"; }
+mjx-c.mjx-c1D43A.TEX-I::before { padding: 0.705em 0.786em 0.022em 0px; content: "G"; }
+mjx-c.mjx-c1D439.TEX-I::before { padding: 0.68em 0.749em 0px 0px; content: "F"; }
+mjx-c.mjx-c3A9::before { padding: 0.704em 0.722em 0px 0px; content: "Ω"; }
+mjx-c.mjx-c2248::before { padding: 0.483em 0.778em 0px 0px; content: "≈"; }
+mjx-c.mjx-c222B.TEX-S1::before { padding: 0.805em 0.61em 0.306em 0px; content: "∫"; }
+mjx-c.mjx-c200B::before { padding: 0px; content: ""; }
+mjx-c.mjx-c1D44A.TEX-I::before { padding: 0.683em 1.048em 0.022em 0px; content: "W"; }
+mjx-c.mjx-c1D443.TEX-I::before { padding: 0.683em 0.751em 0px 0px; content: "P"; }
+mjx-c.mjx-c1D45E.TEX-I::before { padding: 0.442em 0.46em 0.194em 0px; content: "q"; }
+mjx-c.mjx-c2208::before { padding: 0.54em 0.667em 0.04em 0px; content: "∈"; }
+mjx-c.mjx-c4E.TEX-C::before { padding: 0.789em 0.979em 0.05em 0px; content: "N"; }
+mjx-c.mjx-c1D712.TEX-I::before { padding: 0.442em 0.626em 0.204em 0px; content: "χ"; }
+mjx-c.mjx-c53::before { padding: 0.705em 0.556em 0.022em 0px; content: "S"; }
+mjx-c.mjx-c4D::before { padding: 0.683em 0.917em 0px 0px; content: "M"; }
+mjx-c.mjx-c1D44B.TEX-I::before { padding: 0.683em 0.852em 0px 0px; content: "X"; }
+mjx-c.mjx-c56::before { padding: 0.683em 0.75em 0.022em 0px; content: "V"; }
+mjx-c.mjx-c45::before { padding: 0.68em 0.681em 0px 0px; content: "E"; }
+mjx-c.mjx-c2264::before { padding: 0.636em 0.778em 0.138em 0px; content: "≤"; }
+mjx-c.mjx-c1D70E.TEX-I::before { padding: 0.431em 0.571em 0.011em 0px; content: "σ"; }
+mjx-c.mjx-c1D707.TEX-I::before { padding: 0.442em 0.603em 0.216em 0px; content: "μ"; }
+mjx-c.mjx-c1D708.TEX-I::before { padding: 0.442em 0.53em 0px 0px; content: "ν"; }
+mjx-c.mjx-c46::before { padding: 0.68em 0.653em 0px 0px; content: "F"; }
+mjx-c.mjx-c7B.TEX-S3::before { padding: 1.45em 0.75em 0.949em 0px; content: "{"; }
+mjx-c.mjx-c7D.TEX-S3::before { padding: 1.45em 0.75em 0.949em 0px; content: "}"; }
+mjx-c.mjx-c1D438.TEX-I::before { padding: 0.68em 0.764em 0px 0px; content: "E"; }
+mjx-c.mjx-c222B.TEX-S2::before { padding: 1.36em 0.944em 0.862em 0px; content: "∫"; }
+mjx-c.mjx-c1D43B.TEX-I::before { padding: 0.683em 0.888em 0px 0px; content: "H"; }
+mjx-c.mjx-c1D70C.TEX-I::before { padding: 0.442em 0.517em 0.216em 0px; content: "ρ"; }
+mjx-c.mjx-c1D702.TEX-I::before { padding: 0.442em 0.497em 0.216em 0px; content: "η"; }
+mjx-c.mjx-c221A.TEX-S2::before { padding: 1.15em 1.02em 0.65em 0px; content: "√"; }
+mjx-c.mjx-c3E::before { padding: 0.54em 0.778em 0.04em 0px; content: ">"; }
+mjx-munderover { display: inline-block; text-align: left; }
+mjx-munderover:not([limits="false"]) { padding-top: 0.1em; }
+mjx-munderover:not([limits="false"]) > * { display: block; }
+mjx-c.mjx-c221A.TEX-S1::before { padding: 0.85em 1.02em 0.35em 0px; content: "√"; }
+mjx-c.mjx-c3A::before { padding: 0.43em 0.278em 0px 0px; content: ":"; }
+mjx-c.mjx-c211D.TEX-A::before { padding: 0.683em 0.722em 0px 0px; content: "R"; }
+mjx-c.mjx-c3B::before { padding: 0.43em 0.278em 0.194em 0px; content: ";"; }
+mjx-c.mjx-c21A6::before { padding: 0.511em 1em 0.011em 0px; content: "↦"; }
+mjx-c.mjx-c1D41B.TEX-B::before { padding: 0.694em 0.639em 0.006em 0px; content: "b"; }
+mjx-c.mjx-c2211.TEX-S2::before { padding: 0.95em 1.444em 0.45em 0px; content: "∑"; }
+mjx-c.mjx-c1D457.TEX-I::before { padding: 0.661em 0.412em 0.204em 0px; content: "j"; }
+mjx-c.mjx-c38::before { padding: 0.666em 0.5em 0.022em 0px; content: "8"; }
+mjx-c.mjx-c41::before { padding: 0.716em 0.75em 0px 0px; content: "A"; }
+mjx-c.mjx-c43::before { padding: 0.705em 0.722em 0.021em 0px; content: "C"; }
+mjx-msqrt { display: inline-block; text-align: left; }
+mjx-root { display: inline-block; white-space: nowrap; }
+mjx-surd { display: inline-block; vertical-align: top; }
+mjx-sqrt { display: inline-block; padding-top: 0.07em; }
+mjx-sqrt > mjx-box { border-top: 0.07em solid; }
+mjx-sqrt.mjx-tall > mjx-box { padding-left: 0.3em; margin-left: -0.3em; }
+mjx-c.mjx-c1D435.TEX-I::before { padding: 0.683em 0.759em 0px 0px; content: "B"; }
+mjx-c.mjx-c1D436.TEX-I::before { padding: 0.705em 0.76em 0.022em 0px; content: "C"; }
+mjx-c.mjx-c28.TEX-S3::before { padding: 1.45em 0.736em 0.949em 0px; content: "("; }
+mjx-c.mjx-c29.TEX-S3::before { padding: 1.45em 0.736em 0.949em 0px; content: ")"; }
+mjx-c.mjx-c42::before { padding: 0.683em 0.708em 0px 0px; content: "B"; }
+mjx-c.mjx-c1D449.TEX-I::before { padding: 0.683em 0.769em 0.022em 0px; content: "V"; }
+mjx-c.mjx-c1D462.TEX-I::before { padding: 0.442em 0.572em 0.011em 0px; content: "u"; }
+mjx-c.mjx-c221A.TEX-S4::before { padding: 1.75em 1.02em 1.25em 0px; content: "√"; }
+mjx-c.mjx-c22C6::before { padding: 0.486em 0.5em 0px 0px; content: "⋆"; }
+mjx-c.mjx-c1D42E.TEX-B::before { padding: 0.45em 0.639em 0.006em 0px; content: "u"; }
+mjx-c.mjx-c2E::before { padding: 0.12em 0.278em 0px 0px; content: "."; }
+mjx-c.mjx-c1D43C.TEX-I::before { padding: 0.683em 0.504em 0px 0px; content: "I"; }
+mjx-c.mjx-c1D43F.TEX-I::before { padding: 0.683em 0.681em 0px 0px; content: "L"; }
+mjx-c.mjx-c1D458.TEX-I::before { padding: 0.694em 0.521em 0.011em 0px; content: "k"; }
+mjx-c.mjx-c28.TEX-S1::before { padding: 0.85em 0.458em 0.349em 0px; content: "("; }
+mjx-c.mjx-c29.TEX-S1::before { padding: 0.85em 0.458em 0.349em 0px; content: ")"; }
+mjx-c.mjx-c6D::before { padding: 0.442em 0.833em 0px 0px; content: "m"; }
+mjx-c.mjx-c1D425.TEX-B::before { padding: 0.694em 0.319em 0px 0px; content: "l"; }
+mjx-c.mjx-c1D421.TEX-B::before { padding: 0.694em 0.639em 0px 0px; content: "h"; }
+mjx-c.mjx-c62::before { padding: 0.694em 0.556em 0.011em 0px; content: "b"; }
+mjx-c.mjx-c1D42F.TEX-B::before { padding: 0.444em 0.607em 0px 0px; content: "v"; }
+mjx-c.mjx-c2225::before { padding: 0.75em 0.5em 0.25em 0px; content: "∥"; }
+mjx-c.mjx-c1D441.TEX-I::before { padding: 0.683em 0.888em 0px 0px; content: "N"; }
+mjx-c.mjx-c2211.TEX-S1::before { padding: 0.75em 1.056em 0.25em 0px; content: "∑"; }
+mjx-stretchy-v.mjx-c7B mjx-beg mjx-c::before { content: "⎧"; padding: 0.899em 0.889em 0.01em 0px; }
+mjx-stretchy-v.mjx-c7B mjx-ext mjx-c::before { content: "⎪"; width: 0.889em; }
+mjx-stretchy-v.mjx-c7B mjx-end mjx-c::before { content: "⎩"; padding: 0.01em 0.889em 0.899em 0px; }
+mjx-stretchy-v.mjx-c7B mjx-mid mjx-c::before { content: "⎨"; padding: 1.16em 0.889em 0.66em 0px; }
+mjx-stretchy-v.mjx-c7B > mjx-mid { margin-top: -0.91em; margin-bottom: -0.91em; }
+mjx-stretchy-v.mjx-c7B > mjx-end { margin-top: -0.909em; }
+mjx-stretchy-v.mjx-c7B > mjx-ext { height: 50%; border-top-width: 0.879em; border-bottom-width: 0.879em; }
+mjx-c.mjx-c2217::before { padding: 0.465em 0.5em 0px 0px; content: "∗"; }
+mjx-c.mjx-c68::before { padding: 0.694em 0.556em 0px 0px; content: "h"; }
+mjx-c.mjx-c1D70B.TEX-I::before { padding: 0.431em 0.57em 0.011em 0px; content: "π"; }
+mjx-c.mjx-c1D714.TEX-I::before { padding: 0.443em 0.622em 0.011em 0px; content: "ω"; }
+mjx-c.mjx-c37::before { padding: 0.676em 0.5em 0.022em 0px; content: "7"; }
+mjx-mtable { display: inline-block; text-align: center; vertical-align: 0.25em; position: relative; box-sizing: border-box; border-spacing: 0px; border-collapse: collapse; }
+mjx-mstyle[size="s"] mjx-mtable { vertical-align: 0.354em; }
+mjx-labels { position: absolute; left: 0px; top: 0px; }
+mjx-table { display: inline-block; vertical-align: -0.5ex; box-sizing: border-box; }
+mjx-table > mjx-itable { vertical-align: middle; text-align: left; box-sizing: border-box; }
+mjx-labels > mjx-itable { position: absolute; top: 0px; }
+mjx-mtable[justify="left"] { text-align: left; }
+mjx-mtable[justify="right"] { text-align: right; }
+mjx-mtable[justify="left"][side="left"] { padding-right: 0px !important; }
+mjx-mtable[justify="left"][side="right"] { padding-left: 0px !important; }
+mjx-mtable[justify="right"][side="left"] { padding-right: 0px !important; }
+mjx-mtable[justify="right"][side="right"] { padding-left: 0px !important; }
+mjx-mtable[align] { vertical-align: baseline; }
+mjx-mtable[align="top"] > mjx-table { vertical-align: top; }
+mjx-mtable[align="bottom"] > mjx-table { vertical-align: bottom; }
+mjx-mtable[side="right"] mjx-labels { min-width: 100%; }
+mjx-mtr { display: table-row; text-align: left; }
+mjx-mtr[rowalign="top"] > mjx-mtd { vertical-align: top; }
+mjx-mtr[rowalign="center"] > mjx-mtd { vertical-align: middle; }
+mjx-mtr[rowalign="bottom"] > mjx-mtd { vertical-align: bottom; }
+mjx-mtr[rowalign="baseline"] > mjx-mtd { vertical-align: baseline; }
+mjx-mtr[rowalign="axis"] > mjx-mtd { vertical-align: 0.25em; }
+mjx-mtd { display: table-cell; text-align: center; padding: 0.215em 0.4em; }
+mjx-mtd:first-child { padding-left: 0px; }
+mjx-mtd:last-child { padding-right: 0px; }
+mjx-mtable > * > mjx-itable > :first-child > mjx-mtd { padding-top: 0px; }
+mjx-mtable > * > mjx-itable > :last-child > mjx-mtd { padding-bottom: 0px; }
+mjx-tstrut { display: inline-block; height: 1em; vertical-align: -0.25em; }
+mjx-labels[align="left"] > mjx-mtr > mjx-mtd { text-align: left; }
+mjx-labels[align="right"] > mjx-mtr > mjx-mtd { text-align: right; }
+mjx-mtd[extra] { padding: 0px; }
+mjx-mtd[rowalign="top"] { vertical-align: top; }
+mjx-mtd[rowalign="center"] { vertical-align: middle; }
+mjx-mtd[rowalign="bottom"] { vertical-align: bottom; }
+mjx-mtd[rowalign="baseline"] { vertical-align: baseline; }
+mjx-mtd[rowalign="axis"] { vertical-align: 0.25em; }
+mjx-texatom { display: inline-block; text-align: left; }
+mjx-mrow { display: inline-block; text-align: left; }
+mjx-msub { display: inline-block; text-align: left; }
+mjx-mspace { display: inline-block; text-align: left; }
+mjx-mtext { display: inline-block; text-align: left; }
+mjx-munder { display: inline-block; text-align: left; }
+mjx-over { text-align: left; }
+mjx-munder:not([limits="false"]) { display: inline-table; }
+mjx-munder > mjx-row { text-align: left; }
+mjx-under { padding-bottom: 0.1em; }
+mjx-mover { display: inline-block; text-align: left; }
+mjx-mover:not([limits="false"]) { padding-top: 0.1em; }
+mjx-mover:not([limits="false"]) > * { display: block; text-align: left; }
+mjx-msubsup { display: inline-block; text-align: left; }
+mjx-script { display: inline-block; padding-right: 0.05em; padding-left: 0.033em; }
+mjx-script > mjx-spacer { display: block; }
+mjx-mfrac { display: inline-block; text-align: left; }
+mjx-frac { display: inline-block; vertical-align: 0.17em; padding: 0px 0.22em; }
+mjx-frac[type="d"] { vertical-align: 0.04em; }
+mjx-frac[delims] { padding: 0px 0.1em; }
+mjx-frac[atop] { padding: 0px 0.12em; }
+mjx-frac[atop][delims] { padding: 0px; }
+mjx-dtable { display: inline-table; width: 100%; }
+mjx-dtable > * { font-size: 2000%; }
+mjx-dbox { display: block; font-size: 5%; }
+mjx-num { display: block; text-align: center; }
+mjx-den { display: block; text-align: center; }
+mjx-mfrac[bevelled] > mjx-num { display: inline-block; }
+mjx-mfrac[bevelled] > mjx-den { display: inline-block; }
+mjx-den[align="right"], mjx-num[align="right"] { text-align: right; }
+mjx-den[align="left"], mjx-num[align="left"] { text-align: left; }
+mjx-nstrut { display: inline-block; height: 0.054em; width: 0px; vertical-align: -0.054em; }
+mjx-nstrut[type="d"] { height: 0.217em; vertical-align: -0.217em; }
+mjx-dstrut { display: inline-block; height: 0.505em; width: 0px; }
+mjx-dstrut[type="d"] { height: 0.726em; }
+mjx-line { display: block; box-sizing: border-box; min-height: 1px; height: 0.06em; border-top: 0.06em solid; margin: 0.06em -0.1em; overflow: hidden; }
+mjx-line[type="d"] { margin: 0.18em -0.1em; }
+mjx-stretchy-v.mjx-c28 mjx-beg mjx-c::before { content: "⎛"; padding: 1.154em 0.875em 0.655em 0px; }
+mjx-stretchy-v.mjx-c28 mjx-ext mjx-c::before { content: "⎜"; width: 0.875em; }
+mjx-stretchy-v.mjx-c28 mjx-end mjx-c::before { content: "⎝"; padding: 1.165em 0.875em 0.644em 0px; }
+mjx-stretchy-v.mjx-c28 > mjx-end { margin-top: -1.809em; }
+mjx-stretchy-v.mjx-c28 > mjx-ext { border-top-width: 1.779em; border-bottom-width: 1.779em; }
+mjx-stretchy-v.mjx-c29 mjx-beg mjx-c::before { content: "⎞"; padding: 1.154em 0.875em 0.655em 0px; }
+mjx-stretchy-v.mjx-c29 mjx-ext mjx-c::before { content: "⎟"; width: 0.875em; }
+mjx-stretchy-v.mjx-c29 mjx-end mjx-c::before { content: "⎠"; padding: 1.165em 0.875em 0.644em 0px; }
+mjx-stretchy-v.mjx-c29 > mjx-end { margin-top: -1.809em; }
+mjx-stretchy-v.mjx-c29 > mjx-ext { border-top-width: 1.779em; border-bottom-width: 1.779em; }
+mjx-stretchy-v.mjx-c5B mjx-beg mjx-c::before { content: "⎡"; padding: 1.154em 0.667em 0.645em 0px; }
+mjx-stretchy-v.mjx-c5B mjx-ext mjx-c::before { content: "⎢"; width: 0.667em; }
+mjx-stretchy-v.mjx-c5B mjx-end mjx-c::before { content: "⎣"; padding: 1.155em 0.667em 0.644em 0px; }
+mjx-stretchy-v.mjx-c5B > mjx-end { margin-top: -1.799em; }
+mjx-stretchy-v.mjx-c5B > mjx-ext { border-top-width: 1.769em; border-bottom-width: 1.769em; }
+mjx-stretchy-v.mjx-c5D mjx-beg mjx-c::before { content: "⎤"; padding: 1.154em 0.667em 0.645em 0px; }
+mjx-stretchy-v.mjx-c5D mjx-ext mjx-c::before { content: "⎥"; width: 0.667em; }
+mjx-stretchy-v.mjx-c5D mjx-end mjx-c::before { content: "⎦"; padding: 1.155em 0.667em 0.644em 0px; }
+mjx-stretchy-v.mjx-c5D > mjx-end { margin-top: -1.799em; }
+mjx-stretchy-v.mjx-c5D > mjx-ext { border-top-width: 1.769em; border-bottom-width: 1.769em; }
+mjx-stretchy-h.mjx-c23DF mjx-beg mjx-c::before { content: ""; padding: 0.32em 0px 0.2em; }
+mjx-stretchy-h.mjx-c23DF mjx-ext mjx-c::before { content: ""; padding: 0.32em 0px 0.2em; }
+mjx-stretchy-h.mjx-c23DF mjx-end mjx-c::before { content: ""; padding: 0.32em 0px 0.2em; }
+mjx-stretchy-h.mjx-c23DF mjx-mid mjx-c::before { content: ""; padding: 0.32em 0px 0.2em; }
+mjx-stretchy-h.mjx-c23DF > mjx-ext { width: 50%; }
+mjx-c.mjx-c1D466.TEX-I::before { padding: 0.442em 0.49em 0.205em 0px; content: "y"; }
+mjx-c.mjx-c5B.TEX-S3::before { padding: 1.45em 0.528em 0.949em 0px; content: "["; }
+mjx-c.mjx-c5D.TEX-S3::before { padding: 1.45em 0.528em 0.949em 0px; content: "]"; }
+mjx-c.mjx-c30::before { padding: 0.666em 0.5em 0.022em 0px; content: "0"; }
+mjx-c.mjx-c2212::before { padding: 0.583em 0.778em 0.082em 0px; content: "−"; }
+mjx-c.mjx-c1D411.TEX-B::before { padding: 0.686em 0.862em 0.011em 0px; content: "R"; }
+mjx-c.mjx-c1D703.TEX-I::before { padding: 0.705em 0.469em 0.01em 0px; content: "θ"; }
+mjx-c.mjx-c63::before { padding: 0.448em 0.444em 0.011em 0px; content: "c"; }
+mjx-c.mjx-c6F::before { padding: 0.448em 0.5em 0.01em 0px; content: "o"; }
+mjx-c.mjx-c73::before { padding: 0.448em 0.394em 0.011em 0px; content: "s"; }
+mjx-c.mjx-c2061::before { padding: 0px; content: ""; }
+mjx-c.mjx-c69::before { padding: 0.669em 0.278em 0px 0px; content: "i"; }
+mjx-c.mjx-c6E::before { padding: 0.442em 0.556em 0px 0px; content: "n"; }
+mjx-c.mjx-c1D451.TEX-I::before { padding: 0.694em 0.52em 0.01em 0px; content: "d"; }
+mjx-c.mjx-c1D437.TEX-I::before { padding: 0.683em 0.828em 0px 0px; content: "D"; }
+mjx-c.mjx-c1D447.TEX-I::before { padding: 0.677em 0.704em 0px 0px; content: "T"; }
+mjx-c.mjx-c1D464.TEX-I::before { padding: 0.443em 0.716em 0.011em 0px; content: "w"; }
+mjx-c.mjx-c22C5::before { padding: 0.31em 0.278em 0px 0px; content: "⋅"; }
+mjx-c.mjx-c1D412.TEX-B::before { padding: 0.697em 0.639em 0.011em 0px; content: "S"; }
+mjx-c.mjx-c1D6FC.TEX-I::before { padding: 0.442em 0.64em 0.011em 0px; content: "α"; }
+mjx-c.mjx-c1D445.TEX-I::before { padding: 0.683em 0.759em 0.021em 0px; content: "R"; }
+mjx-c.mjx-c34::before { padding: 0.677em 0.5em 0px 0px; content: "4"; }
+mjx-c.mjx-c35::before { padding: 0.666em 0.5em 0.022em 0px; content: "5"; }
+mjx-c.mjx-c2218::before { padding: 0.444em 0.5em 0px 0px; content: "∘"; }
+mjx-c.mjx-c1D434.TEX-I::before { padding: 0.716em 0.75em 0px 0px; content: "A"; }
+mjx-c.mjx-c2026::before { padding: 0.12em 1.172em 0px 0px; content: "…"; }
+mjx-c.mjx-c1D431.TEX-B::before { padding: 0.444em 0.607em 0px 0px; content: "x"; }
+mjx-c.mjx-c1D400.TEX-B::before { padding: 0.698em 0.869em 0px 0px; content: "A"; }
+mjx-c.mjx-c22EF::before { padding: 0.31em 1.172em 0px 0px; content: "⋯"; }
+mjx-c.mjx-c1D413.TEX-B::before { padding: 0.675em 0.8em 0px 0px; content: "T"; }
+mjx-c.mjx-c28.TEX-B::before { padding: 0.75em 0.447em 0.249em 0px; content: "("; }
+mjx-c.mjx-c1D41C.TEX-B::before { padding: 0.453em 0.511em 0.006em 0px; content: "c"; }
+mjx-c.mjx-c29.TEX-B::before { padding: 0.75em 0.447em 0.249em 0px; content: ")"; }
+mjx-c.mjx-c2212.TEX-B::before { padding: 0.281em 0.894em 0px 0px; content: "−"; }
+mjx-c.mjx-c33::before { padding: 0.665em 0.5em 0.022em 0px; content: "3"; }
+mjx-c.mjx-c44::before { padding: 0.683em 0.764em 0px 0px; content: "D"; }
+mjx-c.mjx-cA0::before { padding: 0px 0.25em 0px 0px; content: " "; }
+mjx-c.mjx-c70::before { padding: 0.442em 0.556em 0.194em 0px; content: "p"; }
+mjx-c.mjx-c74::before { padding: 0.615em 0.389em 0.01em 0px; content: "t"; }
+mjx-c.mjx-c78::before { padding: 0.431em 0.528em 0px 0px; content: "x"; }
+mjx-c.mjx-c79::before { padding: 0.431em 0.528em 0.204em 0px; content: "y"; }
+mjx-c.mjx-c7A::before { padding: 0.431em 0.444em 0px 0px; content: "z"; }
+mjx-c.mjx-c54::before { padding: 0.677em 0.722em 0px 0px; content: "T"; }
+mjx-c.mjx-c76::before { padding: 0.431em 0.528em 0.011em 0px; content: "v"; }
+mjx-c.mjx-c65::before { padding: 0.448em 0.444em 0.011em 0px; content: "e"; }
+mjx-c.mjx-c72::before { padding: 0.442em 0.392em 0px 0px; content: "r"; }
+mjx-c.mjx-c1D467.TEX-I::before { padding: 0.442em 0.465em 0.011em 0px; content: "z"; }
+mjx-c.mjx-c1D453.TEX-I::before { padding: 0.705em 0.55em 0.205em 0px; content: "f"; }
+mjx-c.mjx-c1D6FD.TEX-I::before { padding: 0.705em 0.566em 0.194em 0px; content: "β"; }
+mjx-c.mjx-c1D6FE.TEX-I::before { padding: 0.441em 0.543em 0.216em 0px; content: "γ"; }
+mjx-c.mjx-c1D427.TEX-B::before { padding: 0.45em 0.639em 0px 0px; content: "n"; }
+mjx-c.mjx-c1D408.TEX-B::before { padding: 0.686em 0.436em 0px 0px; content: "I"; }
+mjx-c.mjx-c1D40D.TEX-B::before { padding: 0.686em 0.9em 0px 0px; content: "N"; }
+mjx-c.mjx-c50::before { padding: 0.683em 0.681em 0px 0px; content: "P"; }
+mjx-c.mjx-c20D7.TEX-V::before { padding: 0.714em 0.5em 0px 0px; content: "→"; }
+mjx-c.mjx-c4C::before { padding: 0.683em 0.625em 0px 0px; content: "L"; }
+mjx-c.mjx-c6B::before { padding: 0.694em 0.528em 0px 0px; content: "k"; }
+mjx-c.mjx-c2D::before { padding: 0.252em 0.333em 0px 0px; content: "-"; }
+mjx-c.mjx-c61::before { padding: 0.448em 0.5em 0.011em 0px; content: "a"; }
+mjx-c.mjx-c20::before { padding: 0px 0.25em 0px 0px; content: " "; }
+mjx-c.mjx-c2F::before { padding: 0.75em 0.5em 0.25em 0px; content: "/"; }
+mjx-c.mjx-c67::before { padding: 0.453em 0.5em 0.206em 0px; content: "g"; }
+mjx-c.mjx-c64::before { padding: 0.694em 0.556em 0.011em 0px; content: "d"; }
+mjx-c.mjx-c5E::before { padding: 0.694em 0.5em 0px 0px; content: "^"; }
+mjx-c.mjx-c1D448.TEX-I::before { padding: 0.683em 0.767em 0.022em 0px; content: "U"; }
+mjx-c.mjx-cD7::before { padding: 0.491em 0.778em 0px 0px; content: "×"; }
+mjx-c.mjx-c5B::before { padding: 0.75em 0.278em 0.25em 0px; content: "["; }
+mjx-c.mjx-c5D::before { padding: 0.75em 0.278em 0.25em 0px; content: "]"; }
+mjx-c.mjx-c21D2::before { padding: 0.525em 1em 0.024em 0px; content: "⇒"; }
+mjx-c.mjx-c75::before { padding: 0.442em 0.556em 0.011em 0px; content: "u"; }
+mjx-c.mjx-c77::before { padding: 0.431em 0.722em 0.011em 0px; content: "w"; }
+mjx-c.mjx-c6C::before { padding: 0.694em 0.278em 0px 0px; content: "l"; }
+mjx-c.mjx-c1D440.TEX-I::before { padding: 0.683em 1.051em 0px 0px; content: "M"; }
+mjx-c.mjx-c1D465.TEX-I::before { padding: 0.442em 0.572em 0.011em 0px; content: "x"; }
+mjx-c.mjx-cD7::before { padding: 0.491em 0.778em 0px 0px; content: "×"; }
+mjx-c.mjx-c32::before { padding: 0.666em 0.5em 0px 0px; content: "2"; }
+mjx-c.mjx-c1D463.TEX-I::before { padding: 0.443em 0.485em 0.011em 0px; content: "v"; }
+mjx-c.mjx-c1D45D.TEX-I::before { padding: 0.442em 0.503em 0.194em 0px; content: "p"; }
+mjx-c.mjx-c2192::before { padding: 0.511em 1em 0.011em 0px; content: "→"; }
+mjx-c.mjx-c1D44E.TEX-I::before { padding: 0.441em 0.529em 0.01em 0px; content: "a"; }
+mjx-c.mjx-c1D44F.TEX-I::before { padding: 0.694em 0.429em 0.011em 0px; content: "b"; }
+mjx-c.mjx-c1D459.TEX-I::before { padding: 0.694em 0.298em 0.011em 0px; content: "l"; }
+mjx-c.mjx-c1D452.TEX-I::before { padding: 0.442em 0.466em 0.011em 0px; content: "e"; }
+mjx-mn { display: inline-block; text-align: left; }
+mjx-c.mjx-c1D442.TEX-I::before { padding: 0.704em 0.763em 0.022em 0px; content: "O"; }
+mjx-c.mjx-c31::before { padding: 0.666em 0.5em 0px 0px; content: "1"; }
+mjx-container[jax="CHTML"] { line-height: 0; }
+mjx-container [space="1"] { margin-left: 0.111em; }
+mjx-container [space="2"] { margin-left: 0.167em; }
+mjx-container [space="3"] { margin-left: 0.222em; }
+mjx-container [space="4"] { margin-left: 0.278em; }
+mjx-container [space="5"] { margin-left: 0.333em; }
+mjx-container [rspace="1"] { margin-right: 0.111em; }
+mjx-container [rspace="2"] { margin-right: 0.167em; }
+mjx-container [rspace="3"] { margin-right: 0.222em; }
+mjx-container [rspace="4"] { margin-right: 0.278em; }
+mjx-container [rspace="5"] { margin-right: 0.333em; }
+mjx-container [size="s"] { font-size: 70.7%; }
+mjx-container [size="ss"] { font-size: 50%; }
+mjx-container [size="Tn"] { font-size: 60%; }
+mjx-container [size="sm"] { font-size: 85%; }
+mjx-container [size="lg"] { font-size: 120%; }
+mjx-container [size="Lg"] { font-size: 144%; }
+mjx-container [size="LG"] { font-size: 173%; }
+mjx-container [size="hg"] { font-size: 207%; }
+mjx-container [size="HG"] { font-size: 249%; }
+mjx-container [width="full"] { width: 100%; }
+mjx-box { display: inline-block; }
+mjx-block { display: block; }
+mjx-itable { display: inline-table; }
+mjx-row { display: table-row; }
+mjx-row > * { display: table-cell; }
+mjx-mtext { display: inline-block; }
+mjx-mstyle { display: inline-block; }
+mjx-merror { display: inline-block; color: red; background-color: yellow; }
+mjx-mphantom { visibility: hidden; }
+mjx-assistive-mml { top: 0px; left: 0px; clip: rect(1px, 1px, 1px, 1px); user-select: none; position: absolute !important; padding: 1px 0px 0px !important; border: 0px !important; display: block !important; width: auto !important; overflow: hidden !important; }
+mjx-assistive-mml[display="block"] { width: 100% !important; }
+mjx-math { display: inline-block; text-align: left; line-height: 0; text-indent: 0px; font-style: normal; font-weight: normal; font-size: 100%; font-size-adjust: none; letter-spacing: normal; border-collapse: collapse; overflow-wrap: normal; word-spacing: normal; white-space: nowrap; direction: ltr; padding: 1px 0px; }
+mjx-container[jax="CHTML"][display="true"] { display: block; text-align: center; margin: 1em 0px; }
+mjx-container[jax="CHTML"][display="true"][width="full"] { display: flex; }
+mjx-container[jax="CHTML"][display="true"] mjx-math { padding: 0px; }
+mjx-container[jax="CHTML"][justify="left"] { text-align: left; }
+mjx-container[jax="CHTML"][justify="right"] { text-align: right; }
+mjx-mi { display: inline-block; text-align: left; }
+mjx-c { display: inline-block; }
+mjx-utext { display: inline-block; padding: 0.75em 0px 0.2em; }
+mjx-mo { display: inline-block; text-align: left; }
+mjx-stretchy-h { display: inline-table; width: 100%; }
+mjx-stretchy-h > * { display: table-cell; width: 0px; }
+mjx-stretchy-h > * > mjx-c { display: inline-block; transform: scaleX(1); }
+mjx-stretchy-h > * > mjx-c::before { display: inline-block; width: initial; }
+mjx-stretchy-h > mjx-ext { overflow: clip visible; width: 100%; }
+mjx-stretchy-h > mjx-ext > mjx-c::before { transform: scaleX(500); }
+mjx-stretchy-h > mjx-ext > mjx-c { width: 0px; }
+mjx-stretchy-h > mjx-beg > mjx-c { margin-right: -0.1em; }
+mjx-stretchy-h > mjx-end > mjx-c { margin-left: -0.1em; }
+mjx-stretchy-v { display: inline-block; }
+mjx-stretchy-v > * { display: block; }
+mjx-stretchy-v > mjx-beg { height: 0px; }
+mjx-stretchy-v > mjx-end > mjx-c { display: block; }
+mjx-stretchy-v > * > mjx-c { transform: scaleY(1); transform-origin: left center; overflow: hidden; }
+mjx-stretchy-v > mjx-ext { display: block; height: 100%; box-sizing: border-box; border: 0px solid transparent; overflow: visible clip; }
+mjx-stretchy-v > mjx-ext > mjx-c::before { width: initial; box-sizing: border-box; }
+mjx-stretchy-v > mjx-ext > mjx-c { transform: scaleY(500) translateY(0.075em); overflow: visible; }
+mjx-mark { display: inline-block; height: 0px; }
+mjx-msup { display: inline-block; text-align: left; }
+mjx-c::before { display: block; width: 0px; }
+.MJX-TEX { font-family: MJXZERO, MJXTEX; }
+.TEX-B { font-family: MJXZERO, MJXTEX-B; }
+.TEX-I { font-family: MJXZERO, MJXTEX-I; }
+.TEX-MI { font-family: MJXZERO, MJXTEX-MI; }
+.TEX-BI { font-family: MJXZERO, MJXTEX-BI; }
+.TEX-S1 { font-family: MJXZERO, MJXTEX-S1; }
+.TEX-S2 { font-family: MJXZERO, MJXTEX-S2; }
+.TEX-S3 { font-family: MJXZERO, MJXTEX-S3; }
+.TEX-S4 { font-family: MJXZERO, MJXTEX-S4; }
+.TEX-A { font-family: MJXZERO, MJXTEX-A; }
+.TEX-C { font-family: MJXZERO, MJXTEX-C; }
+.TEX-CB { font-family: MJXZERO, MJXTEX-CB; }
+.TEX-FR { font-family: MJXZERO, MJXTEX-FR; }
+.TEX-FRB { font-family: MJXZERO, MJXTEX-FRB; }
+.TEX-SS { font-family: MJXZERO, MJXTEX-SS; }
+.TEX-SSB { font-family: MJXZERO, MJXTEX-SSB; }
+.TEX-SSI { font-family: MJXZERO, MJXTEX-SSI; }
+.TEX-SC { font-family: MJXZERO, MJXTEX-SC; }
+.TEX-T { font-family: MJXZERO, MJXTEX-T; }
+.TEX-V { font-family: MJXZERO, MJXTEX-V; }
+.TEX-VB { font-family: MJXZERO, MJXTEX-VB; }
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c { font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A !important; }
+@font-face { font-family: MJXZERO; src: url("lib/fonts/mathjax_zero.woff") format("woff"); }
+@font-face { font-family: MJXTEX; src: url("lib/fonts/mathjax_main-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-B; src: url("lib/fonts/mathjax_main-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-I; src: url("lib/fonts/mathjax_math-italic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-MI; src: url("lib/fonts/mathjax_main-italic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-BI; src: url("lib/fonts/mathjax_math-bolditalic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S1; src: url("lib/fonts/mathjax_size1-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S2; src: url("lib/fonts/mathjax_size2-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S3; src: url("lib/fonts/mathjax_size3-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S4; src: url("lib/fonts/mathjax_size4-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-A; src: url("lib/fonts/mathjax_ams-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-C; src: url("lib/fonts/mathjax_calligraphic-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-CB; src: url("lib/fonts/mathjax_calligraphic-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-FR; src: url("lib/fonts/mathjax_fraktur-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-FRB; src: url("lib/fonts/mathjax_fraktur-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SS; src: url("lib/fonts/mathjax_sansserif-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SSB; src: url("lib/fonts/mathjax_sansserif-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SSI; src: url("lib/fonts/mathjax_sansserif-italic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SC; src: url("lib/fonts/mathjax_script-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-T; src: url("lib/fonts/mathjax_typewriter-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-V; src: url("lib/fonts/mathjax_vector-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-VB; src: url("lib/fonts/mathjax_vector-bold.woff") format("woff"); }
+mjx-c.mjx-c1D45F.TEX-I::before { padding: 0.442em 0.451em 0.011em 0px; content: "r"; }
+mjx-c.mjx-c210E.TEX-I::before { padding: 0.694em 0.576em 0.011em 0px; content: "h"; }
+mjx-c.mjx-c1D460.TEX-I::before { padding: 0.442em 0.469em 0.01em 0px; content: "s"; }
+mjx-c.mjx-c28::before { padding: 0.75em 0.389em 0.25em 0px; content: "("; }
+mjx-c.mjx-c29::before { padding: 0.75em 0.389em 0.25em 0px; content: ")"; }
+mjx-c.mjx-c3D::before { padding: 0.583em 0.778em 0.082em 0px; content: "="; }
+mjx-c.mjx-c1D45A.TEX-I::before { padding: 0.442em 0.878em 0.011em 0px; content: "m"; }
+mjx-c.mjx-c1D456.TEX-I::before { padding: 0.661em 0.345em 0.011em 0px; content: "i"; }
+mjx-c.mjx-c1D45B.TEX-I::before { padding: 0.442em 0.6em 0.011em 0px; content: "n"; }
+mjx-c.mjx-c1D454.TEX-I::before { padding: 0.442em 0.477em 0.205em 0px; content: "g"; }
+mjx-c.mjx-c2032::before { padding: 0.56em 0.275em 0px 0px; content: "′"; }
+mjx-c.mjx-c2B::before { padding: 0.583em 0.778em 0.082em 0px; content: "+"; }
+mjx-c.mjx-c1D450.TEX-I::before { padding: 0.442em 0.433em 0.011em 0px; content: "c"; }
+mjx-c.mjx-c1D45C.TEX-I::before { padding: 0.441em 0.485em 0.011em 0px; content: "o"; }
+mjx-c.mjx-c1D461.TEX-I::before { padding: 0.626em 0.361em 0.011em 0px; content: "t"; }
+mjx-c.mjx-c2C::before { padding: 0.121em 0.278em 0.194em 0px; content: ","; }
+</style><div class="markdown-preview-sizer markdown-preview-section"><h1 class="page-title heading inline-title" id="Lecture 2：编队移动转向系统"><p dir="auto">Lecture 2：编队移动转向系统</p></h1><div class="el-h2 heading-wrapper"><h2 data-heading="协同移动理论" dir="auto" class="heading" id="协同移动理论"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>协同移动理论</h2><div class="heading-children"><div class="el-p"><p dir="auto"><mark><strong>概念</strong></mark>：协同移动基础概念</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>引入：
+<ul>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>游戏越来越需要角色群体以协同的方式移动，协同移动可分为两个层级：
+<ul>
+<li data-line="2" dir="auto">个体可以做出互补的决策，让自身的移动看起来协调统一；</li>
+<li data-line="3" dir="auto">也可以作为一个整体做出决策，按照预设规则以协同群体的形式移动；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto">此部分仅讨论在已确定需要共同移动的前提下，让角色群体保持凝聚力的移动方法，这类方法通常被称为<strong>编队移动</strong>；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="6" dir="auto">编队移动是指一组角色在移动过程中保持特定群体组织形态的移动方式。最简单的编队移动，是按照固定的几何阵型（如 <code>V</code> 形、横队线形）移动，但编队移动的应用场景不限于此。编队也可以结合环境进行设计，例如，角色小队仅需对编队转向做少量修改，就能以编队形式在各个掩护点之间移动；</li>
+<li data-line="7" dir="auto">编队移动广泛应用于团队体育类游戏、小队制游戏、即时战略游戏，同时也被越来越多的第一人称射击游戏、驾驶游戏和动作冒险游戏采用。它是一种简单灵活的技术，相比协同战术决策，编队移动的代码编写和执行效率更高，还能实现更稳定的行为表现；</li>
+</ul>
+</li>
+</ul></div><div class="el-h3 heading-wrapper"><h3 data-heading="三类编队方式" dir="auto" class="heading" id="三类编队方式"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>三类编队方式</h3><div class="heading-children"><div class="el-h4 heading-wrapper"><h4 data-heading="固定编队" dir="auto" class="heading" id="固定编队"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>固定编队</h4><div class="heading-children"><div class="el-p"><p dir="auto"><mark><strong>概念</strong></mark>：固定编队</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">最简单的编队移动类型，采用固定几何阵型的编队。一个编队由一组<strong>槽位</strong>定义，槽位即角色可以站位的位置，图展示了军事题材游戏中几种常见的编队阵型；</li>
+<li data-line="2" dir="auto">编队中会有一个槽位被标记为领队槽位，编队中其他所有槽位，都相对于该领队槽位进行定义。实际上，领队槽位定义了整个编队的位置与朝向的“零点基准”。处于领队位置的角色，和非编队角色一样在游戏世界中移动。它可以由任意转向行为控制，可以跟随固定路径，也可以通过管线式转向系统融合多种移动需求。无论采用哪种移动机制，领队角色都无需考虑自身处于编队中的定位；</li>
+<li data-line="3" dir="auto">整个编队阵型在游戏世界中的位置与朝向，会始终跟随领队：保证领队处于其对应的槽位中，面朝预设的方向。当领队移动时，整个阵型也会在游戏世界中同步移动、旋转，阵型中的每个槽位也会随之同步移动和旋转；</li>
+<li data-line="4" dir="auto">编队中其余的每个槽位，都可以由一个额外的角色填充。每个角色的位置可以直接通过编队的几何结构确定，无需自身的运动学系统或转向系统。通常，槽位中角色的位置和朝向会被直接设置；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="6" dir="auto"><span alt="Pasted image 20260310202034.png" src="Pasted image 20260310202034.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20260310202034.png" src="lib/media/pasted-image-20260310202034.png"></span></li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>核心公式：
+<ul>
+<li data-line="8" dir="auto">若某个槽位相对于领队槽位的位置为 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45F TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math></mjx-container></span>，则该槽位中角色的最终位置为：<br>
+<span class="math math-block is-loaded"><mjx-container class="MathJax" jax="CHTML" display="true"><mjx-math display="true" class="MJX-TEX" style="margin-left: 0px; margin-right: 0px;"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-msub space="4"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c2B"></mjx-c></mjx-mo><mjx-msub space="3"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D440 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.081em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45F TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math></mjx-container></span>其中，<span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math></mjx-container></span> 是游戏世界中槽位 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi></mjx-math></mjx-container></span> 的最终位置，<span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math></mjx-container></span> 是领队角色的位置，<span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D440 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.081em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math></mjx-container></span> 是领队角色朝向对应的旋转矩阵。</li>
+<li data-line="11" dir="auto">同理，槽位中角色的朝向为：<br>
+<span class="math math-block is-loaded"><mjx-container class="MathJax" jax="CHTML" display="true"><mjx-math display="true" class="MJX-TEX" style="margin-left: 0px; margin-right: 0px;"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-msub space="4"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c2B"></mjx-c></mjx-mo><mjx-msub space="3"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45F TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D452 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-script></mjx-msub></mjx-math></mjx-container></span>其中，<span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45F TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D452 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-script></mjx-msub></mjx-math></mjx-container></span> 是槽位 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi></mjx-math></mjx-container></span> 相对于领队朝向的偏移角度，<span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math></mjx-container></span> 是领队的朝向。</li>
+</ul>
+</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>设计要点：
+<ul>
+<li data-line="15" dir="auto">领队角色的移动，需要考虑到它会带动其他所有角色同步移动。领队使用的移动算法本身和非编队角色没有区别，但需要对其转向速度设置限制，避免编队边缘的角色以不符合常理的速度高速旋转；同时所有碰撞或障碍物躲避行为，都需要将整个编队的尺寸纳入考量；</li>
+<li data-line="16" dir="auto">实际应用中，受限于对领队移动的这些约束，这类编队仅能满足非常简单的编队需求，例如在玩家可操控上万个单位的策略游戏中，控制小型步兵小队的移动；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h4 heading-wrapper"><h4 data-heading="可伸缩编队" dir="auto" class="heading" id="可伸缩编队"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>可伸缩编队</h4><div class="heading-children"><div class="el-p"><p dir="auto"><mark><strong>概念</strong></mark>：可伸缩编队</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">在很多场景中，编队的具体结构会取决于参与编队的角色数量。例如防御环形编队，20 个防御者的阵型会比 5 个防御者的阵型更宽；如果有 100 个防御者，还可以将编队设计为多层同心环形结构；</li>
+<li data-line="2" dir="auto">可伸缩编队的实现，通常不会显式定义槽位的位置和朝向列表。例如，可以通过一个函数，根据编队中的总角色数量，动态返回对应的槽位位置。</li>
+<li data-line="3" dir="auto">这种隐式的可伸缩编队，在《家园》（Relic Entertainment, 1999）中有着非常典型的应用。当有新的舰船加入编队时，编队会自动适配，调整槽位的分布以容纳新成员。和前文的示例不同，《家园》采用了更复杂的算法来实现编队的整体移动。</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：不同角色数量的防御环形编队（4 人、7 人、12 人）
+<ul>
+<li data-line="5" dir="auto"><span alt="Pasted image 20260310202600.png" src="Pasted image 20260310202600.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20260310202600.png" src="lib/media/pasted-image-20260310202600.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h4 heading-wrapper"><h4 data-heading="涌现式编队" dir="auto" class="heading" id="涌现式编队"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>涌现式编队</h4><div class="heading-children"><div class="el-p"><p dir="auto"><mark><strong>概念</strong></mark>：涌现式编队</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">涌现式编队为编队的可伸缩性提供了另一种解决方案。每个角色都拥有基于抵达行为的独立转向系统，角色会根据群体中其他角色的位置，选择自己的目标位置；</li>
+<li data-line="2" dir="auto">以创建大型 V 形编队为例：我们可以让每个角色选择前方的另一个目标角色，然后将转向目标设定在该角色的后方侧方位置；如果已有其他角色选择了该目标，就重新选择；同理，如果已有其他角色的目标位置和当前位置非常接近，也会继续寻找新的目标。</li>
+<li data-line="3" dir="auto">目标位置一旦选定，就会在后续所有帧中沿用，并根据目标角色的位置和朝向实时更新。如果目标位置变得无法抵达，例如目标位置进入了墙体内部，则会重新选择新的目标。</li>
+<li data-line="4" dir="auto">最终，这套机制会让整个群体自发形成 V 形编队。如果编队成员数量很多，V 形的间隙中还会填充出更小的 V 形结构。如图所示，无论编队中的角色数量多少，最终都会呈现出非常明显的箭头形整体效果，图中的线条连接了每个角色与其跟随的目标角色；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>核心特点：
+<ul>
+<li data-line="6" dir="auto">这种方法无需定义整体的编队几何结构，群体也不一定需要领队，当然，如果群体中有一个成员不需要根据其他成员调整自身位置，会更利于编队的稳定。</li>
+<li data-line="7" dir="auto">编队是从每个角色的个体规则中自发涌现出来的，和前文群集行为从每个群体成员的转向行为中涌现的原理完全一致；</li>
+<li data-line="8" dir="auto">该方法的另一个优势，是允许每个角色独立对障碍物和潜在碰撞做出反应。在<strong>考虑转向或墙体躲避时，无需将编队的整体尺寸纳入考量</strong>，因为编队中的每个个体都会做出合理的行为，只要其转向系统中包含了对应的躲避行为；</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>局限性：
+<ul>
+<li data-line="10" dir="auto">尽管这种方法简单有效，但很难通过调整规则精准得到想要的阵型。在前文的 <code>V</code> 形编队示例中，经常会有多个角色在 <code>V</code> 形的中心位置争抢站位；如果每个角色的目标选择出现偏差，同样的规则可能会让编队最终形成一条长长的斜线，完全看不到预期的 <code>V</code> 形特征。</li>
+<li data-line="11" dir="auto">和所有涌现式行为一样，涌现式编队的调试难度很高。其最终的整体效果往往是可控的无序状态，而非精准的编队移动。对于军事类群体而言，这种无序的特性让涌现式编队几乎没有实际应用价值；</li>
+</ul>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：涌现式箭头编队
+<ul>
+<li data-line="13" dir="auto"><span alt="Pasted image 20260310202911.png" src="Pasted image 20260310202911.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20260310202911.png" src="lib/media/pasted-image-20260310202911.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="双层编队转向" dir="auto" class="heading" id="双层编队转向"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>双层编队转向</h3><div class="heading-children"><div class="el-h4 heading-wrapper"><h4 data-heading="双层编队转向基础概念" dir="auto" class="heading" id="双层编队转向基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>双层编队转向基础概念</h4><div class="heading-children"><div class="el-p"><p dir="auto"><mark><strong>概念</strong></mark>：双层编队转向</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">我们可以通过双层转向系统，将严格的几何编队和涌现式方法的灵活性结合起来。和前文一样，我们采用由<strong>固定槽位阵型定义的几何编队</strong>，初始阶段我们先假设编队存在领队角色，后续会移除这一限制；</li>
+<li data-line="2" dir="auto">这种方法不会直接将角色放置到对应的槽位中，而是沿用涌现式的思路：<strong>将槽位作为抵达行为的目标位置</strong>，角色可以拥有自己的碰撞躲避行为，以及其他所需的复合转向逻辑；</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>这种方法被称为双层转向，因为它包含两个依次执行的转向系统：
+<ul>
+<li data-line="4" dir="auto">（1）首先，领队控制编队阵型的整体移动；</li>
+<li data-line="5" dir="auto">（2）然后，编队中的每个角色通过转向来保持在阵型的槽位中；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto">只要领队不以最大速度移动，每个角色在兼顾环境、保持自身处于槽位的过程中，就会拥有一定的调整空间；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="8" dir="auto"><span alt="Pasted image 20260310203220.png" src="Pasted image 20260310203220.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20260310203220.png" src="lib/media/pasted-image-20260310203220.png"></span></li>
+<li data-line="9" dir="auto">如图展示了多个智能体以 <code>V</code> 形编队穿过树林的场景，图中可以看到清晰的 <code>V</code> 形特征，但每个角色都为了避开树木，相对槽位位置有轻微的偏移；</li>
+<li data-line="10" dir="auto">即使角色要抵达的槽位暂时无法到达，其转向算法也能保证角色做出合理的行为；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h4 heading-wrapper"><h4 data-heading="双层编队转向系统优化" dir="auto" class="heading" id="双层编队转向系统优化"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>双层编队转向系统优化</h4><div class="heading-children"><div class="el-p"><p dir="auto"><mark><strong>概念</strong></mark>：双层编队转向系统优化</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>核心优化 <code>1</code>：移除领队
+<ul>
+<li data-line="1" dir="auto">在前文的示例中，如果领队需要横向移动躲避树木，编队中所有的槽位都会随之横向偏移，其他所有角色也会跟着横向移动来跟上槽位。这种效果看起来会很怪异，因为尽管其他角色在很大程度上可以自主处理障碍物，但它们的行为会完全复刻领队的动作；</li>
+<li data-line="2" dir="auto">我们可以将引导编队的职责从领队身上移除，让所有角色都以相同的方式响应自己的槽位。此时，编队的整体移动由一个<strong>隐形领队</strong>控制：这是一个<strong>独立的转向系统，它控制整个编队的移动，但不控制任何单个角色</strong>，这就是双层编队的第二层转向逻辑；</li>
+<li data-line="3" dir="auto">由于这个新的领队是隐形的，它无需担心小型障碍物、与其他角色的碰撞，或是小型的地形特征。这个隐形领队在游戏世界中依然有固定的位置，这个位置会被用于排布编队阵型，确定所有角色对应的槽位位置；但阵型中领队槽位的位置，不会对应任何实际的角色。由于它不再起到槽位的作用，我们将这个位置称为阵型的<strong>锚点</strong>；</li>
+<li data-line="4" dir="auto">为编队设置独立的转向系统，通常会简化代码实现。我们不再需要为不同角色设置不同的职责，也无需担心当某个角色阵亡时，需要让另一个角色接管领队的职责；</li>
+<li data-line="5" dir="auto">同时，锚点的转向逻辑通常可以做简化处理。例如，在户外场景中，我们可能只需要使用一个高层级的抵达行为，或是路径跟随行为；在室内场景中，锚点的转向依然需要考虑大型障碍物，比如墙体。如果编队直接穿墙而过，会导致所有角色被困，无法跟上对应的槽位；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>核心优化 <code>2</code>：编队移动的速度调节
+<ul>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>问题
+<ul>
+<li data-line="8" dir="auto">到目前为止，信息只有单向的流动：从编队传递到编队内的角色。当我们使用双层转向系统时，这种单向流动会引发问题：编队可能会一直向前移动，完全无视编队内的角色已经难以跟上的情况；</li>
+<li data-line="9" dir="auto">当编队由实际角色领队时，这个问题并不突出，因为编队中其他角色遇到的困难，领队大概率也会遇到。但当我们直接控制锚点移动时，锚点通常可以忽略小型障碍物和其他角色，而编队内的角色需要绕开这些障碍物，其实际移动耗时会远高于预期，最终导致编队和角色的位置严重不同步；</li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>解决：
+<ul>
+<li data-line="11" dir="auto">解决方案 1：降低编队的移动速度。这是一个常用的经验法则，是将编队的最大速度设置为角色最大速度的一半左右。但在较为复杂的环境中，所需的减速幅度是无法预测的，为了少数高速移动会出问题的场景，就让整个游戏的编队移动都保持低速，是非常不合理的；</li>
+<li data-line="12" dir="auto">解决方案 2：根据编队槽位内角色的当前位置，调节编队的移动速度。这实际上就是给锚点加上一个“牵引绳”，如果槽位内的角色难以抵达目标位置，整个编队就应该放慢速度，给角色跟上的机会；</li>
+</ul>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>具体实现方式：
+<ul>
+<li data-line="14" dir="auto">每帧都重置锚点的运动学参数，<strong>将锚点的位置、朝向、速度、旋转速度，都设置为所有槽位内角色对应属性的平均值</strong>；</li>
+<li data-line="15" dir="auto">如果锚点的转向系统先执行，它会向前移动一小段距离，带动所有槽位向前移动，进而迫使角色也向前移动；当所有槽位内的角色完成移动后，锚点会被往回拉，避免它向前移动得太远；</li>
+<li data-line="16" dir="auto">由于每帧都会重置锚点的位置，当角色执行转向时，目标槽位只会在角色前方一小段距离。使用抵达行为时，角色对于移动这么短的距离会非常轻松，槽位内角色的移动速度也会随之降低；这反过来又会降低编队的整体速度，因为编队速度是槽位内角色移动速度的平均值。在下一帧，编队的速度会进一步降低，几帧之后，编队就会减速到完全停止；</li>
+<li data-line="17" dir="auto">因此，通常会设置一个偏移量，让锚点位于编队质心前方一小段距离。最简单的实现方式，是<strong>根据编队的速度，将锚点向前移动固定距离</strong>，公式如下：<br>
+<span class="math math-block is-loaded"><mjx-container class="MathJax" jax="CHTML" display="true" width="full" style="min-width: 15.435em;"><mjx-math width="full" display="true" class="MJX-TEX"><mjx-mtable width="full" side="right" style="min-width: 15.435em;"><mjx-table style="width: auto; min-width: 9.723em; margin: 0px 2.856em;"><mjx-itable width="full"><mjx-mlabeledtr><mjx-mtd><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D44E TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D450 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c210E TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45C TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45F TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-script></mjx-msub><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-msub space="4"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D450 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c2B"></mjx-c></mjx-mo><mjx-msub space="3"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D458 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45C TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D452 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D461 TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-script></mjx-msub><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D463 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D450 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-tstrut></mjx-tstrut></mjx-mtd></mjx-mlabeledtr></mjx-itable></mjx-table><mjx-labels style="width: 15.435em;"><mjx-itable align="right" style="right: 0px;"><mjx-mtr style="height: 1.045em;"><mjx-mtd><mjx-mtext class="mjx-n"><mjx-c class="mjx-c28"></mjx-c><mjx-c class="mjx-c33"></mjx-c><mjx-c class="mjx-c2E"></mjx-c><mjx-c class="mjx-c39"></mjx-c><mjx-c class="mjx-c29"></mjx-c></mjx-mtext><mjx-tstrut style="height: 1.045em; vertical-align: -0.295em;"></mjx-tstrut></mjx-mtd></mjx-mtr></mjx-itable></mjx-labels></mjx-mtable></mjx-math></mjx-container></span>其中，<span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D450 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math></mjx-container></span> 是编队质心的位置，<span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D463 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D450 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math></mjx-container></span> 是编队质心的速度；</li>
+<li data-line="20" dir="auto">同时，需要为编队的转向系统设置非常高的最大加速度和最大速度。编队实际上不会达到这个加速度或速度，因为它会被编队内角色的实际移动速度所限制；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="21" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>核心优化 3：解决漂移问题
+<ul>
+<li data-line="22" dir="auto">编队移动的速度调节机制，要求编队的锚点必须始终位于槽位的质心，即所有槽位的平均位置。否则，当编队需要保持静止时，锚点会被重置到平均位置，而这个位置和上一帧的位置不同；所有槽位会根据新的锚点更新位置，进而再次改变锚点的位置，最终导致整个编队在场景中持续漂移，无法真正到达目标点；</li>
+<li data-line="23" dir="auto">不过，我们可以很方便地<strong>基于编队质心的计算结果，重新计算每个槽位的偏移量</strong>。槽位的质心计算公式为：<br>
+<span class="math math-block is-loaded"><mjx-container class="MathJax" jax="CHTML" display="true"><mjx-math display="true" class="MJX-TEX" style="margin-left: 0px; margin-right: 0px;"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D450 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mfrac space="4"><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac><mjx-munder space="2"><mjx-row><mjx-base style="padding-left: 0.261em;"><mjx-mo class="mjx-lop"><mjx-c class="mjx-c2211 TEX-S2"></mjx-c></mjx-mo></mjx-base></mjx-row><mjx-row><mjx-under style="padding-top: 0.167em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c><mjx-c class="mjx-c2E"></mjx-c></mjx-mn><mjx-mo class="mjx-n"><mjx-c class="mjx-c2E"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-under></mjx-row></mjx-munder><mjx-mrow space="2"><mjx-mo class="mjx-s3"><mjx-c class="mjx-c7B TEX-S3"></mjx-c></mjx-mo><mjx-mtable style="min-width: 8.507em;"><mjx-table><mjx-itable><mjx-mtr><mjx-mtd style="text-align: left; padding-right: 0.5em; padding-bottom: 0.1em;"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-script></mjx-msub><mjx-tstrut></mjx-tstrut></mjx-mtd><mjx-mtd style="text-align: left; padding-left: 0.5em; padding-bottom: 0.1em;"><mjx-mtext class="mjx-n"><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">若</mjx-utext><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">槽</mjx-utext><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">位</mjx-utext></mjx-mtext><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi><mjx-mtext class="mjx-n"><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">被</mjx-utext><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">占</mjx-utext><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">用</mjx-utext></mjx-mtext><mjx-tstrut></mjx-tstrut></mjx-mtd></mjx-mtr><mjx-mtr><mjx-mtd style="text-align: left; padding-right: 0.5em; padding-top: 0.1em;"><mjx-mn class="mjx-n"><mjx-c class="mjx-c30"></mjx-c></mjx-mn><mjx-tstrut></mjx-tstrut></mjx-mtd><mjx-mtd style="text-align: left; padding-left: 0.5em; padding-top: 0.1em;"><mjx-mtext class="mjx-n"><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">其</mjx-utext><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">他</mjx-utext><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">情</mjx-utext><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">况</mjx-utext></mjx-mtext><mjx-tstrut></mjx-tstrut></mjx-mtd></mjx-mtr></mjx-itable></mjx-table></mjx-mtable><mjx-mo class="mjx-n" style="vertical-align: 0.25em;"></mjx-mo></mjx-mrow></mjx-math></mjx-container></span>其中，<span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-script></mjx-msub></mjx-math></mjx-container></span> 是槽位 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-math></mjx-container></span> 的位置。</li>
+<li data-line="26" dir="auto">从旧锚点切换到新锚点时，<strong>每个槽位的坐标</strong>需要按照以下公式更新：<br>
+<span class="math math-block is-loaded"><mjx-container class="MathJax" jax="CHTML" display="true" width="full" style="min-width: 12.483em;"><mjx-math width="full" display="true" class="MJX-TEX"><mjx-mtable width="full" side="right" style="min-width: 12.483em;"><mjx-table style="width: auto; min-width: 5.771em; margin: 0px 3.356em;"><mjx-itable width="full"><mjx-mlabeledtr><mjx-mtd><mjx-msubsup><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0px;"><mjx-mo class="mjx-var" size="s"><mjx-c class="mjx-c2032"></mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.223em;"></mjx-spacer><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-script></mjx-msubsup><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-msub space="4"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-script></mjx-msub><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c2212"></mjx-c></mjx-mo><mjx-msub space="3"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D450 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-tstrut></mjx-tstrut></mjx-mtd></mjx-mlabeledtr></mjx-itable></mjx-table><mjx-labels style="width: 12.483em;"><mjx-itable align="right" style="right: 0px;"><mjx-mtr style="height: 1.064em;"><mjx-mtd><mjx-mtext class="mjx-n"><mjx-c class="mjx-c28"></mjx-c><mjx-c class="mjx-c33"></mjx-c><mjx-c class="mjx-c2E"></mjx-c><mjx-c class="mjx-c31"></mjx-c><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c29"></mjx-c></mjx-mtext><mjx-tstrut style="height: 1.064em; vertical-align: -0.255em;"></mjx-tstrut></mjx-mtd></mjx-mtr></mjx-itable></mjx-labels></mjx-mtable></mjx-math></mjx-container></span></li>
+<li data-line="28" dir="auto">为了保证运行效率，该计算应该只执行一次，并存储新的槽位坐标，而不是每帧都重复计算。但该计算可能无法离线完成，因为不同时间点，被占用的槽位组合可能不同。例如，当某个槽位内的角色阵亡时，编队质心会发生变化，槽位坐标就需要重新计算；</li>
+<li data-line="29" dir="auto">当锚点的朝向与被占用槽位的平均朝向不一致时，也会出现漂移问题。这种情况下，编队不会在场景中平移漂移，而是会原地旋转。我们同样可以基于被占用槽位的平均朝向，为所有槽位的朝向设置偏移量：<br>
+<span class="math math-block is-loaded"><mjx-container class="MathJax" jax="CHTML" display="true"><mjx-math display="true" class="MJX-TEX" style="margin-left: 0px; margin-right: 0px;"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D450 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mfrac space="4"><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D463 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D450 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-mrow><mjx-mo class="mjx-n"><mjx-c class="mjx-c7C"></mjx-c></mjx-mo><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D463 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D450 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c7C"></mjx-c></mjx-mo></mjx-mrow></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac></mjx-math></mjx-container></span>其中，<br>
+<span class="math math-block is-loaded"><mjx-container class="MathJax" jax="CHTML" display="true"><mjx-math display="true" class="MJX-TEX" style="margin-left: 0px; margin-right: 0px;"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D463 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D450 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mfrac space="4"><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac><mjx-munder space="2"><mjx-row><mjx-base style="padding-left: 0.261em;"><mjx-mo class="mjx-lop"><mjx-c class="mjx-c2211 TEX-S2"></mjx-c></mjx-mo></mjx-base></mjx-row><mjx-row><mjx-under style="padding-top: 0.167em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c><mjx-c class="mjx-c2E"></mjx-c></mjx-mn><mjx-mo class="mjx-n"><mjx-c class="mjx-c2E"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-under></mjx-row></mjx-munder><mjx-mrow space="2"><mjx-mo class="mjx-s3"><mjx-c class="mjx-c7B TEX-S3"></mjx-c></mjx-mo><mjx-mtable style="min-width: 8.626em;"><mjx-table><mjx-itable><mjx-mtr><mjx-mtd style="text-align: left; padding-right: 0.5em; padding-bottom: 0.1em;"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-script></mjx-msub><mjx-tstrut></mjx-tstrut></mjx-mtd><mjx-mtd style="text-align: left; padding-left: 0.5em; padding-bottom: 0.1em;"><mjx-mtext class="mjx-n"><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">若</mjx-utext><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">槽</mjx-utext><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">位</mjx-utext></mjx-mtext><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi><mjx-mtext class="mjx-n"><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">被</mjx-utext><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">占</mjx-utext><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">用</mjx-utext></mjx-mtext><mjx-tstrut></mjx-tstrut></mjx-mtd></mjx-mtr><mjx-mtr><mjx-mtd style="text-align: left; padding-right: 0.5em; padding-top: 0.1em;"><mjx-mn class="mjx-n"><mjx-c class="mjx-c30"></mjx-c></mjx-mn><mjx-tstrut></mjx-tstrut></mjx-mtd><mjx-mtd style="text-align: left; padding-left: 0.5em; padding-top: 0.1em;"><mjx-mtext class="mjx-n"><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">其</mjx-utext><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">他</mjx-utext><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">情</mjx-utext><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">况</mjx-utext></mjx-mtext><mjx-tstrut></mjx-tstrut></mjx-mtd></mjx-mtr></mjx-itable></mjx-table></mjx-mtable><mjx-mo class="mjx-n" style="vertical-align: 0.25em;"></mjx-mo></mjx-mrow></mjx-math></mjx-container></span><span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-script></mjx-msub></mjx-math></mjx-container></span> 是槽位 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-math></mjx-container></span> 的朝向。平均朝向以向量形式给出，可以转换回 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mo class="mjx-n"><mjx-c class="mjx-c2212"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D70B TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-mi class="mjx-i" space="2"><mjx-c class="mjx-c1D70B TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math></mjx-container></span> 范围内的角度 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D450 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math></mjx-container></span>。</li>
+<li data-line="34" dir="auto">和之前一样，从旧锚点切换到新锚点时，每个槽位的朝向需要按照以下公式更新：<br>
+<span class="math math-block is-loaded"><mjx-container class="MathJax" jax="CHTML" display="true"><mjx-math display="true" class="MJX-TEX" style="margin-left: 0px; margin-right: 0px;"><mjx-msubsup><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0px;"><mjx-mo class="mjx-var" size="s"><mjx-c class="mjx-c2032"></mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.223em;"></mjx-spacer><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-script></mjx-msubsup><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-msub space="4"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-script></mjx-msub><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c2212"></mjx-c></mjx-mo><mjx-msub space="3"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D714 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D450 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math></mjx-container></span></li>
+<li data-line="36" dir="auto">该计算也应该尽量少执行，在被占用的槽位组合发生变化前，都可以缓存计算结果，无需重复计算；</li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><mark><strong>补充</strong></mark>：锚点、执行与寻路路径</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="1" dir="auto">双层编队转向系统中，锚点等于质心与编队沿路径移动并不矛盾。关键在于：锚点的“目标位置”由路径点决定，而锚点的“实际位置”则受编队质心约束并通过速度调节机制动态调整；</li>
+<li data-line="2" dir="auto">锚点的目标位置（<code>Target</code>）：由高层寻路系统（如 A*、路径点序列）计算得出，代表编队整体想要到达的位置；</li>
+<li data-line="3" dir="auto">锚点的实际位置（<code>Actual</code>）：每帧根据公式 ​计算得出，其中 pc​是编队质心，vc​是质心速度。这个实际位置是编队当前状态的反映，用于确定槽位坐标；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>特点：
+<ul>
+<li data-line="5" dir="auto">路径跟随与编队稳定性的平衡：锚点的高层转向系统确保编队整体沿路径移动；而锚点实际位置与质心的绑定（通过速度调节）确保了编队不会因角色掉队而分散；</li>
+<li data-line="6" dir="auto">自然避障：角色在向槽位移动时，各自的避障行为可以处理局部障碍，而编队整体路径只需考虑大型障碍（由高层寻路处理）；</li>
+</ul>
+</li>
+</ul></div></div></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="协同移动实现" dir="auto" class="heading" id="协同移动实现"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>协同移动实现</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="两级编队系统实现" dir="auto" class="heading" id="两级编队系统实现"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>两级编队系统实现</h3><div class="heading-children"><div class="el-p"><p dir="auto"><mark><strong>概念</strong></mark>：两级编队系统的核心实现</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">我们可实现一套完整的两级编队系统，该系统以编队管理器为核心，负责处理编队模式规则，为占据对应槽位的角色生成目标位姿；</li>
+<li data-line="2" dir="auto">编队管理器的核心能力覆盖角色与槽位的全生命周期管理、编队漂移补偿、槽位目标位姿的实时计算与下发；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>核心实现逻辑：
+<ul>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（1）槽位分配更新：
+<ul>
+<li data-line="5" dir="auto">采用极简的顺序分配算法，为列表中的每个分配项依次分配连续的槽位编号，同步计算并更新当前已填充槽位对应的编队漂移偏移量；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（2）角色添加逻辑：
+<ul>
+<li data-line="7" dir="auto">先校验编队模式是否支持新增槽位，支持则为新角色创建槽位分配项，更新全量槽位分配后返回成功；不支持则直接返回添加失败；</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（3）角色移除逻辑：
+<ul>
+<li data-line="9" dir="auto">查找目标角色对应的槽位，校验槽位有效性后移除该分配项，再更新剩余角色的槽位分配；</li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（4）槽位目标更新逻辑：
+<ol>
+<li data-line="11" dir="auto">获取编队的锚点位姿，将锚点的朝向转换为变换矩阵；</li>
+<li data-line="12" dir="auto">遍历所有槽位分配项，获取对应槽位相对于锚点的本地位姿；</li>
+<li data-line="13" dir="auto">通过锚点的变换矩阵，将槽位本地位姿转换为世界坐标系下的绝对位姿；</li>
+<li data-line="14" dir="auto">叠加漂移偏移补偿，消除编队整体的位置与朝向偏差；</li>
+<li data-line="15" dir="auto">将最终计算出的目标位姿下发给对应角色，作为其转向行为的目标；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>数据结构与接口：
+<ul>
+<li data-line="17" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>编队锚点获取：<code>getAnchorPoint</code>
+<ul>
+<li data-line="18" dir="auto">系统通过 <code>getAnchorPoint</code> 函数<strong>获取编队当前的锚点位姿</strong>，锚点可对应领队角色的位姿、编队内角色的修正质心，或是两级转向系统中可被独立操控的隐形锚点；</li>
+</ul>
+</li>
+<li data-line="19" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>编队模式类 <code>FormationPattern</code>：核心职责是<strong>生成槽位相对于锚点的本地偏移</strong>，同时根据槽位分配情况计算漂移偏移量，需实现三个核心方法：
+<ol>
+<li data-line="20" dir="auto"><code>getDriftOffset</code>：根据传入的槽位分配集合，计算编队的整体漂移偏移量；</li>
+<li data-line="21" dir="auto"><code>getSlotLocation</code>：获取指定槽位编号对应的本地位姿；</li>
+<li data-line="22" dir="auto"><code>supportsSlots</code>：判断编队模式是否支持指定数量的槽位；</li>
+</ol>
+</li>
+<li data-line="23" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>角色类 <code>Character</code>：
+<ul>
+<li data-line="24" dir="auto">需实现 <code>setTarget</code> 方法，用于接收编队系统下发的目标位姿（包含位置与朝向），驱动自身的转向行为；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="25" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实现注意事项：
+<ul>
+<li data-line="26" dir="auto">接口的具体实现需适配对应游戏引擎的角色数据架构，需根据引擎内的数据排布方式调整编队管理器代码，确保可直接访问角色的核心位姿数据；</li>
+<li data-line="27" dir="auto">伪代码中简化了槽位查找与移除逻辑，实际工程中需根据选用的数据结构，实现高效的角色-槽位映射查找与元素移除能力。</li>
+</ul>
+</li>
+<li data-line="28" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>性能分析：
+<ul>
+<li data-line="29" dir="auto">槽位目标更新算法的时间复杂度为 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D442 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math></mjx-container></span>，其中 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-math></mjx-container></span> 为编队内已占用的槽位数量；内存复杂度为 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D442 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c></mjx-mn><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math></mjx-container></span>（不含槽位分配常驻数据结构，该结构本身内存复杂度为 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D442 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math></mjx-container></span>）；</li>
+<li data-line="30" dir="auto">角色添加操作的时间与内存复杂度均为 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D442 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c></mjx-mn><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math></mjx-container></span>；</li>
+<li data-line="31" dir="auto">角色移除操作的核心开销为角色-槽位查找，采用哈希存储结构可将时间复杂度优化至 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D442 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-n"><mjx-c class="mjx-c6C"></mjx-c><mjx-c class="mjx-c6F"></mjx-c><mjx-c class="mjx-c67"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c2061"></mjx-c></mjx-mo><mjx-mi class="mjx-i" space="2"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math></mjx-container></span>，内存复杂度为 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D442 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c></mjx-mn><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math></mjx-container></span>；</li>
+<li data-line="32" dir="auto">基础槽位分配算法的时间复杂度为 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D442 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math></mjx-container></span>，内存复杂度为 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D442 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c></mjx-mn><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math></mjx-container></span>（不含分配数据结构），更完善的分配算法通常会带来更高的性能开销；</li>
+</ul>
+</li>
+<li data-line="33" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-python"><code data-line="0" class="language-python is-loaded"><span class="token comment"># 编队管理器类</span>
+<span class="token keyword">class</span> <span class="token class-name">FormationManager</span><span class="token punctuation">:</span>
+    <span class="token comment"># 存储单个角色与槽位的分配关系</span>
+    <span class="token keyword">class</span> <span class="token class-name">SlotAssignment</span><span class="token punctuation">:</span>
+        <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>character <span class="token operator">=</span> <span class="token boolean">None</span>
+            self<span class="token punctuation">.</span>slotNumber <span class="token operator">=</span> <span class="token number">0</span>
+
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># 槽位分配列表</span>
+        self<span class="token punctuation">.</span>slotAssignments <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+        <span class="token comment"># 存储当前已填充槽位的漂移偏移量</span>
+        self<span class="token punctuation">.</span>driftOffset <span class="token operator">=</span> Static<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token comment"># 编队模式实例</span>
+        self<span class="token punctuation">.</span>pattern <span class="token operator">=</span> <span class="token boolean">None</span>
+
+    <span class="token comment"># 更新角色与槽位的分配关系</span>
+    <span class="token keyword">def</span> <span class="token function">updateSlotAssignments</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># 极简分配算法：为列表中的每个分配项分配连续的槽位编号</span>
+        <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>slotAssignments<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>slotAssignments<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>slotNumber <span class="token operator">=</span> i
+        
+        <span class="token comment"># 更新漂移偏移量</span>
+        self<span class="token punctuation">.</span>driftOffset <span class="token operator">=</span> self<span class="token punctuation">.</span>pattern<span class="token punctuation">.</span>getDriftOffset<span class="token punctuation">(</span>self<span class="token punctuation">.</span>slotAssignments<span class="token punctuation">)</span>
+
+    <span class="token comment"># 向第一个可用槽位添加新角色，无可用槽位时返回false</span>
+    <span class="token keyword">def</span> <span class="token function">addCharacter</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> character<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># 获取当前已占用的槽位数量</span>
+        occupiedSlots <span class="token operator">=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>slotAssignments<span class="token punctuation">)</span>
+        
+        <span class="token comment"># 检查编队模式是否支持新增槽位</span>
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>pattern<span class="token punctuation">.</span>supportsSlots<span class="token punctuation">(</span>occupiedSlots <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token comment"># 创建新的槽位分配项</span>
+            slotAssignment <span class="token operator">=</span> self<span class="token punctuation">.</span>SlotAssignment<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            slotAssignment<span class="token punctuation">.</span>character <span class="token operator">=</span> character
+            self<span class="token punctuation">.</span>slotAssignments<span class="token punctuation">.</span>append<span class="token punctuation">(</span>slotAssignment<span class="token punctuation">)</span>
+            
+            <span class="token comment"># 更新槽位分配并返回成功</span>
+            self<span class="token punctuation">.</span>updateSlotAssignments<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token boolean">True</span>
+        
+        <span class="token comment"># 无法添加角色，返回失败</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+
+    <span class="token comment"># 从槽位中移除指定角色</span>
+    <span class="token keyword">def</span> <span class="token function">removeCharacter</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> character<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># 查找角色对应的槽位</span>
+        slot <span class="token operator">=</span> <span class="token boolean">None</span>
+        <span class="token keyword">for</span> idx<span class="token punctuation">,</span> assignment <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>slotAssignments<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">if</span> assignment<span class="token punctuation">.</span>character <span class="token operator">==</span> character<span class="token punctuation">:</span>
+                slot <span class="token operator">=</span> idx
+                <span class="token keyword">break</span>
+        
+        <span class="token comment"># 校验槽位有效性</span>
+        <span class="token keyword">if</span> slot <span class="token keyword">is</span> <span class="token keyword">not</span> <span class="token boolean">None</span> <span class="token keyword">and</span> <span class="token number">0</span> <span class="token operator">&lt;=</span> slot <span class="token operator">&lt;</span> <span class="token builtin">len</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>slotAssignments<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token comment"># 移除该槽位分配项</span>
+            self<span class="token punctuation">.</span>slotAssignments<span class="token punctuation">.</span>pop<span class="token punctuation">(</span>slot<span class="token punctuation">)</span>
+            <span class="token comment"># 更新槽位分配</span>
+            self<span class="token punctuation">.</span>updateSlotAssignments<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># 获取编队锚点位姿（可根据需求重写）</span>
+    <span class="token keyword">def</span> <span class="token function">getAnchorPoint</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># 默认实现：返回编队质心</span>
+        anchor <span class="token operator">=</span> Static<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> self<span class="token punctuation">.</span>slotAssignments<span class="token punctuation">:</span>
+            <span class="token keyword">return</span> anchor
+        
+        <span class="token comment"># 根据平均位置和平均方向计算锚点的位姿</span>
+        <span class="token keyword">for</span> assignment <span class="token keyword">in</span> self<span class="token punctuation">.</span>slotAssignments<span class="token punctuation">:</span>
+            anchor<span class="token punctuation">.</span>position <span class="token operator">+=</span> assignment<span class="token punctuation">.</span>character<span class="token punctuation">.</span>position
+            anchor<span class="token punctuation">.</span>orientation <span class="token operator">+=</span> assignment<span class="token punctuation">.</span>character<span class="token punctuation">.</span>orientation
+        
+        count <span class="token operator">=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>slotAssignments<span class="token punctuation">)</span>
+        anchor<span class="token punctuation">.</span>position <span class="token operator">/=</span> count
+        anchor<span class="token punctuation">.</span>orientation <span class="token operator">/=</span> count
+        <span class="token keyword">return</span> anchor
+
+    <span class="token comment"># 为每个角色更新槽位目标位置</span>
+    <span class="token keyword">def</span> <span class="token function">updateSlots</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># 获取编队锚点位姿</span>
+        anchor <span class="token operator">=</span> self<span class="token punctuation">.</span>getAnchorPoint<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token comment"># 将锚点朝向转换为变换矩阵</span>
+        orientationMatrix <span class="token operator">=</span> anchor<span class="token punctuation">.</span>orientation<span class="token punctuation">.</span>asMatrix<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        
+        <span class="token comment"># 遍历所有角色</span>
+        <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>slotAssignments<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token comment"># 获取槽位相对于锚点的本地位姿</span>
+            relativeLoc <span class="token operator">=</span> self<span class="token punctuation">.</span>pattern<span class="token punctuation">.</span>getSlotLocation<span class="token punctuation">(</span>self<span class="token punctuation">.</span>slotAssignments<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>slotNumber<span class="token punctuation">)</span>
+            
+            <span class="token comment"># 通过锚点变换，将本地位姿转换为世界位姿</span>
+            location <span class="token operator">=</span> Static<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            
+            <span class="token comment"># 矩阵变换计算位置</span>
+            loc_x <span class="token operator">=</span> relativeLoc<span class="token punctuation">.</span>position<span class="token punctuation">.</span>x <span class="token operator">*</span> orientationMatrix<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">+</span> relativeLoc<span class="token punctuation">.</span>position<span class="token punctuation">.</span>z <span class="token operator">*</span> orientationMatrix<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span>
+            loc_z <span class="token operator">=</span> relativeLoc<span class="token punctuation">.</span>position<span class="token punctuation">.</span>x <span class="token operator">*</span> orientationMatrix<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">+</span> relativeLoc<span class="token punctuation">.</span>position<span class="token punctuation">.</span>z <span class="token operator">*</span> orientationMatrix<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span>
+            location<span class="token punctuation">.</span>position <span class="token operator">=</span> Vector3<span class="token punctuation">(</span>loc_x<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> loc_z<span class="token punctuation">)</span> <span class="token operator">+</span> anchor<span class="token punctuation">.</span>position
+            
+            <span class="token comment"># 叠加朝向</span>
+            location<span class="token punctuation">.</span>orientation <span class="token operator">=</span> anchor<span class="token punctuation">.</span>orientation <span class="token operator">+</span> relativeLoc<span class="token punctuation">.</span>orientation
+            
+            <span class="token comment"># 叠加漂移偏移补偿</span>
+            location<span class="token punctuation">.</span>position <span class="token operator">-=</span> self<span class="token punctuation">.</span>driftOffset<span class="token punctuation">.</span>position
+            location<span class="token punctuation">.</span>orientation <span class="token operator">-=</span> self<span class="token punctuation">.</span>driftOffset<span class="token punctuation">.</span>orientation
+            
+            <span class="token comment"># 将目标位姿写入角色</span>
+            self<span class="token punctuation">.</span>slotAssignments<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>character<span class="token punctuation">.</span>setTarget<span class="token punctuation">(</span>location<span class="token punctuation">)</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">代码：相关基类</li>
+</ul></div><div class="el-pre"><pre class="language-python"><code data-line="0" class="language-python is-loaded"><span class="token comment"># 编队模式基类</span>
+<span class="token keyword">class</span> <span class="token class-name">FormationPattern</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># 编队当前的槽位数量，在getDriftOffset方法中更新，可为固定值</span>
+        self<span class="token punctuation">.</span>numberOfSlots <span class="token operator">=</span> <span class="token number">0</span>
+
+    <span class="token comment"># 计算给定槽位分配集合下的编队漂移偏移量</span>
+    <span class="token keyword">def</span> <span class="token function">getDriftOffset</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> slotAssignments<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">raise</span> NotImplementedError<span class="token punctuation">(</span><span class="token string">"需子类实现该方法"</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># 获取指定槽位编号对应的本地位姿</span>
+    <span class="token keyword">def</span> <span class="token function">getSlotLocation</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> slotNumber<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">raise</span> NotImplementedError<span class="token punctuation">(</span><span class="token string">"需子类实现该方法"</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># 判断编队模式是否支持指定数量的槽位，支持返回true</span>
+    <span class="token keyword">def</span> <span class="token function">supportsSlots</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> slotCount<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">raise</span> NotImplementedError<span class="token punctuation">(</span><span class="token string">"需子类实现该方法"</span><span class="token punctuation">)</span>
+    
+    <span class="token comment"># 获取角色占据指定槽位的成本（槽位分配扩展用）</span>
+    <span class="token keyword">def</span> <span class="token function">getSlotCost</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> character<span class="token punctuation">,</span> slotNumber<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token number">0.0</span>
+
+<span class="token comment"># 角色基类</span>
+<span class="token keyword">class</span> <span class="token class-name">Character</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>position <span class="token operator">=</span> Vector3<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>orientation <span class="token operator">=</span> Orientation<span class="token punctuation">(</span><span class="token number">0.0</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>target <span class="token operator">=</span> Static<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># 设置角色的转向目标，入参为Static对象</span>
+    <span class="token keyword">def</span> <span class="token function">setTarget</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> static<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>target <span class="token operator">=</span> static
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><mark><strong>概念</strong></mark>：示例编队模式——防御环形编队</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">防御环形编队会将角色均匀布置在圆周上，使角色背部朝向圆心，可支持任意数量的角色，是最常用的防御类编队模式；</li>
+<li data-line="2" dir="auto">该编队模式的核心逻辑包含槽位数量计算、漂移偏移量计算、槽位位姿计算、槽位数量支持判断四个模块。</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>核心实现逻辑：
+<ul>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>槽位数量计算：
+<ul>
+<li data-line="5" dir="auto">通过槽位分配数据，获取当前已占用的最高槽位编号，加 1 后得到所需的总槽位数量；若使用前文的顺序分配算法，可直接简化为返回槽位分配项的总数；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>漂移偏移量计算：
+<ul>
+<li data-line="7" dir="auto">遍历所有槽位分配项，累加各槽位的位置与朝向，求平均值后得到编队的质心，即需要补偿的漂移偏移量；</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>槽位位姿计算：
+<ol>
+<li data-line="9" dir="auto">根据槽位编号与总槽位数量，计算该槽位在圆周上的对应角度；</li>
+<li data-line="10" dir="auto">根据角色半径与总槽位数量，计算环形编队的半径，确保角色之间无间隙贴合；</li>
+<li data-line="11" dir="auto">基于圆周角度与编队半径，计算槽位的相对位置；</li>
+<li data-line="12" dir="auto">设置槽位朝向为圆周向外的方向，确保角色背对圆心；</li>
+</ol>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>槽位支持判断：
+<ul>
+<li data-line="14" dir="auto">该编队模式无槽位数量上限，始终返回支持；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="15" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-python"><code data-line="0" class="language-python is-loaded"><span class="token comment"># 防御环形编队模式类</span>
+<span class="token keyword">class</span> <span class="token class-name">DefensiveCirclePattern</span><span class="token punctuation">(</span>FormationPattern<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token comment"># 单个角色的半径，用于计算环形编队的最小半径</span>
+        self<span class="token punctuation">.</span>characterRadius <span class="token operator">=</span> <span class="token number">1.0</span>
+
+    <span class="token comment"># 非接口方法：根据槽位分配数据计算编队所需的槽位数量</span>
+    <span class="token keyword">def</span> <span class="token function">calculateNumberOfSlots</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> assignments<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># 找到已占用的最高槽位编号</span>
+        filledSlots <span class="token operator">=</span> <span class="token number">0</span>
+        <span class="token keyword">for</span> assignment <span class="token keyword">in</span> assignments<span class="token punctuation">:</span>
+            <span class="token keyword">if</span> assignment<span class="token punctuation">.</span>slotNumber <span class="token operator">&gt;</span> filledSlots<span class="token punctuation">:</span>
+                filledSlots <span class="token operator">=</span> assignment<span class="token punctuation">.</span>slotNumber
+        
+        <span class="token comment"># 最高槽位编号+1为总槽位数量</span>
+        self<span class="token punctuation">.</span>numberOfSlots <span class="token operator">=</span> filledSlots <span class="token operator">+</span> <span class="token number">1</span>
+        <span class="token keyword">return</span> self<span class="token punctuation">.</span>numberOfSlots
+
+    <span class="token comment"># 计算编队的漂移偏移量</span>
+    <span class="token keyword">def</span> <span class="token function">getDriftOffset</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> assignments<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># 先更新槽位数量</span>
+        self<span class="token punctuation">.</span>calculateNumberOfSlots<span class="token punctuation">(</span>assignments<span class="token punctuation">)</span>
+        
+        <span class="token comment"># 初始化质心</span>
+        center <span class="token operator">=</span> Static<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        center<span class="token punctuation">.</span>position <span class="token operator">=</span> Vector3<span class="token punctuation">.</span>zero
+        center<span class="token punctuation">.</span>orientation <span class="token operator">=</span> <span class="token number">0.0</span>
+
+        <span class="token comment"># 遍历所有槽位分配项，累加位置与朝向</span>
+        <span class="token keyword">for</span> assignment <span class="token keyword">in</span> assignments<span class="token punctuation">:</span>
+            location <span class="token operator">=</span> self<span class="token punctuation">.</span>getSlotLocation<span class="token punctuation">(</span>assignment<span class="token punctuation">.</span>slotNumber<span class="token punctuation">)</span>
+            center<span class="token punctuation">.</span>position <span class="token operator">+=</span> location<span class="token punctuation">.</span>position
+            center<span class="token punctuation">.</span>orientation <span class="token operator">+=</span> location<span class="token punctuation">.</span>orientation
+        
+        <span class="token comment"># 求平均值得到质心（漂移偏移量）</span>
+        numberOfAssignments <span class="token operator">=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>assignments<span class="token punctuation">)</span>
+        center<span class="token punctuation">.</span>position <span class="token operator">/=</span> numberOfAssignments
+        center<span class="token punctuation">.</span>orientation <span class="token operator">/=</span> numberOfAssignments
+        <span class="token keyword">return</span> center
+
+    <span class="token comment"># 按照编队的要求，计算指定slotNumber的槽位的本地位姿</span>
+    <span class="token keyword">def</span> <span class="token function">getSlotLocation</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> slotNumber<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># 槽位数量为0时直接返回原点</span>
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>numberOfSlots <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">:</span>
+            <span class="token keyword">return</span> Static<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        
+        <span class="token comment"># 根据槽位编号计算圆周角度</span>
+        angleAroundCircle <span class="token operator">=</span> <span class="token punctuation">(</span>slotNumber <span class="token operator">/</span> self<span class="token punctuation">.</span>numberOfSlots<span class="token punctuation">)</span> <span class="token operator">*</span> math<span class="token punctuation">.</span>pi <span class="token operator">*</span> <span class="token number">2</span>
+        
+        <span class="token comment"># 计算环形编队半径，确保角色之间无间隙</span>
+        radius <span class="token operator">=</span> self<span class="token punctuation">.</span>characterRadius <span class="token operator">/</span> math<span class="token punctuation">.</span>sin<span class="token punctuation">(</span>math<span class="token punctuation">.</span>pi <span class="token operator">/</span> self<span class="token punctuation">.</span>numberOfSlots<span class="token punctuation">)</span>
+        
+        <span class="token comment"># 初始化槽位位姿</span>
+        location <span class="token operator">=</span> Static<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token comment"># 计算圆周位置</span>
+        location<span class="token punctuation">.</span>position<span class="token punctuation">.</span>x <span class="token operator">=</span> radius <span class="token operator">*</span> math<span class="token punctuation">.</span>cos<span class="token punctuation">(</span>angleAroundCircle<span class="token punctuation">)</span>
+        location<span class="token punctuation">.</span>position<span class="token punctuation">.</span>z <span class="token operator">=</span> radius <span class="token operator">*</span> math<span class="token punctuation">.</span>sin<span class="token punctuation">(</span>angleAroundCircle<span class="token punctuation">)</span>
+        <span class="token comment"># 朝向设置为圆周向外</span>
+        location<span class="token punctuation">.</span>orientation <span class="token operator">=</span> angleAroundCircle
+        
+        <span class="token keyword">return</span> location
+
+    <span class="token comment"># 判断是否支持指定数量的槽位，该编队支持任意数量槽位</span>
+    <span class="token keyword">def</span> <span class="token function">supportsSlots</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> slotCount<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="多级编队扩展" dir="auto" class="heading" id="多级编队扩展"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>多级编队扩展</h3><div class="heading-children"><div class="el-p"><p dir="auto"><mark><strong>概念</strong></mark>：多级编队嵌套实现</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">两级转向系统可无缝扩展为多级结构，实现“编队中嵌套子编队”的效果，该特性在包含大量作战单位的军事模拟类游戏中尤为重要，完全贴合现实军队的层级编制架构；</li>
+<li data-line="2" dir="auto">多级扩展的核心框架：每一级编队都拥有独立的转向锚点，该锚点可对应领队角色，也可代表子编队的抽象位姿；锚点的转向行为可由上一级编队系统统一管理，以此实现任意深度的编队嵌套；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="4" dir="auto"><span alt="Pasted image 20260311205134.png" src="Pasted image 20260311205134.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20260311205134.png" src="lib/media/pasted-image-20260311205134.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="槽位角色与优化分配方案" dir="auto" class="heading" id="槽位角色与优化分配方案"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>槽位角色与优化分配方案</h3><div class="heading-children"><div class="el-p"><p dir="auto"><mark><strong>概念</strong></mark>：槽位角色与优化分配方案</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：槽位角色分配基础
+<ul>
+<li data-line="1" dir="auto">此前的编队系统默认任意角色均可占据所有槽位，但实际游戏中，大量编队会为不同槽位设定专属职责，例如军事模拟游戏的步枪小队，会将步枪手、掷弹兵、机枪手、小队长安排在固定位置；即时战略游戏中，也通常会将重型火炮部署在防御编队的中心，将机动步兵部署在先锋位置；</li>
+<li data-line="2" dir="auto">为编队槽位设定角色规则后，仅符合角色要求的单位可占据对应槽位；无论是否使用槽位角色，都需要一套合理的分配机制，避免角色进入编队时出现混乱穿插的情况；无角色限制的槽位分配难度较低，加入角色限制后，分配会成为一个复杂问题，游戏开发中通常采用简化方案即可获得足够好的效果；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：硬角色与软角色规则
+<ul>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>硬角色规则：
+<ul>
+<li data-line="5" dir="auto">为编队槽位设定固定的角色准入要求，角色仅能占据自身可胜任角色对应的槽位；</li>
+<li data-line="6" dir="auto">示例：<code>RPG</code> 游戏的地牢探索编队中，设定“近战”“远程”“法术”三类槽位，战士仅能进入近战槽位，法师仅能进入法术槽位，弓箭手仅能进入远程槽位；</li>
+<li data-line="7" dir="auto">局限性：当队伍角色构成与编队槽位角色不匹配时，会出现槽位无法被填充的情况，需要为不同的队伍配置设计大量专属编队，开发成本高；</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>软角色规则：
+<ul>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>为工程化折中方案，打破硬角色的绝对限制；
+<ul>
+<li data-line="10" dir="auto">不为角色设定可胜任的角色列表，而是为每个角色设定对应每类槽位的<strong>槽位成本</strong>，成本越高代表该角色越不适合占据此槽位；</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>核心规则：
+<ol>
+<li data-line="12" dir="auto">理想适配的槽位，成本设为 <code>0</code>；完全无法适配的槽位，成本设为极大值（不使用数据类型上限，避免累加时出现数值溢出）；</li>
+<li data-line="13" dir="auto">分配算法的核心目标是，将角色分配到槽位后，总槽位成本最小化；</li>
+<li data-line="14" dir="auto">当没有理想适配的槽位时，角色仍可被分配到非最优槽位，避免出现角色无槽位可去的情况；</li>
+</ol>
+</li>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>优势：
+<ul>
+<li data-line="16" dir="auto">当队伍配置与编队槽位角色匹配时，效果与硬角色完全一致；</li>
+<li data-line="17" dir="auto">当配置不匹配时，也能完成有效分配，不会出现系统失效的情况，大幅降低编队设计的开发成本；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="18" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：硬角色规则
+<ul>
+<li data-line="19" dir="auto"><span alt="Pasted image 20260311205440.png" src="Pasted image 20260311205440.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20260311205440.png" src="lib/media/pasted-image-20260311205440.png"></span></li>
+</ul>
+</li>
+<li data-line="20" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：软角色规则
+<ul>
+<li data-line="21" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>代价表格：
+<ul>
+<li data-line="22" dir="auto"><span alt="Pasted image 20260311205626.png" src="Pasted image 20260311205626.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20260311205626.png" src="lib/media/pasted-image-20260311205626.png"></span></li>
+</ul>
+</li>
+<li data-line="23" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：软角色分配
+<ul>
+<li data-line="24" dir="auto"><span alt="Pasted image 20260311205645.png" src="Pasted image 20260311205645.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20260311205645.png" src="lib/media/pasted-image-20260311205645.png"></span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="槽位分配算法" dir="auto" class="heading" id="槽位分配算法"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>槽位分配算法</h3><div class="heading-children"><div class="el-p"><p dir="auto"><mark><strong>概念</strong></mark>：槽位分配问题基础</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">槽位分配在游戏中触发频率很低，通常仅<strong>在无序角色组被分配到编队</strong>、或是战术移动中角色需要主动切换槽位时执行，绝大多数时间角色仅需跟随自身槽位的目标移动；</li>
+<li data-line="1" dir="auto">槽位分配属于 <strong><code>NP</code> 完全问题</strong>：将 k 个角色分配到 n 个槽位，可能的分配方案数量为排列数 <span class="math math-block is-loaded"><mjx-container class="MathJax" jax="CHTML" display="true"><mjx-math display="true" class="MJX-TEX" style="margin-left: 0px; margin-right: 0px;"><mjx-msubsup><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D443 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: -0.109em;"><mjx-mi class="mjx-i" size="s" style="margin-left: 0.233em;"><mjx-c class="mjx-c1D458 TEX-I"></mjx-c></mjx-mi><mjx-spacer style="margin-top: 0.34em;"></mjx-spacer><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msubsup><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mfrac space="4"><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mrow><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c21"></mjx-c></mjx-mo></mjx-mrow></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-mrow><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c2212"></mjx-c></mjx-mo><mjx-mi class="mjx-i" space="3"><mjx-c class="mjx-c1D458 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-mo class="mjx-n"><mjx-c class="mjx-c21"></mjx-c></mjx-mo></mjx-mrow></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac></mjx-math></mjx-container></span></li>
+<li data-line="2" dir="auto">因此 <code>20</code> 个角色分配到 <code>20</code> 个槽位时，方案数接近 <code>2500</code> 万亿，无法通过穷举所有方案找到全局最优解；</li>
+<li data-line="3" dir="auto">游戏工程中采用<strong>启发式算法</strong>，无法保证得到全局最优解，但能在极短时间内得到足够优质的分配结果，完全满足游戏运行需求。</li>
+</ul></div><div class="el-p"><p dir="auto"><mark><strong>概念</strong></mark>：启发式分配核心算法</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>基础逻辑：
+<ul>
+<li data-line="1" dir="auto">按顺序遍历每个角色，为其分配当前剩余的、成本最低的槽位；</li>
+<li data-line="2" dir="auto">该方案存在缺陷，若将灵活度高的角色优先分配，可能会导致灵活度低的角色最后无合适槽位可去；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>优化方案：
+<ul>
+<li data-line="4" dir="auto">优先分配灵活度最低、最难找到合适槽位的角色，最后分配灵活度高的角色；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分配难易度计算：
+<ul>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>为每个角色计算「分配易度值」，公式为：
+<ul>
+<li data-line="7" dir="auto"><span class="math math-block is-loaded"><mjx-container class="MathJax" jax="CHTML" display="true"><mjx-math display="true" class="MJX-TEX" style="margin-left: 0px; margin-right: 0px;"><mjx-munderover><mjx-over style="padding-bottom: 0.192em; padding-left: 0.51em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-over><mjx-box><mjx-munder><mjx-row><mjx-base><mjx-mo class="mjx-lop"><mjx-c class="mjx-c2211 TEX-S2"></mjx-c></mjx-mo></mjx-base></mjx-row><mjx-row><mjx-under style="padding-top: 0.167em; padding-left: 0.148em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-texatom></mjx-under></mjx-row></mjx-munder></mjx-box></mjx-munderover><mjx-mrow space="2"><mjx-mo class="mjx-s3"><mjx-c class="mjx-c7B TEX-S3"></mjx-c></mjx-mo><mjx-mtable style="min-width: 6.881em;"><mjx-table><mjx-itable><mjx-mtr><mjx-mtd style="text-align: left; padding-right: 0.5em; padding-bottom: 0.1em;"><mjx-mfrac><mjx-frac><mjx-num><mjx-nstrut></mjx-nstrut><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-num><mjx-dbox><mjx-dtable><mjx-line></mjx-line><mjx-row><mjx-den><mjx-dstrut></mjx-dstrut><mjx-mrow size="s"><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c></mjx-mn><mjx-mo class="mjx-n"><mjx-c class="mjx-c2B"></mjx-c></mjx-mo><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D450 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-mrow></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac><mjx-tstrut></mjx-tstrut></mjx-mtd><mjx-mtd style="text-align: left; padding-left: 0.5em; padding-bottom: 0.1em;"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D450 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3C"></mjx-c></mjx-mo><mjx-mi class="mjx-i" space="4"><mjx-c class="mjx-c1D458 TEX-I"></mjx-c></mjx-mi><mjx-tstrut></mjx-tstrut></mjx-mtd></mjx-mtr><mjx-mtr><mjx-mtd style="text-align: left; padding-right: 0.5em; padding-top: 0.1em;"><mjx-mn class="mjx-n"><mjx-c class="mjx-c30"></mjx-c></mjx-mn><mjx-tstrut></mjx-tstrut></mjx-mtd><mjx-mtd style="text-align: left; padding-left: 0.5em; padding-top: 0.1em;"><mjx-mi class="mjx-n"><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">其</mjx-utext></mjx-mi><mjx-mi class="mjx-n"><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">他</mjx-utext></mjx-mi><mjx-mi class="mjx-n"><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">情</mjx-utext></mjx-mi><mjx-mi class="mjx-n"><mjx-utext variant="normal" style="font-family: MJXZERO, serif;">况</mjx-utext></mjx-mi><mjx-tstrut></mjx-tstrut></mjx-mtd></mjx-mtr></mjx-itable></mjx-table></mjx-mtable><mjx-mo class="mjx-n" style="vertical-align: 0.25em;"></mjx-mo></mjx-mrow></mjx-math></mjx-container></span></li>
+</ul>
+</li>
+<li data-line="8" dir="auto">其中 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D450 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math></mjx-container></span> 为角色占据第 <code>i</code> 个槽位的成本，<code>n</code> 为总槽位数量，<code>k</code> 为槽位成本阈值，超过该阈值的槽位被视为不适合占据；</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>完整执行流程：
+<ol>
+<li data-line="10" dir="auto">按分配易度值对角色进行升序排序，<strong>最难分配的角色排在最前</strong>；</li>
+<li data-line="11" dir="auto">遍历排序后的角色，为每个角色的可用槽位按成本升序排序；</li>
+<li data-line="12" dir="auto">为角色分配排序后第一个未被占用的槽位，标记该槽位为已占用；</li>
+<li data-line="13" dir="auto">若角色无可用槽位，执行异常处理（如向玩家报错）；</li>
+<li data-line="14" dir="auto">所有角色分配完成后，更新编队的槽位分配数据。</li>
+</ol>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><mark><strong>概念</strong></mark>：通用槽位成本扩展</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">槽位成本不仅可由角色与槽位的角色匹配度决定，还可扩展为包含角色占据槽位的所有不利因素，实现更贴合业务需求的分配；</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>可纳入成本计算的常见因素：
+<ol>
+<li data-line="3" dir="auto">距离成本：角色当前位置到槽位目标位置的距离，距离越远成本越高，可让角色优先选择就近的槽位，减少编队集结时的穿插混乱；</li>
+<li data-line="4" dir="auto">掩体质量成本：防御编队中，槽位对应的掩体防护效果越差，成本越高，确保优质掩体槽位被优先分配；</li>
+<li data-line="5" dir="auto">机动能力成本：机动能力弱的单位，远距离移动的成本更高，适配不同机动属性的单位；</li>
+</ol>
+</li>
+<li data-line="6" dir="auto">工程化实现：可将槽位成本封装为方法调用，向角色查询其占据指定槽位的成本，便于灵活扩展不同的成本计算规则；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>性能：
+<ul>
+<li data-line="8" dir="auto">算法的内存复杂度为 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D442 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D458 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math></mjx-container></span>，其中 k 为角色数量，n 为槽位数量；</li>
+<li data-line="9" dir="auto">时间复杂度为 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D442 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D458 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D44E TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-n" space="2"><mjx-c class="mjx-c6C"></mjx-c><mjx-c class="mjx-c6F"></mjx-c><mjx-c class="mjx-c67"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c2061"></mjx-c></mjx-mo><mjx-mi class="mjx-i" space="2"><mjx-c class="mjx-c1D44E TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math></mjx-container></span>，其中 a 为单个角色可占据的平均可用槽位数量，该值通常远小于总槽位数量；若单个角色的可用槽位数量与总槽位数量成正比，则时间复杂度为 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D442 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D458 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math></mjx-container></span>；</li>
+<li data-line="10" dir="auto">该算法的性能远优于穷举排列的 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msubsup><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D443 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: -0.109em;"><mjx-mi class="mjx-i" size="s" style="margin-left: 0.233em;"><mjx-c class="mjx-c1D458 TEX-I"></mjx-c></mjx-mi><mjx-spacer style="margin-top: 0.29em;"></mjx-spacer><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msubsup></mjx-math></mjx-container></span> 级复杂度，完全满足游戏开发的运行需求；</li>
+<li data-line="11" dir="auto">算法的主要瓶颈通常为内存占用，可通过优化实现降低内存开销，但会相应增加执行时间；</li>
+<li data-line="12" dir="auto">由于槽位分配的触发频率极低，即使算法耗时较高，也可拆分为多帧执行，玩家不会感知到编队集结的延迟。</li>
+</ul>
+</li>
+<li data-line="13" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-python"><code data-line="0" class="language-python is-loaded"><span class="token comment"># 扩展槽位分配能力的编队管理器类</span>
+<span class="token keyword">class</span> <span class="token class-name">AdvancedFormationManager</span><span class="token punctuation">(</span>FormationManager<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># 槽位成本与槽位编号结构体</span>
+    <span class="token keyword">class</span> <span class="token class-name">CostAndSlot</span><span class="token punctuation">:</span>
+        <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>cost <span class="token operator">=</span> <span class="token number">0.0</span>
+            self<span class="token punctuation">.</span>slot <span class="token operator">=</span> <span class="token number">0</span>
+
+    <span class="token comment"># 角色分配易度与可用槽位结构体</span>
+    <span class="token keyword">class</span> <span class="token class-name">CharacterAndSlots</span><span class="token punctuation">:</span>
+        <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>character <span class="token operator">=</span> <span class="token boolean">None</span>
+            self<span class="token punctuation">.</span>assignmentEase <span class="token operator">=</span> <span class="token number">0.0</span>
+            self<span class="token punctuation">.</span>costAndSlots <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+    <span class="token comment"># 更新槽位分配（带角色-槽位成本优化的分配算法）</span>
+    <span class="token keyword">def</span> <span class="token function">updateSlotAssignments</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># 角色数据列表</span>
+        characterData <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+        <span class="token comment"># 成本阈值，超过该值的槽位被视为不可用</span>
+        COST_LIMIT <span class="token operator">=</span> <span class="token number">10000.0</span>
+
+        <span class="token comment"># 编译每个角色的分配数据</span>
+        <span class="token keyword">for</span> assignment <span class="token keyword">in</span> self<span class="token punctuation">.</span>slotAssignments<span class="token punctuation">:</span>
+            <span class="token comment"># 创建角色数据项</span>
+            datum <span class="token operator">=</span> self<span class="token punctuation">.</span>CharacterAndSlots<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            datum<span class="token punctuation">.</span>character <span class="token operator">=</span> assignment<span class="token punctuation">.</span>character
+
+            <span class="token comment"># 遍历所有槽位，筛选可用槽位</span>
+            <span class="token keyword">for</span> slot <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>pattern<span class="token punctuation">.</span>numberOfSlots<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token comment"># 获取角色占据该槽位的成本</span>
+                cost <span class="token operator">=</span> self<span class="token punctuation">.</span>pattern<span class="token punctuation">.</span>getSlotCost<span class="token punctuation">(</span>assignment<span class="token punctuation">.</span>character<span class="token punctuation">,</span> slot<span class="token punctuation">)</span>
+                <span class="token comment"># 过滤不可用槽位</span>
+                <span class="token keyword">if</span> cost <span class="token operator">&gt;=</span> COST_LIMIT<span class="token punctuation">:</span>
+                    <span class="token keyword">continue</span>
+
+                <span class="token comment"># 存储槽位信息</span>
+                slotDatum <span class="token operator">=</span> self<span class="token punctuation">.</span>CostAndSlot<span class="token punctuation">(</span><span class="token punctuation">)</span>
+                slotDatum<span class="token punctuation">.</span>slot <span class="token operator">=</span> slot
+                slotDatum<span class="token punctuation">.</span>cost <span class="token operator">=</span> cost
+                datum<span class="token punctuation">.</span>costAndSlots<span class="token punctuation">.</span>append<span class="token punctuation">(</span>slotDatum<span class="token punctuation">)</span>
+
+                <span class="token comment"># 累加角色的分配易度值</span>
+                datum<span class="token punctuation">.</span>assignmentEase <span class="token operator">+=</span> <span class="token number">1</span> <span class="token operator">/</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">+</span> cost<span class="token punctuation">)</span>
+
+            <span class="token comment"># 将角色数据加入列表</span>
+            characterData<span class="token punctuation">.</span>append<span class="token punctuation">(</span>datum<span class="token punctuation">)</span>
+
+        <span class="token comment"># 初始化槽位占用标记数组</span>
+        filledSlots <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token boolean">False</span><span class="token punctuation">]</span> <span class="token operator">*</span> self<span class="token punctuation">.</span>pattern<span class="token punctuation">.</span>numberOfSlots
+        <span class="token comment"># 初始化新的分配结果列表</span>
+        newAssignments <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+        <span class="token comment"># 按分配易度值升序排序，最难分配的角色排在最前</span>
+        characterData<span class="token punctuation">.</span>sort<span class="token punctuation">(</span>key<span class="token operator">=</span><span class="token keyword">lambda</span> x<span class="token punctuation">:</span> x<span class="token punctuation">.</span>assignmentEase<span class="token punctuation">)</span>
+
+        <span class="token comment"># 遍历排序后的角色，依次分配槽位</span>
+        <span class="token keyword">for</span> characterDatum <span class="token keyword">in</span> characterData<span class="token punctuation">:</span>
+            <span class="token comment"># 按槽位成本升序排序该角色的可用槽位</span>
+            characterDatum<span class="token punctuation">.</span>costAndSlots<span class="token punctuation">.</span>sort<span class="token punctuation">(</span>key<span class="token operator">=</span><span class="token keyword">lambda</span> x<span class="token punctuation">:</span> x<span class="token punctuation">.</span>cost<span class="token punctuation">)</span>
+
+            <span class="token comment"># 为角色分配第一个未被占用的槽位</span>
+            assigned <span class="token operator">=</span> <span class="token boolean">False</span>
+            <span class="token keyword">for</span> slotDatum <span class="token keyword">in</span> characterDatum<span class="token punctuation">.</span>costAndSlots<span class="token punctuation">:</span>
+                slot <span class="token operator">=</span> slotDatum<span class="token punctuation">.</span>slot
+                <span class="token keyword">if</span> <span class="token keyword">not</span> filledSlots<span class="token punctuation">[</span>slot<span class="token punctuation">]</span><span class="token punctuation">:</span>
+                    <span class="token comment"># 创建分配项</span>
+                    assignment <span class="token operator">=</span> self<span class="token punctuation">.</span>SlotAssignment<span class="token punctuation">(</span><span class="token punctuation">)</span>
+                    assignment<span class="token punctuation">.</span>character <span class="token operator">=</span> characterDatum<span class="token punctuation">.</span>character
+                    assignment<span class="token punctuation">.</span>slotNumber <span class="token operator">=</span> slot
+                    newAssignments<span class="token punctuation">.</span>append<span class="token punctuation">(</span>assignment<span class="token punctuation">)</span>
+
+                    <span class="token comment"># 标记槽位为已占用</span>
+                    filledSlots<span class="token punctuation">[</span>slot<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">True</span>
+                    assigned <span class="token operator">=</span> <span class="token boolean">True</span>
+                    <span class="token keyword">break</span>
+
+            <span class="token comment"># 若角色无可用槽位，抛出异常</span>
+            <span class="token keyword">if</span> <span class="token keyword">not</span> assigned<span class="token punctuation">:</span>
+                <span class="token keyword">raise</span> Exception<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"角色</span><span class="token interpolation"><span class="token punctuation">{</span>characterDatum<span class="token punctuation">.</span>character<span class="token punctuation">}</span></span><span class="token string">无可用槽位，分配失败"</span></span><span class="token punctuation">)</span>
+
+        <span class="token comment"># 更新槽位分配数据</span>
+        self<span class="token punctuation">.</span>slotAssignments <span class="token operator">=</span> newAssignments
+        <span class="token comment"># 更新漂移偏移量</span>
+        self<span class="token punctuation">.</span>driftOffset <span class="token operator">=</span> self<span class="token punctuation">.</span>pattern<span class="token punctuation">.</span>getDriftOffset<span class="token punctuation">(</span>self<span class="token punctuation">.</span>slotAssignments<span class="token punctuation">)</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="mod-footer mod-ui"></div></div></div></div></div></div></div></div><div class="sidebar-right sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"></div><script defer="">let rs = document.querySelector(".sidebar-right"); rs.classList.add("is-collapsed"); if (window.innerWidth > 768) rs.classList.remove("is-collapsed"); rs.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-right-width"));</script></div></div></body></html>

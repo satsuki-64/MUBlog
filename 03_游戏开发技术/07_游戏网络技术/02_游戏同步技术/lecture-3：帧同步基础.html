@@ -1,0 +1,611 @@
+<!DOCTYPE html> <html><head>
+		<title>Lecture 3：帧同步基础</title>
+		<base href="..\..\../">
+		<meta id="root-path" root-path="..\..\../">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
+		<meta charset="UTF-8">
+		<meta name="description" content="MUBlog - Lecture 3：帧同步基础">
+		<meta property="og:title" content="Lecture 3：帧同步基础">
+		<meta property="og:description" content="MUBlog - Lecture 3：帧同步基础">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="03_游戏开发技术/07_游戏网络技术/02_游戏同步技术/lecture-3：帧同步基础.html">
+		<meta property="og:image" content="lib\media\pixpin_2025-11-26_15-53-51.png">
+		<meta property="og:site_name" content="MUBlog">
+		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="lib/rss.xml"><script async="" id="webpage-script" src="lib/scripts/webpage.js" onload="this.onload=null;this.setAttribute(&quot;loaded&quot;, &quot;true&quot;)"></script><link rel="icon" href="lib/media/favicon.png"><style>body{--line-width:40em;--line-width-adaptive:40em;--file-line-width:40em;--sidebar-width:min(20em, 80vw);--collapse-arrow-size:11px;--tree-horizontal-spacing:0.6em;--tree-vertical-spacing:0.6em;--sidebar-margin:12px}.sidebar{height:100%;min-width:calc(var(--sidebar-width) + var(--divider-width-hover));max-width:calc(var(--sidebar-width) + var(--divider-width-hover));font-size:14px;z-index:10;position:relative;overflow:hidden;transition:min-width ease-in-out,max-width ease-in-out;transition-duration:.2s;contain:size}.sidebar-left{left:0}.sidebar-right{right:0}.sidebar.is-collapsed{min-width:0;max-width:0}body.floating-sidebars .sidebar{position:absolute}.sidebar-content{height:100%;min-width:calc(var(--sidebar-width) - var(--divider-width-hover));top:0;padding:var(--sidebar-margin);padding-top:4em;line-height:var(--line-height-tight);background-color:var(--background-secondary);transition:background-color,border-right,border-left,box-shadow;transition-duration:var(--color-fade-speed);transition-timing-function:ease-in-out;position:absolute;display:flex;flex-direction:column}.sidebar:not(.is-collapsed) .sidebar-content{min-width:calc(max(100%,var(--sidebar-width)) - 3px);max-width:calc(max(100%,var(--sidebar-width)) - 3px)}.sidebar-left .sidebar-content{left:0;border-top-right-radius:var(--radius-l);border-bottom-right-radius:var(--radius-l)}.sidebar-right .sidebar-content{right:0;border-top-left-radius:var(--radius-l);border-bottom-left-radius:var(--radius-l)}.sidebar:has(.sidebar-content:empty):has(.topbar-content:empty){display:none}.sidebar-topbar{height:2em;width:var(--sidebar-width);top:var(--sidebar-margin);padding-inline:var(--sidebar-margin);z-index:1;position:fixed;display:flex;align-items:center;transition:width ease-in-out;transition-duration:inherit}.sidebar.is-collapsed .sidebar-topbar{width:calc(2.3em + var(--sidebar-margin) * 2)}.sidebar .sidebar-topbar.is-collapsed{width:0}.sidebar-left .sidebar-topbar{left:0}.sidebar-right .sidebar-topbar{right:0}.topbar-content{overflow:hidden;overflow:clip;width:100%;height:100%;display:flex;align-items:center;transition:inherit}.sidebar.is-collapsed .topbar-content{width:0;transition:inherit}.clickable-icon.sidebar-collapse-icon{background-color:transparent;color:var(--icon-color-focused);padding:0!important;margin:0!important;height:100%!important;width:2.3em!important;margin-inline:0.14em!important;position:absolute}.sidebar-left .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);right:var(--sidebar-margin)}.sidebar-right .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);left:var(--sidebar-margin)}.clickable-icon.sidebar-collapse-icon svg.svg-icon{width:100%;height:100%}.sidebar-section-header{margin:0 0 1em 0;text-transform:uppercase;letter-spacing:.06em;font-weight:600}body{transition:background-color var(--color-fade-speed) ease-in-out}.webpage-container{display:flex;flex-direction:row;height:100%;width:100%;align-items:stretch;justify-content:center}.document-container{opacity:1;flex-basis:100%;max-width:100%;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;transition:opacity .2s ease-in-out;contain:inline-size}.hide{opacity:0;transition:opacity .2s ease-in-out}.document-container>.markdown-preview-view{margin:var(--sidebar-margin);margin-bottom:0;width:100%;width:-webkit-fill-available;width:-moz-available;width:fill-available;background-color:var(--background-primary);transition:background-color var(--color-fade-speed) ease-in-out;border-top-right-radius:var(--window-radius,var(--radius-m));border-top-left-radius:var(--window-radius,var(--radius-m));overflow-x:hidden!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;contain:inline-size}.document-container>.markdown-preview-view>.markdown-preview-sizer{padding-bottom:80vh!important;width:100%!important;max-width:var(--line-width)!important;flex-basis:var(--line-width)!important;transition:background-color var(--color-fade-speed) ease-in-out;contain:inline-size}.markdown-rendered img:not([width]),.view-content img:not([width]){max-width:100%;outline:0}.document-container>.view-content.embed{display:flex;padding:1em;height:100%;width:100%;align-items:center;justify-content:center}.document-container>.view-content.embed>*{max-width:100%;max-height:100%;object-fit:contain}:has(> :is(.math,table)){overflow-x:auto!important}.document-container>.view-content{overflow-x:auto;contain:content;padding:0;margin:0;height:100%}.scroll-highlight{position:absolute;width:100%;height:100%;pointer-events:none;z-index:1000;background-color:hsla(var(--color-accent-hsl),.25);opacity:0;padding:1em;inset:50%;translate:-50% -50%;border-radius:var(--radius-s)}</style><script defer="">async function loadIncludes(){if("file:"!=location.protocol){let e=document.querySelectorAll("include");for(let t=0;t<e.length;t++){let o=e[t],l=o.getAttribute("src");try{const e=await fetch(l);if(!e.ok){console.log("Could not include file: "+l),o?.remove();continue}let t=await e.text(),n=document.createRange().createContextualFragment(t),i=Array.from(n.children);for(let e of i)e.classList.add("hide"),e.style.transition="opacity 0.5s ease-in-out",setTimeout((()=>{e.classList.remove("hide")}),10);o.before(n),o.remove(),console.log("Included file: "+l)}catch(e){o?.remove(),console.log("Could not include file: "+l,e);continue}}}else{if(document.querySelectorAll("include").length>0){var e=document.createElement("div");e.id="error",e.textContent="Web server exports must be hosted on an http / web server to be viewed correctly.",e.style.position="fixed",e.style.top="50%",e.style.left="50%",e.style.transform="translate(-50%, -50%)",e.style.fontSize="1.5em",e.style.fontWeight="bold",e.style.textAlign="center",document.body.appendChild(e),document.querySelector(".document-container")?.classList.remove("hide")}}}document.addEventListener("DOMContentLoaded",(()=>{loadIncludes()}));let isFileProtocol="file:"==location.protocol;function waitLoadScripts(e,t){let o=e.map((e=>document.getElementById(e+"-script"))),l=0;!function e(){let n=o[l];l++,n&&"true"!=n.getAttribute("loaded")||l<o.length&&e(),l<o.length?n.addEventListener("load",e):t()}()}</script><link rel="stylesheet" href="lib/styles/obsidian.css"><link rel="stylesheet" href="lib/styles/theme.css"><link rel="preload" href="lib/styles/global-variable-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/global-variable-styles.css"></noscript><link rel="preload" href="lib/styles/supported-plugins.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/supported-plugins.css"></noscript><link rel="preload" href="lib/styles/main-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/main-styles.css"></noscript><link rel="preload" href="lib/styles/snippets.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/snippets.css"></noscript></head><body class="publish css-settings-manager styled-scrollbars theme-light show-inline-title ctp-rosepine-light ctp-mocha ctp-accent-rosewater anuppuccin-accent-toggle anp-current-line-border anp-callout-color-toggle anp-codeblock-numbers anp-list-toggle anp-table-width anp-toggle-preview anp-color-transition-toggle anp-button-metadata-toggle anp-toggle-metadata anp-toggle-scrollbars anp-h1-red anp-h1-divider anp-h2-peach anp-h3-green anp-h4-teal anp-h5-lavender anp-h6-mauve anp-decoration-toggle anp-bold-maroon anp-italic-green anp-highlight-yellow anp-colorful-frame-icon-toggle-dark anp-simple-rainbow-color-toggle anp-rainbow-file-toggle anp-simple-rainbow-title-toggle anp-simple-rainbow-icon-folder-toggle anp-simple-rainbow-indentation-toggle anp-simple-rainbow-collapse-toggle anp-card-layout anp-card-shadows anp-card-layout-filebrowser anp-theme-ext-light anp-theme-ext-dark anp-theme-ext-amoled ctp-atom-light ctp-atom-dark table-type-three-line table-header-color-blue table-row-alt-background-option table-dark-mode"><script defer="">let theme=localStorage.getItem("theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");"dark"==theme?(document.body.classList.add("theme-dark"),document.body.classList.remove("theme-light")):(document.body.classList.add("theme-light"),document.body.classList.remove("theme-dark")),window.innerWidth<480?document.body.classList.add("is-phone"):window.innerWidth<768?document.body.classList.add("is-tablet"):window.innerWidth<1024?document.body.classList.add("is-small-screen"):document.body.classList.add("is-large-screen")</script><div class="webpage-container workspace"><div class="sidebar-left sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"><label class="theme-toggle-container" for="theme_toggle"><input class="theme-toggle-input" type="checkbox" id="theme_toggle"><div class="toggle-background"></div></label></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"><include src="lib/html/file-tree.html"></include></div><script defer="">let ls = document.querySelector(".sidebar-left"); ls.classList.add("is-collapsed"); if (window.innerWidth > 768) ls.classList.remove("is-collapsed"); ls.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-left-width"));</script></div><div class="document-container markdown-reading-view hide"><div class="markdown-preview-view markdown-rendered allow-fold-headings allow-fold-lists is-readable-line-width"><style id="MJX-CHTML-styles">mjx-c.mjx-c2223::before{padding:.75em .278em .249em 0;content:"∣"}mjx-c.mjx-c2119.TEX-A::before{padding:.683em .611em 0 0;content:"P"}mjx-c.mjx-c1D444.TEX-I::before{padding:.704em .791em .194em 0;content:"Q"}mjx-c.mjx-c52.TEX-C::before{padding:.682em .848em .022em 0;content:"R"}mjx-c.mjx-c1D53C.TEX-A::before{padding:.683em .667em 0 0;content:"E"}mjx-c.mjx-c223C::before{padding:.367em .778em 0 0;content:"∼"}mjx-c.mjx-c2A7E.TEX-A::before{padding:.636em .778em .138em 0;content:"⩾"}mjx-c.mjx-c2A7D.TEX-A::before{padding:.636em .778em .138em 0;content:"⩽"}mjx-c.mjx-c230A::before{padding:.75em .444em .25em 0;content:"⌊"}mjx-c.mjx-c230B::before{padding:.75em .444em .25em 0;content:"⌋"}mjx-c.mjx-c1D5C1.TEX-SS::before{padding:.694em .517em 0 0;content:"h"}mjx-c.mjx-c3D.TEX-SS::before{padding:.37em .778em 0 0;content:"="}mjx-mlabeledtr{display:table-row;text-align:left}mjx-mlabeledtr[rowalign=top]>mjx-mtd{vertical-align:top}mjx-mlabeledtr[rowalign=center]>mjx-mtd{vertical-align:middle}mjx-mlabeledtr[rowalign=bottom]>mjx-mtd{vertical-align:bottom}mjx-mlabeledtr[rowalign=baseline]>mjx-mtd{vertical-align:baseline}mjx-mlabeledtr[rowalign=axis]>mjx-mtd{vertical-align:.25em}mjx-c.mjx-c21::before{padding:.716em .278em 0 0;content:"!"}mjx-mpadded{display:inline-block;text-align:left}mjx-rbox{display:inline-block;position:relative}mjx-stretchy-h.mjx-c2192 mjx-ext mjx-c::before{content:"−";padding:.583em 0 .082em}mjx-stretchy-h.mjx-c2192 mjx-end mjx-c::before{content:"→";padding:.583em 0 .082em}mjx-c.mjx-c39::before{padding:.666em .5em .022em 0;content:"9"}mjx-c.mjx-c1D44D.TEX-I::before{padding:.683em .723em 0 0;content:"Z"}mjx-c.mjx-c58::before{padding:.683em .75em 0 0;content:"X"}mjx-c.mjx-c59::before{padding:.683em .75em 0 0;content:"Y"}mjx-c.mjx-c5A::before{padding:.683em .611em 0 0;content:"Z"}mjx-c.mjx-c28.TEX-S2::before{padding:1.15em .597em .649em 0;content:"("}mjx-c.mjx-c29.TEX-S2::before{padding:1.15em .597em .649em 0;content:")"}mjx-c.mjx-c4E::before{padding:.683em .75em 0 0;content:"N"}mjx-c.mjx-c22A4::before{padding:.668em .778em 0 0;content:"⊤"}mjx-c.mjx-cB7::before{padding:.31em .278em 0 0;content:"⋅"}mjx-c.mjx-c36::before{padding:.666em .5em .022em 0;content:"6"}mjx-c.mjx-c1D43E.TEX-I::before{padding:.683em .889em 0 0;content:"K"}mjx-c.mjx-c52::before{padding:.683em .736em .022em 0;content:"R"}mjx-c.mjx-c1D42B.TEX-B::before{padding:.45em .474em 0 0;content:"r"}mjx-c.mjx-c1D428.TEX-B::before{padding:.452em .575em .005em 0;content:"o"}mjx-c.mjx-c1D41D.TEX-B::before{padding:.694em .639em .006em 0;content:"d"}mjx-c.mjx-c3C::before{padding:.54em .778em .04em 0;content:"<"}mjx-c.mjx-c221E::before{padding:.442em 1em .011em 0;content:"∞"}mjx-c.mjx-c1D429.TEX-B::before{padding:.45em .639em .194em 0;content:"p"}mjx-c.mjx-cB1::before{padding:.666em .778em 0 0;content:"±"}mjx-c.mjx-c221A::before{padding:.8em .853em .2em 0;content:"√"}mjx-c.mjx-c47::before{padding:.705em .785em .022em 0;content:"G"}mjx-c.mjx-c66::before{padding:.705em .372em 0 0;content:"f"}mjx-c.mjx-c71::before{padding:.442em .528em .194em 0;content:"q"}mjx-c.mjx-c5E.TEX-B::before{padding:.694em .575em 0 0;content:"^"}mjx-c.mjx-c1D42D.TEX-B::before{padding:.635em .447em .005em 0;content:"t"}mjx-c.mjx-c1D40E.TEX-B::before{padding:.696em .864em .01em 0;content:"O"}mjx-c.mjx-c1D403.TEX-B::before{padding:.686em .882em 0 0;content:"D"}mjx-c.mjx-c1D40F.TEX-B::before{padding:.686em .786em 0 0;content:"P"}mjx-c.mjx-c2219::before{padding:.444em .5em 0 0;content:"∙"}mjx-c.mjx-c1D404.TEX-B::before{padding:.68em .756em 0 0;content:"E"}mjx-c.mjx-c20D7.TEX-VB::before{padding:.723em .575em 0 0;content:"→"}mjx-c.mjx-c7B::before{padding:.75em .5em .25em 0;content:"{"}mjx-c.mjx-c7D::before{padding:.75em .5em .25em 0;content:"}"}mjx-c.mjx-c26::before{padding:.716em .778em .022em 0;content:"&"}mjx-c.mjx-c2261::before{padding:.464em .778em 0 0;content:"≡"}mjx-c.mjx-c3A6::before{padding:.683em .722em 0 0;content:"Φ"}mjx-c.mjx-c57::before{padding:.683em 1.028em .022em 0;content:"W"}mjx-c.mjx-c2035.TEX-A::before{padding:.56em .275em 0 0;content:"‵"}mjx-c.mjx-c1D446.TEX-I::before{padding:.705em .645em .022em 0;content:"S"}mjx-c.mjx-c1D719.TEX-I::before{padding:.694em .596em .205em 0;content:"ϕ"}mjx-c.mjx-c7C::before{padding:.75em .278em .249em 0;content:"|"}.mjx-stretched mjx-c.mjx-c2013::before{content:"–"}mjx-stretchy-h.mjx-c2013 mjx-ext mjx-c::before{content:"–";padding:.285em 0 0}mjx-c.mjx-c1D52E.TEX-FR::before{padding:.479em .489em .219em 0;content:"q"}mjx-c.mjx-c1D52D.TEX-FR::before{padding:.541em .5em .212em 0;content:"p"}mjx-c.mjx-c1D43A.TEX-I::before{padding:.705em .786em .022em 0;content:"G"}mjx-c.mjx-c1D439.TEX-I::before{padding:.68em .749em 0 0;content:"F"}mjx-c.mjx-c3A9::before{padding:.704em .722em 0 0;content:"Ω"}mjx-c.mjx-c2248::before{padding:.483em .778em 0 0;content:"≈"}mjx-c.mjx-c222B.TEX-S1::before{padding:.805em .61em .306em 0;content:"∫"}mjx-c.mjx-c200B::before{padding:0;content:""}mjx-c.mjx-c1D44A.TEX-I::before{padding:.683em 1.048em .022em 0;content:"W"}mjx-c.mjx-c1D443.TEX-I::before{padding:.683em .751em 0 0;content:"P"}mjx-c.mjx-c1D45E.TEX-I::before{padding:.442em .46em .194em 0;content:"q"}mjx-c.mjx-c2208::before{padding:.54em .667em .04em 0;content:"∈"}mjx-c.mjx-c4E.TEX-C::before{padding:.789em .979em .05em 0;content:"N"}mjx-c.mjx-c1D712.TEX-I::before{padding:.442em .626em .204em 0;content:"χ"}mjx-c.mjx-c53::before{padding:.705em .556em .022em 0;content:"S"}mjx-c.mjx-c4D::before{padding:.683em .917em 0 0;content:"M"}mjx-c.mjx-c1D44B.TEX-I::before{padding:.683em .852em 0 0;content:"X"}mjx-c.mjx-c56::before{padding:.683em .75em .022em 0;content:"V"}mjx-c.mjx-c45::before{padding:.68em .681em 0 0;content:"E"}mjx-c.mjx-c2264::before{padding:.636em .778em .138em 0;content:"≤"}mjx-c.mjx-c1D70E.TEX-I::before{padding:.431em .571em .011em 0;content:"σ"}mjx-c.mjx-c1D707.TEX-I::before{padding:.442em .603em .216em 0;content:"μ"}mjx-c.mjx-c1D708.TEX-I::before{padding:.442em .53em 0 0;content:"ν"}mjx-c.mjx-c46::before{padding:.68em .653em 0 0;content:"F"}mjx-c.mjx-c7B.TEX-S3::before{padding:1.45em .75em .949em 0;content:"{"}mjx-c.mjx-c7D.TEX-S3::before{padding:1.45em .75em .949em 0;content:"}"}mjx-c.mjx-c1D438.TEX-I::before{padding:.68em .764em 0 0;content:"E"}mjx-c.mjx-c222B.TEX-S2::before{padding:1.36em .944em .862em 0;content:"∫"}mjx-c.mjx-c1D43B.TEX-I::before{padding:.683em .888em 0 0;content:"H"}mjx-c.mjx-c1D70C.TEX-I::before{padding:.442em .517em .216em 0;content:"ρ"}mjx-c.mjx-c1D702.TEX-I::before{padding:.442em .497em .216em 0;content:"η"}mjx-c.mjx-c221A.TEX-S2::before{padding:1.15em 1.02em .65em 0;content:"√"}mjx-c.mjx-c3E::before{padding:.54em .778em .04em 0;content:">"}mjx-munderover{display:inline-block;text-align:left}mjx-munderover:not([limits=false]){padding-top:.1em}mjx-munderover:not([limits=false])>*{display:block}mjx-c.mjx-c221A.TEX-S1::before{padding:.85em 1.02em .35em 0;content:"√"}mjx-c.mjx-c3A::before{padding:.43em .278em 0 0;content:":"}mjx-c.mjx-c211D.TEX-A::before{padding:.683em .722em 0 0;content:"R"}mjx-c.mjx-c3B::before{padding:.43em .278em .194em 0;content:";"}mjx-c.mjx-c21A6::before{padding:.511em 1em .011em 0;content:"↦"}mjx-c.mjx-c1D41B.TEX-B::before{padding:.694em .639em .006em 0;content:"b"}mjx-c.mjx-c2211.TEX-S2::before{padding:.95em 1.444em .45em 0;content:"∑"}mjx-c.mjx-c1D457.TEX-I::before{padding:.661em .412em .204em 0;content:"j"}mjx-c.mjx-c38::before{padding:.666em .5em .022em 0;content:"8"}mjx-c.mjx-c41::before{padding:.716em .75em 0 0;content:"A"}mjx-c.mjx-c43::before{padding:.705em .722em .021em 0;content:"C"}mjx-msqrt{display:inline-block;text-align:left}mjx-root{display:inline-block;white-space:nowrap}mjx-surd{display:inline-block;vertical-align:top}mjx-sqrt{display:inline-block;padding-top:.07em}mjx-sqrt>mjx-box{border-top:.07em solid}mjx-sqrt.mjx-tall>mjx-box{padding-left:.3em;margin-left:-.3em}mjx-c.mjx-c1D435.TEX-I::before{padding:.683em .759em 0 0;content:"B"}mjx-c.mjx-c1D436.TEX-I::before{padding:.705em .76em .022em 0;content:"C"}mjx-c.mjx-c28.TEX-S3::before{padding:1.45em .736em .949em 0;content:"("}mjx-c.mjx-c29.TEX-S3::before{padding:1.45em .736em .949em 0;content:")"}mjx-c.mjx-c42::before{padding:.683em .708em 0 0;content:"B"}mjx-c.mjx-c1D449.TEX-I::before{padding:.683em .769em .022em 0;content:"V"}mjx-c.mjx-c1D462.TEX-I::before{padding:.442em .572em .011em 0;content:"u"}mjx-c.mjx-c221A.TEX-S4::before{padding:1.75em 1.02em 1.25em 0;content:"√"}mjx-c.mjx-c22C6::before{padding:.486em .5em 0 0;content:"⋆"}mjx-c.mjx-c1D42E.TEX-B::before{padding:.45em .639em .006em 0;content:"u"}mjx-c.mjx-c2E::before{padding:.12em .278em 0 0;content:"."}mjx-c.mjx-c1D43C.TEX-I::before{padding:.683em .504em 0 0;content:"I"}mjx-c.mjx-c1D43F.TEX-I::before{padding:.683em .681em 0 0;content:"L"}mjx-c.mjx-c1D458.TEX-I::before{padding:.694em .521em .011em 0;content:"k"}mjx-c.mjx-c28.TEX-S1::before{padding:.85em .458em .349em 0;content:"("}mjx-c.mjx-c29.TEX-S1::before{padding:.85em .458em .349em 0;content:")"}mjx-c.mjx-c6D::before{padding:.442em .833em 0 0;content:"m"}mjx-c.mjx-c1D425.TEX-B::before{padding:.694em .319em 0 0;content:"l"}mjx-c.mjx-c1D421.TEX-B::before{padding:.694em .639em 0 0;content:"h"}mjx-c.mjx-c62::before{padding:.694em .556em .011em 0;content:"b"}mjx-c.mjx-c1D42F.TEX-B::before{padding:.444em .607em 0 0;content:"v"}mjx-c.mjx-c2225::before{padding:.75em .5em .25em 0;content:"∥"}mjx-c.mjx-c1D441.TEX-I::before{padding:.683em .888em 0 0;content:"N"}mjx-c.mjx-c2211.TEX-S1::before{padding:.75em 1.056em .25em 0;content:"∑"}mjx-stretchy-v.mjx-c7B mjx-beg mjx-c::before{content:"⎧";padding:.899em .889em .01em 0}mjx-stretchy-v.mjx-c7B mjx-ext mjx-c::before{content:"⎪";width:.889em}mjx-stretchy-v.mjx-c7B mjx-end mjx-c::before{content:"⎩";padding:.01em .889em .899em 0}mjx-stretchy-v.mjx-c7B mjx-mid mjx-c::before{content:"⎨";padding:1.16em .889em .66em 0}mjx-stretchy-v.mjx-c7B>mjx-mid{margin-top:-.91em;margin-bottom:-.91em}mjx-stretchy-v.mjx-c7B>mjx-end{margin-top:-.909em}mjx-stretchy-v.mjx-c7B>mjx-ext{height:50%;border-top-width:.879em;border-bottom-width:.879em}mjx-c.mjx-c2217::before{padding:.465em .5em 0 0;content:"∗"}mjx-c.mjx-c68::before{padding:.694em .556em 0 0;content:"h"}mjx-c.mjx-c1D70B.TEX-I::before{padding:.431em .57em .011em 0;content:"π"}mjx-c.mjx-c1D714.TEX-I::before{padding:.443em .622em .011em 0;content:"ω"}mjx-c.mjx-c37::before{padding:.676em .5em .022em 0;content:"7"}mjx-mtable{display:inline-block;text-align:center;vertical-align:.25em;position:relative;box-sizing:border-box;border-spacing:0px;border-collapse:collapse}mjx-mstyle[size="s"] mjx-mtable{vertical-align:.354em}mjx-labels{position:absolute;left:0;top:0}mjx-table{display:inline-block;vertical-align:-.5ex;box-sizing:border-box}mjx-table>mjx-itable{vertical-align:middle;text-align:left;box-sizing:border-box}mjx-labels>mjx-itable{position:absolute;top:0}mjx-mtable[justify=left]{text-align:left}mjx-mtable[justify=right]{text-align:right}mjx-mtable[justify=left][side=left]{padding-right:0!important}mjx-mtable[justify=left][side=right]{padding-left:0!important}mjx-mtable[justify=right][side=left]{padding-right:0!important}mjx-mtable[justify=right][side=right]{padding-left:0!important}mjx-mtable[align]{vertical-align:baseline}mjx-mtable[align=top]>mjx-table{vertical-align:top}mjx-mtable[align=bottom]>mjx-table{vertical-align:bottom}mjx-mtable[side=right] mjx-labels{min-width:100%}mjx-mtr{display:table-row;text-align:left}mjx-mtr[rowalign=top]>mjx-mtd{vertical-align:top}mjx-mtr[rowalign=center]>mjx-mtd{vertical-align:middle}mjx-mtr[rowalign=bottom]>mjx-mtd{vertical-align:bottom}mjx-mtr[rowalign=baseline]>mjx-mtd{vertical-align:baseline}mjx-mtr[rowalign=axis]>mjx-mtd{vertical-align:.25em}mjx-mtd{display:table-cell;text-align:center;padding:.215em .4em}mjx-mtd:first-child{padding-left:0}mjx-mtd:last-child{padding-right:0}mjx-mtable>*>mjx-itable>:first-child>mjx-mtd{padding-top:0}mjx-mtable>*>mjx-itable>:last-child>mjx-mtd{padding-bottom:0}mjx-tstrut{display:inline-block;height:1em;vertical-align:-.25em}mjx-labels[align=left]>mjx-mtr>mjx-mtd{text-align:left}mjx-labels[align=right]>mjx-mtr>mjx-mtd{text-align:right}mjx-mtd[extra]{padding:0}mjx-mtd[rowalign=top]{vertical-align:top}mjx-mtd[rowalign=center]{vertical-align:middle}mjx-mtd[rowalign=bottom]{vertical-align:bottom}mjx-mtd[rowalign=baseline]{vertical-align:baseline}mjx-mtd[rowalign=axis]{vertical-align:.25em}mjx-texatom{display:inline-block;text-align:left}mjx-mrow{display:inline-block;text-align:left}mjx-msub{display:inline-block;text-align:left}mjx-mspace{display:inline-block;text-align:left}mjx-mtext{display:inline-block;text-align:left}mjx-munder{display:inline-block;text-align:left}mjx-over{text-align:left}mjx-munder:not([limits=false]){display:inline-table}mjx-munder>mjx-row{text-align:left}mjx-under{padding-bottom:.1em}mjx-mover{display:inline-block;text-align:left}mjx-mover:not([limits=false]){padding-top:.1em}mjx-mover:not([limits=false])>*{display:block;text-align:left}mjx-msubsup{display:inline-block;text-align:left}mjx-script{display:inline-block;padding-right:.05em;padding-left:.033em}mjx-script>mjx-spacer{display:block}mjx-mfrac{display:inline-block;text-align:left}mjx-frac{display:inline-block;vertical-align:.17em;padding:0 .22em}mjx-frac[type="d"]{vertical-align:.04em}mjx-frac[delims]{padding:0 .1em}mjx-frac[atop]{padding:0 .12em}mjx-frac[atop][delims]{padding:0}mjx-dtable{display:inline-table;width:100%}mjx-dtable>*{font-size:2000%}mjx-dbox{display:block;font-size:5%}mjx-num{display:block;text-align:center}mjx-den{display:block;text-align:center}mjx-mfrac[bevelled]>mjx-num{display:inline-block}mjx-mfrac[bevelled]>mjx-den{display:inline-block}mjx-den[align=right],mjx-num[align=right]{text-align:right}mjx-den[align=left],mjx-num[align=left]{text-align:left}mjx-nstrut{display:inline-block;height:.054em;width:0;vertical-align:-.054em}mjx-nstrut[type="d"]{height:.217em;vertical-align:-.217em}mjx-dstrut{display:inline-block;height:.505em;width:0}mjx-dstrut[type="d"]{height:.726em}mjx-line{display:block;box-sizing:border-box;min-height:1px;height:.06em;border-top:.06em solid;margin:.06em -.1em;overflow:hidden}mjx-line[type="d"]{margin:.18em -.1em}mjx-stretchy-v.mjx-c28 mjx-beg mjx-c::before{content:"⎛";padding:1.154em .875em .655em 0}mjx-stretchy-v.mjx-c28 mjx-ext mjx-c::before{content:"⎜";width:.875em}mjx-stretchy-v.mjx-c28 mjx-end mjx-c::before{content:"⎝";padding:1.165em .875em .644em 0}mjx-stretchy-v.mjx-c28>mjx-end{margin-top:-1.809em}mjx-stretchy-v.mjx-c28>mjx-ext{border-top-width:1.779em;border-bottom-width:1.779em}mjx-stretchy-v.mjx-c29 mjx-beg mjx-c::before{content:"⎞";padding:1.154em .875em .655em 0}mjx-stretchy-v.mjx-c29 mjx-ext mjx-c::before{content:"⎟";width:.875em}mjx-stretchy-v.mjx-c29 mjx-end mjx-c::before{content:"⎠";padding:1.165em .875em .644em 0}mjx-stretchy-v.mjx-c29>mjx-end{margin-top:-1.809em}mjx-stretchy-v.mjx-c29>mjx-ext{border-top-width:1.779em;border-bottom-width:1.779em}mjx-stretchy-v.mjx-c5B mjx-beg mjx-c::before{content:"⎡";padding:1.154em .667em .645em 0}mjx-stretchy-v.mjx-c5B mjx-ext mjx-c::before{content:"⎢";width:.667em}mjx-stretchy-v.mjx-c5B mjx-end mjx-c::before{content:"⎣";padding:1.155em .667em .644em 0}mjx-stretchy-v.mjx-c5B>mjx-end{margin-top:-1.799em}mjx-stretchy-v.mjx-c5B>mjx-ext{border-top-width:1.769em;border-bottom-width:1.769em}mjx-stretchy-v.mjx-c5D mjx-beg mjx-c::before{content:"⎤";padding:1.154em .667em .645em 0}mjx-stretchy-v.mjx-c5D mjx-ext mjx-c::before{content:"⎥";width:.667em}mjx-stretchy-v.mjx-c5D mjx-end mjx-c::before{content:"⎦";padding:1.155em .667em .644em 0}mjx-stretchy-v.mjx-c5D>mjx-end{margin-top:-1.799em}mjx-stretchy-v.mjx-c5D>mjx-ext{border-top-width:1.769em;border-bottom-width:1.769em}mjx-stretchy-h.mjx-c23DF mjx-beg mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF mjx-ext mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF mjx-end mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF mjx-mid mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF>mjx-ext{width:50%}mjx-c.mjx-c1D466.TEX-I::before{padding:.442em .49em .205em 0;content:"y"}mjx-c.mjx-c5B.TEX-S3::before{padding:1.45em .528em .949em 0;content:"["}mjx-c.mjx-c5D.TEX-S3::before{padding:1.45em .528em .949em 0;content:"]"}mjx-c.mjx-c30::before{padding:.666em .5em .022em 0;content:"0"}mjx-c.mjx-c2212::before{padding:.583em .778em .082em 0;content:"−"}mjx-c.mjx-c1D411.TEX-B::before{padding:.686em .862em .011em 0;content:"R"}mjx-c.mjx-c1D703.TEX-I::before{padding:.705em .469em .01em 0;content:"θ"}mjx-c.mjx-c63::before{padding:.448em .444em .011em 0;content:"c"}mjx-c.mjx-c6F::before{padding:.448em .5em .01em 0;content:"o"}mjx-c.mjx-c73::before{padding:.448em .394em .011em 0;content:"s"}mjx-c.mjx-c2061::before{padding:0;content:""}mjx-c.mjx-c69::before{padding:.669em .278em 0 0;content:"i"}mjx-c.mjx-c6E::before{padding:.442em .556em 0 0;content:"n"}mjx-c.mjx-c1D451.TEX-I::before{padding:.694em .52em .01em 0;content:"d"}mjx-c.mjx-c1D437.TEX-I::before{padding:.683em .828em 0 0;content:"D"}mjx-c.mjx-c1D447.TEX-I::before{padding:.677em .704em 0 0;content:"T"}mjx-c.mjx-c1D464.TEX-I::before{padding:.443em .716em .011em 0;content:"w"}mjx-c.mjx-c22C5::before{padding:.31em .278em 0 0;content:"⋅"}mjx-c.mjx-c1D412.TEX-B::before{padding:.697em .639em .011em 0;content:"S"}mjx-c.mjx-c1D6FC.TEX-I::before{padding:.442em .64em .011em 0;content:"α"}mjx-c.mjx-c1D445.TEX-I::before{padding:.683em .759em .021em 0;content:"R"}mjx-c.mjx-c34::before{padding:.677em .5em 0 0;content:"4"}mjx-c.mjx-c35::before{padding:.666em .5em .022em 0;content:"5"}mjx-c.mjx-c2218::before{padding:.444em .5em 0 0;content:"∘"}mjx-c.mjx-c1D434.TEX-I::before{padding:.716em .75em 0 0;content:"A"}mjx-c.mjx-c2026::before{padding:.12em 1.172em 0 0;content:"…"}mjx-c.mjx-c1D431.TEX-B::before{padding:.444em .607em 0 0;content:"x"}mjx-c.mjx-c1D400.TEX-B::before{padding:.698em .869em 0 0;content:"A"}mjx-c.mjx-c22EF::before{padding:.31em 1.172em 0 0;content:"⋯"}mjx-c.mjx-c1D413.TEX-B::before{padding:.675em .8em 0 0;content:"T"}mjx-c.mjx-c28.TEX-B::before{padding:.75em .447em .249em 0;content:"("}mjx-c.mjx-c1D41C.TEX-B::before{padding:.453em .511em .006em 0;content:"c"}mjx-c.mjx-c29.TEX-B::before{padding:.75em .447em .249em 0;content:")"}mjx-c.mjx-c2212.TEX-B::before{padding:.281em .894em 0 0;content:"−"}mjx-c.mjx-c33::before{padding:.665em .5em .022em 0;content:"3"}mjx-c.mjx-c44::before{padding:.683em .764em 0 0;content:"D"}mjx-c.mjx-cA0::before{padding:0 .25em 0 0;content:" "}mjx-c.mjx-c70::before{padding:.442em .556em .194em 0;content:"p"}mjx-c.mjx-c74::before{padding:.615em .389em .01em 0;content:"t"}mjx-c.mjx-c78::before{padding:.431em .528em 0 0;content:"x"}mjx-c.mjx-c79::before{padding:.431em .528em .204em 0;content:"y"}mjx-c.mjx-c7A::before{padding:.431em .444em 0 0;content:"z"}mjx-c.mjx-c54::before{padding:.677em .722em 0 0;content:"T"}mjx-c.mjx-c76::before{padding:.431em .528em .011em 0;content:"v"}mjx-c.mjx-c65::before{padding:.448em .444em .011em 0;content:"e"}mjx-c.mjx-c72::before{padding:.442em .392em 0 0;content:"r"}mjx-c.mjx-c1D467.TEX-I::before{padding:.442em .465em .011em 0;content:"z"}mjx-c.mjx-c1D453.TEX-I::before{padding:.705em .55em .205em 0;content:"f"}mjx-c.mjx-c1D6FD.TEX-I::before{padding:.705em .566em .194em 0;content:"β"}mjx-c.mjx-c1D6FE.TEX-I::before{padding:.441em .543em .216em 0;content:"γ"}mjx-c.mjx-c1D427.TEX-B::before{padding:.45em .639em 0 0;content:"n"}mjx-c.mjx-c1D408.TEX-B::before{padding:.686em .436em 0 0;content:"I"}mjx-c.mjx-c1D40D.TEX-B::before{padding:.686em .9em 0 0;content:"N"}mjx-c.mjx-c50::before{padding:.683em .681em 0 0;content:"P"}mjx-c.mjx-c20D7.TEX-V::before{padding:.714em .5em 0 0;content:"→"}mjx-c.mjx-c4C::before{padding:.683em .625em 0 0;content:"L"}mjx-c.mjx-c6B::before{padding:.694em .528em 0 0;content:"k"}mjx-c.mjx-c2D::before{padding:.252em .333em 0 0;content:"-"}mjx-c.mjx-c61::before{padding:.448em .5em .011em 0;content:"a"}mjx-c.mjx-c20::before{padding:0 .25em 0 0;content:" "}mjx-c.mjx-c2F::before{padding:.75em .5em .25em 0;content:"/"}mjx-c.mjx-c67::before{padding:.453em .5em .206em 0;content:"g"}mjx-c.mjx-c64::before{padding:.694em .556em .011em 0;content:"d"}mjx-c.mjx-c5E::before{padding:.694em .5em 0 0;content:"^"}mjx-c.mjx-c1D448.TEX-I::before{padding:.683em .767em .022em 0;content:"U"}mjx-c.mjx-cD7::before{padding:.491em .778em 0 0;content:"×"}mjx-c.mjx-c5B::before{padding:.75em .278em .25em 0;content:"["}mjx-c.mjx-c5D::before{padding:.75em .278em .25em 0;content:"]"}mjx-c.mjx-c21D2::before{padding:.525em 1em .024em 0;content:"⇒"}mjx-c.mjx-c75::before{padding:.442em .556em .011em 0;content:"u"}mjx-c.mjx-c77::before{padding:.431em .722em .011em 0;content:"w"}mjx-c.mjx-c6C::before{padding:.694em .278em 0 0;content:"l"}mjx-c.mjx-c1D440.TEX-I::before{padding:.683em 1.051em 0 0;content:"M"}mjx-c.mjx-c1D465.TEX-I::before{padding:.442em .572em .011em 0;content:"x"}mjx-c.mjx-cD7::before{padding:.491em .778em 0 0;content:"×"}mjx-c.mjx-c32::before{padding:.666em .5em 0 0;content:"2"}mjx-c.mjx-c1D463.TEX-I::before{padding:.443em .485em .011em 0;content:"v"}mjx-c.mjx-c1D45D.TEX-I::before{padding:.442em .503em .194em 0;content:"p"}mjx-c.mjx-c2192::before{padding:.511em 1em .011em 0;content:"→"}mjx-c.mjx-c1D44E.TEX-I::before{padding:.441em .529em .01em 0;content:"a"}mjx-c.mjx-c1D44F.TEX-I::before{padding:.694em .429em .011em 0;content:"b"}mjx-c.mjx-c1D459.TEX-I::before{padding:.694em .298em .011em 0;content:"l"}mjx-c.mjx-c1D452.TEX-I::before{padding:.442em .466em .011em 0;content:"e"}mjx-mn{display:inline-block;text-align:left}mjx-c.mjx-c1D442.TEX-I::before{padding:.704em .763em .022em 0;content:"O"}mjx-c.mjx-c31::before{padding:.666em .5em 0 0;content:"1"}mjx-container[jax=CHTML]{line-height:0}mjx-container [space="1"]{margin-left:.111em}mjx-container [space="2"]{margin-left:.167em}mjx-container [space="3"]{margin-left:.222em}mjx-container [space="4"]{margin-left:.278em}mjx-container [space="5"]{margin-left:.333em}mjx-container [rspace="1"]{margin-right:.111em}mjx-container [rspace="2"]{margin-right:.167em}mjx-container [rspace="3"]{margin-right:.222em}mjx-container [rspace="4"]{margin-right:.278em}mjx-container [rspace="5"]{margin-right:.333em}mjx-container [size="s"]{font-size:70.7%}mjx-container [size=ss]{font-size:50%}mjx-container [size=Tn]{font-size:60%}mjx-container [size=sm]{font-size:85%}mjx-container [size=lg]{font-size:120%}mjx-container [size=Lg]{font-size:144%}mjx-container [size=LG]{font-size:173%}mjx-container [size=hg]{font-size:207%}mjx-container [size=HG]{font-size:249%}mjx-container [width=full]{width:100%}mjx-box{display:inline-block}mjx-block{display:block}mjx-itable{display:inline-table}mjx-row{display:table-row}mjx-row>*{display:table-cell}mjx-mtext{display:inline-block}mjx-mstyle{display:inline-block}mjx-merror{display:inline-block;color:red;background-color:#ff0}mjx-mphantom{visibility:hidden}mjx-assistive-mml{top:0;left:0;clip:rect(1px,1px,1px,1px);user-select:none;position:absolute!important;padding:1px 0 0!important;border:0!important;display:block!important;width:auto!important;overflow:hidden!important}mjx-assistive-mml[display=block]{width:100%!important}mjx-math{display:inline-block;text-align:left;line-height:0;text-indent:0;font-style:normal;font-weight:400;font-size:100%;font-size-adjust:none;letter-spacing:normal;border-collapse:collapse;overflow-wrap:normal;word-spacing:normal;white-space:nowrap;direction:ltr;padding:1px 0}mjx-container[jax=CHTML][display=true]{display:block;text-align:center;margin:1em 0}mjx-container[jax=CHTML][display=true][width=full]{display:flex}mjx-container[jax=CHTML][display=true] mjx-math{padding:0}mjx-container[jax=CHTML][justify=left]{text-align:left}mjx-container[jax=CHTML][justify=right]{text-align:right}mjx-mi{display:inline-block;text-align:left}mjx-c{display:inline-block}mjx-utext{display:inline-block;padding:.75em 0 .2em}mjx-mo{display:inline-block;text-align:left}mjx-stretchy-h{display:inline-table;width:100%}mjx-stretchy-h>*{display:table-cell;width:0}mjx-stretchy-h>*>mjx-c{display:inline-block;transform:scaleX(1)}mjx-stretchy-h>*>mjx-c::before{display:inline-block;width:initial}mjx-stretchy-h>mjx-ext{overflow:clip visible;width:100%}mjx-stretchy-h>mjx-ext>mjx-c::before{transform:scaleX(500)}mjx-stretchy-h>mjx-ext>mjx-c{width:0}mjx-stretchy-h>mjx-beg>mjx-c{margin-right:-.1em}mjx-stretchy-h>mjx-end>mjx-c{margin-left:-.1em}mjx-stretchy-v{display:inline-block}mjx-stretchy-v>*{display:block}mjx-stretchy-v>mjx-beg{height:0}mjx-stretchy-v>mjx-end>mjx-c{display:block}mjx-stretchy-v>*>mjx-c{transform:scaleY(1);transform-origin:left center;overflow:hidden}mjx-stretchy-v>mjx-ext{display:block;height:100%;box-sizing:border-box;border:0 solid transparent;overflow:visible clip}mjx-stretchy-v>mjx-ext>mjx-c::before{width:initial;box-sizing:border-box}mjx-stretchy-v>mjx-ext>mjx-c{transform:scaleY(500) translateY(.075em);overflow:visible}mjx-mark{display:inline-block;height:0}mjx-msup{display:inline-block;text-align:left}mjx-c::before{display:block;width:0}.MJX-TEX{font-family:MJXZERO,MJXTEX}.TEX-B{font-family:MJXZERO,MJXTEX-B}.TEX-I{font-family:MJXZERO,MJXTEX-I}.TEX-MI{font-family:MJXZERO,MJXTEX-MI}.TEX-BI{font-family:MJXZERO,MJXTEX-BI}.TEX-S1{font-family:MJXZERO,MJXTEX-S1}.TEX-S2{font-family:MJXZERO,MJXTEX-S2}.TEX-S3{font-family:MJXZERO,MJXTEX-S3}.TEX-S4{font-family:MJXZERO,MJXTEX-S4}.TEX-A{font-family:MJXZERO,MJXTEX-A}.TEX-C{font-family:MJXZERO,MJXTEX-C}.TEX-CB{font-family:MJXZERO,MJXTEX-CB}.TEX-FR{font-family:MJXZERO,MJXTEX-FR}.TEX-FRB{font-family:MJXZERO,MJXTEX-FRB}.TEX-SS{font-family:MJXZERO,MJXTEX-SS}.TEX-SSB{font-family:MJXZERO,MJXTEX-SSB}.TEX-SSI{font-family:MJXZERO,MJXTEX-SSI}.TEX-SC{font-family:MJXZERO,MJXTEX-SC}.TEX-T{font-family:MJXZERO,MJXTEX-T}.TEX-V{font-family:MJXZERO,MJXTEX-V}.TEX-VB{font-family:MJXZERO,MJXTEX-VB}mjx-stretchy-h mjx-c,mjx-stretchy-v mjx-c{font-family:MJXZERO,MJXTEX-S1,MJXTEX-S4,MJXTEX,MJXTEX-A!important}@font-face{font-family:MJXZERO;src:url("lib/fonts/mathjax_zero.woff") format("woff")}@font-face{font-family:MJXTEX;src:url("lib/fonts/mathjax_main-regular.woff") format("woff")}@font-face{font-family:MJXTEX-B;src:url("lib/fonts/mathjax_main-bold.woff") format("woff")}@font-face{font-family:MJXTEX-I;src:url("lib/fonts/mathjax_math-italic.woff") format("woff")}@font-face{font-family:MJXTEX-MI;src:url("lib/fonts/mathjax_main-italic.woff") format("woff")}@font-face{font-family:MJXTEX-BI;src:url("lib/fonts/mathjax_math-bolditalic.woff") format("woff")}@font-face{font-family:MJXTEX-S1;src:url("lib/fonts/mathjax_size1-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S2;src:url("lib/fonts/mathjax_size2-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S3;src:url("lib/fonts/mathjax_size3-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S4;src:url("lib/fonts/mathjax_size4-regular.woff") format("woff")}@font-face{font-family:MJXTEX-A;src:url("lib/fonts/mathjax_ams-regular.woff") format("woff")}@font-face{font-family:MJXTEX-C;src:url("lib/fonts/mathjax_calligraphic-regular.woff") format("woff")}@font-face{font-family:MJXTEX-CB;src:url("lib/fonts/mathjax_calligraphic-bold.woff") format("woff")}@font-face{font-family:MJXTEX-FR;src:url("lib/fonts/mathjax_fraktur-regular.woff") format("woff")}@font-face{font-family:MJXTEX-FRB;src:url("lib/fonts/mathjax_fraktur-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SS;src:url("lib/fonts/mathjax_sansserif-regular.woff") format("woff")}@font-face{font-family:MJXTEX-SSB;src:url("lib/fonts/mathjax_sansserif-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SSI;src:url("lib/fonts/mathjax_sansserif-italic.woff") format("woff")}@font-face{font-family:MJXTEX-SC;src:url("lib/fonts/mathjax_script-regular.woff") format("woff")}@font-face{font-family:MJXTEX-T;src:url("lib/fonts/mathjax_typewriter-regular.woff") format("woff")}@font-face{font-family:MJXTEX-V;src:url("lib/fonts/mathjax_vector-regular.woff") format("woff")}@font-face{font-family:MJXTEX-VB;src:url("lib/fonts/mathjax_vector-bold.woff") format("woff")}mjx-c.mjx-c1D45F.TEX-I::before{padding:.442em .451em .011em 0;content:"r"}mjx-c.mjx-c210E.TEX-I::before{padding:.694em .576em .011em 0;content:"h"}mjx-c.mjx-c1D460.TEX-I::before{padding:.442em .469em .01em 0;content:"s"}mjx-c.mjx-c28::before{padding:.75em .389em .25em 0;content:"("}mjx-c.mjx-c29::before{padding:.75em .389em .25em 0;content:")"}mjx-c.mjx-c3D::before{padding:.583em .778em .082em 0;content:"="}mjx-c.mjx-c1D45A.TEX-I::before{padding:.442em .878em .011em 0;content:"m"}mjx-c.mjx-c1D456.TEX-I::before{padding:.661em .345em .011em 0;content:"i"}mjx-c.mjx-c1D45B.TEX-I::before{padding:.442em .6em .011em 0;content:"n"}mjx-c.mjx-c1D454.TEX-I::before{padding:.442em .477em .205em 0;content:"g"}mjx-c.mjx-c2032::before{padding:.56em .275em 0 0;content:"′"}mjx-c.mjx-c2B::before{padding:.583em .778em .082em 0;content:"+"}mjx-c.mjx-c1D450.TEX-I::before{padding:.442em .433em .011em 0;content:"c"}mjx-c.mjx-c1D45C.TEX-I::before{padding:.441em .485em .011em 0;content:"o"}mjx-c.mjx-c1D461.TEX-I::before{padding:.626em .361em .011em 0;content:"t"}mjx-c.mjx-c2C::before{padding:.121em .278em .194em 0;content:","}</style><div class="markdown-preview-sizer markdown-preview-section"><h1 class="page-title heading inline-title" id="Lecture 3：帧同步基础"><p dir="auto">Lecture 3：帧同步基础</p></h1><div class="el-h2 heading-wrapper"><h2 data-heading="帧同步引入" dir="auto" class="heading" id="帧同步引入"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>帧同步引入</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：帧同步</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>引入：
+<ul>
+<li data-line="1" dir="auto">其实“帧同步”属于一个翻译上的失误，宽泛一点来讲“帧同步”是指包含各种变形算法的 <code>Lockstep</code>，严格来讲就是指最基本的 <code>Deterministic Lockstep</code>。我猜测国内在引入这个概念的时候已经是 <code>2000</code> 年以后（具体时间没有考证），<code>lockstep</code> 算法已经有很多变形，时间帧的概念也早已诞生，所以相关译者可能就把“<code>lockstep</code>”翻译成了“帧同步”。当然也可能是引入的时候翻译成了“按帧锁定同步”，后来被大家以简化的方式（帧同步）传递开来；</li>
+<li data-line="2" dir="auto">但不管怎么说，“帧”在实际应用中更多的是指画面渲染的频率，<code>lockstep</code> 里面的“<code>step</code>”概念要更宽泛一些才是；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="4" dir="auto">了解游戏的朋友，都知道游戏是有帧率（FPS）的，每一帧都会运行相当复杂的运算（包括逻辑和渲染），如果运算规模达到一定程度就会拉长这一帧的时间，帧率也就会随之下降。所有影视作品的画面都是由一张张图构成的，每一个画面就是一帧，一秒能放多少个画面，就是有多少帧。在游戏里面，渲染器会不停的向渲染目标输出画面，并在帧与帧之间游戏处理各种逻辑，逻辑会改变游戏世界对象的行为，这些行为又会影响游戏画面的变化，这就是游戏的核心框架；</li>
+<li data-line="5" dir="auto">早期的 <code>lockstep</code> 里面渲染和逻辑都是放在一个帧里面去处理的，这样一旦命令受到网络延迟的影响，玩家本地就会卡在一个画面直到消息的到来；</li>
+<li data-line="6" dir="auto">为了解决这个问题，有一些游戏会将逻辑和渲染分开处理（分为逻辑帧和渲染帧），逻辑帧每隔固定的时间去处理所有逻辑事件；</li>
+<li data-line="7" dir="auto">在不是严格锁帧的情况下，你本地即使没有收到网络数据，也可以在继续执行其他的逻辑并维持高频率的渲染（正在移动的对象不会由于短暂的延迟而静止不动）。这里面的逻辑帧就是 <code>lockstep</code> 里面的“<code>Step</code>”，也可以叫做“<code>turn</code>”，“<code>bucket</code>”或者“步”；</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结：
+<ul>
+<li data-line="9" dir="auto">网络同步，其目标就是时刻保证多台机器的游戏表现完全一致；</li>
+<li data-line="10" dir="auto">但是由于网络延迟的存在，时刻保持相同是不可能的，所我们要尽可能在一个回合（<code>turn</code>）内保持一致，如果有人由于某些原因（如网络延迟）没有同步推进，那么我们就需要等他，这就是 <code>Lockstep</code>（或者说一种停等协议）</li>
+<li data-line="11" dir="auto"><code>LockStep</code> 其实是很朴素的一种思想，很早就被用于计算机仿真模拟、计算机数据同步等领域。后来网络游戏发展起来后，也很自然的被开发者们拿到了系统设计中。早期 <code>lockstep</code> 被广泛用于局域网游戏内（延迟基本可以保持在 <code>50ms</code> 以内），所以这种策略是很有效的。<code>lockstep</code> 每个回合的触发，并不是由收到网络包驱动，也不是由渲染帧数驱动（当然渲染帧率稳定的话也可以以帧为单位，每 <code>N</code> 帧一个回合），而是采用客户端内在的时钟稳定按一定间隔（ <code>比如100ms</code>） 的心跳前进；</li>
+<li data-line="12" dir="auto">游戏的一开始，玩家在本地进行操作，<strong>操作指令会被缓存起来</strong>。在回合结束前（网络延迟在 <code>50ms</code> 以内），我们会<strong>收到所有其他客户端的指令数据</strong>，然后和前面缓存的指令一同执行并推进到下一个回合。如果玩家在一个回合开始到 <code>50ms</code>（网络延迟的一半）都没有任何操作，我们可以认为玩家发出了一个 <code>Idle</code> 指令，打包发给其他客户端； </li>
+<li data-line="13" dir="auto">换个角度来看，假如一场游戏持续了 20 分钟，不考虑延迟的情况下整场游戏就是 12000 个回合（所有客户端都是如此）。现在我们反过去给每个回合添加指令，确保每个回合都收集到所有玩家的指令，那么就可以严格保证所有客户端每个回合的表现都是一样的。假如我们再把这些指令都存储起来，那么就推演出整场比赛，这也是为什么 <code>lockstep</code> 为什么做回放系统很容易；  </li>
+<li data-line="14" dir="auto">至于 <code>lockstep</code> 为什么要发送指令而不是状态，其实是与当时的网络带宽有关。很多游戏都有明确的人数限制（一般不超过 <code>10</code> 个人），玩家在每个回合能做的操作也有限甚至是不操作，这样的条件下所有玩家的指令一共也占用不了多少带宽。如果换成同步每个角色的状态数据，那么数据量可能会膨胀 <code>10</code> 倍不止；</li>
+<li data-line="15" dir="auto">从原则上说，锁步数据既可以是游戏角色的状态信息也可以是玩家的操作指令，只不过由于各种原因没有采取状态数据罢了；</li>
+</ul>
+</li>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：传统的 <code>Lockstep</code> 
+<ul>
+<li data-line="17" dir="auto"><span alt="PixPin_2025-11-26_15-53-51.png" src="PixPin_2025-11-26_15-53-51.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-26_15-53-51.png" src="lib/media/pixpin_2025-11-26_15-53-51.png"></span></li>
+</ul>
+</li>
+<li data-line="18" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>问题：
+<ul>
+<li data-line="19" dir="auto">仔细分析一下 <code>lockstep</code>，其实就能发现不少缺点。首当其冲的就是网络条件较差的客户端很容易影响其他玩家的游戏体验。为了尽可能保证所有玩家的游戏体验，开发者们不断的对游戏进行更深一步的分析，先后提出了各种优化手段和算法，包括使用乐观帧锁定，把渲染与同步逻辑拆开，客户端预执行，将指令流水线化，操作回滚等；</li>
+<li data-line="20" dir="auto">其次，<code>lockstep</code> 的另一个问题就是很难保证命令一致的情况下，所有客户端的计算结果完全一致，只要任何一个回出现了一点点的误差就可能像蝴蝶效应一样导致两个客户端后面的结果截然不同。这个问题听起来容易，实际上执行起来却有很多容易被忽略的细节，比如 <code>RPC</code> 的时序，浮点数计算的偏差，容器排序的不确定性，随机数值计算不统一等等。浮点数的计算在不同硬件（跨平台更是如此）上很难保持一致的，可以考虑转换为定点数，随机计算保持各个端的随机种子一定也可以解决，但是具体实现起来可能还有很多问题，需要踩坑之后才能真正解决；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="帧同步基础" dir="auto" class="heading" id="帧同步基础"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>帧同步基础</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="什么是帧同步" dir="auto" class="heading" id="什么是帧同步"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>什么是帧同步</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：什么是帧同步</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">帧同步（<code>Frame Synchronization</code>）是一项确保多人在线游戏中各玩家之间游戏状态一致性的技术；</li>
+<li data-line="2" dir="auto">其基本原理是在每一帧内，将玩家的操作指令发送给其他玩家，以实现同步；</li>
+<li data-line="3" dir="auto">具体而言，游戏中的服务器按照固定的时间频率（即帧率）接收并转发来自玩家的操作指令，这些指令会依照服务器设定的频率逐一传递给所有其他玩家，确保每个玩家的操作都在相同的时间点发生；</li>
+<li data-line="4" dir="auto">在这一过程中，玩家接收到操作指令后，会按照服务器设定的帧率精确执行相应的操作，确保每个玩家的行为与其他玩家保持一致。这样，所有玩家在任何时刻看到的游戏状态，包括角色的动作、场景的变化以及其他游戏事件，都是一致的，没有延迟或差异；</li>
+<li data-line="5" dir="auto">帧同步技术不仅消除了操作不同步的现象，还有效避免了因网络延迟引起的游戏卡顿或异常，使得游戏体验更加流畅、稳定；</li>
+<li data-line="6" dir="auto">通过帧同步，游戏中的每一个小细节都能够在玩家之间保持一致性，包括角色的移动、技能的释放、物体的交互等，确保玩家之间的互动公平且精准。更重要的是，这种技术的使用能显著提升竞技类游戏中的公平性，避免了因不同玩家操作延迟产生的优势差距；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：帧同步的适用场合
+<ul>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>虽然帧同步适用于某些类型的游戏，但它并不总是最适合所有游戏。像大多数大型多人在线游戏（<code>MMO</code>）或第一人称射击游戏（<code>FPS</code>）中，状态同步（<code>Server-side synchronization</code>）通常更合适，因为帧同步会带来更高的带宽和计算开销，而这些游戏往往对时延要求更高，反而需要通过服务器控制状态来确保稳定性；
+<ul>
+<li data-line="9" dir="auto">不过并不一定正确。因为帧同步只需要同步命令，而状态同步需要同步服务器计算得到的状态。而命令所占的字节数很少，因此即使每帧进行同步，也不一定带宽更高；</li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>帧同步确实能有效减少玩家之间的输入差异和时延问题，但它无法完全消除所有类型的延迟问题，尤其是在网络状况较差时。因为每一帧的数据都需要所有玩家在同一时刻保持同步，如果某个玩家的网络较差，可能会出现“卡顿"现象，导致游戏体验受损；
+<ul>
+<li data-line="11" dir="auto">游戏特别卡的时候，可能会导致卡帧，比如说游戏很卡的时候，可以看到人先是卡住，然后连续的闪烁瞬移，移动到面前 <code>-&gt;</code> 此时是在将数据追到当前最新的帧，因此会进行快速渲染；</li>
+</ul>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>虽然帧同步适合需要高度实时互动的竞技类游戏，但并非所有竞技类游戏都适合使用帧同步。并不是所有 <code>MOBA</code> 游戏都是帧同步，例如大型团队对抗（<code>DOTA2</code>）的 <code>MOBA</code> 游戏或大型竞技射击游戏，可能更适合使用其他同步方式（如状态同步或混合同步）来保持较高的稳定性和玩家体验；
+<ul>
+<li data-line="13" dir="auto">其实更类似于<strong>状态帧同步</strong>；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>优点：
+<ul>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="15" dir="auto">一致性保证：</li>
+</ol>
+<ul>
+<li data-line="16" dir="auto">帧同步能够保证所有玩家的游戏状态一致；</li>
+<li data-line="17" dir="auto">这意味着每个玩家看到的游戏画面和操作结果是完全同步的，避免了因网络延迟或不稳定导致的画面错乱和不同步问题；</li>
+<li data-line="18" dir="auto">这样玩家体验会更流畅，感觉更真实；</li>
+</ul>
+</li>
+<li data-line="19" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="19" dir="auto">公平性：</li>
+</ol>
+<ul>
+<li data-line="20" dir="auto">因为所有玩家的游戏状态都基于相同的时间和事件，这避免了某些玩家在延迟较小的情况下获得不公平的优势。游戏的竞技性和公平性大大提高；</li>
+</ul>
+</li>
+<li data-line="21" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="21" dir="auto">容易调试：</li>
+</ol>
+<ul>
+<li data-line="22" dir="auto">帧同步让开发者可以在相同的状态下进行调试，找出潜在的 <code>bug</code> 或者平衡问题。每个事件都对应一个时间点，这样更容易追踪和复现问题；</li>
+</ul>
+</li>
+<li data-line="23" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="23" dir="auto">开发相对容易</li>
+</ol>
+<ul>
+<li data-line="24" dir="auto">服务器只需要少量逻辑，大部分逻辑都在客户端；</li>
+<li data-line="25" dir="auto">因为如果是使用状态同步，很多逻辑是在服务端；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="26" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>缺点：
+<ul>
+<li data-line="27" dir="auto">下面的缺点只建立在标准的帧同步下，其实游戏开发中大多都会在帧同步的设计方案上增加一些手段来避免下面的一些问题；</li>
+<li data-line="28" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="28" dir="auto">作弊工具与外挂：</li>
+</ol>
+<ul>
+<li data-line="29" dir="auto">在帧同步的环境中，作弊工具可能会通过修改客户端的内存、模拟操作或其他手段，使得玩家能以不正常的方式控制自己的角色。而且因为服务端并没有跑客户端的逻辑，因此此时服务点不能知道客户端是否作弊；</li>
+<li data-line="30" dir="auto">尤其是在一些高频次的同步游戏中，外挂工具可以通过修改帧数据或改变同步流程来绕过防护，获取游戏优势；</li>
+</ul>
+</li>
+<li data-line="31" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="31" dir="auto">数据包篡改：</li>
+</ol>
+<ul>
+<li data-line="32" dir="auto">由于每一帧都要传输大量数据，特别是游戏中的位置、操作指令等，这些数据可以通过网络被拦截和篡改；</li>
+<li data-line="33" dir="auto">服务器只是每一帧的收集数据然后转发，并没有进行验证，因此可以通过一些外挂把每一帧数据变得非常庞大或者复杂；</li>
+<li data-line="34" dir="auto">如果没有充分的加密或验证机制，恶意玩家可以通过篡改数据包来伪造游戏状态，从而获得不公平的优势；</li>
+</ul>
+</li>
+<li data-line="35" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="35" dir="auto">服务器验证困难：</li>
+</ol>
+<ul>
+<li data-line="36" dir="auto">因为服务器只是转发操作数据，所以无法验证客户端玩家发送数据；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div><div class="el-div"><div data-callout-metadata="" data-callout-fold="" data-callout="summary" class="callout drop-shadow"><div class="callout-title" dir="auto"><div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-clipboard-list"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="M12 11h4"></path><path d="M12 16h4"></path><path d="M8 11h.01"></path><path d="M8 16h.01"></path></svg></div><div class="callout-title-inner">总结：帧同步与状态同步优缺点</div></div><div class="callout-content">
+<ul>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>帧同步：同步的内容为输入数据，例如：王者荣耀、<code>CookingBattle</code>、荒野乱斗等 <code>MOBA</code> 型游戏；
+<ul>
+<li data-line="2" dir="auto"><span alt="PixPin_2025-11-25_14-34-49.png" src="PixPin_2025-11-25_14-34-49.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-25_14-34-49.png" src="lib/media/pixpin_2025-11-25_14-34-49.png"></span></li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>状态同步：同步的内容为状态数据，例如：完美世界、魔兽世界等 <code>MMOARPG</code>
+<ul>
+<li data-line="4" dir="auto"><span alt="PixPin_2025-11-25_14-35-40.png" src="PixPin_2025-11-25_14-35-40.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-25_14-35-40.png" src="lib/media/pixpin_2025-11-25_14-35-40.png"></span></li>
+</ul>
+</li>
+</ul>
+</div></div></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="帧同步与网络协议" dir="auto" class="heading" id="帧同步与网络协议"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>帧同步与网络协议</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：帧同步与网络协议</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：帧同步更适合 <code>UDP</code> 
+<ul>
+<li data-line="1" dir="auto"><code>UDP</code> 不能保证数据送达、不保证顺序，没有重传机制，丢了就丢了。因为没有 <code>TCP</code> 的重传机制，可以在延迟低的情况下自定义重发机制，所以延迟相对 <code>TCP</code> 要低；</li>
+<li data-line="2" dir="auto">帧同步更适合 <code>UDP</code>，因为帧同步对丢包的容忍度较高，帧同步通常是连续的数据流。帧丢了，下一帧会覆盖更新，可以通过帧同步的逻辑来避免消息顺序问题；</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（1）对丢包的容忍度较高：
+<ul>
+<li data-line="4" dir="auto">比如当前服务器已经发了第二帧和地三帧，但客户端当前只接收到了第一帧，此时服务器会把第二帧和第三帧的数据一起发过来，因此可以把丢包的问题解决了；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（2）低延迟和低抖动：
+<ul>
+<li data-line="6" dir="auto">可以自定义或者干脆不做确认机制；</li>
+<li data-line="7" dir="auto">带来了更低的延迟；</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（3）灵活的应用层补偿机制：
+<ul>
+<li data-line="9" dir="auto">补帧、追帧、跳帧；</li>
+<li data-line="10" dir="auto">包序号控制；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>原理：
+<ul>
+<li data-line="12" dir="auto">帧同步的基本思想，是让所有客户端在相同的逻辑帧执行相同的操作，从而保证游戏状态的一致性；</li>
+<li data-line="13" dir="auto">与状态同步不同，帧同步只同步玩家的输入指令，而不是游戏对象的状态数据。所有客户端运行完全相同的游戏逻辑代码，接收到相同的输入序列后，每个操作都是在相同的时间间隔执行。理论上会产生完全相同的游戏状态；</li>
+<li data-line="14" dir="auto">所有逻辑运算都在客户端进行，客户端保证彼此之间的一致性；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`Bucket Synchronization`" dir="auto" class="heading" id="`Bucket_Synchronization`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Bucket Synchronization</code></h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>Bucket Synchronization</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>引入：
+<ul>
+<li data-line="1" dir="auto">传统的确定性锁步同步（<code>Deterministic&nbsp;Lockstep</code>）有一个简洁的规则：每一逻辑帧，服务器必须收集到所有玩家的输入指令后，才能将这些指令广播给所有客户端，各客户端才能据此推进游戏逻辑；</li>
+<li data-line="2" dir="auto">这种模式带来了一个致命问题，即&nbsp;“木桶效应”：整个游戏的推进速度取决于网络延迟最高的那个玩家。只要有一个玩家因为网络波动导致指令包迟到，其他所有玩家，包括网络通畅的玩家，都必须暂停游戏逻辑，一起等待；</li>
+<li data-line="3" dir="auto"><code>Bucket Synchronization</code> 正是为了打破这一困境而诞生的； </li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="5" dir="auto"><code>Bucket Synchronization</code> 核心改进在于，将游戏的流畅性从“最慢的玩家”手中解放出来，通过一种更为灵活和宽容的机制，在保证最终一致性的前提下，极大提升了游戏的流畅体验；</li>
+<li data-line="6" dir="auto">算法将连续的时间轴划分为一系列固定长度的<strong>时间片段</strong>，每个片段就像一个“桶”（<code>Bucket</code>）。这个时间片段的长度是固定的，例如 <code>40ms</code> 或 <code>50ms</code>，这实际上定义了游戏逻辑更新的<strong>基本时间单位</strong>；</li>
+<li data-line="7" dir="auto">玩家的操作指令不再要求在同一帧内必须被收集和执行。相反，指令在产生时会被打上一个时间戳，并放入其对应的未来某个时间桶中；</li>
+<li data-line="8" dir="auto">服务器不会无限期等待未到达的指令。每个时间桶都有一个截止时间（<code>Playout&nbsp;Delay</code>）。当到达某个时间桶的截止点时，服务器就会将这个桶内已经收集到的所有指令广播给所有客户端，游戏逻辑随即推进。那些迟到的指令不会被丢弃，而是会被放入它们本应属于的后续时间桶中等待执行；</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>机制：
+<ul>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（1）指令提交：
+<ul>
+<li data-line="11" dir="auto">玩家在客户端执行操作，客户端立即将带有精确时间戳的指令发送给服务器（或在 P 2 P 架构下发送给其他玩家）</li>
+</ul>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（2）分桶归档：
+<ul>
+<li data-line="13" dir="auto">服务器根据指令的时间戳，将其<strong>归入对应的未来时间桶</strong>；</li>
+<li data-line="14" dir="auto">例如，一个本应属于第 <code>101</code> 号桶的指令，即使迟到，也会被尝试放入当前即将执行的第 <code>102</code> 号桶；</li>
+</ul>
+</li>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（3）定时广播：
+<ul>
+<li data-line="16" dir="auto">服务器以固定的节奏（如每 50 ms）检查当前时间桶的截止时间是否到达。时间一到，便将该桶内已收集的所有指令打包，广播给所有客户端；</li>
+</ul>
+</li>
+<li data-line="17" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（4）客户端执行：
+<ul>
+<li data-line="18" dir="auto">所有客户端同时收到指令包，并在本地完全一致地执行这些指令，从而推进游戏世界；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="19" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>特点：
+<ul>
+<li data-line="20" dir="auto">实时性更好，一致性更差；</li>
+</ul>
+</li>
+<li data-line="21" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="22" dir="auto"><span alt="PixPin_2025-11-28_15-09-24.png" src="PixPin_2025-11-28_15-09-24.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-28_15-09-24.png" src="lib/media/pixpin_2025-11-28_15-09-24.png"></span></li>
+<li data-line="23" dir="auto">如图可知，当前 Player B 发送的 <code>B1</code> 和 <code>B2</code> 数据，由于 <code>B2</code> 在 <code>Bucket 2</code> 才送达，因此它会在 <code>Bucket 2</code> 的末尾才会被发送到 <code>Player A</code>，<code>Player A</code> 不会被阻塞；</li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="帧同步调度机制" dir="auto" class="heading" id="帧同步调度机制"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>帧同步调度机制</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="逻辑帧" dir="auto" class="heading" id="逻辑帧"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>逻辑帧</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：服务端实现</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：服务端的作用
+<ul>
+<li data-line="1" dir="auto">在帧同步架构中，服务端并不负责繁重的游戏逻辑计算（这部分工作主要在客户端完成），而是作为一个的“调度员”和“记录员”，其主要职责和运行机制如下：</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="2" dir="auto">接收所有客户端发送的操作指令（如移动、施法），并按帧号打包广播给所有客户端；</li>
+</ol>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="3" dir="auto">通过管理随机数种子、校验逻辑版本等方式，为所有客户端提供完全一致的运算基础；</li>
+</ol>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="4" dir="auto">（可选）如果需要反作弊，则还需要服务端会运行一套与客户端相同的逻辑，将自身运算结果与客户端上报的结果进行比对，从而判断客户端是否作弊；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：逻辑帧及其频率
+<ul>
+<li data-line="6" dir="auto">逻辑帧的频率是帧同步游戏的“心跳”，逻辑帧的频率通常在每秒 <code>10</code> 帧到 <code>20</code> 帧​&nbsp;之间，即每帧时长 <code>100ms</code> 到 <code>50ms</code>。逻辑帧处理所有确定性计算（如物理碰撞、技能效果、数值变化），由服务器统一驱动；</li>
+<li data-line="7" dir="auto"><code>RTS</code>（即时战略）或 <code>MOBA</code>（多人在线战术竞技）游戏需要较快的反应，频率可能偏高（如 <code>15-20 fps</code>）。而节奏稍慢的卡牌或回合制游戏可以稍低（如 <code>10 fps</code>） ；</li>
+<li data-line="8" dir="auto">为什么大家都推荐 15 帧，20 帧可以吗？10 帧可以吗？其实这个帧选择多少，主要还是看人反应的速度，就比如说，你一秒钟你能快速按几个键。一般的人一秒最多按 3-5，有些高手可以 6-10。按照 10 帧来算，我一秒最多按到 10，那我做成 15 帧，另外 5 帧可能就没有数据；</li>
+<li data-line="9" dir="auto"><code>15</code> 帧是某些特别成熟的游戏他们测试出来的，经过他们的大量测试，发现 <code>15</code> 帧能最少减少服务器的性能和带宽，还可以提升玩家的手感和流畅度；</li>
+<li data-line="10" dir="auto"><code>SLG</code> 大多用帧同步来设计，这样的游戏的帧就可以更低些，比如 <code>10</code>、<code>8</code> 帧；</li>
+<li data-line="11" dir="auto">因此，逻辑帧的大小需要在确保操作流畅性的同时，找到性能和体验的最佳平衡点。帧率越高，客户端计算压力也越大；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="帧锁定与乐观帧" dir="auto" class="heading" id="帧锁定与乐观帧"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>帧锁定与乐观帧</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：乐观帧与帧锁定</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>引入：传统帧锁定同步
+<ul>
+<li data-line="1" dir="auto">服务器必须收集到<strong>所有玩家</strong>当前帧的操作指令后，才广播并推进到下一帧。因此此时严格同步，所有客户端帧进度绝对一致，可以适用于早期 <code>RTS</code> 游戏或对延迟极度不敏感、玩家数量少的场景；</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>其基本流程为：
+<ul>
+<li data-line="3" dir="auto">（1）在每个逻辑帧开始时，服务器等待接收所有客户端的操作指令；</li>
+<li data-line="4" dir="auto">（2）如果某个客户端的指令因网络延迟未到达，服务器会<strong>停止并等待</strong>，游戏帧暂停推进；</li>
+<li data-line="5" dir="auto">（3）一旦收齐所有指令，服务器将它们打包成一个“帧数据包”，广播给所有客户端；</li>
+<li data-line="6" dir="auto">（4）所有客户端收到同一个帧数据包后，才在本地的同一逻辑帧中执行这些指令，进行计算和表现；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto">游戏进程会被网络最慢的玩家“锁住”。因此，在现代对实时性要求高的游戏中已较少采用纯帧锁定模式；</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：乐观帧与帧锁定
+<ul>
+<li data-line="9" dir="auto">服务端不会因为等待某个客户端的操作指令而卡住整个游戏进程；</li>
+<li data-line="10" dir="auto">它会按照自己固定的逻辑帧的时常，广播当前收集到的所有操作。如果某个客户端因为网络延迟在某帧没有指令上传，服务端就广播一个空指令或让其重复上一帧的操作；</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>特点：
+<ul>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>优点：
+<ul>
+<li data-line="13" dir="auto">避免了因个别玩家网络卡顿导致“一人卡顿，全场等待”的糟糕体验；</li>
+</ul>
+</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>缺点：
+<ul>
+<li data-line="15" dir="auto">网络延迟高的玩家会体验到操作延迟，因为他的指令需要时间传到服务器再广播出去；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实现：
+<ul>
+<li data-line="17" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>服务端：
+<ul>
+<li data-line="18" dir="auto">服务器不再等待所有玩家，每到一次间隔，就将当前<strong>已经收到</strong>的所有玩家指令广播出去，无论是否收齐；</li>
+<li data-line="19" dir="auto">网络差的玩家指令可能在这帧被遗漏，那么他的角色就会维持上一帧的操作或执行空操作；</li>
+</ul>
+</li>
+<li data-line="20" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>客户端：
+<ul>
+<li data-line="21" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="21" dir="auto">指令缓存与快进播放：每个客户端都会本地缓存自己的操作指令。如果网络短暂卡顿后，一次性收到服务器发来的多个帧数据，客户端会识别出缺失的帧，并像快进播放录像一样，连续执行这些帧的逻辑，快速追上当前服务器的帧进度；</li>
+</ol>
+</li>
+<li data-line="22" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="22" dir="auto">将逻辑帧与渲染帧分离：这是实现流畅表现的关键。逻辑帧以较低的固定频率（如 <code>15fps</code>）运行，由服务器驱动。渲染帧则以更高的频率（如 <code>60fps</code>）运行，在逻辑帧之间进行插值平滑计算，使画面流畅，避免因逻辑帧率低而产生的“幻灯片”效果；</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`Frame Buffer`" dir="auto" class="heading" id="`Frame_Buffer`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Frame Buffer</code></h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>Frame Buffer</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>引入：
+<ul>
+<li data-line="1" dir="auto">想象一下玩一款多人对战游戏，你的每一个操作（比如移动、攻击）都会被封装成一个数据包，通过网络发送给其他玩家。但由于网络状况复杂多变，这些数据包可能会延迟到达、顺序错乱甚至丢失；</li>
+<li data-line="2" dir="auto">如果游戏客户端每收到一个数据包就立刻处理，游戏画面必然会因为等待而卡顿，或者因为执行顺序错误而导致不同玩家看到的状态不一致；</li>
+<li data-line="3" dir="auto"><code>Frame&nbsp;Buffer</code> 就是为了解决这些问题而生的。它的核心思想是：不是收到数据就立刻处理，而是先“存起来”，在最合适的时机，按照正确的顺序，批量交付给游戏逻辑执行；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（1）数据缓存与排序：
+<ul>
+<li data-line="6" dir="auto"><code>Frame&nbsp;Buffer</code> 会暂存陆续到达的网络数据包；</li>
+<li data-line="7" dir="auto">它依据每个数据包携带的帧编号（<code>Frame&nbsp;ID</code>）对其进行排序，确保游戏逻辑总是按照&nbsp;<code>1,&nbsp;2,&nbsp;3...</code> 的正确顺序来处理指令，即使数据包是&nbsp;2,&nbsp;1,&nbsp;3 的顺序到达的； </li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（2）对抗网络抖动：
+<ul>
+<li data-line="9" dir="auto">网络延迟时高时低，这就是抖动；</li>
+<li data-line="10" dir="auto"><code>Frame&nbsp;Buffer</code> 通过引入一个短暂的缓冲延迟，比如 <code>80-150</code> 毫秒，来“熨平”这种波动。它会让游戏逻辑基于一个固定的、稍晚的时间点来运行，为大多数数据包的到达留出时间，从而有效减少因个别数据包迟到而导致的卡顿；</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（3）依赖关系管理：
+<ul>
+<li data-line="12" dir="auto">在复杂的游戏中，某些帧的执行可能依赖于之前帧的结果；</li>
+<li data-line="13" dir="auto"><code>Frame&nbsp;Buffer</code> 能够识别这种依赖关系，确保只有在所有前置依赖帧都就绪后，才将当前帧标记为“可执行”，从而维护逻辑的正确性；</li>
+</ul>
+</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（4）渲染平滑处理：
+<ul>
+<li data-line="15" dir="auto">网络逻辑帧率（如 <code>15Hz</code> 或 <code>20Hz</code>）通常低于屏幕渲染帧率（<code>60Hz</code>）；</li>
+<li data-line="16" dir="auto"><code>Frame&nbsp;Buffer</code> 层可以提供稳定的历史状态数据，供渲染层在两个逻辑帧之间进行插值计算，使得物体运动看起来非常平滑，而不是生硬地“跳跃”；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="逻辑与渲染分离" dir="auto" class="heading" id="逻辑与渲染分离"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>逻辑与渲染分离</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：逻辑与渲染分离</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：逻辑和渲染
+<ul>
+<li data-line="1" dir="auto"><span alt="PixPin_2025-11-28_15-32-57 1.png" src="PixPin_2025-11-28_15-32-57 1.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-28_15-32-57 1.png" src="lib/media/pixpin_2025-11-28_15-32-57-1.png"></span></li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="3" dir="auto">必须创建一个与渲染更新解耦的、独立的逻辑帧更新循环。这个循环以固定的时间间隔（如每 <code>66ms</code>）触发，驱动整个游戏世界的逻辑前进；</li>
+<li data-line="4" dir="auto">逻辑层与渲染层如何安全、高效地通信是关键。主要有两种架构思路：</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="5" dir="auto">事件驱动模式：逻辑层在状态发生变化时（如角色移动、创建新物体）触发事件。渲染层订阅这些事件，并据此更新视觉表现。这种模式解耦彻底，逻辑层完全不知道渲染层的存在；</li>
+</ol>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="6" dir="auto">数据轮询模式：每个渲染对象内部持有一个对应逻辑对象的引用。在渲染层的每一帧（如 <code>Update</code> 中），从逻辑对象中读取当前状态（位置、旋转等），然后更新自己的表现；</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="追帧与回滚" dir="auto" class="heading" id="追帧与回滚"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>追帧与回滚</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：追帧与回滚</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：追帧
+<ul>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="2" dir="auto">也称为“赶帧”或“加速同步”；</li>
+<li data-line="3" dir="auto">当某个客户端由于网络延迟或短暂断线而落后于服务器或其他玩家当前帧进度时，它需要一种机制来快速追赶上当前的游戏进度。这个过程不是简单的“瞬移”，而是让客户端在短时间内以数倍于正常的速度（例如 <code>5</code> 倍速、<code>10</code> 倍速）执行落后的逻辑帧，直到其状态与权威状态同步。这就像录像带快进，旨在解决“落后”的问题；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实现：
+<ul>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>追帧通常在两种情况下触发：
+<ul>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="6" dir="auto">断线重连：玩家网络中断后恢复，需要同步到最新状态；</li>
+</ol>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="7" dir="auto">网络波动：持续的高延迟导致积压了大量未处理的逻辑帧；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="8" dir="auto">高效的追帧依赖于游戏状态快照。服务器会定期（如每 <code>30</code> 或 <code>50</code> 帧）生成一个全量快照，记录此时所有游戏对象的完整状态；</li>
+<li data-line="9" dir="auto">帧与帧之间则生成增量快照，只记录状态变化部分。当客户端需要追帧时，服务器会发送一个最近的全量快照以及从此到当前帧的所有增量快照。客户端先加载全量快照获得一个正确的起点，然后快速执行增量帧，这比从第 <code>0</code> 帧开始重放所有输入要高效得多；</li>
+<li data-line="10" dir="auto">在追帧模式下，客户端逻辑更新循环会脱离固定的渲染帧率限制。例如，正常情况每秒执行 <code>30</code> 逻辑帧，追帧时可能每秒执行 <code>100</code> 帧甚至更多；</li>
+<li data-line="11" dir="auto">关键在于，追帧过程只计算逻辑，不播放或简化表现。在追帧期间，可能会跳过非关键的视觉特效、声音或复杂动画，或者仅播放简化版本，以确保追帧速度，待追上进度后，再恢复正常表现；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：回滚
+<ul>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="14" dir="auto">这是一种更为积极的“乐观”策略。为了极致的操作响应，客户端不会被动等待服务器确认，而是会立即根据本地输入进行预测执行和表现。如果之后收到的服务器权威帧数据与本地预测一致，则继续执行；如果不一致，客户端就需要“回滚”到之前某个正确的确定状态，并依据正确的输入重新模拟至当前帧。这旨在解决“预测错误”的问题；</li>
+</ul>
+</li>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实现：
+<ul>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>预测执行与状态保存：
+<ul>
+<li data-line="17" dir="auto">客户端收到玩家操作输入后，不会等待网络往返，而是立即基于此输入推进本地游戏逻辑并给予视觉反馈，这就是预测执行；</li>
+<li data-line="18" dir="auto">为了应对可能的预测错误，系统需要在执行预测前，保存当前帧的完整游戏状态快照。这些快照保存在一个容量有限的环形缓冲区中；</li>
+</ul>
+</li>
+<li data-line="19" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>一致性校验与回滚触发：
+<ul>
+<li data-line="20" dir="auto">客户端会持续接收服务器广播的包含所有玩家权威输入的帧数据；</li>
+<li data-line="21" dir="auto">收到后，会将本地之前预测执行的输入与服务器权威输入进行比对。一旦发现不一致（例如，本机预测你向右移动，但服务器数据显示你当时被击中僵直，实际无法移动），回滚即被触发；</li>
+</ul>
+</li>
+<li data-line="22" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>状态回滚与重模拟：
+<ul>
+<li data-line="23" dir="auto">系统会从保存的快照缓冲区中，找到发生预测错误的前一帧的正确状态，并将其加载为当前状态；</li>
+<li data-line="24" dir="auto">然后，从这一帧开始，使用刚从服务器收到的、经过校验的权威输入序列，重新模拟（<code>Re-simulation</code>）游戏逻辑，直至当前帧；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="25" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意：
+<ul>
+<li data-line="26" dir="auto">确定性是帧同步的核心前提。意味着<strong>相同的初始状态&nbsp;+&nbsp;相同的输入序列&nbsp;+&nbsp;相同的计算顺序&nbsp;=&nbsp;完全相同的结果</strong>；</li>
+<li data-line="27" dir="auto">这要求对浮点数运算（常使用定点数替代）、随机数生成器（使用相同种子）、容器遍历顺序等有严格的规范；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="帧同步与确定性物理" dir="auto" class="heading" id="帧同步与确定性物理"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>帧同步与确定性物理</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：帧同步与确定性物理</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>引入：帧同步为什么需要确定性
+<ul>
+<li data-line="1" dir="auto">帧同步的目标是确保所有客户端在相同游戏帧下，基于相同的输入，经过相同的计算过程，得到相同的游戏状态，因此其核心在于确定性（<code>Determinism</code>）；</li>
+<li data-line="2" dir="auto">确定性物理是实现帧同步的基石。它要求物理计算在不同硬件、平台、设备上，只要初始状态和输入序列相同，每一帧的物理状态演变结果都完全一致；</li>
+<li data-line="3" dir="auto">而 <code>Unity</code> 内置的 <code>PhysX</code> 物理引擎基于浮点数计算。浮点数在不同平台或硬件上可能存在细微精度差异。在单机游戏中这无关紧要，但在帧同步网络游戏中，即使是最微小的差异（例如 <code>0.0000001</code>），随着帧数累积（“蝴蝶效应”），也会在数百上千帧后导致各客户端出现肉眼可见的、灾难性的不同步；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：确定性物理的核心机制 - 定点数
+<ul>
+<li data-line="5" dir="auto">为了解决浮点数精度不确定性，常用方法是使用<strong>定点数</strong>。定点数通过<strong>固定小数点位置</strong>，用整数运算来模拟小数运算，从而保证确定性；</li>
+<li data-line="6" dir="auto">例如，使用 <code>Q12.20</code> 格式（<code>32</code> 位整数中，<code>12</code> 位表示整数部分，<code>20</code> 位表示小数部分） </li>
+<li data-line="7" dir="auto"><span alt="PixPin_2025-11-25_14-14-05.png" src="PixPin_2025-11-25_14-14-05.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-25_14-14-05.png" src="lib/media/pixpin_2025-11-25_14-14-05.png"></span></li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>代码</strong>：简单的定点数实现示例</p></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">using System.Collections.Generic;
+using UnityEngine;
+
+// 简单的定点数结构 (Q12.20格式)
+public struct FixedInt
+{
+    private long rawValue;
+    private const int FRACTION_BITS = 20;
+    private const long MAX_VALUE = long.MaxValue &gt;&gt; FRACTION_BITS;
+    private const long MIN_VALUE = long.MinValue &gt;&gt; FRACTION_BITS;
+
+    public FixedInt(long value)
+    {
+        rawValue = value &lt;&lt; FRACTION_BITS;
+    }
+
+    public FixedInt(int value)
+    {
+        rawValue = (long)value &lt;&lt; FRACTION_BITS;
+    }
+
+    public static FixedInt FromFloat(float value)
+    {
+        FixedInt result;
+        result.rawValue = (long)(value * (1 &lt;&lt; FRACTION_BITS));
+        return result;
+    }
+
+    public float ToFloat()
+    {
+        return rawValue / (float)(1 &lt;&lt; FRACTION_BITS);
+    }
+
+    public static FixedInt operator +(FixedInt a, FixedInt b)
+    {
+        a.rawValue += b.rawValue;
+        return a;
+    }
+
+    public static FixedInt operator -(FixedInt a, FixedInt b)
+    {
+        a.rawValue -= b.rawValue;
+        return a;
+    }
+
+    public static FixedInt operator *(FixedInt a, FixedInt b)
+    {
+        long result = (a.rawValue * b.rawValue) &gt;&gt; FRACTION_BITS;
+        return new FixedInt { rawValue = result };
+    }
+
+    public static FixedInt operator /(FixedInt a, FixedInt b)
+    {
+        long result = (a.rawValue &lt;&lt; FRACTION_BITS) / b.rawValue;
+        return new FixedInt { rawValue = result };
+    }
+
+    public override string ToString()
+    {
+        return ToFloat().ToString("F6");
+    }
+}
+
+// 定点数版本的Vector3
+public struct FixedVector3
+{
+    public FixedInt x;
+    public FixedInt y;
+    public FixedInt z;
+
+    public FixedVector3(FixedInt x, FixedInt y, FixedInt z)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
+    public static FixedVector3 FromVector3(Vector3 v)
+    {
+        return new FixedVector3(
+            FixedInt.FromFloat(v.x),
+            FixedInt.FromFloat(v.y),
+            FixedInt.FromFloat(v.z)
+        );
+    }
+
+    public Vector3 ToVector3()
+    {
+        return new Vector3(x.ToFloat(), y.ToFloat(), z.ToFloat());
+    }
+
+    public static FixedVector3 operator +(FixedVector3 a, FixedVector3 b)
+    {
+        a.x += b.x;
+        a.y += b.y;
+        a.z += b.z;
+        return a;
+    }
+
+    public static FixedVector3 operator *(FixedVector3 v, FixedInt scalar)
+    {
+        v.x = v.x * scalar;
+        v.y = v.y * scalar;
+        v.z = v.z * scalar;
+        return v;
+    }
+
+    public FixedInt Magnitude()
+    {
+        // 简化处理，实际应用可能需要更精确的开方实现
+        return FixedInt.FromFloat(Mathf.Sqrt(
+            (x * x + y * y + z * z).ToFloat()
+        ));
+    }
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="简易帧同步实现" dir="auto" class="heading" id="简易帧同步实现"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>简易帧同步实现</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="服务端实现" dir="auto" class="heading" id="服务端实现"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>服务端实现</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：消息定义示例
+<ul>
+<li data-line="1" dir="auto"><span alt="PixPin_2025-11-25_14-23-07.png" src="PixPin_2025-11-25_14-23-07.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-25_14-23-07.png" src="lib/media/pixpin_2025-11-25_14-23-07.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="客户端实现" dir="auto" class="heading" id="客户端实现"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>客户端实现</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：客户端实现</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">客户端都是先采集指令，采集指令后发送给服务器；但是采集的时候呢，并不是马上执行这个逻辑。比如鼠标点了某个点，然后客户端采集、将其发送给服务器，然后服务器根据当前帧率，打包发送给所有客户端；</li>
+<li data-line="2" dir="auto">然后服务器发送完成之后，客户端拿到帧数据，开始执行指令，然后渲染层根据这个指令进行渲染；</li>
+<li data-line="3" dir="auto">因此客户端执行的永远是上一帧的内容，这个上一帧的内容是由服务器发送而来的，称之为权威帧；</li>
+<li data-line="4" dir="auto"></li>
+</ul>
+</li>
+</ul></div><div class="mod-footer mod-ui"></div></div></div></div></div></div></div></div><div class="sidebar-right sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"></div><script defer="">let rs = document.querySelector(".sidebar-right"); rs.classList.add("is-collapsed"); if (window.innerWidth > 768) rs.classList.remove("is-collapsed"); rs.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-right-width"));</script></div></div></body></html>

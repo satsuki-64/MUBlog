@@ -1,0 +1,853 @@
+<!DOCTYPE html> <html><head>
+		<title>Lecture 4：状态同步基础</title>
+		<base href="..\..\../">
+		<meta id="root-path" root-path="..\..\../">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
+		<meta charset="UTF-8">
+		<meta name="description" content="MUBlog - Lecture 4：状态同步基础">
+		<meta property="og:title" content="Lecture 4：状态同步基础">
+		<meta property="og:description" content="MUBlog - Lecture 4：状态同步基础">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="03_游戏开发技术/07_游戏网络技术/02_游戏同步技术/lecture-4：状态同步基础.html">
+		<meta property="og:image" content="lib\media\pixpin_2025-11-27_14-07-38.png">
+		<meta property="og:site_name" content="MUBlog">
+		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="lib/rss.xml"><script async="" id="webpage-script" src="lib/scripts/webpage.js" onload="this.onload=null;this.setAttribute(&quot;loaded&quot;, &quot;true&quot;)"></script><link rel="icon" href="lib/media/favicon.png"><style>body{--line-width:40em;--line-width-adaptive:40em;--file-line-width:40em;--sidebar-width:min(20em, 80vw);--collapse-arrow-size:11px;--tree-horizontal-spacing:0.6em;--tree-vertical-spacing:0.6em;--sidebar-margin:12px}.sidebar{height:100%;min-width:calc(var(--sidebar-width) + var(--divider-width-hover));max-width:calc(var(--sidebar-width) + var(--divider-width-hover));font-size:14px;z-index:10;position:relative;overflow:hidden;transition:min-width ease-in-out,max-width ease-in-out;transition-duration:.2s;contain:size}.sidebar-left{left:0}.sidebar-right{right:0}.sidebar.is-collapsed{min-width:0;max-width:0}body.floating-sidebars .sidebar{position:absolute}.sidebar-content{height:100%;min-width:calc(var(--sidebar-width) - var(--divider-width-hover));top:0;padding:var(--sidebar-margin);padding-top:4em;line-height:var(--line-height-tight);background-color:var(--background-secondary);transition:background-color,border-right,border-left,box-shadow;transition-duration:var(--color-fade-speed);transition-timing-function:ease-in-out;position:absolute;display:flex;flex-direction:column}.sidebar:not(.is-collapsed) .sidebar-content{min-width:calc(max(100%,var(--sidebar-width)) - 3px);max-width:calc(max(100%,var(--sidebar-width)) - 3px)}.sidebar-left .sidebar-content{left:0;border-top-right-radius:var(--radius-l);border-bottom-right-radius:var(--radius-l)}.sidebar-right .sidebar-content{right:0;border-top-left-radius:var(--radius-l);border-bottom-left-radius:var(--radius-l)}.sidebar:has(.sidebar-content:empty):has(.topbar-content:empty){display:none}.sidebar-topbar{height:2em;width:var(--sidebar-width);top:var(--sidebar-margin);padding-inline:var(--sidebar-margin);z-index:1;position:fixed;display:flex;align-items:center;transition:width ease-in-out;transition-duration:inherit}.sidebar.is-collapsed .sidebar-topbar{width:calc(2.3em + var(--sidebar-margin) * 2)}.sidebar .sidebar-topbar.is-collapsed{width:0}.sidebar-left .sidebar-topbar{left:0}.sidebar-right .sidebar-topbar{right:0}.topbar-content{overflow:hidden;overflow:clip;width:100%;height:100%;display:flex;align-items:center;transition:inherit}.sidebar.is-collapsed .topbar-content{width:0;transition:inherit}.clickable-icon.sidebar-collapse-icon{background-color:transparent;color:var(--icon-color-focused);padding:0!important;margin:0!important;height:100%!important;width:2.3em!important;margin-inline:0.14em!important;position:absolute}.sidebar-left .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);right:var(--sidebar-margin)}.sidebar-right .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);left:var(--sidebar-margin)}.clickable-icon.sidebar-collapse-icon svg.svg-icon{width:100%;height:100%}.sidebar-section-header{margin:0 0 1em 0;text-transform:uppercase;letter-spacing:.06em;font-weight:600}body{transition:background-color var(--color-fade-speed) ease-in-out}.webpage-container{display:flex;flex-direction:row;height:100%;width:100%;align-items:stretch;justify-content:center}.document-container{opacity:1;flex-basis:100%;max-width:100%;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;transition:opacity .2s ease-in-out;contain:inline-size}.hide{opacity:0;transition:opacity .2s ease-in-out}.document-container>.markdown-preview-view{margin:var(--sidebar-margin);margin-bottom:0;width:100%;width:-webkit-fill-available;width:-moz-available;width:fill-available;background-color:var(--background-primary);transition:background-color var(--color-fade-speed) ease-in-out;border-top-right-radius:var(--window-radius,var(--radius-m));border-top-left-radius:var(--window-radius,var(--radius-m));overflow-x:hidden!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;contain:inline-size}.document-container>.markdown-preview-view>.markdown-preview-sizer{padding-bottom:80vh!important;width:100%!important;max-width:var(--line-width)!important;flex-basis:var(--line-width)!important;transition:background-color var(--color-fade-speed) ease-in-out;contain:inline-size}.markdown-rendered img:not([width]),.view-content img:not([width]){max-width:100%;outline:0}.document-container>.view-content.embed{display:flex;padding:1em;height:100%;width:100%;align-items:center;justify-content:center}.document-container>.view-content.embed>*{max-width:100%;max-height:100%;object-fit:contain}:has(> :is(.math,table)){overflow-x:auto!important}.document-container>.view-content{overflow-x:auto;contain:content;padding:0;margin:0;height:100%}.scroll-highlight{position:absolute;width:100%;height:100%;pointer-events:none;z-index:1000;background-color:hsla(var(--color-accent-hsl),.25);opacity:0;padding:1em;inset:50%;translate:-50% -50%;border-radius:var(--radius-s)}</style><script defer="">async function loadIncludes(){if("file:"!=location.protocol){let e=document.querySelectorAll("include");for(let t=0;t<e.length;t++){let o=e[t],l=o.getAttribute("src");try{const e=await fetch(l);if(!e.ok){console.log("Could not include file: "+l),o?.remove();continue}let t=await e.text(),n=document.createRange().createContextualFragment(t),i=Array.from(n.children);for(let e of i)e.classList.add("hide"),e.style.transition="opacity 0.5s ease-in-out",setTimeout((()=>{e.classList.remove("hide")}),10);o.before(n),o.remove(),console.log("Included file: "+l)}catch(e){o?.remove(),console.log("Could not include file: "+l,e);continue}}}else{if(document.querySelectorAll("include").length>0){var e=document.createElement("div");e.id="error",e.textContent="Web server exports must be hosted on an http / web server to be viewed correctly.",e.style.position="fixed",e.style.top="50%",e.style.left="50%",e.style.transform="translate(-50%, -50%)",e.style.fontSize="1.5em",e.style.fontWeight="bold",e.style.textAlign="center",document.body.appendChild(e),document.querySelector(".document-container")?.classList.remove("hide")}}}document.addEventListener("DOMContentLoaded",(()=>{loadIncludes()}));let isFileProtocol="file:"==location.protocol;function waitLoadScripts(e,t){let o=e.map((e=>document.getElementById(e+"-script"))),l=0;!function e(){let n=o[l];l++,n&&"true"!=n.getAttribute("loaded")||l<o.length&&e(),l<o.length?n.addEventListener("load",e):t()}()}</script><link rel="stylesheet" href="lib/styles/obsidian.css"><link rel="stylesheet" href="lib/styles/theme.css"><link rel="preload" href="lib/styles/global-variable-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/global-variable-styles.css"></noscript><link rel="preload" href="lib/styles/supported-plugins.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/supported-plugins.css"></noscript><link rel="preload" href="lib/styles/main-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/main-styles.css"></noscript><link rel="preload" href="lib/styles/snippets.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/snippets.css"></noscript></head><body class="publish css-settings-manager styled-scrollbars theme-light show-inline-title ctp-rosepine-light ctp-mocha ctp-accent-rosewater anuppuccin-accent-toggle anp-current-line-border anp-callout-color-toggle anp-codeblock-numbers anp-list-toggle anp-table-width anp-toggle-preview anp-color-transition-toggle anp-button-metadata-toggle anp-toggle-metadata anp-toggle-scrollbars anp-h1-red anp-h1-divider anp-h2-peach anp-h3-green anp-h4-teal anp-h5-lavender anp-h6-mauve anp-decoration-toggle anp-bold-maroon anp-italic-green anp-highlight-yellow anp-colorful-frame-icon-toggle-dark anp-simple-rainbow-color-toggle anp-rainbow-file-toggle anp-simple-rainbow-title-toggle anp-simple-rainbow-icon-folder-toggle anp-simple-rainbow-indentation-toggle anp-simple-rainbow-collapse-toggle anp-card-layout anp-card-shadows anp-card-layout-filebrowser anp-theme-ext-light anp-theme-ext-dark anp-theme-ext-amoled ctp-atom-light ctp-atom-dark table-type-three-line table-header-color-blue table-row-alt-background-option table-dark-mode"><script defer="">let theme=localStorage.getItem("theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");"dark"==theme?(document.body.classList.add("theme-dark"),document.body.classList.remove("theme-light")):(document.body.classList.add("theme-light"),document.body.classList.remove("theme-dark")),window.innerWidth<480?document.body.classList.add("is-phone"):window.innerWidth<768?document.body.classList.add("is-tablet"):window.innerWidth<1024?document.body.classList.add("is-small-screen"):document.body.classList.add("is-large-screen")</script><div class="webpage-container workspace"><div class="sidebar-left sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"><label class="theme-toggle-container" for="theme_toggle"><input class="theme-toggle-input" type="checkbox" id="theme_toggle"><div class="toggle-background"></div></label></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"><include src="lib/html/file-tree.html"></include></div><script defer="">let ls = document.querySelector(".sidebar-left"); ls.classList.add("is-collapsed"); if (window.innerWidth > 768) ls.classList.remove("is-collapsed"); ls.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-left-width"));</script></div><div class="document-container markdown-reading-view hide"><div class="markdown-preview-view markdown-rendered allow-fold-headings allow-fold-lists is-readable-line-width"><style id="MJX-CHTML-styles">mjx-c.mjx-c2223::before { padding: 0.75em 0.278em 0.249em 0px; content: "∣"; }
+mjx-c.mjx-c2119.TEX-A::before { padding: 0.683em 0.611em 0px 0px; content: "P"; }
+mjx-c.mjx-c1D444.TEX-I::before { padding: 0.704em 0.791em 0.194em 0px; content: "Q"; }
+mjx-c.mjx-c52.TEX-C::before { padding: 0.682em 0.848em 0.022em 0px; content: "R"; }
+mjx-c.mjx-c1D53C.TEX-A::before { padding: 0.683em 0.667em 0px 0px; content: "E"; }
+mjx-c.mjx-c223C::before { padding: 0.367em 0.778em 0px 0px; content: "∼"; }
+mjx-c.mjx-c2A7E.TEX-A::before { padding: 0.636em 0.778em 0.138em 0px; content: "⩾"; }
+mjx-c.mjx-c2A7D.TEX-A::before { padding: 0.636em 0.778em 0.138em 0px; content: "⩽"; }
+mjx-c.mjx-c230A::before { padding: 0.75em 0.444em 0.25em 0px; content: "⌊"; }
+mjx-c.mjx-c230B::before { padding: 0.75em 0.444em 0.25em 0px; content: "⌋"; }
+mjx-c.mjx-c1D5C1.TEX-SS::before { padding: 0.694em 0.517em 0px 0px; content: "h"; }
+mjx-c.mjx-c3D.TEX-SS::before { padding: 0.37em 0.778em 0px 0px; content: "="; }
+mjx-mlabeledtr { display: table-row; text-align: left; }
+mjx-mlabeledtr[rowalign="top"] > mjx-mtd { vertical-align: top; }
+mjx-mlabeledtr[rowalign="center"] > mjx-mtd { vertical-align: middle; }
+mjx-mlabeledtr[rowalign="bottom"] > mjx-mtd { vertical-align: bottom; }
+mjx-mlabeledtr[rowalign="baseline"] > mjx-mtd { vertical-align: baseline; }
+mjx-mlabeledtr[rowalign="axis"] > mjx-mtd { vertical-align: 0.25em; }
+mjx-c.mjx-c21::before { padding: 0.716em 0.278em 0px 0px; content: "!"; }
+mjx-mpadded { display: inline-block; text-align: left; }
+mjx-rbox { display: inline-block; position: relative; }
+mjx-stretchy-h.mjx-c2192 mjx-ext mjx-c::before { content: "−"; padding: 0.583em 0px 0.082em; }
+mjx-stretchy-h.mjx-c2192 mjx-end mjx-c::before { content: "→"; padding: 0.583em 0px 0.082em; }
+mjx-c.mjx-c39::before { padding: 0.666em 0.5em 0.022em 0px; content: "9"; }
+mjx-c.mjx-c1D44D.TEX-I::before { padding: 0.683em 0.723em 0px 0px; content: "Z"; }
+mjx-c.mjx-c58::before { padding: 0.683em 0.75em 0px 0px; content: "X"; }
+mjx-c.mjx-c59::before { padding: 0.683em 0.75em 0px 0px; content: "Y"; }
+mjx-c.mjx-c5A::before { padding: 0.683em 0.611em 0px 0px; content: "Z"; }
+mjx-c.mjx-c28.TEX-S2::before { padding: 1.15em 0.597em 0.649em 0px; content: "("; }
+mjx-c.mjx-c29.TEX-S2::before { padding: 1.15em 0.597em 0.649em 0px; content: ")"; }
+mjx-c.mjx-c4E::before { padding: 0.683em 0.75em 0px 0px; content: "N"; }
+mjx-c.mjx-c22A4::before { padding: 0.668em 0.778em 0px 0px; content: "⊤"; }
+mjx-c.mjx-cB7::before { padding: 0.31em 0.278em 0px 0px; content: "⋅"; }
+mjx-c.mjx-c36::before { padding: 0.666em 0.5em 0.022em 0px; content: "6"; }
+mjx-c.mjx-c1D43E.TEX-I::before { padding: 0.683em 0.889em 0px 0px; content: "K"; }
+mjx-c.mjx-c52::before { padding: 0.683em 0.736em 0.022em 0px; content: "R"; }
+mjx-c.mjx-c1D42B.TEX-B::before { padding: 0.45em 0.474em 0px 0px; content: "r"; }
+mjx-c.mjx-c1D428.TEX-B::before { padding: 0.452em 0.575em 0.005em 0px; content: "o"; }
+mjx-c.mjx-c1D41D.TEX-B::before { padding: 0.694em 0.639em 0.006em 0px; content: "d"; }
+mjx-c.mjx-c3C::before { padding: 0.54em 0.778em 0.04em 0px; content: "<"; }
+mjx-c.mjx-c221E::before { padding: 0.442em 1em 0.011em 0px; content: "∞"; }
+mjx-c.mjx-c1D429.TEX-B::before { padding: 0.45em 0.639em 0.194em 0px; content: "p"; }
+mjx-c.mjx-cB1::before { padding: 0.666em 0.778em 0px 0px; content: "±"; }
+mjx-c.mjx-c221A::before { padding: 0.8em 0.853em 0.2em 0px; content: "√"; }
+mjx-c.mjx-c47::before { padding: 0.705em 0.785em 0.022em 0px; content: "G"; }
+mjx-c.mjx-c66::before { padding: 0.705em 0.372em 0px 0px; content: "f"; }
+mjx-c.mjx-c71::before { padding: 0.442em 0.528em 0.194em 0px; content: "q"; }
+mjx-c.mjx-c5E.TEX-B::before { padding: 0.694em 0.575em 0px 0px; content: "^"; }
+mjx-c.mjx-c1D42D.TEX-B::before { padding: 0.635em 0.447em 0.005em 0px; content: "t"; }
+mjx-c.mjx-c1D40E.TEX-B::before { padding: 0.696em 0.864em 0.01em 0px; content: "O"; }
+mjx-c.mjx-c1D403.TEX-B::before { padding: 0.686em 0.882em 0px 0px; content: "D"; }
+mjx-c.mjx-c1D40F.TEX-B::before { padding: 0.686em 0.786em 0px 0px; content: "P"; }
+mjx-c.mjx-c2219::before { padding: 0.444em 0.5em 0px 0px; content: "∙"; }
+mjx-c.mjx-c1D404.TEX-B::before { padding: 0.68em 0.756em 0px 0px; content: "E"; }
+mjx-c.mjx-c20D7.TEX-VB::before { padding: 0.723em 0.575em 0px 0px; content: "→"; }
+mjx-c.mjx-c7B::before { padding: 0.75em 0.5em 0.25em 0px; content: "{"; }
+mjx-c.mjx-c7D::before { padding: 0.75em 0.5em 0.25em 0px; content: "}"; }
+mjx-c.mjx-c26::before { padding: 0.716em 0.778em 0.022em 0px; content: "&"; }
+mjx-c.mjx-c2261::before { padding: 0.464em 0.778em 0px 0px; content: "≡"; }
+mjx-c.mjx-c3A6::before { padding: 0.683em 0.722em 0px 0px; content: "Φ"; }
+mjx-c.mjx-c57::before { padding: 0.683em 1.028em 0.022em 0px; content: "W"; }
+mjx-c.mjx-c2035.TEX-A::before { padding: 0.56em 0.275em 0px 0px; content: "‵"; }
+mjx-c.mjx-c1D446.TEX-I::before { padding: 0.705em 0.645em 0.022em 0px; content: "S"; }
+mjx-c.mjx-c1D719.TEX-I::before { padding: 0.694em 0.596em 0.205em 0px; content: "ϕ"; }
+mjx-c.mjx-c7C::before { padding: 0.75em 0.278em 0.249em 0px; content: "|"; }
+.mjx-stretched mjx-c.mjx-c2013::before { content: "–"; }
+mjx-stretchy-h.mjx-c2013 mjx-ext mjx-c::before { content: "–"; padding: 0.285em 0px 0px; }
+mjx-c.mjx-c1D52E.TEX-FR::before { padding: 0.479em 0.489em 0.219em 0px; content: "q"; }
+mjx-c.mjx-c1D52D.TEX-FR::before { padding: 0.541em 0.5em 0.212em 0px; content: "p"; }
+mjx-c.mjx-c1D43A.TEX-I::before { padding: 0.705em 0.786em 0.022em 0px; content: "G"; }
+mjx-c.mjx-c1D439.TEX-I::before { padding: 0.68em 0.749em 0px 0px; content: "F"; }
+mjx-c.mjx-c3A9::before { padding: 0.704em 0.722em 0px 0px; content: "Ω"; }
+mjx-c.mjx-c2248::before { padding: 0.483em 0.778em 0px 0px; content: "≈"; }
+mjx-c.mjx-c222B.TEX-S1::before { padding: 0.805em 0.61em 0.306em 0px; content: "∫"; }
+mjx-c.mjx-c200B::before { padding: 0px; content: ""; }
+mjx-c.mjx-c1D44A.TEX-I::before { padding: 0.683em 1.048em 0.022em 0px; content: "W"; }
+mjx-c.mjx-c1D443.TEX-I::before { padding: 0.683em 0.751em 0px 0px; content: "P"; }
+mjx-c.mjx-c1D45E.TEX-I::before { padding: 0.442em 0.46em 0.194em 0px; content: "q"; }
+mjx-c.mjx-c2208::before { padding: 0.54em 0.667em 0.04em 0px; content: "∈"; }
+mjx-c.mjx-c4E.TEX-C::before { padding: 0.789em 0.979em 0.05em 0px; content: "N"; }
+mjx-c.mjx-c1D712.TEX-I::before { padding: 0.442em 0.626em 0.204em 0px; content: "χ"; }
+mjx-c.mjx-c53::before { padding: 0.705em 0.556em 0.022em 0px; content: "S"; }
+mjx-c.mjx-c4D::before { padding: 0.683em 0.917em 0px 0px; content: "M"; }
+mjx-c.mjx-c1D44B.TEX-I::before { padding: 0.683em 0.852em 0px 0px; content: "X"; }
+mjx-c.mjx-c56::before { padding: 0.683em 0.75em 0.022em 0px; content: "V"; }
+mjx-c.mjx-c45::before { padding: 0.68em 0.681em 0px 0px; content: "E"; }
+mjx-c.mjx-c2264::before { padding: 0.636em 0.778em 0.138em 0px; content: "≤"; }
+mjx-c.mjx-c1D70E.TEX-I::before { padding: 0.431em 0.571em 0.011em 0px; content: "σ"; }
+mjx-c.mjx-c1D707.TEX-I::before { padding: 0.442em 0.603em 0.216em 0px; content: "μ"; }
+mjx-c.mjx-c1D708.TEX-I::before { padding: 0.442em 0.53em 0px 0px; content: "ν"; }
+mjx-c.mjx-c46::before { padding: 0.68em 0.653em 0px 0px; content: "F"; }
+mjx-c.mjx-c7B.TEX-S3::before { padding: 1.45em 0.75em 0.949em 0px; content: "{"; }
+mjx-c.mjx-c7D.TEX-S3::before { padding: 1.45em 0.75em 0.949em 0px; content: "}"; }
+mjx-c.mjx-c1D438.TEX-I::before { padding: 0.68em 0.764em 0px 0px; content: "E"; }
+mjx-c.mjx-c222B.TEX-S2::before { padding: 1.36em 0.944em 0.862em 0px; content: "∫"; }
+mjx-c.mjx-c1D43B.TEX-I::before { padding: 0.683em 0.888em 0px 0px; content: "H"; }
+mjx-c.mjx-c1D70C.TEX-I::before { padding: 0.442em 0.517em 0.216em 0px; content: "ρ"; }
+mjx-c.mjx-c1D702.TEX-I::before { padding: 0.442em 0.497em 0.216em 0px; content: "η"; }
+mjx-c.mjx-c221A.TEX-S2::before { padding: 1.15em 1.02em 0.65em 0px; content: "√"; }
+mjx-c.mjx-c3E::before { padding: 0.54em 0.778em 0.04em 0px; content: ">"; }
+mjx-munderover { display: inline-block; text-align: left; }
+mjx-munderover:not([limits="false"]) { padding-top: 0.1em; }
+mjx-munderover:not([limits="false"]) > * { display: block; }
+mjx-c.mjx-c221A.TEX-S1::before { padding: 0.85em 1.02em 0.35em 0px; content: "√"; }
+mjx-c.mjx-c3A::before { padding: 0.43em 0.278em 0px 0px; content: ":"; }
+mjx-c.mjx-c211D.TEX-A::before { padding: 0.683em 0.722em 0px 0px; content: "R"; }
+mjx-c.mjx-c3B::before { padding: 0.43em 0.278em 0.194em 0px; content: ";"; }
+mjx-c.mjx-c21A6::before { padding: 0.511em 1em 0.011em 0px; content: "↦"; }
+mjx-c.mjx-c1D41B.TEX-B::before { padding: 0.694em 0.639em 0.006em 0px; content: "b"; }
+mjx-c.mjx-c2211.TEX-S2::before { padding: 0.95em 1.444em 0.45em 0px; content: "∑"; }
+mjx-c.mjx-c1D457.TEX-I::before { padding: 0.661em 0.412em 0.204em 0px; content: "j"; }
+mjx-c.mjx-c38::before { padding: 0.666em 0.5em 0.022em 0px; content: "8"; }
+mjx-c.mjx-c41::before { padding: 0.716em 0.75em 0px 0px; content: "A"; }
+mjx-c.mjx-c43::before { padding: 0.705em 0.722em 0.021em 0px; content: "C"; }
+mjx-msqrt { display: inline-block; text-align: left; }
+mjx-root { display: inline-block; white-space: nowrap; }
+mjx-surd { display: inline-block; vertical-align: top; }
+mjx-sqrt { display: inline-block; padding-top: 0.07em; }
+mjx-sqrt > mjx-box { border-top: 0.07em solid; }
+mjx-sqrt.mjx-tall > mjx-box { padding-left: 0.3em; margin-left: -0.3em; }
+mjx-c.mjx-c1D435.TEX-I::before { padding: 0.683em 0.759em 0px 0px; content: "B"; }
+mjx-c.mjx-c1D436.TEX-I::before { padding: 0.705em 0.76em 0.022em 0px; content: "C"; }
+mjx-c.mjx-c28.TEX-S3::before { padding: 1.45em 0.736em 0.949em 0px; content: "("; }
+mjx-c.mjx-c29.TEX-S3::before { padding: 1.45em 0.736em 0.949em 0px; content: ")"; }
+mjx-c.mjx-c42::before { padding: 0.683em 0.708em 0px 0px; content: "B"; }
+mjx-c.mjx-c1D449.TEX-I::before { padding: 0.683em 0.769em 0.022em 0px; content: "V"; }
+mjx-c.mjx-c1D462.TEX-I::before { padding: 0.442em 0.572em 0.011em 0px; content: "u"; }
+mjx-c.mjx-c221A.TEX-S4::before { padding: 1.75em 1.02em 1.25em 0px; content: "√"; }
+mjx-c.mjx-c22C6::before { padding: 0.486em 0.5em 0px 0px; content: "⋆"; }
+mjx-c.mjx-c1D42E.TEX-B::before { padding: 0.45em 0.639em 0.006em 0px; content: "u"; }
+mjx-c.mjx-c2E::before { padding: 0.12em 0.278em 0px 0px; content: "."; }
+mjx-c.mjx-c1D43C.TEX-I::before { padding: 0.683em 0.504em 0px 0px; content: "I"; }
+mjx-c.mjx-c1D43F.TEX-I::before { padding: 0.683em 0.681em 0px 0px; content: "L"; }
+mjx-c.mjx-c1D458.TEX-I::before { padding: 0.694em 0.521em 0.011em 0px; content: "k"; }
+mjx-c.mjx-c28.TEX-S1::before { padding: 0.85em 0.458em 0.349em 0px; content: "("; }
+mjx-c.mjx-c29.TEX-S1::before { padding: 0.85em 0.458em 0.349em 0px; content: ")"; }
+mjx-c.mjx-c6D::before { padding: 0.442em 0.833em 0px 0px; content: "m"; }
+mjx-c.mjx-c1D425.TEX-B::before { padding: 0.694em 0.319em 0px 0px; content: "l"; }
+mjx-c.mjx-c1D421.TEX-B::before { padding: 0.694em 0.639em 0px 0px; content: "h"; }
+mjx-c.mjx-c62::before { padding: 0.694em 0.556em 0.011em 0px; content: "b"; }
+mjx-c.mjx-c1D42F.TEX-B::before { padding: 0.444em 0.607em 0px 0px; content: "v"; }
+mjx-c.mjx-c2225::before { padding: 0.75em 0.5em 0.25em 0px; content: "∥"; }
+mjx-c.mjx-c1D441.TEX-I::before { padding: 0.683em 0.888em 0px 0px; content: "N"; }
+mjx-c.mjx-c2211.TEX-S1::before { padding: 0.75em 1.056em 0.25em 0px; content: "∑"; }
+mjx-stretchy-v.mjx-c7B mjx-beg mjx-c::before { content: "⎧"; padding: 0.899em 0.889em 0.01em 0px; }
+mjx-stretchy-v.mjx-c7B mjx-ext mjx-c::before { content: "⎪"; width: 0.889em; }
+mjx-stretchy-v.mjx-c7B mjx-end mjx-c::before { content: "⎩"; padding: 0.01em 0.889em 0.899em 0px; }
+mjx-stretchy-v.mjx-c7B mjx-mid mjx-c::before { content: "⎨"; padding: 1.16em 0.889em 0.66em 0px; }
+mjx-stretchy-v.mjx-c7B > mjx-mid { margin-top: -0.91em; margin-bottom: -0.91em; }
+mjx-stretchy-v.mjx-c7B > mjx-end { margin-top: -0.909em; }
+mjx-stretchy-v.mjx-c7B > mjx-ext { height: 50%; border-top-width: 0.879em; border-bottom-width: 0.879em; }
+mjx-c.mjx-c2217::before { padding: 0.465em 0.5em 0px 0px; content: "∗"; }
+mjx-c.mjx-c68::before { padding: 0.694em 0.556em 0px 0px; content: "h"; }
+mjx-c.mjx-c1D70B.TEX-I::before { padding: 0.431em 0.57em 0.011em 0px; content: "π"; }
+mjx-c.mjx-c1D714.TEX-I::before { padding: 0.443em 0.622em 0.011em 0px; content: "ω"; }
+mjx-c.mjx-c37::before { padding: 0.676em 0.5em 0.022em 0px; content: "7"; }
+mjx-mtable { display: inline-block; text-align: center; vertical-align: 0.25em; position: relative; box-sizing: border-box; border-spacing: 0px; border-collapse: collapse; }
+mjx-mstyle[size="s"] mjx-mtable { vertical-align: 0.354em; }
+mjx-labels { position: absolute; left: 0px; top: 0px; }
+mjx-table { display: inline-block; vertical-align: -0.5ex; box-sizing: border-box; }
+mjx-table > mjx-itable { vertical-align: middle; text-align: left; box-sizing: border-box; }
+mjx-labels > mjx-itable { position: absolute; top: 0px; }
+mjx-mtable[justify="left"] { text-align: left; }
+mjx-mtable[justify="right"] { text-align: right; }
+mjx-mtable[justify="left"][side="left"] { padding-right: 0px !important; }
+mjx-mtable[justify="left"][side="right"] { padding-left: 0px !important; }
+mjx-mtable[justify="right"][side="left"] { padding-right: 0px !important; }
+mjx-mtable[justify="right"][side="right"] { padding-left: 0px !important; }
+mjx-mtable[align] { vertical-align: baseline; }
+mjx-mtable[align="top"] > mjx-table { vertical-align: top; }
+mjx-mtable[align="bottom"] > mjx-table { vertical-align: bottom; }
+mjx-mtable[side="right"] mjx-labels { min-width: 100%; }
+mjx-mtr { display: table-row; text-align: left; }
+mjx-mtr[rowalign="top"] > mjx-mtd { vertical-align: top; }
+mjx-mtr[rowalign="center"] > mjx-mtd { vertical-align: middle; }
+mjx-mtr[rowalign="bottom"] > mjx-mtd { vertical-align: bottom; }
+mjx-mtr[rowalign="baseline"] > mjx-mtd { vertical-align: baseline; }
+mjx-mtr[rowalign="axis"] > mjx-mtd { vertical-align: 0.25em; }
+mjx-mtd { display: table-cell; text-align: center; padding: 0.215em 0.4em; }
+mjx-mtd:first-child { padding-left: 0px; }
+mjx-mtd:last-child { padding-right: 0px; }
+mjx-mtable > * > mjx-itable > :first-child > mjx-mtd { padding-top: 0px; }
+mjx-mtable > * > mjx-itable > :last-child > mjx-mtd { padding-bottom: 0px; }
+mjx-tstrut { display: inline-block; height: 1em; vertical-align: -0.25em; }
+mjx-labels[align="left"] > mjx-mtr > mjx-mtd { text-align: left; }
+mjx-labels[align="right"] > mjx-mtr > mjx-mtd { text-align: right; }
+mjx-mtd[extra] { padding: 0px; }
+mjx-mtd[rowalign="top"] { vertical-align: top; }
+mjx-mtd[rowalign="center"] { vertical-align: middle; }
+mjx-mtd[rowalign="bottom"] { vertical-align: bottom; }
+mjx-mtd[rowalign="baseline"] { vertical-align: baseline; }
+mjx-mtd[rowalign="axis"] { vertical-align: 0.25em; }
+mjx-texatom { display: inline-block; text-align: left; }
+mjx-mrow { display: inline-block; text-align: left; }
+mjx-msub { display: inline-block; text-align: left; }
+mjx-mspace { display: inline-block; text-align: left; }
+mjx-mtext { display: inline-block; text-align: left; }
+mjx-munder { display: inline-block; text-align: left; }
+mjx-over { text-align: left; }
+mjx-munder:not([limits="false"]) { display: inline-table; }
+mjx-munder > mjx-row { text-align: left; }
+mjx-under { padding-bottom: 0.1em; }
+mjx-mover { display: inline-block; text-align: left; }
+mjx-mover:not([limits="false"]) { padding-top: 0.1em; }
+mjx-mover:not([limits="false"]) > * { display: block; text-align: left; }
+mjx-msubsup { display: inline-block; text-align: left; }
+mjx-script { display: inline-block; padding-right: 0.05em; padding-left: 0.033em; }
+mjx-script > mjx-spacer { display: block; }
+mjx-mfrac { display: inline-block; text-align: left; }
+mjx-frac { display: inline-block; vertical-align: 0.17em; padding: 0px 0.22em; }
+mjx-frac[type="d"] { vertical-align: 0.04em; }
+mjx-frac[delims] { padding: 0px 0.1em; }
+mjx-frac[atop] { padding: 0px 0.12em; }
+mjx-frac[atop][delims] { padding: 0px; }
+mjx-dtable { display: inline-table; width: 100%; }
+mjx-dtable > * { font-size: 2000%; }
+mjx-dbox { display: block; font-size: 5%; }
+mjx-num { display: block; text-align: center; }
+mjx-den { display: block; text-align: center; }
+mjx-mfrac[bevelled] > mjx-num { display: inline-block; }
+mjx-mfrac[bevelled] > mjx-den { display: inline-block; }
+mjx-den[align="right"], mjx-num[align="right"] { text-align: right; }
+mjx-den[align="left"], mjx-num[align="left"] { text-align: left; }
+mjx-nstrut { display: inline-block; height: 0.054em; width: 0px; vertical-align: -0.054em; }
+mjx-nstrut[type="d"] { height: 0.217em; vertical-align: -0.217em; }
+mjx-dstrut { display: inline-block; height: 0.505em; width: 0px; }
+mjx-dstrut[type="d"] { height: 0.726em; }
+mjx-line { display: block; box-sizing: border-box; min-height: 1px; height: 0.06em; border-top: 0.06em solid; margin: 0.06em -0.1em; overflow: hidden; }
+mjx-line[type="d"] { margin: 0.18em -0.1em; }
+mjx-stretchy-v.mjx-c28 mjx-beg mjx-c::before { content: "⎛"; padding: 1.154em 0.875em 0.655em 0px; }
+mjx-stretchy-v.mjx-c28 mjx-ext mjx-c::before { content: "⎜"; width: 0.875em; }
+mjx-stretchy-v.mjx-c28 mjx-end mjx-c::before { content: "⎝"; padding: 1.165em 0.875em 0.644em 0px; }
+mjx-stretchy-v.mjx-c28 > mjx-end { margin-top: -1.809em; }
+mjx-stretchy-v.mjx-c28 > mjx-ext { border-top-width: 1.779em; border-bottom-width: 1.779em; }
+mjx-stretchy-v.mjx-c29 mjx-beg mjx-c::before { content: "⎞"; padding: 1.154em 0.875em 0.655em 0px; }
+mjx-stretchy-v.mjx-c29 mjx-ext mjx-c::before { content: "⎟"; width: 0.875em; }
+mjx-stretchy-v.mjx-c29 mjx-end mjx-c::before { content: "⎠"; padding: 1.165em 0.875em 0.644em 0px; }
+mjx-stretchy-v.mjx-c29 > mjx-end { margin-top: -1.809em; }
+mjx-stretchy-v.mjx-c29 > mjx-ext { border-top-width: 1.779em; border-bottom-width: 1.779em; }
+mjx-stretchy-v.mjx-c5B mjx-beg mjx-c::before { content: "⎡"; padding: 1.154em 0.667em 0.645em 0px; }
+mjx-stretchy-v.mjx-c5B mjx-ext mjx-c::before { content: "⎢"; width: 0.667em; }
+mjx-stretchy-v.mjx-c5B mjx-end mjx-c::before { content: "⎣"; padding: 1.155em 0.667em 0.644em 0px; }
+mjx-stretchy-v.mjx-c5B > mjx-end { margin-top: -1.799em; }
+mjx-stretchy-v.mjx-c5B > mjx-ext { border-top-width: 1.769em; border-bottom-width: 1.769em; }
+mjx-stretchy-v.mjx-c5D mjx-beg mjx-c::before { content: "⎤"; padding: 1.154em 0.667em 0.645em 0px; }
+mjx-stretchy-v.mjx-c5D mjx-ext mjx-c::before { content: "⎥"; width: 0.667em; }
+mjx-stretchy-v.mjx-c5D mjx-end mjx-c::before { content: "⎦"; padding: 1.155em 0.667em 0.644em 0px; }
+mjx-stretchy-v.mjx-c5D > mjx-end { margin-top: -1.799em; }
+mjx-stretchy-v.mjx-c5D > mjx-ext { border-top-width: 1.769em; border-bottom-width: 1.769em; }
+mjx-stretchy-h.mjx-c23DF mjx-beg mjx-c::before { content: ""; padding: 0.32em 0px 0.2em; }
+mjx-stretchy-h.mjx-c23DF mjx-ext mjx-c::before { content: ""; padding: 0.32em 0px 0.2em; }
+mjx-stretchy-h.mjx-c23DF mjx-end mjx-c::before { content: ""; padding: 0.32em 0px 0.2em; }
+mjx-stretchy-h.mjx-c23DF mjx-mid mjx-c::before { content: ""; padding: 0.32em 0px 0.2em; }
+mjx-stretchy-h.mjx-c23DF > mjx-ext { width: 50%; }
+mjx-c.mjx-c1D466.TEX-I::before { padding: 0.442em 0.49em 0.205em 0px; content: "y"; }
+mjx-c.mjx-c5B.TEX-S3::before { padding: 1.45em 0.528em 0.949em 0px; content: "["; }
+mjx-c.mjx-c5D.TEX-S3::before { padding: 1.45em 0.528em 0.949em 0px; content: "]"; }
+mjx-c.mjx-c30::before { padding: 0.666em 0.5em 0.022em 0px; content: "0"; }
+mjx-c.mjx-c2212::before { padding: 0.583em 0.778em 0.082em 0px; content: "−"; }
+mjx-c.mjx-c1D411.TEX-B::before { padding: 0.686em 0.862em 0.011em 0px; content: "R"; }
+mjx-c.mjx-c1D703.TEX-I::before { padding: 0.705em 0.469em 0.01em 0px; content: "θ"; }
+mjx-c.mjx-c63::before { padding: 0.448em 0.444em 0.011em 0px; content: "c"; }
+mjx-c.mjx-c6F::before { padding: 0.448em 0.5em 0.01em 0px; content: "o"; }
+mjx-c.mjx-c73::before { padding: 0.448em 0.394em 0.011em 0px; content: "s"; }
+mjx-c.mjx-c2061::before { padding: 0px; content: ""; }
+mjx-c.mjx-c69::before { padding: 0.669em 0.278em 0px 0px; content: "i"; }
+mjx-c.mjx-c6E::before { padding: 0.442em 0.556em 0px 0px; content: "n"; }
+mjx-c.mjx-c1D451.TEX-I::before { padding: 0.694em 0.52em 0.01em 0px; content: "d"; }
+mjx-c.mjx-c1D437.TEX-I::before { padding: 0.683em 0.828em 0px 0px; content: "D"; }
+mjx-c.mjx-c1D447.TEX-I::before { padding: 0.677em 0.704em 0px 0px; content: "T"; }
+mjx-c.mjx-c1D464.TEX-I::before { padding: 0.443em 0.716em 0.011em 0px; content: "w"; }
+mjx-c.mjx-c22C5::before { padding: 0.31em 0.278em 0px 0px; content: "⋅"; }
+mjx-c.mjx-c1D412.TEX-B::before { padding: 0.697em 0.639em 0.011em 0px; content: "S"; }
+mjx-c.mjx-c1D6FC.TEX-I::before { padding: 0.442em 0.64em 0.011em 0px; content: "α"; }
+mjx-c.mjx-c1D445.TEX-I::before { padding: 0.683em 0.759em 0.021em 0px; content: "R"; }
+mjx-c.mjx-c34::before { padding: 0.677em 0.5em 0px 0px; content: "4"; }
+mjx-c.mjx-c35::before { padding: 0.666em 0.5em 0.022em 0px; content: "5"; }
+mjx-c.mjx-c2218::before { padding: 0.444em 0.5em 0px 0px; content: "∘"; }
+mjx-c.mjx-c1D434.TEX-I::before { padding: 0.716em 0.75em 0px 0px; content: "A"; }
+mjx-c.mjx-c2026::before { padding: 0.12em 1.172em 0px 0px; content: "…"; }
+mjx-c.mjx-c1D431.TEX-B::before { padding: 0.444em 0.607em 0px 0px; content: "x"; }
+mjx-c.mjx-c1D400.TEX-B::before { padding: 0.698em 0.869em 0px 0px; content: "A"; }
+mjx-c.mjx-c22EF::before { padding: 0.31em 1.172em 0px 0px; content: "⋯"; }
+mjx-c.mjx-c1D413.TEX-B::before { padding: 0.675em 0.8em 0px 0px; content: "T"; }
+mjx-c.mjx-c28.TEX-B::before { padding: 0.75em 0.447em 0.249em 0px; content: "("; }
+mjx-c.mjx-c1D41C.TEX-B::before { padding: 0.453em 0.511em 0.006em 0px; content: "c"; }
+mjx-c.mjx-c29.TEX-B::before { padding: 0.75em 0.447em 0.249em 0px; content: ")"; }
+mjx-c.mjx-c2212.TEX-B::before { padding: 0.281em 0.894em 0px 0px; content: "−"; }
+mjx-c.mjx-c33::before { padding: 0.665em 0.5em 0.022em 0px; content: "3"; }
+mjx-c.mjx-c44::before { padding: 0.683em 0.764em 0px 0px; content: "D"; }
+mjx-c.mjx-cA0::before { padding: 0px 0.25em 0px 0px; content: " "; }
+mjx-c.mjx-c70::before { padding: 0.442em 0.556em 0.194em 0px; content: "p"; }
+mjx-c.mjx-c74::before { padding: 0.615em 0.389em 0.01em 0px; content: "t"; }
+mjx-c.mjx-c78::before { padding: 0.431em 0.528em 0px 0px; content: "x"; }
+mjx-c.mjx-c79::before { padding: 0.431em 0.528em 0.204em 0px; content: "y"; }
+mjx-c.mjx-c7A::before { padding: 0.431em 0.444em 0px 0px; content: "z"; }
+mjx-c.mjx-c54::before { padding: 0.677em 0.722em 0px 0px; content: "T"; }
+mjx-c.mjx-c76::before { padding: 0.431em 0.528em 0.011em 0px; content: "v"; }
+mjx-c.mjx-c65::before { padding: 0.448em 0.444em 0.011em 0px; content: "e"; }
+mjx-c.mjx-c72::before { padding: 0.442em 0.392em 0px 0px; content: "r"; }
+mjx-c.mjx-c1D467.TEX-I::before { padding: 0.442em 0.465em 0.011em 0px; content: "z"; }
+mjx-c.mjx-c1D453.TEX-I::before { padding: 0.705em 0.55em 0.205em 0px; content: "f"; }
+mjx-c.mjx-c1D6FD.TEX-I::before { padding: 0.705em 0.566em 0.194em 0px; content: "β"; }
+mjx-c.mjx-c1D6FE.TEX-I::before { padding: 0.441em 0.543em 0.216em 0px; content: "γ"; }
+mjx-c.mjx-c1D427.TEX-B::before { padding: 0.45em 0.639em 0px 0px; content: "n"; }
+mjx-c.mjx-c1D408.TEX-B::before { padding: 0.686em 0.436em 0px 0px; content: "I"; }
+mjx-c.mjx-c1D40D.TEX-B::before { padding: 0.686em 0.9em 0px 0px; content: "N"; }
+mjx-c.mjx-c50::before { padding: 0.683em 0.681em 0px 0px; content: "P"; }
+mjx-c.mjx-c20D7.TEX-V::before { padding: 0.714em 0.5em 0px 0px; content: "→"; }
+mjx-c.mjx-c4C::before { padding: 0.683em 0.625em 0px 0px; content: "L"; }
+mjx-c.mjx-c6B::before { padding: 0.694em 0.528em 0px 0px; content: "k"; }
+mjx-c.mjx-c2D::before { padding: 0.252em 0.333em 0px 0px; content: "-"; }
+mjx-c.mjx-c61::before { padding: 0.448em 0.5em 0.011em 0px; content: "a"; }
+mjx-c.mjx-c20::before { padding: 0px 0.25em 0px 0px; content: " "; }
+mjx-c.mjx-c2F::before { padding: 0.75em 0.5em 0.25em 0px; content: "/"; }
+mjx-c.mjx-c67::before { padding: 0.453em 0.5em 0.206em 0px; content: "g"; }
+mjx-c.mjx-c64::before { padding: 0.694em 0.556em 0.011em 0px; content: "d"; }
+mjx-c.mjx-c5E::before { padding: 0.694em 0.5em 0px 0px; content: "^"; }
+mjx-c.mjx-c1D448.TEX-I::before { padding: 0.683em 0.767em 0.022em 0px; content: "U"; }
+mjx-c.mjx-cD7::before { padding: 0.491em 0.778em 0px 0px; content: "×"; }
+mjx-c.mjx-c5B::before { padding: 0.75em 0.278em 0.25em 0px; content: "["; }
+mjx-c.mjx-c5D::before { padding: 0.75em 0.278em 0.25em 0px; content: "]"; }
+mjx-c.mjx-c21D2::before { padding: 0.525em 1em 0.024em 0px; content: "⇒"; }
+mjx-c.mjx-c75::before { padding: 0.442em 0.556em 0.011em 0px; content: "u"; }
+mjx-c.mjx-c77::before { padding: 0.431em 0.722em 0.011em 0px; content: "w"; }
+mjx-c.mjx-c6C::before { padding: 0.694em 0.278em 0px 0px; content: "l"; }
+mjx-c.mjx-c1D440.TEX-I::before { padding: 0.683em 1.051em 0px 0px; content: "M"; }
+mjx-c.mjx-c1D465.TEX-I::before { padding: 0.442em 0.572em 0.011em 0px; content: "x"; }
+mjx-c.mjx-cD7::before { padding: 0.491em 0.778em 0px 0px; content: "×"; }
+mjx-c.mjx-c32::before { padding: 0.666em 0.5em 0px 0px; content: "2"; }
+mjx-c.mjx-c1D463.TEX-I::before { padding: 0.443em 0.485em 0.011em 0px; content: "v"; }
+mjx-c.mjx-c1D45D.TEX-I::before { padding: 0.442em 0.503em 0.194em 0px; content: "p"; }
+mjx-c.mjx-c2192::before { padding: 0.511em 1em 0.011em 0px; content: "→"; }
+mjx-c.mjx-c1D44E.TEX-I::before { padding: 0.441em 0.529em 0.01em 0px; content: "a"; }
+mjx-c.mjx-c1D44F.TEX-I::before { padding: 0.694em 0.429em 0.011em 0px; content: "b"; }
+mjx-c.mjx-c1D459.TEX-I::before { padding: 0.694em 0.298em 0.011em 0px; content: "l"; }
+mjx-c.mjx-c1D452.TEX-I::before { padding: 0.442em 0.466em 0.011em 0px; content: "e"; }
+mjx-mn { display: inline-block; text-align: left; }
+mjx-c.mjx-c1D442.TEX-I::before { padding: 0.704em 0.763em 0.022em 0px; content: "O"; }
+mjx-c.mjx-c31::before { padding: 0.666em 0.5em 0px 0px; content: "1"; }
+mjx-container[jax="CHTML"] { line-height: 0; }
+mjx-container [space="1"] { margin-left: 0.111em; }
+mjx-container [space="2"] { margin-left: 0.167em; }
+mjx-container [space="3"] { margin-left: 0.222em; }
+mjx-container [space="4"] { margin-left: 0.278em; }
+mjx-container [space="5"] { margin-left: 0.333em; }
+mjx-container [rspace="1"] { margin-right: 0.111em; }
+mjx-container [rspace="2"] { margin-right: 0.167em; }
+mjx-container [rspace="3"] { margin-right: 0.222em; }
+mjx-container [rspace="4"] { margin-right: 0.278em; }
+mjx-container [rspace="5"] { margin-right: 0.333em; }
+mjx-container [size="s"] { font-size: 70.7%; }
+mjx-container [size="ss"] { font-size: 50%; }
+mjx-container [size="Tn"] { font-size: 60%; }
+mjx-container [size="sm"] { font-size: 85%; }
+mjx-container [size="lg"] { font-size: 120%; }
+mjx-container [size="Lg"] { font-size: 144%; }
+mjx-container [size="LG"] { font-size: 173%; }
+mjx-container [size="hg"] { font-size: 207%; }
+mjx-container [size="HG"] { font-size: 249%; }
+mjx-container [width="full"] { width: 100%; }
+mjx-box { display: inline-block; }
+mjx-block { display: block; }
+mjx-itable { display: inline-table; }
+mjx-row { display: table-row; }
+mjx-row > * { display: table-cell; }
+mjx-mtext { display: inline-block; }
+mjx-mstyle { display: inline-block; }
+mjx-merror { display: inline-block; color: red; background-color: yellow; }
+mjx-mphantom { visibility: hidden; }
+mjx-assistive-mml { top: 0px; left: 0px; clip: rect(1px, 1px, 1px, 1px); user-select: none; position: absolute !important; padding: 1px 0px 0px !important; border: 0px !important; display: block !important; width: auto !important; overflow: hidden !important; }
+mjx-assistive-mml[display="block"] { width: 100% !important; }
+mjx-math { display: inline-block; text-align: left; line-height: 0; text-indent: 0px; font-style: normal; font-weight: normal; font-size: 100%; font-size-adjust: none; letter-spacing: normal; border-collapse: collapse; overflow-wrap: normal; word-spacing: normal; white-space: nowrap; direction: ltr; padding: 1px 0px; }
+mjx-container[jax="CHTML"][display="true"] { display: block; text-align: center; margin: 1em 0px; }
+mjx-container[jax="CHTML"][display="true"][width="full"] { display: flex; }
+mjx-container[jax="CHTML"][display="true"] mjx-math { padding: 0px; }
+mjx-container[jax="CHTML"][justify="left"] { text-align: left; }
+mjx-container[jax="CHTML"][justify="right"] { text-align: right; }
+mjx-mi { display: inline-block; text-align: left; }
+mjx-c { display: inline-block; }
+mjx-utext { display: inline-block; padding: 0.75em 0px 0.2em; }
+mjx-mo { display: inline-block; text-align: left; }
+mjx-stretchy-h { display: inline-table; width: 100%; }
+mjx-stretchy-h > * { display: table-cell; width: 0px; }
+mjx-stretchy-h > * > mjx-c { display: inline-block; transform: scaleX(1); }
+mjx-stretchy-h > * > mjx-c::before { display: inline-block; width: initial; }
+mjx-stretchy-h > mjx-ext { overflow: clip visible; width: 100%; }
+mjx-stretchy-h > mjx-ext > mjx-c::before { transform: scaleX(500); }
+mjx-stretchy-h > mjx-ext > mjx-c { width: 0px; }
+mjx-stretchy-h > mjx-beg > mjx-c { margin-right: -0.1em; }
+mjx-stretchy-h > mjx-end > mjx-c { margin-left: -0.1em; }
+mjx-stretchy-v { display: inline-block; }
+mjx-stretchy-v > * { display: block; }
+mjx-stretchy-v > mjx-beg { height: 0px; }
+mjx-stretchy-v > mjx-end > mjx-c { display: block; }
+mjx-stretchy-v > * > mjx-c { transform: scaleY(1); transform-origin: left center; overflow: hidden; }
+mjx-stretchy-v > mjx-ext { display: block; height: 100%; box-sizing: border-box; border: 0px solid transparent; overflow: visible clip; }
+mjx-stretchy-v > mjx-ext > mjx-c::before { width: initial; box-sizing: border-box; }
+mjx-stretchy-v > mjx-ext > mjx-c { transform: scaleY(500) translateY(0.075em); overflow: visible; }
+mjx-mark { display: inline-block; height: 0px; }
+mjx-msup { display: inline-block; text-align: left; }
+mjx-c::before { display: block; width: 0px; }
+.MJX-TEX { font-family: MJXZERO, MJXTEX; }
+.TEX-B { font-family: MJXZERO, MJXTEX-B; }
+.TEX-I { font-family: MJXZERO, MJXTEX-I; }
+.TEX-MI { font-family: MJXZERO, MJXTEX-MI; }
+.TEX-BI { font-family: MJXZERO, MJXTEX-BI; }
+.TEX-S1 { font-family: MJXZERO, MJXTEX-S1; }
+.TEX-S2 { font-family: MJXZERO, MJXTEX-S2; }
+.TEX-S3 { font-family: MJXZERO, MJXTEX-S3; }
+.TEX-S4 { font-family: MJXZERO, MJXTEX-S4; }
+.TEX-A { font-family: MJXZERO, MJXTEX-A; }
+.TEX-C { font-family: MJXZERO, MJXTEX-C; }
+.TEX-CB { font-family: MJXZERO, MJXTEX-CB; }
+.TEX-FR { font-family: MJXZERO, MJXTEX-FR; }
+.TEX-FRB { font-family: MJXZERO, MJXTEX-FRB; }
+.TEX-SS { font-family: MJXZERO, MJXTEX-SS; }
+.TEX-SSB { font-family: MJXZERO, MJXTEX-SSB; }
+.TEX-SSI { font-family: MJXZERO, MJXTEX-SSI; }
+.TEX-SC { font-family: MJXZERO, MJXTEX-SC; }
+.TEX-T { font-family: MJXZERO, MJXTEX-T; }
+.TEX-V { font-family: MJXZERO, MJXTEX-V; }
+.TEX-VB { font-family: MJXZERO, MJXTEX-VB; }
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c { font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A !important; }
+@font-face { font-family: MJXZERO; src: url("lib/fonts/mathjax_zero.woff") format("woff"); }
+@font-face { font-family: MJXTEX; src: url("lib/fonts/mathjax_main-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-B; src: url("lib/fonts/mathjax_main-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-I; src: url("lib/fonts/mathjax_math-italic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-MI; src: url("lib/fonts/mathjax_main-italic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-BI; src: url("lib/fonts/mathjax_math-bolditalic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S1; src: url("lib/fonts/mathjax_size1-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S2; src: url("lib/fonts/mathjax_size2-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S3; src: url("lib/fonts/mathjax_size3-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S4; src: url("lib/fonts/mathjax_size4-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-A; src: url("lib/fonts/mathjax_ams-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-C; src: url("lib/fonts/mathjax_calligraphic-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-CB; src: url("lib/fonts/mathjax_calligraphic-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-FR; src: url("lib/fonts/mathjax_fraktur-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-FRB; src: url("lib/fonts/mathjax_fraktur-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SS; src: url("lib/fonts/mathjax_sansserif-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SSB; src: url("lib/fonts/mathjax_sansserif-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SSI; src: url("lib/fonts/mathjax_sansserif-italic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SC; src: url("lib/fonts/mathjax_script-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-T; src: url("lib/fonts/mathjax_typewriter-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-V; src: url("lib/fonts/mathjax_vector-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-VB; src: url("lib/fonts/mathjax_vector-bold.woff") format("woff"); }
+mjx-c.mjx-c1D45F.TEX-I::before { padding: 0.442em 0.451em 0.011em 0px; content: "r"; }
+mjx-c.mjx-c210E.TEX-I::before { padding: 0.694em 0.576em 0.011em 0px; content: "h"; }
+mjx-c.mjx-c1D460.TEX-I::before { padding: 0.442em 0.469em 0.01em 0px; content: "s"; }
+mjx-c.mjx-c28::before { padding: 0.75em 0.389em 0.25em 0px; content: "("; }
+mjx-c.mjx-c29::before { padding: 0.75em 0.389em 0.25em 0px; content: ")"; }
+mjx-c.mjx-c3D::before { padding: 0.583em 0.778em 0.082em 0px; content: "="; }
+mjx-c.mjx-c1D45A.TEX-I::before { padding: 0.442em 0.878em 0.011em 0px; content: "m"; }
+mjx-c.mjx-c1D456.TEX-I::before { padding: 0.661em 0.345em 0.011em 0px; content: "i"; }
+mjx-c.mjx-c1D45B.TEX-I::before { padding: 0.442em 0.6em 0.011em 0px; content: "n"; }
+mjx-c.mjx-c1D454.TEX-I::before { padding: 0.442em 0.477em 0.205em 0px; content: "g"; }
+mjx-c.mjx-c2032::before { padding: 0.56em 0.275em 0px 0px; content: "′"; }
+mjx-c.mjx-c2B::before { padding: 0.583em 0.778em 0.082em 0px; content: "+"; }
+mjx-c.mjx-c1D450.TEX-I::before { padding: 0.442em 0.433em 0.011em 0px; content: "c"; }
+mjx-c.mjx-c1D45C.TEX-I::before { padding: 0.441em 0.485em 0.011em 0px; content: "o"; }
+mjx-c.mjx-c1D461.TEX-I::before { padding: 0.626em 0.361em 0.011em 0px; content: "t"; }
+mjx-c.mjx-c2C::before { padding: 0.121em 0.278em 0.194em 0px; content: ","; }
+</style><div class="markdown-preview-sizer markdown-preview-section"><h1 class="page-title heading inline-title" id="Lecture 4：状态同步基础"><p dir="auto">Lecture 4：状态同步基础</p></h1><div class="el-h2 heading-wrapper"><h2 data-heading="状态同步的早期发展" dir="auto" class="heading" id="状态同步的早期发展"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>状态同步的早期发展</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="引入" dir="auto" class="heading" id="引入"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>引入</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：最开始的状态同步</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><code>FireWalls-1</code> 是第一个使用状态检测（<code>stateful inspection</code>）的商业防火墙软件。其中的 <code>stateful inspection</code> 表示让多个防火墙共享各自状态表中包含的信息，这种信息传递的方式与我们游戏中的状态同步非常相似。由此可见，状态同步与 <code>Lockstep</code> 一样，也是经历了一个相对漫长的时间才发展成如今我们熟知的模样；</li>
+<li data-line="1" dir="auto">在二十年前，相比于使用帧同步（为了方便描述，后续的文章中以帧同步代替 Lockstep）还是状态同步，开发者们更关心的是网络架构的实现方式（<code>P2P/CS</code>)。换句话讲，在当时业内看来，<code>P2P</code> 架构的同步模型虽然减少了延迟，但由于作弊、跨平台、难以维护大型网络游戏等问题，人们更希望用 <code>CS</code> 架构来取代 <code>P2P</code>。同时，开发者们虽然可以继续在 <code>CS</code> 架构下使用逻辑比较简洁的帧同步，但有不少开发者都认为刚刚诞生的状态同步貌似更符合 <code>CS</code> 架构的同步理念；</li>
+<li data-line="2" dir="auto"><span alt="PixPin_2025-11-27_14-07-38.png" src="PixPin_2025-11-27_14-07-38.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-27_14-07-38.png" src="lib/media/pixpin_2025-11-27_14-07-38.png"></span></li>
+<li data-line="3" dir="auto">需要强调的是，帧同步与状态同步并不是一个简单的对立概念，其中的差异包括“数据格式与内容”，“逻辑的计算位置”，“是否有权威服务器”等。随着时间的推进，两种算法互相借鉴互相发展，早已不是当年的样子。网上存在很多概念模糊的文章，包括一些大佬对同步的概念理解也有偏差，这些都很容易对新手产生误导；</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="早期网络架构" dir="auto" class="heading" id="早期网络架构"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>早期网络架构</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：早期网络架构</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：雷神之锤与快照同步
+<ul>
+<li data-line="1" dir="auto">快照是一个通用的行业术语，即在任何给定时刻记录设备的状态并在设备出现故障时进行还原。快照技术常用于计算机的各种存储系统，例如逻辑卷管理、数据库、文件系统等。在游戏领域中，快照的含义更像是照片一样，将当前场景所有的信息保存起来。严格来说，快照同步应该属于状态同步的前身，虽然思想相似但是具体实现却有不小的差异；</li>
+<li data-line="2" dir="auto">1996 年，在 <code>doom</code> 发行不久后，<code>Id software</code> 就公开了新作：雷神之锤（<code>Quake</code>）。在 <code>Quake</code> 里他们舍弃了之前的 <code>P2P</code> 而改用 <code>CS</code> 架构，同时也舍弃了 <code>lockstep</code> 的同步方式。新的架构下，客户端就是一个纯粹的渲染器 (称为 <code>Dumb Client</code>)，每一帧玩家所有的操作信息都会被收集并发送到服务器，然后服务器将计算后的结果压缩后发给客户端来告知他们有哪些角色可以显示，显示在什么位置上；</li>
+<li data-line="3" dir="auto">上述的这个过程就是我们所说的快照同步，即服务器每帧接受客户端的输入来计算整个世界的状态，然后将结果快照发送给所有客户端。<code>Quake</code> 这里所谓的快照，就是把整个游戏世界里面所有对象的状态做一次临时保存（他更强调的是对象的可视化状态，比如位置和旋转等）。通过这个快照，我们可以还原出这一刻世界的状态应该是什么样子的；</li>
+<li data-line="4" dir="auto"><code>Quake</code> 运行时，逻辑帧率与渲染帧率是保持一致的。由于所有的核心逻辑都是在服务器进行，所以也不需要通过锁步来避免客户端不同步的问题，只要在收到服务器消息后执行渲染就好了。当然，对于性能以及网络环境较差的玩家来说，游戏体验仍然很糟糕。因为你按下一个按钮后，可能很长时间都没有反应，当收到服务器的快照消息后，你可能已经被网络好的玩家击杀了；</li>
+<li data-line="5" dir="auto"><code>IdSoftware</code> 自 2012 年以来已经陆续把 <code>Quake</code> 以及 <code>Doom</code> 相关的源码上传到了 <code>GitHub</code> 上面。如果你看过其中 <code>Quake</code> 的源码，会发现整个网络的架构还是比较简单清晰的，博主 <code>FABIEN SANGLARD</code> 就在网上分享了关于 <code>Quake</code> 源码的剖析；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：<code>Quake</code> 源码
+<ul>
+<li data-line="7" dir="auto"><span alt="PixPin_2025-11-27_14-10-54.png" src="PixPin_2025-11-27_14-10-54.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-27_14-10-54.png" src="lib/media/pixpin_2025-11-27_14-10-54.png"></span></li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：<code>Quake</code> 的问题 - 从快照同步到状态同步
+<ul>
+<li data-line="9" dir="auto"><code>Quake</code> 里面由于客户端只是一个简单的渲染器，同步过程中会出现很多明显的问题，比如延迟过大，客户端性能浪费，服务器压力大等。而其中最明显的问题就是对带宽的浪费，对于一个物体和角色比较少的游戏，可以使用快照将整个世界的状态都存储并发送，但是一旦物体数量多了起来，带宽占用就会直线上升；</li>
+<li data-line="10" dir="auto">所以，我们希望不要每帧都把整个世界的数据都发过去，而是只发送那些产生变化的对象数据（可以称为增量快照同步）。更进一步的，我们还希望将数据拆分的更细一些，并根据客户端的特点来定制发送不同的数据。基于这种思想，《星际部落：围攻》团队的开发者们开始对网络架构进行抽象和分层，构造出来一套比较完善的"状态同步"系统，并以此开发出了 <code>Tribe</code> 游戏系列； </li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：《星际围城：部落》引擎中的网络架构
+<ul>
+<li data-line="12" dir="auto"><code>The TRIBES Engine</code> 可以认为是第一个实现状态同步的游戏引擎，《星际部落：围攻》也可以认为是第一个比较完美的实现了状态同步的游戏；</li>
+<li data-line="13" dir="auto">平台数据包模块（<code>Platform Packet Module</code>）可以理解成被封装的 <code>Socket</code> 模块，连接管理器（<code>Connection Manager</code>）处理多个客户端与服务器的连接，流管理器（<code>Stream Manager</code>）负责将具体的数据分发到上面的三个高级管理器；</li>
+<li data-line="14" dir="auto"><code>Ghost</code> 管理器：负责向客户端发送需要同步对象的状态信息，类似属性同步；</li>
+<li data-line="15" dir="auto">事件管理器：维护事件队列，每个事件相当于一个的 <code>RPC</code>；</li>
+<li data-line="16" dir="auto">移动管理器：本质上与事件管理器相同，但是由于移动数据的需要高频的捕捉和发送，所以单独封装成一个特殊的管理器；</li>
+</ul>
+</li>
+<li data-line="17" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：<code>The TRIBES Engine</code> 架构
+<ul>
+<li data-line="18" dir="auto"><span alt="PixPin_2025-11-27_14-12-28.png" src="PixPin_2025-11-27_14-12-28.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-27_14-12-28.png" src="lib/media/pixpin_2025-11-27_14-12-28.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="客户端预测与回滚" dir="auto" class="heading" id="客户端预测与回滚"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>客户端预测与回滚</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：客户端预测与回滚</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">《毁灭公爵》是上世纪 90 年代一个经典的 <code>FPS</code> 游戏系列，首部作品的发布时间与 <code>Doom</code> 几乎相同，网络架构也极为相似。在 1996 年发布的《毁灭公爵 <code>3D</code>》里面，为了提高客户端的表现与响应速度，他放弃了“<code>Dumb</code> 客户端”的方案，并首次采用客户端预测来进行优化（这里主要指移动预测）</li>
+<li data-line="2" dir="auto">即在服务器确认输入并更新游戏状态之前，让<strong>客户端立即对用户输入进行本地响应</strong>。由于这种方式可以大大的降低网络延迟所带来的困扰，很快的 <code>Quake</code> 也开始参考对网络架构进行的大刀阔斧的修改;</li>
+<li data-line="3" dir="auto">在 1997 年发布的更新版本 <code>QuakeWorld</code> 里面，<code>Quake</code> 添加了对互联网对战的支持以及<strong>客户端预测</strong>等新的内容；</li>
+<li data-line="4" dir="auto">关于预测，其实就是本地先执行，所以并不需要什么特别的算法，反倒是预测后的客户端与服务器的同步处理有很多值得优化的地方。由于玩家的行为是没办法完全预测的，所以你不知道玩家会在什么时候突然停下或者转弯，所以经常会发生预测失败的情况；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：客户端预测后行为与服务器行为分析
+<ul>
+<li data-line="6" dir="auto">如果玩家本地的预测结果与服务器几乎一致，那么我们认为预测是成功且有效的，玩家不会受到任何影响，可以继续操作。反之，如果客户端结果与服务器不一致，我们应该如何处理呢？这里分为两种情况；</li>
+<li data-line="7" dir="auto">（1）在没有时间戳的条件下，收到了一条过时的服务器位置数据。你在本地的行为相比服务器是超前的，假如你在 <code>time=10ms</code> 的和 <code>time=50ms</code> 时候分别发送了一条指令。由于网络延迟的存在，当你已经执行完第二个指令的时候才收到服务器对第一条指令的位置同步。很明显，我们不应该让过时的服务器数据来纠正你当前的逻辑。解决方法就是<strong>在每个指令发出的时候带上他的时间戳</strong>，这样客户端收到服务器反馈的时候就知道他处理的是哪条指令信息；</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（2）假如我们在指令里面添加了时间戳的信息，并收到了一条过时的服务器位置数据。在上一篇文章里我们提到了 <code>TimeWarp</code> 算法，即当一个对象收到了一个过去某个时刻应该执行的事件时，他应该回滚到那个时刻的状态，并且回滚前面所有的行为与状态（包括取消之前行为所产生的事件）。这个时候我们可以用类似的方法在本地进行纠正，大体的方案就是<strong>把玩家本地预执行的指令都记录好时间戳并存放到一个 <code>MOVE BUFFER</code> 列表里</strong>（类似一个滑动窗口）；
+<ul>
+<li data-line="9" dir="auto">如果服务器的计算结果与你本地预测相同，可以回复你一个 <code>ACKMOVE</code>；</li>
+<li data-line="10" dir="auto">如果服务器发现你的某个移动位置有问题时，会把该指令的时间戳以及正确的位置打包发给你；</li>
+</ul>
+</li>
+<li data-line="11" dir="auto">当你收到 <code>ACKMOVE</code> 的时候，你可以把 <code>MOVE BUFFER</code> 里面的数据从表里面移除，而当你收到错误纠正信息时，就需要本地回滚到服务器指定的位置，同时把错误时刻后面 <code>MOVE BUFFER</code> 里面的指令重新执行一遍；</li>
+<li data-line="12" dir="auto">这里读者可能会产生一个疑问：为什么不直接拉回？因为这时候他想纠正的是之前的错误而不是现在的错误，如果简单的拉回就会让你觉得被莫名其妙的拉回到以前的一个位置。同时，考虑到已经在路上的指令以及后续你要发送的预测指令，会让服务器后续的校验与纠正变得复杂且奇怪，具体流程细节可以参考下图。另外，Gabriel Gambetta 博主在他的文章中，也对这种情况进行了简单的分析；</li>
+</ul>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="14" dir="auto"><span alt="PixPin_2025-11-27_14-20-33.png" src="PixPin_2025-11-27_14-20-33.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-27_14-20-33.png" src="lib/media/pixpin_2025-11-27_14-20-33.png"></span></li>
+<li data-line="15" dir="auto">如图可知，在 <code>Pos(2,1,0)</code> 时，需要重新执行 "<code>120 ms Move Forward</code>”；</li>
+</ul>
+</li>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：关于 <code>TimeWarp</code> 算法的补充
+<ul>
+<li data-line="17" dir="auto"><code>Timewarp</code> 技术最早出现于仿真模拟中，我们可以认为这些仿真程序中采用的是“以事件驱动的帧同步”；</li>
+<li data-line="18" dir="auto">也就是说，给出一个指令，他就会产生并触发多个事件，这些事件可能进而触发更多的事件来驱动程序，同理取消一个过去发生的事件也需要产生一个新的取消事件才行；</li>
+<li data-line="19" dir="auto">这样造成的问题就是回滚前面的 <code>N</code> 个操作，就需要产生 <code>N</code> 个新的对抗事件，而且这 <code>N</code> 个事件还需要发送到所有其他的客户端执行；</li>
+<li data-line="20" dir="auto">如果这 <code>N</code> 个事件又产生了新的事件，那么整个回滚的操作就显得复杂了很多。换成前面移动的例子来解释一下，就是客户端收到服务器的纠正后，他会立刻发送回滚命令告诉（<code>P2P</code> 架构下）所有其他客户端，我要取消前面的操作，然后其他客户端在本地也执行回滚；</li>
+<li data-line="21" dir="auto">而在如今的 <code>CS</code> 架构状态同步的方式下，服务器可能早就拒绝了客户端的不合法行为，所以并不需要处理回滚（同理，其他客户端也是）。所以严格来说，<code>TimeWarp</code> 技术以及优化后的 <code>BreathTimeWarp</code> 技术都是针对“以事件驱动的帧同步”，并不能与预测回滚这套方案完全等价。当然，随着时间的推移，很多概念也变的逐渐宽泛一些，我们平时提到的时间回溯 <code>TimeWarp</code> 技术大体上与快照回滚是一个意思的；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="时间锁定与时钟同步" dir="auto" class="heading" id="时间锁定与时钟同步"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>时间锁定与时钟同步</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：时间锁定与时钟同步</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">1997 年，<code>Jim Greer</code> 与 <code>Zack Booth Simpson</code> 在开发出了他们第一款基于 CS 架构的 RTS 游戏——”NetStorm：Island at war“。随后在发布的文章中又提出了“事件锁定”这一概念，相比帧同步会受到其他客户端延迟的影响，事件锁定是基于事件队列严格按序执行的，客户端只管发消息然后等待服务器的响应即可，其他时候本地正常模拟，不需要等待；</li>
+<li data-line="2" dir="auto">在目前常见的游戏中，我们很少会听说到事件锁定这种同步方式，因为事件锁定的本质就是通过 RPC 产生事件从而进行同步（也就是排除属性同步的状态同步）。事件锁定在 CS 架构上是非常自然的，相比帧同步，可以定义并发送更灵活的信息，也不必再担心作弊的问题；</li>
+<li data-line="3" dir="auto">不过，由于事件中经常会含有时间相关的信息（比如在 <code>X</code> 秒进行开火）以及服务器需要对客户端的不合法操作进行纠正，所以我们需要尽可能的保持客户端与服务器的时钟同步。实现时钟同步最常见且广泛的方式就是网络时间协议（<code>Network Time Protocol</code>，简称 <code>NTP</code>），<code>NTP</code> 属于应用层协议下层采用 <code>UDP</code> 实现，<code>1979</code> 年诞生以来至今仍被应用在多个计算机领域里，包括嵌入式系统时间、通信计费、<code>Windows</code> 时间服务以及部分游戏等；</li>
+<li data-line="4" dir="auto"><code>NTP</code> 使用了一种树状、半分层的网络结构来部署时钟服务器，每个 <code>UDP</code> 数据包内包含多个时间戳以及一些标记信息用来多次校验与分析；</li>
+<li data-line="5" dir="auto">整个时钟同步的具体算法涉及到非常多的细节，我们这里只考虑他的时钟同步算法；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：时钟同步算法
+<ul>
+<li data-line="7" dir="auto">假如一个服务器与客户端通信，客户端 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D461 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c30"></mjx-c></mjx-mn></mjx-script></mjx-msub></mjx-math></mjx-container></span> 向服务器发送数据，服务器在 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D461 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-script></mjx-msub></mjx-math></mjx-container></span> 收到数据，<span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D461 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-script></mjx-msub></mjx-math></mjx-container></span> 响应并回包给客户端，最后客户端在 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D461 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c33"></mjx-c></mjx-mn></mjx-script></mjx-msub></mjx-math></mjx-container></span> 时间收到了服务器的数据；</li>
+<li data-line="8" dir="auto">当然，该操作不会只执行一次，客户端会同时请求多个服务器，然后对结果进行统计分析、过滤，并从最好的三个剩余候选中估算时间差，然后调整时钟频率来逐渐减小偏移。如果我们的系统对精度要求不是非常高，我们还可以使用简化版的 SNTP (Simple Network Time Protocal），时钟同步算法与 NTP 是相同的，不过简化了一些流程；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="补偿延迟" dir="auto" class="heading" id="补偿延迟"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补偿延迟</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：补偿延迟</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">2001 年，<code>Valve</code> 的新作《半条命》发布，打破了传统 <code>FPS</code> 游戏玩法。不久之后，其 <code>Mod</code> 《反恐精英》更是火遍了全并作为独立游戏发布出去；</li>
+<li data-line="2" dir="auto">由于半条命是基于“<code>QuakeII</code> 引擎修改的 <code>GoldSrc</code> 引擎”开发，所以游戏同样采用了 <code>CS</code> 架构以及状态同步。不过，为了能达到他们心中理想的效果，半条命在网络同步上做出了不小的改动；</li>
+<li data-line="3" dir="auto">首先，半条命也采用了客户端预测逻辑来保证本地玩家能够有流畅的手感，同时为了让客户端提高预测准确率（保证客户端与服务器上的代码逻辑一致），所以半条命里面他们让客户端与服务器执行的是同一套代码；</li>
+<li data-line="4" dir="auto">其次，考虑到本地玩家的时间总是领先服务器，玩家开枪的时间到服务器执行时就一定会被延迟，所以为了尽量减小延迟所带来的问题，他们提出了一种名为<strong>延迟补偿</strong>的技术；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：延迟补偿
+<ul>
+<li data-line="6" dir="auto">所谓延迟补偿，就是弥补客户端到服务器同步延迟的一项技术，该技术的核心是<strong>服务器</strong>在指定时刻对玩家角色进行位置的回滚与计算处理；</li>
+<li data-line="7" dir="auto">假如客户端到服务器的延迟为 <code>Xms</code>，当客户端玩家开枪时，这个操作同步会在 <code>Xms</code> 后到达服务器，服务器这时候计算命中就已经出现了延迟。为了得到更准确的结果，服务器会在定时记录所有玩家的位置，当收到一个客户端开枪事件后，他会立刻把所有玩家回退到 <code>Xms</code> 前的位置并计算是否命中（注意：计算后服务器立刻还原其位置），从而抵消延迟带来的问题；</li>
+<li data-line="8" dir="auto">不过，延迟补偿并不是一个万能的优化方式，采用与否应该由游戏的类型与设计决定。考虑一个 <code>ACT</code> 类型的网游，玩家 <code>A</code> 延迟比较低、玩家 <code>B</code> 延迟比较高。在 <code>A</code> 的客户端上，玩家 <code>A</code> 在 <code>T1</code> 时间靠近 <code>B</code>，而后立刻执行了一个<strong>后滚</strong>操作，发送到服务器。在 B 的客户端上，同样在 T 1 时间发起进攻，然后发送命令到服务器。由于 A 的延迟低，服务器先收到了 A 的指令，A 开始后滚操作，这时候 A 已经脱离了 B 的攻击范围。然后当 B 的指令到达服务器的时候，如果采用延迟补偿，就需要把 A 回滚到之前的位置结果就是 A 收到了 B 的攻击，这对 A 来说显然是不公平的。如果该情况发生在 <code>FPS</code> 里面，就不会有很大的问题，因为 <code>A</code> 根本不知道 <code>B</code> 什么时候瞄准的 <code>A</code>；</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="10" dir="auto"><span alt="PixPin_2025-11-27_14-37-17.png" src="PixPin_2025-11-27_14-37-17.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-27_14-37-17.png" src="lib/media/pixpin_2025-11-27_14-37-17.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="插值技术" dir="auto" class="heading" id="插值技术"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>插值技术</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：插值技术</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：内插值
+<ul>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>核心：
+<ul>
+<li data-line="2" dir="auto">在两个或多个<strong>已知的</strong>历史状态之间进行平滑填充；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="4" dir="auto">内插值的核心思想是“平滑过去”。客户端在收到来自服务器的状态更新包（例如，角色在时间点 <code>T1</code> 和 <code>T2</code> 的位置）后，并不会立即将其渲染到屏幕上。而是将这些数据包缓存起来，并故意等待一个很小的时间偏移（<code>Interpolation&nbsp;Offset</code>），比如 <code>100</code> 毫秒；</li>
+<li data-line="5" dir="auto">这样做的目的是为了确保客户端总是有足够的数据（例如 <code>T1</code> 和 <code>T2</code> 时刻的状态）来计算中间帧，例如 T 1 和 T 2 之间的某一时刻 <code>T</code> 的状态；</li>
+<li data-line="6" dir="auto">然后，客户端使用插值算法（如线性插值、<code>Catmull-Rom</code> 样条曲线等）在 <code>T1</code> 和 <code>T2</code> 之间计算出平滑的中间状态并显示出来；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>特点：
+<ul>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="8" dir="auto">渲染的位置是基于服务器确认的权威数据，结果是确定性的；</li>
+</ol>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="9" dir="auto">运动非常平滑，因为是在两个确定的点之间过渡；</li>
+</ol>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="10" dir="auto">内插值的主要挑战在于会加剧延迟，因为你看到的所有其他玩家，都是他们 <code>100</code> 毫秒之前的状态平滑而来的结果。这会导致你的本地世界视图在时间上“落后”于服务器的权威状态；</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：外插值
+<ul>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>核心：
+<ul>
+<li data-line="13" dir="auto">基于当前的移动状态（位置、速度等）<strong>推测</strong>未来的位置；</li>
+</ul>
+</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="15" dir="auto">当客户端收到一个对象的最新状态（如位置、速度、加速度）时，它不会等待下一个数据包，而是立即基于这些信息建立运动模型，并预测该对象在未来时刻的位置；</li>
+<li data-line="16" dir="auto">例如，收到一辆汽车以每秒 <code>10</code> 米速度向北行驶的状态后，客户端会假定汽车将保持此运动状态，并据此在本地外推出它的位置。这能显著减少操作的滞后感，让你感觉其他对象的响应非常及时； </li>
+<li data-line="17" dir="auto">然而，外插值最大的问题是<strong>预测可能出错</strong>。如果那辆汽车突然刹车或转向，而客户端还在按照原来的轨迹预测，就会产生巨大的位置偏差。当收到服务器的新状态包时，客户端不得不进行纠正；</li>
+<li data-line="18" dir="auto">简单的纠正方法是直接“拉扯”到正确位置，但体验很差。更高级的算法如投影速度混合（Projective Velocity Blending）被用来处理这个问题，它通过平滑地修正速度和位置，让对象沿着一条渐进的曲线过渡到正确状态，而不是瞬间移动；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="状态同步框架的演变" dir="auto" class="heading" id="状态同步框架的演变"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>状态同步框架的演变</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：状态同步框架的演变</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">在 2011 年的 <code>GDC</code> 上，光环（<code>Halo</code>）项目的网络技术负责人 <code>David Aldridge</code> 就其网络同步框架发表了一次演讲；</li>
+<li data-line="2" dir="auto">光环项目的网络架构同样被分层，但相比 <code>Tribe</code> 却更加简洁和精炼。上图的 <code>Replication</code> 层是 <code>Gameplay</code> 开发中比较重视的，他决定了我们逻辑上层可用的同步手段。<code>Halo</code> 里面有三种基本协议，<code>State Data</code>、<code>Event</code>、<code>ControlData</code>，分别是指“基于对象的属性同步”、“通过调用产生的事件同步”以及“玩家的输入信息同步”，其中移动同步归类于 <code>ControlData</code> 协议；</li>
+<li data-line="3" dir="auto">2015 年，游戏业内著名的商业引擎：<code>Unreal Engine</code> 正式开源，其中内置了一套非常完善的网络同步架构；</li>
+<li data-line="4" dir="auto">虚幻引擎的前身是 <code>FPS</code> 游戏：“虚幻竞技场”。该游戏早在 1998 年就发布，当时与 <code>Quake</code> 属于同类型的竞品。虚幻本身也是基于 <code>CS</code> 架构的状态同步，不过由于无法查找到当时的资料，笔者认为一开始可能也是与 <code>Quake</code> 非常相似的同步架构。后来在参考 <code>Tribe</code> 引擎的基础上，进行调整和优化，形成了如今的 <code>Netdriver/Connection/Channel/Uobject</code> 的模型，以及 <code>RPC</code> 和属性同步两种同步方式，这已经是网络同步发展至今非常典型且完善的状态同步方案了（后面要提到的 OverWatch 与其有很多相似之处）；</li>
+<li data-line="5" dir="auto">作为一款游戏引擎，虚幻并没有将所有常见的同步手段都集成到引擎里面，只是将移动相关的优化方案（包括预测回滚、插值等）集成到了移动组件里面。其他的诸如延迟补偿，客户端预测等，他们放到了特定的 <code>Demo</code> 以及插件（<code>GameplayAbility</code>）当中。有兴趣的朋友可以去阅读一些 <code>Unreal</code> 的源码，看看最近几年其网络架构的发展变化；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="7" dir="auto"><span alt="PixPin_2025-11-27_14-40-50.png" src="PixPin_2025-11-27_14-40-50.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-27_14-40-50.png" src="lib/media/pixpin_2025-11-27_14-40-50.png"></span></li>
+</ul>
+</li>
+</ul></div><div class="el-h3 heading-wrapper"><h3 data-heading="守望先锋与 `ECS` 架构" dir="auto" class="heading" id="守望先锋与_`ECS`_架构"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>守望先锋与 <code>ECS</code> 架构</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：守望先锋与 <code>ECS</code> 架构</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">守望先锋可以说是近年来将网络同步优化到极致的 <code>FPS</code> 游戏，其中涵盖了我们可以用到的大部分同步优化技术。在 2018 年的 <code>GDC</code> 上，来自守望先锋的 <code>Gameplay</code> 程序 <code>TimFord</code> 分享了整个游戏的架构以及网络同步的实现方式；</li>
+<li data-line="2" dir="auto">虽然 <code>OverWatch</code> 基于 <code>CS</code> 架构，但是却同时用到了帧同步（逻辑帧概念）以及状态同步包含的多种技术手段。为了实现确定性，他们固定了更新周期为 <code>16</code> 毫秒（电竞比赛时 <code>7</code> 毫秒），每个周期称为一个“命令帧”（等同于 <code>Lockstep</code> 中的“<code>Turn</code>”、“<code>Bucket</code>”）；</li>
+<li data-line="3" dir="auto">在所有与客户端预表现和玩家行为有关的操作不会放在 <code>Update</code> 而是放在<strong>固定周期的 <code>UpdateFixed</code> 里更新</strong>，方便客户端预测与回滚。不过，整个游戏同步的核心还是状态同步，玩家也并不需要等待其他客户端的行为；</li>
+<li data-line="4" dir="auto">先用一句话来简单概括，守望先锋采用的是<strong>基于 <code>ECS</code> 架构的带有预测回滚的增量状态同步</strong>；</li>
+<li data-line="5" dir="auto">我们先从 <code>Gameplay</code> 层面去分析一下。在守望里面，网络同步要解决的问题被分为三部分，分别是<strong>玩家移动，技能行为以及命中检测</strong>；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="7" dir="auto">移动模块：</li>
+</ol>
+<ul>
+<li data-line="8" dir="auto">客户端本地会不断读取输入并立刻进行角色移动的模拟；</li>
+<li data-line="9" dir="auto">他会在客户端记录一个缓冲区来保存历史的运动轨迹（即运动快照），用于后续与服务器纠正数据进行对比以及回滚；</li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="10" dir="auto">技能行为模块：</li>
+</ol>
+<ul>
+<li data-line="11" dir="auto">客户端添加了一个 <code>buffer</code> 来存储玩家的输入操作（带有命令帧的序号），同时保留历史的技能快照；</li>
+<li data-line="12" dir="auto">一旦服务器发现客户端预测执行失败，就会让客户端先通过快照回滚到错误时刻（包括移动和技能），然后把错误时刻到当前时间的所有输入都重执行一遍；</li>
+</ul>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="13" dir="auto">命中模块：</li>
+</ol>
+<ul>
+<li data-line="14" dir="auto">伤害计算在服务器，但是命中判定是在客户端处理（所以可能存在一些误差）；</li>
+<li data-line="15" dir="auto">延迟补偿技术也被采用，但是不是在服务器回滚所有玩家的位置，而是检测当前玩家的准星与附近敌人的逻辑边界（<code>bounding volumes</code>）是否有交集，没有的话不需要回滚；</li>
+</ul>
+</li>
+<li data-line="16" dir="auto">为了增强玩家的游戏体验，游戏还对不同 <code>ping</code> 的玩家进行了逻辑的调整。<code>ping</code> 值会影响本地的预测行为，一旦 <code>PING</code> 值超过 <code>220</code> 毫秒，我们就会延后一些命中效果，也不会再去预测了，直接等服务器回包确认。<code>PING</code> 为 <code>0</code> 的时候，对弹道碰撞做了预测，而击中点和血条没有预测，要等服务器回包才渲染；</li>
+<li data-line="17" dir="auto">当 PING 达到 300 毫秒的时候，碰撞都不预测了，因为射击目标正在做快读的外插，他实际上根本没在这里，这里也用到了前面提到的 DR（<code>Dead Reckoning</code>）外推算法；</li>
+</ul>
+</li>
+<li data-line="18" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：状态同步实现
+<ul>
+<li data-line="19" dir="auto">谈完 <code>Gameplay</code>，我们可以再考虑一下他的状态同步是如何实现的。同样在 2018 年的 GDC 上，来自 <code>Overwatch</code> 服务器团队的开发工程师 <code>Phil Orwig</code> 分享了有关回放与同步的相关技术细节；</li>
+<li data-line="20" dir="auto">客户端玩家操作后，这些指令会立刻发给服务器，同时本地开始执行预测。随后，服务器会将这一帧收到的所有玩家的输入进行处理和计算。在服务器上，每个对象产生的变化都会被记做一个 <code>Delta</code>，并且会持续累积所有对象状态的变化，并保存到一个临时的“每帧脏数据集合”(<code>per frame dirty set</code>)里；</li>
+<li data-line="21" dir="auto">同时，服务器会对给每个客户端（每个 <code>Connection</code>）也会维护一个对应的“脏数据集合”，这个集合可能保存一些之前没有发送出去的信息，每帧结束时，所有客户端对应的“脏数据集合”会与当前脏集合 <code>F</code> 合并，随后当前脏集合 <code>F</code> 会被清空；</li>
+<li data-line="22" dir="auto">同一个 <code>Tick</code> 的后期，这些对应不同客户端连接的脏集合（<code>C1</code>、<code>C2</code> 等）会被序列化并发送给对应的客户端，同时从脏集合中移除。这里的序列化并不是完全使用原生的状态数据，而是维护了一个经客户端确认收到的状态数据的历史记录（比如我们服务器上已经记录了玩家的大部分信息，每次位置变化只序列化位置信息就可以了），这样我们就可以使用“增量编码”来改善带宽模型，即减少带宽的占用；</li>
+</ul>
+</li>
+<li data-line="23" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>ECS</code>
+<ul>
+<li data-line="24" dir="auto">通过前面的分析，我们可以了解到整个网络同步的逻辑是很复杂的，细节也非常多。所以，我们也需要考虑是否能从底层和框架上做一些调整和优化。在守望先锋里面，他们并没有采用常见的面向对象模型（<code>OOP</code>），而是使用了数据与操作行为分离的 <code>ECS</code> 架构；</li>
+<li data-line="25" dir="auto">Entity 代表一个空的实体、Component 代表一个只包含数据的组件、System 代表一个处理数据的系统。在这个架构下，我们将面向对象编程转为面向数据编程，游戏的不同模块可以划分成不同的系统，每个模块只关心自己需要的数据（Component），这种模式下可以方便我们处理快照与回滚的逻辑。ECS 系统看起来有着缓存友好、逻辑解耦等优点，但是操作起来问题也不少，其中最难处理的一个问题<strong>就是如何控制 System 运作的次序</strong>；</li>
+</ul>
+</li>
+<li data-line="26" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：协议与其他
+<ul>
+<li data-line="27" dir="auto">为了提高通信效率，守望也采用定制的可靠 <code>UDP</code>，因此会有不可避免的丢包情况；</li>
+<li data-line="28" dir="auto">为了对抗丢包，每一帧的数据包包含的是最近 <code>N</code> 帧的数据，即使某一个数据包丢了也没什么影响。除此之外，他们还在服务器添加了一个缓冲区，记录玩家的输入信息。缓冲区越大，就能容忍越多的丢包，但是也意味着同步延迟越大。所以，在网络条件良好的情况下，他们会尽力减小这个缓冲区的大小，而一旦客户端丢包，那么就可以提高客户端发送数据频率，进而服务器收到更多的包，缓存更多的数据用于抵消丢包；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="状态同步小结" dir="auto" class="heading" id="状态同步小结"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>状态同步小结</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：状态同步小结</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">状态同步大概在上世纪末就已经诞生（相比帧同步要晚一些），然而至今却没有一个完整的定义。不过单从名字上看，我们也能猜到“状态同步”同步的是对象的状态信息，如角色的位置、生命值等；</li>
+<li data-line="1" dir="auto">在 Quake 诞生前，其实也存在直接传输游戏对象状态的游戏，但是那时候游戏都比较简单，相关的概念也并不清晰。当时的架构模型以 P 2 P 为主，考虑搭配带宽限制等原因，军事模拟、FPS 等游戏都采用了“Lockstep”的方式进行同步； </li>
+<li data-line="2" dir="auto">不过由于作弊问题日益严重、确定性实现困难重重等因素，CS 架构逐渐代替 P 2 P 走向主流。我们也发现似乎所有的游戏状态信息都可以保存在服务器上，客户端只需要接受服务器同步过来的状态并渲染就可以了。按照这种思路，Quake 诞生了，他抛弃了 Doom 的架构并带着状态同步的方式进入我们的视野。这时候的状态同步还只是简单的快照同步，每次同步前服务器都需要把整个游戏世界的状态信息打包发送给客户端；</li>
+<li data-line="3" dir="auto">然而，快照同步太浪费带宽了，不同的玩家在一段时间内只能在很小的范围内活动，根本没有必要知道整个世界的状态。同时，每次发送的快照都与之前的快照有相当多重复的内容，确实过于奢侈。因此，星际围城：部落的开发团队构建出了一个比较完善的状态同步系统，用于对同步信息进行分类和过滤；</li>
+<li data-line="4" dir="auto">后来，光环、虚幻竞技场、守望先锋、Doom 等游戏都在 Tribe Engine 的基础上不断完善状态同步，形成了如今的架构模型；</li>
+<li data-line="5" dir="auto">如今距离状态同步的诞生已经 20 余年，当我们现在再讨论状态同步时，到底是指什么呢？</li>
+<li data-line="6" dir="auto">我认为，如今的状态同步是指包含增量状态同步、<code>RPC</code>（事件同步）两种同步手段，并且可以在各个端传递任何游戏信息（包括输入）的一种同步方式；</li>
+<li data-line="7" dir="auto">目前的状态同步多用于 <code>CS</code> 架构，客户端通过 <code>RPC</code> 向服务器发送指令信息，服务器通过属性同步（增量状态同步）向客户端发送各个对象的状态信息。我们可以采用预测回滚、延迟补偿、插值等优化方式，甚至也可以采用“命令帧”的方式对同步做限制。不过在这个过程中，传递的内容以状态信息（即计算后的结果）为主，收到信息的另一端只需要和解同步过来的状态即可，不需要在本地通过处理其他端的 Input 信息来进行持续的模拟。</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="什么是状态同步" dir="auto" class="heading" id="什么是状态同步"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>什么是状态同步</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="基础概念" dir="auto" class="heading" id="基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>基础概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：什么是状态同步</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">状态同步的基本流程可以概括为：客户端将玩家操作上传至服务器，服务器接收到操作后，进行权威的逻辑计算，得出游戏世界中各种对象的新状态；最后，服务器将这些状态数据广播给所有客户端；客户端根据接收到的状态更新本地游戏世界的表现；这种方式也被称为“胖服务器”模型，服务器的计算压力较大，但安全性高，易于防止作弊；</li>
+<li data-line="2" dir="auto">即：每个客户端发送自己的部分状态（状态不变得、状态不相关得属性都不同步），然后核心的判定逻辑是在服务器上完成的，然后服务器判断是否有效、并把状态同步到其他客户端；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：核心机制
+<ul>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="4" dir="auto">增量状态同步：</li>
+</ol>
+<ul>
+<li data-line="5" dir="auto">服务器不会在每次同步时都发送全部对象的完整状态数据，而是<strong>只发送自上一次同步以来发生变化的部分</strong>（即“脏数据”）</li>
+<li data-line="6" dir="auto">现代游戏引擎会自动追踪属性的变化，并只序列化和发送这些变化量，这能平均减少网络流量；</li>
+<li data-line="7" dir="auto">为了进一步提升效率，还需要<strong>优先级系统</strong>。服务器不会每帧同步所有对象，而是根据一套算法来决定优先同步哪些对象;</li>
+<li data-line="8" dir="auto">例如，一个常见的策略是使用“优先级累加器”：每个对象都有一个累加值，每一帧将当前计算的优先级（如：正在与玩家交互的怪物优先级高，静止的远处景物优先级低）加到累加值上，优先发送累加值最高的那些对象的状态更新。这确保了重要对象（如玩家角色、正在交战的敌人）能获得高频率的同步，而不重要的对象则更新较少；</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="9" dir="auto"><code>RPC</code> 同步：</li>
+</ol>
+<ul>
+<li data-line="10" dir="auto">用于处理离散的、非连续的游戏事件，如玩家开枪、使用道具。客户端通过 <code>RPC</code> 向服务器发送请求，服务器验证并执行逻辑，结果可能通过属性同步下发； </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="状态同步相关优化机制" dir="auto" class="heading" id="状态同步相关优化机制"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>状态同步相关优化机制</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：状态同步相关优化机制</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">为了弥补网络延迟带来的操作滞涩感，状态同步采用了一系列关键技术来进行优化：</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：客户端预测先行
+<ul>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>引入：
+<ul>
+<li data-line="4" dir="auto"><span alt="PixPin_2025-12-01_15-30-20.png" src="PixPin_2025-12-01_15-30-20.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-12-01_15-30-20.png" src="lib/media/pixpin_2025-12-01_15-30-20.png"></span></li>
+<li data-line="5" dir="auto">比如 <code>Player A</code> 的操作需要经过 Server 验证后再发送给 Player A，此时就会有一段时间的延迟，即 <code>Dumb Client Problem</code> 问题；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="7" dir="auto">当玩家进行操作时，客户端不必等待服务器确认，而是<strong>立即在本地模拟操作的结果并呈现给玩家</strong>，从而获得即时反馈；</li>
+<li data-line="8" dir="auto">例如，按下移动键，角色会立刻开始移动。与此同时，这个操作指令会被发送给服务器，服务器进行权威计算后，将真实的结果（包括可能被修正的位置）下发给客户端。当客户端收到的服务器状态与自己预测的状态不一致时，就需要进行矫正；</li>
+<li data-line="9" dir="auto">一种简单粗暴的方式是直接将角色“拉回”到服务器指定的位置，但这会带来突兀的跳动感。更高级的方法是<strong>回滚与重放</strong>；</li>
+<li data-line="10" dir="auto">客户端将本地<strong>未得到服务器确认的预测操作存储在一个列表</strong>中，当收到服务器的权威状态时，先回滚到该状态，然后将之后存储的合法操作指令重新执行一遍，以实现平滑的纠正；</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：守望先锋中的例子
+<ul>
+<li data-line="12" dir="auto"><span alt="PixPin_2025-12-01_15-31-50.png" src="PixPin_2025-12-01_15-31-50.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-12-01_15-31-50.png" src="lib/media/pixpin_2025-12-01_15-31-50.png"></span></li>
+<li data-line="13" dir="auto">客户端总是跑在服务器前面，客户端对于服务器会有一个 <code>RTT</code> 的估计，自己先跑、然后再等待一定时间后再对齐；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：回滚与纠正
+<ul>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="16" dir="auto">由于客户端预测可能出错（如服务器判定玩家撞墙），当服务器下发权威状态与本地预测不一致时，客户端需要进行“回滚”，即纠正到服务器指定的正确状态，有时可能会观察到角色被“拉回”的现象；</li>
+<li data-line="17" dir="auto">因此需要在服务器当中有一个 <code>RingBuffer</code> 用来存储客户端最近几帧的信息，如果出现回滚，则当前 RingBuffer 里面数据需要全部丢弃掉；</li>
+</ul>
+</li>
+<li data-line="18" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="19" dir="auto"><span alt="PixPin_2025-12-01_15-36-36.png" src="PixPin_2025-12-01_15-36-36.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-12-01_15-36-36.png" src="lib/media/pixpin_2025-12-01_15-36-36.png"></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="20" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：丢包问题
+<ul>
+<li data-line="21" dir="auto">服务器的简单的策略：先把用户的输入存起来，确保 <code>Server</code> 的操作流畅。然后如果发现客户端丢失，则可能会将当前 Client 的最后一个操作复制，发送给其他的客户端（这个地方的设计不同游戏不同）；</li>
+</ul>
+</li>
+<li data-line="22" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：延迟补偿
+<ul>
+<li data-line="23" dir="auto">这是一项主要用于 <code>FPS</code> 游戏的服务器端技术。服务器在处理如开枪命中判定时，会考虑到子弹飞行时间对应的玩家延迟，将其他玩家的位置回滚到过去某个时刻的状态进行计算，以提供更公平的体验；</li>
+<li data-line="24" dir="auto">值得注意的是，这种技术在某些类型的游戏（如 <code>ACT</code>）中可能会带来公平性问题；</li>
+</ul>
+</li>
+<li data-line="25" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：插值与抖动缓存
+<ul>
+<li data-line="26" dir="auto">这两个概念主要应用于处理其他远程实体的同步，以提升视觉平滑度；</li>
+<li data-line="27" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="27" dir="auto">插值：</li>
+</ol>
+<ul>
+<li data-line="28" dir="auto">用于平滑显示远程对象的状态更新；</li>
+<li data-line="29" dir="auto">由于网络同步是间断的（例如每 <code>100</code> 毫秒一次），如果客户端在收到更新包时直接将物体“闪现”到新位置，就会产生卡顿感；</li>
+<li data-line="30" dir="auto">插值技术是在收到两个连续的状态更新包后，在前一个状态和当前状态之间进行平滑的过渡计算，而不是瞬间切换，从而使移动更加流畅；</li>
+</ul>
+</li>
+<li data-line="31" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="31" dir="auto">抖动缓冲：</li>
+</ol>
+<ul>
+<li data-line="32" dir="auto">抖动缓冲用于对抗网络抖动（即数据包到达时间间隔不均匀），它在接收端建立一个缓冲区，将提前到达的数据包暂存一小段时间（例如 <code>4-5</code> 帧），再按照正确的、均匀的时间间隔交付给游戏逻辑应用。这样可以避免因数据包集中到达而导致的瞬时卡顿或“跳跃”，为插值提供稳定的数据源，从而保证外推的连续性；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="33" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>区别：
+<ul>
+<li data-line="34" dir="auto"><span alt="PixPin_2025-11-27_15-11-15.png" src="PixPin_2025-11-27_15-11-15.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-27_15-11-15.png" src="lib/media/pixpin_2025-11-27_15-11-15.png"></span></li>
+<li data-line="35" dir="auto"><span alt="PixPin_2025-12-01_15-41-13.png" src="PixPin_2025-12-01_15-41-13.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-12-01_15-41-13.png" src="lib/media/pixpin_2025-12-01_15-41-13.png"></span></li>
+</ul>
+</li>
+<li data-line="36" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="37" dir="auto"><span alt="PixPin_2025-12-01_15-25-20.png" src="PixPin_2025-12-01_15-25-20.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-12-01_15-25-20.png" src="lib/media/pixpin_2025-12-01_15-25-20.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="总结" dir="auto" class="heading" id="总结"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：总结</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><span alt="PixPin_2025-11-28_14-38-28.png" src="PixPin_2025-11-28_14-38-28.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-28_14-38-28.png" src="lib/media/pixpin_2025-11-28_14-38-28.png"></span></li>
+</ul></div><div class="mod-footer mod-ui"></div></div></div></div></div></div></div></div><div class="sidebar-right sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"></div><script defer="">let rs = document.querySelector(".sidebar-right"); rs.classList.add("is-collapsed"); if (window.innerWidth > 768) rs.classList.remove("is-collapsed"); rs.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-right-width"));</script></div></div></body></html>

@@ -1,0 +1,1132 @@
+<!DOCTYPE html> <html><head>
+		<title>Lecture 4：反射</title>
+		<base href="..\..\../">
+		<meta id="root-path" root-path="..\..\../">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
+		<meta charset="UTF-8">
+		<meta name="description" content="MUBlog - Lecture 4：反射">
+		<meta property="og:title" content="Lecture 4：反射">
+		<meta property="og:description" content="MUBlog - Lecture 4：反射">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="01_编程语言基础/02_csharp/01_核心知识/lecture-4：反射.html">
+		<meta property="og:image" content="lib\media\pasted-image-20250705153407.png">
+		<meta property="og:site_name" content="MUBlog">
+		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="lib/rss.xml"><script async="" id="webpage-script" src="lib/scripts/webpage.js" onload="this.onload=null;this.setAttribute(&quot;loaded&quot;, &quot;true&quot;)"></script><link rel="icon" href="lib/media/favicon.png"><style>body{--line-width:40em;--line-width-adaptive:40em;--file-line-width:40em;--sidebar-width:min(20em, 80vw);--collapse-arrow-size:11px;--tree-horizontal-spacing:0.6em;--tree-vertical-spacing:0.6em;--sidebar-margin:12px}.sidebar{height:100%;min-width:calc(var(--sidebar-width) + var(--divider-width-hover));max-width:calc(var(--sidebar-width) + var(--divider-width-hover));font-size:14px;z-index:10;position:relative;overflow:hidden;transition:min-width ease-in-out,max-width ease-in-out;transition-duration:.2s;contain:size}.sidebar-left{left:0}.sidebar-right{right:0}.sidebar.is-collapsed{min-width:0;max-width:0}body.floating-sidebars .sidebar{position:absolute}.sidebar-content{height:100%;min-width:calc(var(--sidebar-width) - var(--divider-width-hover));top:0;padding:var(--sidebar-margin);padding-top:4em;line-height:var(--line-height-tight);background-color:var(--background-secondary);transition:background-color,border-right,border-left,box-shadow;transition-duration:var(--color-fade-speed);transition-timing-function:ease-in-out;position:absolute;display:flex;flex-direction:column}.sidebar:not(.is-collapsed) .sidebar-content{min-width:calc(max(100%,var(--sidebar-width)) - 3px);max-width:calc(max(100%,var(--sidebar-width)) - 3px)}.sidebar-left .sidebar-content{left:0;border-top-right-radius:var(--radius-l);border-bottom-right-radius:var(--radius-l)}.sidebar-right .sidebar-content{right:0;border-top-left-radius:var(--radius-l);border-bottom-left-radius:var(--radius-l)}.sidebar:has(.sidebar-content:empty):has(.topbar-content:empty){display:none}.sidebar-topbar{height:2em;width:var(--sidebar-width);top:var(--sidebar-margin);padding-inline:var(--sidebar-margin);z-index:1;position:fixed;display:flex;align-items:center;transition:width ease-in-out;transition-duration:inherit}.sidebar.is-collapsed .sidebar-topbar{width:calc(2.3em + var(--sidebar-margin) * 2)}.sidebar .sidebar-topbar.is-collapsed{width:0}.sidebar-left .sidebar-topbar{left:0}.sidebar-right .sidebar-topbar{right:0}.topbar-content{overflow:hidden;overflow:clip;width:100%;height:100%;display:flex;align-items:center;transition:inherit}.sidebar.is-collapsed .topbar-content{width:0;transition:inherit}.clickable-icon.sidebar-collapse-icon{background-color:transparent;color:var(--icon-color-focused);padding:0!important;margin:0!important;height:100%!important;width:2.3em!important;margin-inline:0.14em!important;position:absolute}.sidebar-left .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);right:var(--sidebar-margin)}.sidebar-right .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);left:var(--sidebar-margin)}.clickable-icon.sidebar-collapse-icon svg.svg-icon{width:100%;height:100%}.sidebar-section-header{margin:0 0 1em 0;text-transform:uppercase;letter-spacing:.06em;font-weight:600}body{transition:background-color var(--color-fade-speed) ease-in-out}.webpage-container{display:flex;flex-direction:row;height:100%;width:100%;align-items:stretch;justify-content:center}.document-container{opacity:1;flex-basis:100%;max-width:100%;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;transition:opacity .2s ease-in-out;contain:inline-size}.hide{opacity:0;transition:opacity .2s ease-in-out}.document-container>.markdown-preview-view{margin:var(--sidebar-margin);margin-bottom:0;width:100%;width:-webkit-fill-available;width:-moz-available;width:fill-available;background-color:var(--background-primary);transition:background-color var(--color-fade-speed) ease-in-out;border-top-right-radius:var(--window-radius,var(--radius-m));border-top-left-radius:var(--window-radius,var(--radius-m));overflow-x:hidden!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;contain:inline-size}.document-container>.markdown-preview-view>.markdown-preview-sizer{padding-bottom:80vh!important;width:100%!important;max-width:var(--line-width)!important;flex-basis:var(--line-width)!important;transition:background-color var(--color-fade-speed) ease-in-out;contain:inline-size}.markdown-rendered img:not([width]),.view-content img:not([width]){max-width:100%;outline:0}.document-container>.view-content.embed{display:flex;padding:1em;height:100%;width:100%;align-items:center;justify-content:center}.document-container>.view-content.embed>*{max-width:100%;max-height:100%;object-fit:contain}:has(> :is(.math,table)){overflow-x:auto!important}.document-container>.view-content{overflow-x:auto;contain:content;padding:0;margin:0;height:100%}.scroll-highlight{position:absolute;width:100%;height:100%;pointer-events:none;z-index:1000;background-color:hsla(var(--color-accent-hsl),.25);opacity:0;padding:1em;inset:50%;translate:-50% -50%;border-radius:var(--radius-s)}</style><script defer="">async function loadIncludes(){if("file:"!=location.protocol){let e=document.querySelectorAll("include");for(let t=0;t<e.length;t++){let o=e[t],l=o.getAttribute("src");try{const e=await fetch(l);if(!e.ok){console.log("Could not include file: "+l),o?.remove();continue}let t=await e.text(),n=document.createRange().createContextualFragment(t),i=Array.from(n.children);for(let e of i)e.classList.add("hide"),e.style.transition="opacity 0.5s ease-in-out",setTimeout((()=>{e.classList.remove("hide")}),10);o.before(n),o.remove(),console.log("Included file: "+l)}catch(e){o?.remove(),console.log("Could not include file: "+l,e);continue}}}else{if(document.querySelectorAll("include").length>0){var e=document.createElement("div");e.id="error",e.textContent="Web server exports must be hosted on an http / web server to be viewed correctly.",e.style.position="fixed",e.style.top="50%",e.style.left="50%",e.style.transform="translate(-50%, -50%)",e.style.fontSize="1.5em",e.style.fontWeight="bold",e.style.textAlign="center",document.body.appendChild(e),document.querySelector(".document-container")?.classList.remove("hide")}}}document.addEventListener("DOMContentLoaded",(()=>{loadIncludes()}));let isFileProtocol="file:"==location.protocol;function waitLoadScripts(e,t){let o=e.map((e=>document.getElementById(e+"-script"))),l=0;!function e(){let n=o[l];l++,n&&"true"!=n.getAttribute("loaded")||l<o.length&&e(),l<o.length?n.addEventListener("load",e):t()}()}</script><link rel="stylesheet" href="lib/styles/obsidian.css"><link rel="stylesheet" href="lib/styles/theme.css"><link rel="preload" href="lib/styles/global-variable-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/global-variable-styles.css"></noscript><link rel="preload" href="lib/styles/supported-plugins.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/supported-plugins.css"></noscript><link rel="preload" href="lib/styles/main-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/main-styles.css"></noscript><link rel="preload" href="lib/styles/snippets.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/snippets.css"></noscript></head><body class="publish css-settings-manager styled-scrollbars theme-light show-inline-title ctp-rosepine-light ctp-mocha ctp-accent-rosewater anuppuccin-accent-toggle anp-current-line-border anp-callout-color-toggle anp-codeblock-numbers anp-list-toggle anp-table-width anp-toggle-preview anp-color-transition-toggle anp-button-metadata-toggle anp-toggle-metadata anp-toggle-scrollbars anp-h1-red anp-h1-divider anp-h2-peach anp-h3-green anp-h4-teal anp-h5-lavender anp-h6-mauve anp-decoration-toggle anp-bold-maroon anp-italic-green anp-highlight-yellow anp-colorful-frame-icon-toggle-dark anp-simple-rainbow-color-toggle anp-rainbow-file-toggle anp-simple-rainbow-title-toggle anp-simple-rainbow-icon-folder-toggle anp-simple-rainbow-indentation-toggle anp-simple-rainbow-collapse-toggle anp-card-layout anp-card-shadows anp-card-layout-filebrowser anp-theme-ext-light anp-theme-ext-dark anp-theme-ext-amoled ctp-atom-light ctp-atom-dark table-type-three-line table-header-color-blue table-row-alt-background-option table-dark-mode"><script defer="">let theme=localStorage.getItem("theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");"dark"==theme?(document.body.classList.add("theme-dark"),document.body.classList.remove("theme-light")):(document.body.classList.add("theme-light"),document.body.classList.remove("theme-dark")),window.innerWidth<480?document.body.classList.add("is-phone"):window.innerWidth<768?document.body.classList.add("is-tablet"):window.innerWidth<1024?document.body.classList.add("is-small-screen"):document.body.classList.add("is-large-screen")</script><div class="webpage-container workspace"><div class="sidebar-left sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"><label class="theme-toggle-container" for="theme_toggle"><input class="theme-toggle-input" type="checkbox" id="theme_toggle"><div class="toggle-background"></div></label></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"><include src="lib/html/file-tree.html"></include></div><script defer="">let ls = document.querySelector(".sidebar-left"); ls.classList.add("is-collapsed"); if (window.innerWidth > 768) ls.classList.remove("is-collapsed"); ls.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-left-width"));</script></div><div class="document-container markdown-reading-view hide"><div class="markdown-preview-view markdown-rendered allow-fold-headings allow-fold-lists is-readable-line-width"><style id="MJX-CHTML-styles">mjx-c.mjx-c1D440.TEX-I::before{padding:.683em 1.051em 0 0;content:"M"}mjx-c.mjx-c1D465.TEX-I::before{padding:.442em .572em .011em 0;content:"x"}mjx-c.mjx-cD7::before{padding:.491em .778em 0 0;content:"×"}mjx-c.mjx-c32::before{padding:.666em .5em 0 0;content:"2"}mjx-c.mjx-c1D463.TEX-I::before{padding:.443em .485em .011em 0;content:"v"}mjx-c.mjx-c1D45D.TEX-I::before{padding:.442em .503em .194em 0;content:"p"}mjx-c.mjx-c2192::before{padding:.511em 1em .011em 0;content:"→"}mjx-c.mjx-c1D44E.TEX-I::before{padding:.441em .529em .01em 0;content:"a"}mjx-c.mjx-c1D44F.TEX-I::before{padding:.694em .429em .011em 0;content:"b"}mjx-c.mjx-c1D459.TEX-I::before{padding:.694em .298em .011em 0;content:"l"}mjx-c.mjx-c1D452.TEX-I::before{padding:.442em .466em .011em 0;content:"e"}mjx-mn{display:inline-block;text-align:left}mjx-c.mjx-c1D442.TEX-I::before{padding:.704em .763em .022em 0;content:"O"}mjx-c.mjx-c31::before{padding:.666em .5em 0 0;content:"1"}mjx-container[jax=CHTML]{line-height:0}mjx-container [space="1"]{margin-left:.111em}mjx-container [space="2"]{margin-left:.167em}mjx-container [space="3"]{margin-left:.222em}mjx-container [space="4"]{margin-left:.278em}mjx-container [space="5"]{margin-left:.333em}mjx-container [rspace="1"]{margin-right:.111em}mjx-container [rspace="2"]{margin-right:.167em}mjx-container [rspace="3"]{margin-right:.222em}mjx-container [rspace="4"]{margin-right:.278em}mjx-container [rspace="5"]{margin-right:.333em}mjx-container [size="s"]{font-size:70.7%}mjx-container [size=ss]{font-size:50%}mjx-container [size=Tn]{font-size:60%}mjx-container [size=sm]{font-size:85%}mjx-container [size=lg]{font-size:120%}mjx-container [size=Lg]{font-size:144%}mjx-container [size=LG]{font-size:173%}mjx-container [size=hg]{font-size:207%}mjx-container [size=HG]{font-size:249%}mjx-container [width=full]{width:100%}mjx-box{display:inline-block}mjx-block{display:block}mjx-itable{display:inline-table}mjx-row{display:table-row}mjx-row>*{display:table-cell}mjx-mtext{display:inline-block}mjx-mstyle{display:inline-block}mjx-merror{display:inline-block;color:red;background-color:#ff0}mjx-mphantom{visibility:hidden}mjx-assistive-mml{top:0;left:0;clip:rect(1px,1px,1px,1px);user-select:none;position:absolute!important;padding:1px 0 0!important;border:0!important;display:block!important;width:auto!important;overflow:hidden!important}mjx-assistive-mml[display=block]{width:100%!important}mjx-math{display:inline-block;text-align:left;line-height:0;text-indent:0;font-style:normal;font-weight:400;font-size:100%;font-size-adjust:none;letter-spacing:normal;border-collapse:collapse;overflow-wrap:normal;word-spacing:normal;white-space:nowrap;direction:ltr;padding:1px 0}mjx-container[jax=CHTML][display=true]{display:block;text-align:center;margin:1em 0}mjx-container[jax=CHTML][display=true][width=full]{display:flex}mjx-container[jax=CHTML][display=true] mjx-math{padding:0}mjx-container[jax=CHTML][justify=left]{text-align:left}mjx-container[jax=CHTML][justify=right]{text-align:right}mjx-mi{display:inline-block;text-align:left}mjx-c{display:inline-block}mjx-utext{display:inline-block;padding:.75em 0 .2em}mjx-mo{display:inline-block;text-align:left}mjx-stretchy-h{display:inline-table;width:100%}mjx-stretchy-h>*{display:table-cell;width:0}mjx-stretchy-h>*>mjx-c{display:inline-block;transform:scaleX(1)}mjx-stretchy-h>*>mjx-c::before{display:inline-block;width:initial}mjx-stretchy-h>mjx-ext{overflow:clip visible;width:100%}mjx-stretchy-h>mjx-ext>mjx-c::before{transform:scaleX(500)}mjx-stretchy-h>mjx-ext>mjx-c{width:0}mjx-stretchy-h>mjx-beg>mjx-c{margin-right:-.1em}mjx-stretchy-h>mjx-end>mjx-c{margin-left:-.1em}mjx-stretchy-v{display:inline-block}mjx-stretchy-v>*{display:block}mjx-stretchy-v>mjx-beg{height:0}mjx-stretchy-v>mjx-end>mjx-c{display:block}mjx-stretchy-v>*>mjx-c{transform:scaleY(1);transform-origin:left center;overflow:hidden}mjx-stretchy-v>mjx-ext{display:block;height:100%;box-sizing:border-box;border:0 solid transparent;overflow:visible clip}mjx-stretchy-v>mjx-ext>mjx-c::before{width:initial;box-sizing:border-box}mjx-stretchy-v>mjx-ext>mjx-c{transform:scaleY(500) translateY(.075em);overflow:visible}mjx-mark{display:inline-block;height:0}mjx-msup{display:inline-block;text-align:left}mjx-c::before{display:block;width:0}.MJX-TEX{font-family:MJXZERO,MJXTEX}.TEX-B{font-family:MJXZERO,MJXTEX-B}.TEX-I{font-family:MJXZERO,MJXTEX-I}.TEX-MI{font-family:MJXZERO,MJXTEX-MI}.TEX-BI{font-family:MJXZERO,MJXTEX-BI}.TEX-S1{font-family:MJXZERO,MJXTEX-S1}.TEX-S2{font-family:MJXZERO,MJXTEX-S2}.TEX-S3{font-family:MJXZERO,MJXTEX-S3}.TEX-S4{font-family:MJXZERO,MJXTEX-S4}.TEX-A{font-family:MJXZERO,MJXTEX-A}.TEX-C{font-family:MJXZERO,MJXTEX-C}.TEX-CB{font-family:MJXZERO,MJXTEX-CB}.TEX-FR{font-family:MJXZERO,MJXTEX-FR}.TEX-FRB{font-family:MJXZERO,MJXTEX-FRB}.TEX-SS{font-family:MJXZERO,MJXTEX-SS}.TEX-SSB{font-family:MJXZERO,MJXTEX-SSB}.TEX-SSI{font-family:MJXZERO,MJXTEX-SSI}.TEX-SC{font-family:MJXZERO,MJXTEX-SC}.TEX-T{font-family:MJXZERO,MJXTEX-T}.TEX-V{font-family:MJXZERO,MJXTEX-V}.TEX-VB{font-family:MJXZERO,MJXTEX-VB}mjx-stretchy-h mjx-c,mjx-stretchy-v mjx-c{font-family:MJXZERO,MJXTEX-S1,MJXTEX-S4,MJXTEX,MJXTEX-A!important}@font-face{font-family:MJXZERO;src:url("lib/fonts/mathjax_zero.woff") format("woff")}@font-face{font-family:MJXTEX;src:url("lib/fonts/mathjax_main-regular.woff") format("woff")}@font-face{font-family:MJXTEX-B;src:url("lib/fonts/mathjax_main-bold.woff") format("woff")}@font-face{font-family:MJXTEX-I;src:url("lib/fonts/mathjax_math-italic.woff") format("woff")}@font-face{font-family:MJXTEX-MI;src:url("lib/fonts/mathjax_main-italic.woff") format("woff")}@font-face{font-family:MJXTEX-BI;src:url("lib/fonts/mathjax_math-bolditalic.woff") format("woff")}@font-face{font-family:MJXTEX-S1;src:url("lib/fonts/mathjax_size1-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S2;src:url("lib/fonts/mathjax_size2-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S3;src:url("lib/fonts/mathjax_size3-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S4;src:url("lib/fonts/mathjax_size4-regular.woff") format("woff")}@font-face{font-family:MJXTEX-A;src:url("lib/fonts/mathjax_ams-regular.woff") format("woff")}@font-face{font-family:MJXTEX-C;src:url("lib/fonts/mathjax_calligraphic-regular.woff") format("woff")}@font-face{font-family:MJXTEX-CB;src:url("lib/fonts/mathjax_calligraphic-bold.woff") format("woff")}@font-face{font-family:MJXTEX-FR;src:url("lib/fonts/mathjax_fraktur-regular.woff") format("woff")}@font-face{font-family:MJXTEX-FRB;src:url("lib/fonts/mathjax_fraktur-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SS;src:url("lib/fonts/mathjax_sansserif-regular.woff") format("woff")}@font-face{font-family:MJXTEX-SSB;src:url("lib/fonts/mathjax_sansserif-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SSI;src:url("lib/fonts/mathjax_sansserif-italic.woff") format("woff")}@font-face{font-family:MJXTEX-SC;src:url("lib/fonts/mathjax_script-regular.woff") format("woff")}@font-face{font-family:MJXTEX-T;src:url("lib/fonts/mathjax_typewriter-regular.woff") format("woff")}@font-face{font-family:MJXTEX-V;src:url("lib/fonts/mathjax_vector-regular.woff") format("woff")}@font-face{font-family:MJXTEX-VB;src:url("lib/fonts/mathjax_vector-bold.woff") format("woff")}mjx-c.mjx-c1D45F.TEX-I::before{padding:.442em .451em .011em 0;content:"r"}mjx-c.mjx-c210E.TEX-I::before{padding:.694em .576em .011em 0;content:"h"}mjx-c.mjx-c1D460.TEX-I::before{padding:.442em .469em .01em 0;content:"s"}mjx-c.mjx-c28::before{padding:.75em .389em .25em 0;content:"("}mjx-c.mjx-c29::before{padding:.75em .389em .25em 0;content:")"}mjx-c.mjx-c3D::before{padding:.583em .778em .082em 0;content:"="}mjx-c.mjx-c1D45A.TEX-I::before{padding:.442em .878em .011em 0;content:"m"}mjx-c.mjx-c1D456.TEX-I::before{padding:.661em .345em .011em 0;content:"i"}mjx-c.mjx-c1D45B.TEX-I::before{padding:.442em .6em .011em 0;content:"n"}mjx-c.mjx-c1D454.TEX-I::before{padding:.442em .477em .205em 0;content:"g"}mjx-c.mjx-c2032::before{padding:.56em .275em 0 0;content:"′"}mjx-c.mjx-c2B::before{padding:.583em .778em .082em 0;content:"+"}mjx-c.mjx-c1D450.TEX-I::before{padding:.442em .433em .011em 0;content:"c"}mjx-c.mjx-c1D45C.TEX-I::before{padding:.441em .485em .011em 0;content:"o"}mjx-c.mjx-c1D461.TEX-I::before{padding:.626em .361em .011em 0;content:"t"}mjx-c.mjx-c2C::before{padding:.121em .278em .194em 0;content:","}</style><div class="markdown-preview-sizer markdown-preview-section"><h1 class="page-title heading inline-title" id="Lecture 4：反射"><p dir="auto">Lecture 4：反射</p></h1><div class="el-h2 heading-wrapper"><h2 data-heading="基础概念" dir="auto" class="heading" id="基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>基础概念</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="程序集和元数据" dir="auto" class="heading" id="程序集和元数据"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>程序集和元数据</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：程序集和元数据</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：元数据
+<ul>
+<li data-line="1" dir="auto">元数据 (<code>Metadata</code>)在 <code>C#</code> 中是指 "描述数据的数据"，它提供了关于程序的结构、类型定义、成员信息等关键内容的信息；</li>
+<li data-line="2" dir="auto">元数据是 <code>.NET</code> 平台中不可或缺的组成部分，它使得程序能够自我描述，即程序能够携带关于其自身的信息；</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>在 <code>C#</code> 中 ，元数据主要包含以下几类信息：
+<ul>
+<li data-line="4" dir="auto"><span alt="Pasted image 20250705153407.png" src="Pasted image 20250705153407.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250705153407.png" src="lib/media/pasted-image-20250705153407.png"></span></li>
+</ul>
+</li>
+<li data-line="5" dir="auto">元数据以非特定语言的方式描述在代码中定义的每一类型和成员，这使得不同 <code>.NET</code> 语言编写的程序能够无缝互相操作；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：程序集
+<ul>
+<li data-line="7" dir="auto">程序集 (<code>Assembly</code>)是 <code>.NET</code> 应用程序的<strong>基本构建块</strong>和<strong>部署单元</strong>，通常表现为 <code>DLL</code> (动态链接库)或 <code>EXE</code> (可执行文件)文件；</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>其主要包含以下内容：
+<ul>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="9" dir="auto"><code>IL</code> 代码：中间语言 (<code>Intermediate Language</code>)，是 <code>.NET</code> 代码编译后的中间形式，需要 <code>JIT</code> (即时编译)转换为机器码；</li>
+</ol>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="10" dir="auto">元数据：描述程序集中类型、成员、引用关系等信息的数据；</li>
+</ol>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="11" dir="auto">资源文件：如图标、图像、字符串等非代码资源；</li>
+</ol>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="12" dir="auto"><code>Manifest</code> 清单：程序集的元数据，包括版本号、依赖项、标识信息等；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>元数据与程序集密不可分，程序集是元数据的物理载体，而元数据是程序集的"自描述"机制：
+<ul>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="14" dir="auto">编译时：代码编译为 <code>PE</code> (可移植可执行)文件时，编译器会生成元数据并嵌入到程序集中；</li>
+</ol>
+</li>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="15" dir="auto">执行时：<code>CLR</code> (公共语言运行时) 在执行程序时会<strong>加载元数据</strong>，用于发现类、成员、继承等信息；</li>
+</ol>
+</li>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="16" dir="auto">反射：元数据为反射 <code>API</code> 提供了基础数据，使得程序能够在运行时动态检查和使用类型信息； </li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="17" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：程序集中的 <code>Manifest</code>
+<ul>
+<li data-line="18" dir="auto">程序集清单 (<code>Assembly Manifest</code>) 是 <code>.NET</code> 程序集的核心组成部分，它包含了程序集的元数据信息，描述了程序集的结构、依赖关系和版本控制等重要信息；</li>
+<li data-line="19" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>构成：
+<ul>
+<li data-line="20" dir="auto"><span alt="Pasted image 20250705155150.png" src="Pasted image 20250705155150.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250705155150.png" src="lib/media/pasted-image-20250705155150.png"></span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="反射基础概念" dir="auto" class="heading" id="反射基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>反射基础概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：什么是反射</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">反射允许程序在运行时动态地检查、访问和修改自身的结构和行为，程序正在运行时，可以查看其它程序集或者自身的元数据，一个个运行的程序查看本身或者其它程序的元数据的行为就叫做反射；</li>
+<li data-line="2" dir="auto">因此，通过反射，开发者可以在程序运行时获取程序集、模块、类型及其成员的信息，并能够动态创建类型实例、调用方法、访问属性和字段等；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：反射的核心功能
+<ul>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="4" dir="auto"><strong>动态获取类型信息</strong>​：通过 <code>typeof</code> 运算符或 <code>GetType()</code> 方法获取 <code>System.Type</code> 对象，该对象包含类型的完整元数据；</li>
+</ol>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="5" dir="auto"><strong>动态创建对象</strong>​：使用 <code>Activator.CreateInstance</code> 方法或通过 <code>ConstructorInfo</code> 调用构造函数来实例化对象；</li>
+</ol>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="6" dir="auto"><strong>动态调用方法</strong>​：通过 <code>MethodInfo</code> 对象调用方法，包括静态方法和实例方法；</li>
+</ol>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="7" dir="auto"><strong>访问成员信息</strong>​：通过 <code>PropertyInfo</code>、<code>FieldInfo</code>、<code>EventInfo</code> 等类访问和操作属性、字段和事件；</li>
+</ol>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="5">
+<li data-line="8" dir="auto"><strong>动态加载程序集</strong>​：使用 <code>Assembly.Load</code> 或 <code>Assembly.LoadFrom</code> 方法在运行时加载外部程序集； </li>
+</ol>
+</li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="使用反射得到类信息" dir="auto" class="heading" id="使用反射得到类信息"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>使用反射得到类信息</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="获得类的元数据" dir="auto" class="heading" id="获得类的元数据"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>获得类的元数据</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>Type</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>system.Type</code> 的实例代表了类型的元数据。由于 <code>Type</code> 的应用领域非常广泛，因此它存在于 <code>System</code> 命名空间，而非 <code>System.Reflection</code> 命名空间中；</li>
+<li data-line="2" dir="auto"><code>Type</code> 类是 <code>C#</code> 反射机制的核心组件，它提供了运行时访问类型元数据的能力，使开发者能够动态检查和操作类、接口、数组、值类型等类型信息；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>作用：
+<ul>
+<li data-line="4" dir="auto">
+<p>调用任意对象的 <code>GetType</code> 方法或者使用 <code>C#</code> 的 <code>typeof</code> 运算符都可以得到 <code>System.Type</code> 的实例：</p>
+</li>
+<li data-line="5" dir="auto">
+<pre class="language-none"><code data-line="5" class="language-C# language-none is-loaded">  // 1. 获取任意数组或泛型的类型
+Type t1 = typeof(Dictionary&lt;int,int&gt;);
+Type t2 = typeof(Dictionary&lt;,&gt;);
+
+// 2. 基于程序集获取类型
+Type t3 = Assembly.GetExecutingAssembly().GetType("Demos.TestProgram");
+
+// 3. 获取数组类型
+Type simpleArrayType = typeof(int).MakeArrayType(3); // 创建三维数组
+
+// 4. 获取嵌套类型
+// 得到 Environment 类当中的所有嵌套类型
+foreach(Type t in typeof(System.Environment).GetNestedTypes())
+{
+	Console.Write(t.FullName);
+}
+
+// 5. 获得BaseType类型
+Type baseType = typeof(System.String).BaseType; // Object
+Type baseType2 = typeof(System.IO.FileStream).BaseType; // Stream
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+</li>
+</ul>
+</li>
+<li data-line="27" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结：
+<ul>
+<li data-line="28" dir="auto"><code>System.Type</code> 实例是打开类型的所有元数据的窗口；</li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：类型名称</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：一般类型名称
+<ul>
+<li data-line="1" dir="auto">类型具有 <code>Namespace</code>、<code>Name</code> 以及 <code>FullName</code> 属性；</li>
+<li data-line="2" dir="auto">在大多数情况下，<code>FullName</code> 是前两者的组合；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>代码：
+<ul>
+<li data-line="4" dir="auto"><span alt="Pasted image 20251013134458.png" src="Pasted image 20251013134458.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20251013134458.png" src="lib/media/pasted-image-20251013134458.png"></span></li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：泛型类型名称
+<ul>
+<li data-line="6" dir="auto">泛型类型名称带有 <code>'</code> 后缀，后续加上类型参数的数目；</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>如果泛型类型是未绑定的类型，则其 <code>Name</code> 和 <code>FullName</code> 都将遵循该规则：
+<ul>
+<li data-line="8" dir="auto">
+<pre class="language-none"><code data-line="8" class="language-C# language-none is-loaded">  Type t = typeof (Dictionary&lt;,&gt;);
+  Console.WriteLine(t.Name); // Dictionary`2 
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>代码</strong></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">用于测试的 <code>Test</code> 类型</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">class Test
+{
+	private int i = 1;
+	public string str = "123";
+
+	public Test(int i)
+	{
+		this.i = i;
+	}
+
+	public Test(int i,string str):this(i)
+	{
+		this.str = str;
+	}
+	
+	public void Speak()
+	{
+		Console.Write("456");
+	}
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">获得 <code>Type</code> 的三种方式，得到类的程序集信息</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">int a = 42;
+
+// 方式一
+Type type = a.GetType();
+
+// 方式二
+Type type2 = typeof(int);
+// 注意：类名必须包含命名空间，不然找不到
+
+// 方式三
+Type type3 = Type.GetType("System.Int32");
+
+// 注意：上述三种方式，引用的对象其实是一样的，都是堆地址当中存储的Int32类型的地址
+// 因为某一个类型的元数据只会在内存中存储一份，因此通过不同方式指向的Int32类型，其引用的地址一致
+
+// 得到类的程序集信息
+Console.WriteLine(type.Assembly);
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">获取类中的所有公共成员</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 首先得到 Type
+Type t = typeof(Test);
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-div"><div data-callout-metadata="" data-callout-fold="" data-callout="warning" class="callout drop-shadow"><div class="callout-title" dir="auto"><div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-alert-triangle"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></div><div class="callout-title-inner">补充：关于 <code>typeof</code> </div></div><div class="callout-content">
+<ul>
+<li data-line="1" dir="auto"><code>System.Type</code> 是一个抽象类型；</li>
+<li data-line="2" dir="auto">因此，实际上 <code>typeof</code> 运算符获得的是个 <code>Type</code> 的子类；</li>
+<li data-line="3" dir="auto">这种 <code>CLR</code> 使用的子类属于 <code>mscorlib</code> 的内部类型，称为 <code>RuntimeType</code>；</li>
+</ul>
+</div></div></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="代码示例：获得类中信息" dir="auto" class="heading" id="代码示例：获得类中信息"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>代码示例：获得类中信息</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>代码</strong></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">获得类中所有公共成员</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">Type t = typeof(Test);
+MemberInfo[] infos = t.GetMembers();
+for(int i = 0;i&lt;infos.Length;i++)
+{
+	Console.WriteLine(infos[i]);
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">获得所有构造函数</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">ConstructorInfo[] ctors = t.GetConstructors();
+for(int i = 0;i&lt;ctors.Length;i++)
+{
+	Console.WriteLine(ctors[i]);
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">执行构造函数，<code>new</code> 对象</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 得构造函数传入 Type 数组 数组中内容按顺序是参数类型
+// 执行构造函数传入 object 数组 表示按顺序传入的参数
+
+// 得到无参构造函数
+ConstructorInfo info = t.GetConstructors(new Type[0]);
+
+// 调用 info.Invoke 方法来执行无参构造函数，进而实例化一个 Test 类型的对象
+Test obj = info.Invoke(null) as Test;
+Console.WriteLine(obj.str);
+
+// 得到有参构造函数
+// 在大括号中，指定构造函数的指定重载版本
+ConstructorInfo info2 = t.GetConstructors(new Type[] { typeof(int) } );
+obj = info2.Invoke(new object[]{2}) as Test;
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">获取类中公共成员变量</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 1. 得到所有成员变量
+FieldInfo[] fieldInfos = t.GetFields();
+for (int i = 0; i &lt; fieldInfos.Length; i++)
+{
+	Console.WriteLine(fieldInfos[i]);
+}
+
+// 2. 得到指定名称的公共成员变量
+// 这里的 t 是指定的类型，然后这里的 GetField 是获得这个 t 类型当中、指定名称的字段的元数据
+FieldInfo infoJ = t.GetField("j");
+Console.WriteLine(infoJ);
+
+// 3. 通过反射获取和设置对象的值
+Test test = new Test();
+test.j = 99;
+test.str = "2222";
+
+// 4 有了类型的实例之后，可以通过反射得到的字段元数据，得到实例的指定字段的值
+Console.WriteLine(infoJ.GetValue(test));
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>获取类中公共成员方法
+<ul>
+<li data-line="1" dir="auto">注意：调用成员方法时，如果是静态方法，<code>Invoke</code> 中的第一个参数传 <code>null</code> 即可；</li>
+</ul>
+</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">Type strType = typeof(string);
+
+MethodInfo[] methods = strType.GetMethods();
+for (int i = 0; i &lt; methods.Length; i++)
+{
+	Console.WriteLine(methods[i]);
+}
+
+// 获得String类中的SubString方法
+MethodInfo subStrMethod = strType.GetMethod("SubString",new type[]{typeof(int),typeof(int)});
+
+// 调用该方法
+string str = "Hello";
+subStr.Invoke(str,new object[]{1,3});
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="总结" dir="auto" class="heading" id="总结"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>总结</strong></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="0" dir="auto">使用 <code>Type</code> 来得到类型的元数据；</li>
+</ol>
+</li>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="1" dir="auto">使用 <code>XXXInfo</code> 来存储方法、变量、构造函数等内容，使用 <code>xx.GetXXXs()</code> 来获得某个成员的全部 <code>XXX</code> 信息；</li>
+</ol>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="2" dir="auto">可以使用 <code>xxx元数据.GetXXX(实例)</code> 来得到 <code>xxx元数据</code> 的一个 <code>XXX</code> <code>实例</code> 信息；</li>
+</ol>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="3" dir="auto">使用 <code>xxx.Invoke(参数...)</code> 来调用方法；</li>
+</ol>
+</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="实例化类型" dir="auto" class="heading" id="实例化类型"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实例化类型</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：实例化类型</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">从类型中创建对象实例有两种方法：</li>
+<li data-line="1" dir="auto">方法一：调用静态的 <code>Activator.CreateInstance</code> 方法；</li>
+<li data-line="2" dir="auto">方法二：获得类型的构造函数的元数据，调用 <code>ConstructorInfo.Invoke</code> 方法，并使用 <code>Type</code> 的 <code>GetConstructor</code> 方法的返回值作为参数；</li>
+</ul></div><div class="el-h3 heading-wrapper"><h3 data-heading="使用 `Activator` 类创建类型" dir="auto" class="heading" id="使用_`Activator`_类创建类型"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>使用 <code>Activator</code> 类创建类型</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>Activator</code> 类</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>Activator</code> 类是 <code>C#</code> 反射 (<code>Reflection</code>) 机制的重要组成部分，它专门用于在运行时动态创建对象实例，是 <code>.NET</code> 框架中实现动态编程的关键组件之一； </li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Activator</code> 类位于 <code>System</code> 命名空间下，主要提供以下核心功能：
+<ul>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="3" dir="auto">无需在编译时知道具体类型，即可在运行时创建对象实例；</li>
+</ol>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="4" dir="auto">支持无参和有参构造函数的动态调用；</li>
+</ol>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="5" dir="auto">能够从外部程序集 (如 <code>DLL</code>)中加载并创建类型的实例； </li>
+</ol>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="6" dir="auto">通过 <code>Activator.CreateInstance&lt;T&gt;()</code> 方法支持泛型类型的实例化；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="7" dir="auto">与直接使用 <code>new</code> 关键字相比，<code>Activator</code> 的最大优势在于其<strong>运行时动态性</strong>，它允许程序根据运行时的条件 (如配置文件、用户输入等)决定要实例化的具体类型；</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>Activator</code> 类与反射的关系
+<ul>
+<li data-line="9" dir="auto"><code>Activator</code> 是反射机制的一部分，二者关系可概括为：</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="10" dir="auto">反射是基础*：反射提供了获取类型信息 (<code>Type</code>)的能力，而 <code>Activator</code> 利用这些信息进行实例化；</li>
+</ol>
+<ul>
+<li data-line="11" dir="auto"><span alt="Pasted image 20250705164940.png" src="Pasted image 20250705164940.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250705164940.png" src="lib/media/pasted-image-20250705164940.png"></span></li>
+</ul>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="12" dir="auto">负责不同的内容：</li>
+</ol>
+<ul>
+<li data-line="13" dir="auto">反射负责"探查"，获取程序集、模块、类型及成员信息，<code>Activator</code> 负责"创建"，专注于对象实例的动态创建；</li>
+<li data-line="14" dir="auto"><span alt="Pasted image 20250705165030.png" src="Pasted image 20250705165030.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250705165030.png" src="lib/media/pasted-image-20250705165030.png"></span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>代码</strong></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">有参构造函数的构造</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">Type testType = typeof(Test);
+
+// 第一个参数传入类型，第二个参数开始、传入有参构造函数的参数
+Test testObj = Activator.CreateInstance(testType,99) as Test
+Console.WriteLine(testobj.j);
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="使用构造函数实例化类型" dir="auto" class="heading" id="使用构造函数实例化类型"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>使用构造函数实例化类型</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：使用构造函数来实例化类型</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">当所用参数值无法甄别重载构造器时，就需要调用 <code>ConstructorInfo</code> 的 <code>Invoke</code> 方法；</li>
+<li data-line="2" dir="auto">例如，假设 <code>X</code> 类拥有两个构造器：一个构造器接受 <code>string</code> 参数，另一个接受 <code>StringBuilder</code> 类型的参数；</li>
+<li data-line="3" dir="auto">如果向 <code>Activator.CreateInstance</code> 传递 <code>null</code> 参数，则调用目标就具有二义性, 此时就需要使用 <code>ConstructorInfo</code>；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 1. 获得指定参数重载版本的构造函数
+// GetConstructor 方法的参数指定构造函数的参数类型
+ConstructorInfo ci = typeof(X).GetConstructor(new[] {typeof(string)});
+
+// 2. 使用构造函数创建对象
+object foo = ci?.Invoke(new object[]{null});
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-div"><div data-callout-metadata="" data-callout-fold="" data-callout="warning" class="callout drop-shadow"><div class="callout-title" dir="auto"><div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-alert-triangle"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></div><div class="callout-title-inner">注意：动态实例化的开销</div></div><div class="callout-content">
+<ul>
+<li data-line="1" dir="auto">使用动态实例化构造对象会增加几微秒的时间，相对来说这个时间比较长；</li>
+<li data-line="2" dir="auto">因为 <code>CLR</code> 实例化对象的速度是很快的，使用 <code>new</code> 实例化一个简单的小型类只需要消耗几十纳秒的时间；</li>
+</ul>
+</div></div></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="实例化委托对象" dir="auto" class="heading" id="实例化委托对象"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实例化委托对象</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：实例化委托对象</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">如果要动态实例化委托对象，应当调用 <code>Delegate.CreateDelegate</code> 方法；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">class Program
+{
+	delegate int IntFunc(int x);
+	static int Square(int x) { return x*x; }
+	int Cube (int x) { return x*x*x; }
+	
+	static void Main()
+	{
+		// 参数1：指定委托
+		// 参数2-1：如果是创建静态方法的委托，则使用 typeof 获得类型
+		// 参数2-2：如果是创建实例方法的委托，则传入 当前类型实例
+		// 参数3：指定的方法名
+		Delegate staticD = Delegate.CreateDelegate(
+			typeof(IntFunc), typeof(Program), "Square"
+		);
+		
+		Delegate instanceD = Delegate.CreateDelegate(
+			typeof(IntFunc), new Program(), "Cube"
+		);
+		
+		// 调用方法
+		IntFunc f = (IntFunc)staticD;
+		Console.WriteLine(f(3));
+	}
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="泛型类型及其成员" dir="auto" class="heading" id="泛型类型及其成员"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>泛型类型及其成员</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：泛型类型及其成员</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">
+<p><code>Type</code> 既可以表示封闭的泛型类型，也可以表示未绑定类型参数的泛型类型。但是在编译时只能够实例化封闭的泛型类型，而无法实例化未绑定的泛型类型；</p>
+</li>
+<li data-line="2" dir="auto">
+<pre class="language-none"><code data-line="2" class="language-C# language-none is-loaded">// 能够正确运行
+Type closedType = typeof(List&lt;int&gt;);
+List&lt;int&gt; list = (List&lt;int&gt;) Activator.CreateInstance(closedType);
+
+// 以下代码会在运行时产生报错
+Type unbound = typeof(List&lt;&gt;);
+object anError = Activator.CreateInstance(unbound);
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：将未绑定的泛型类型转换为封闭的泛型类型
+<ul>
+<li data-line="12" dir="auto">
+<p>可以使用 <code>MakeGenericType</code> 方法接受类型参数：</p>
+<pre class="language-none"><code data-line="13" class="language-C# language-none is-loaded">Type unbound = typeof(List&lt;&gt;);
+Type closed = unbound.MakeGenericType(typeof(int));
+
+// 反过程
+Type unbound = closed.GetGenericTypeDefinition();
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+</li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>分析</strong></p></div><div class="el-pre"><pre class="language-c"><code data-line="0" class="language-c is-loaded">public <span class="token keyword">void</span> Add<span class="token operator">&lt;</span>TProperty<span class="token operator">&gt;</span><span class="token punctuation">(</span>string name<span class="token punctuation">,</span>BindableProperty<span class="token operator">&lt;</span>TProperty<span class="token operator">&gt;</span><span class="token punctuation">.</span>ValueChangedHandler valueChangedHandler <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+	<span class="token comment">// 这里的 T 是类的泛型参数，使用 typeof(T) 在运行时获取 T 的真实类型</span>
+	<span class="token comment">// 然后再使用 GetField 得到类型当中变量名为 name 的字段的元数据，此字段为Public修饰符</span>
+	var fieldInfo <span class="token operator">=</span> <span class="token keyword">typeof</span><span class="token punctuation">(</span>T<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">GetField</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> BindingFlags<span class="token punctuation">.</span>Instance <span class="token operator">|</span> BindingFlags<span class="token punctuation">.</span>Public<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>fieldInfo <span class="token operator">==</span> null<span class="token punctuation">)</span>
+	<span class="token punctuation">{</span>
+		throw new <span class="token function">Exception</span><span class="token punctuation">(</span>string<span class="token punctuation">.</span><span class="token function">Format</span><span class="token punctuation">(</span><span class="token string">"Unable to find bindableproperty field '{0}.{1}'"</span><span class="token punctuation">,</span> <span class="token keyword">typeof</span><span class="token punctuation">(</span>T<span class="token punctuation">)</span><span class="token punctuation">.</span>Name<span class="token punctuation">,</span> name<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+
+	_binders<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span>viewmodel <span class="token operator">=</span><span class="token operator">&gt;</span>
+	<span class="token punctuation">{</span>
+		GetBindablePropertyFromViewModel<span class="token operator">&lt;</span>TProperty<span class="token operator">&gt;</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> viewmodel<span class="token punctuation">,</span> fieldInfo<span class="token punctuation">)</span><span class="token punctuation">.</span>OnValueChanged <span class="token operator">+=</span> valueChangedHandler<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	_unbinders<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span>viewModel <span class="token operator">=</span><span class="token operator">&gt;</span>
+	<span class="token punctuation">{</span>
+		GetBindablePropertyFromViewModel<span class="token operator">&lt;</span>TProperty<span class="token operator">&gt;</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> viewModel<span class="token punctuation">,</span> fieldInfo<span class="token punctuation">)</span><span class="token punctuation">.</span>OnValueChanged <span class="token operator">-=</span> valueChangedHandler<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+private BindableProperty<span class="token operator">&lt;</span>TProperty<span class="token operator">&gt;</span> GetBindablePropertyFromViewModel<span class="token operator">&lt;</span>TProperty<span class="token operator">&gt;</span><span class="token punctuation">(</span>string name<span class="token punctuation">,</span> T viewModel<span class="token punctuation">,</span>FieldInfo fieldInfo<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+	<span class="token comment">// 从 viewModel 的实例中，得到 fieldInfo 字段对应的实例</span>
+	var value <span class="token operator">=</span> fieldInfo<span class="token punctuation">.</span><span class="token function">GetValue</span><span class="token punctuation">(</span>viewModel<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	
+	BindableProperty<span class="token operator">&lt;</span>TProperty<span class="token operator">&gt;</span> bindableProperty <span class="token operator">=</span> value as BindableProperty<span class="token operator">&lt;</span>TProperty<span class="token operator">&gt;</span><span class="token punctuation">;</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>bindableProperty <span class="token operator">==</span> null<span class="token punctuation">)</span>
+	<span class="token punctuation">{</span>
+		throw new <span class="token function">Exception</span><span class="token punctuation">(</span>string<span class="token punctuation">.</span><span class="token function">Format</span><span class="token punctuation">(</span><span class="token string">"Illegal bindableproperty field '{0}.{1}' "</span><span class="token punctuation">,</span> <span class="token keyword">typeof</span><span class="token punctuation">(</span>T<span class="token punctuation">)</span><span class="token punctuation">.</span>Name<span class="token punctuation">,</span> name<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">return</span> bindableProperty<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="动态绑定" dir="auto" class="heading" id="动态绑定"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>动态绑定</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`GetMember` 方法" dir="auto" class="heading" id="`GetMember`_方法"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>GetMember</code> 方法</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>GetMember</code> 方法</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">如果在调用 <code>GetMembers</code> 方法时不传递任何参数，则该方法会返回当前类型 (及其基类) 的所有公有成员，<code>GetMember</code> 方法则可以通过名称检索特定的成员。由于成员可能会被重载，因此该方法仍然会返回一个数组；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>MemberInfo</code> 的 <code>MemberType</code> 属性
+<ul>
+<li data-line="3" dir="auto"><span alt="Pasted image 20251013145247.png" src="Pasted image 20251013145247.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20251013145247.png" src="lib/media/pasted-image-20251013145247.png"></span></li>
+<li data-line="4" dir="auto">当调用 <code>GetMembers</code> 方法时，可以传递一个 <code>MemberTypes</code> 实例来限定返回的成员类型；</li>
+<li data-line="5" dir="auto">此外，还可以调用 <code>GetMethods</code>、<code>GetFields</code>、<code>GetProperties</code>、<code>GetEvents</code>、<code>GetConstructors</code> 以及 <code>GetNestedTypes</code> 方法获得相应的成员，以上方法均有返回指定的单个成员的版本；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>示例：
+<ul>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>类型定义：
+<ul>
+<li data-line="8" dir="auto"><span alt="Pasted image 20251013144423.png" src="Pasted image 20251013144423.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20251013144423.png" src="lib/media/pasted-image-20251013144423.png"></span></li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>对公有成员进行反射：
+<ul>
+<li data-line="10" dir="auto"><span alt="Pasted image 20251013144444.png" src="Pasted image 20251013144444.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20251013144444.png" src="lib/media/pasted-image-20251013144444.png"></span></li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>执行结果：
+<ul>
+<li data-line="12" dir="auto">只会获得所有公有成员，因此 <code>cracked</code> 的元数据不会被获取；</li>
+<li data-line="13" dir="auto"><span alt="Pasted image 20251013144455.png" src="Pasted image 20251013144455.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20251013144455.png" src="lib/media/pasted-image-20251013144455.png"></span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`MemberInfo` 类型及其子类型" dir="auto" class="heading" id="`MemberInfo`_类型及其子类型"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>MemberInfo</code> 类型及其子类型</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>MemberInfo</code> 对象</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>MemberInfo</code> 类型是其他具体成员类型的父类，其主要是提供以下属性：</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="2" dir="auto"><code>Name</code>：名称；</li>
+</ol>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="3" dir="auto"><code>DeclaringType</code>：该属性返回该成员的定义类型，返回的是基类型；</li>
+</ol>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="4" dir="auto"><code>ReflectedType</code>：返回调用 <code>GetMembers</code> 的具体类型，返回的是子类型；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="5" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">MethodInfo test = typeof(Program).GetMethod("ToString");
+MethodInfo obj = typeof(object).GetMethod("ToString");
+
+Console.WriteLine(test.DeclaringType); // System.Object
+Console.WriteLine(obj.DeclaringType); // System.Object
+
+Console.WriteLine(test.ReflectedType); // Program
+Console.WriteLine(obj.ReflectedType); // System.Object
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：具体成员类型
+<ul>
+<li data-line="1" dir="auto"><span alt="Pasted image 20251013150103.png" src="Pasted image 20251013150103.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20251013150103.png" src="lib/media/pasted-image-20251013150103.png"></span></li>
+<li data-line="2" dir="auto">可以根据 <code>MemberInfo</code> 的 <code>MemberType</code> 属性将 <code>MemberInfo</code> 转换为相应的子类型。如果通过 <code>GetMethod</code>、<code>GetField</code>、<code>GetProperty</code>、<code>GetEvent</code>、<code>GetConstructor</code> 或者 <code>GetNestedTypes</code> (及其复数版本) 获取成员则无须进行转换；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：获取具体成员类型的方法
+<ul>
+<li data-line="4" dir="auto"><span alt="Pasted image 20251013150359.png" src="Pasted image 20251013150359.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20251013150359.png" src="lib/media/pasted-image-20251013150359.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="动态绑定及其实现" dir="auto" class="heading" id="动态绑定及其实现"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>动态绑定及其实现</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：什么是动态绑定</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">可以通过 <code>GetMember</code> 或者 <code>GetFields</code> 等方法得到类型当中得成员得元数据信息；</li>
+<li data-line="2" dir="auto">比如：假设得到了 <code>MethodInfo</code>、<code>PropertyInfo</code> 或者 <code>FieldInfo</code> 对象，我们就可以动态对其进行调用，或者得到并设置它们的值。这称为“动态绑定”或者“后期绑定”，它会在运行时 (而不是在编译时) 来决定成员的调用；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 静态绑定
+string s = "Hello";
+int length = s.Length;
+
+// 动态绑定
+object s = "Hello";
+PropertyInfo propInfo = s.GetType().GetProperty("Length");
+int length = (int) propInfo.GetValue(s,null);
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>解析：
+<ul>
+<li data-line="1" dir="auto">第一步：使用实例的 <code>GetType</code> 成员方法，得到类型元数据；</li>
+<li data-line="2" dir="auto">第二步：对类型使用 <code>GetXXX</code> 方法，得到指定种类（比如属性、字段、方法等）的元数据信息，参数当中传入的是变量的名称；</li>
+<li data-line="3" dir="auto">第三步：使用元数据的 <code>GetValue</code> 方法，第一个参数传入实例，第二个参数指定 <code>GetValue</code> 的一些操作；</li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：设置/获取元数据对于实例的值 - <code>Get/SetValue(实例，访问属性)</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>介绍：
+<ul>
+<li data-line="1" dir="auto">通过反射获取 <code>PropertyInfo</code> 或 <code>FieldInfo</code> 等元数据信息后，<code>GetValue</code> 和 <code>SetValue</code> 方法与这些成员的实际值进行交互的桥梁；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>GetValue</code> 方法
+<ul>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<p>定义：</p>
+<ul>
+<li data-line="4" dir="auto"><code>object GetValue(object obj)​</code>：获取指定对象 <code>obj</code> 的属性或字段的值；</li>
+<li data-line="5" dir="auto"><code>object GetValue(object obj, object[] index)​</code>：主要用于获取索引属性​（<code>C#</code> 中的索引器）的值。<code>index</code> 参数是一个对象数组，用于传递索引值。对于非索引属性，比如属性，此参数应传入 <code>null</code></li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<p>返回：</p>
+<ul>
+<li data-line="7" dir="auto">返回类型为 <code>object</code>。如果获取的是值类型（如 <code>int</code>, <code>bool</code>），返回值将是该值类型的<strong>装箱</strong>对象；</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<p>示例：</p>
+<ul>
+<li data-line="9" dir="auto">
+<pre class="language-none"><code data-line="9" class="language-C# language-none is-loaded">using System;
+using System.Reflection;
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+</li>
+</ul>
+<p>public class MyClass<br>
+{<br>
+public string InstanceProperty { get; set; } = "Hello";<br>
+public static int StaticProperty { get; set; } = 42;<br>
+private string _privateField = "Private Info";<br>
+}</p>
+<p>// 获取实例属性值<br>
+MyClass obj = new MyClass();<br>
+PropertyInfo instanceProp = typeof(MyClass).GetProperty("InstanceProperty");<br>
+object value1 = instanceProp.GetValue(obj); // value1 包含 "Hello"</p>
+<p>// 获取静态属性值<br>
+PropertyInfo staticProp = typeof(MyClass).GetProperty("StaticProperty");<br>
+// 注意：静态变量，不需要在GetValue当中传入实例，可以传入null表示当前获取的是静态变量<br>
+object value2 = staticProp.GetValue(null); // obj 为 null，value2 包含 42</p>
+<p>// 获取私有字段值（需要设置绑定标志）<br>
+FieldInfo privateField = typeof(MyClass).GetField("_privateField", BindingFlags.NonPublic | BindingFlags.Instance);<br>
+object value3 = privateField.GetValue(obj); // value3 包含 "Private Info"<br>
+```</p>
+</li>
+</ul>
+</li>
+<li data-line="34" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>SetValue</code> 方法
+<ul>
+<li data-line="35" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>定义：
+<ul>
+<li data-line="36" dir="auto"><code>void SetValue(object obj, object value)​</code>：将指定对象 <code>obj</code> 的属性或字段设置为 <code>value</code>；</li>
+<li data-line="37" dir="auto"><code>void SetValue(object obj, object value, object[] index)​</code>：用于设置索引属性的值。<code>index</code> 参数用于传递索引值；</li>
+</ul>
+</li>
+<li data-line="38" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意：
+<ul>
+<li data-line="39" dir="auto">参数 obj 含义同 <code>GetValue</code>，实例成员传对象，静态成员传 <code>null</code>；</li>
+<li data-line="40" dir="auto"><code>value</code> 表示要设置的新值，类型为 <code>object</code>。方法内部会尝试将其转换为目标属性/字段的实际类型。如果类型不兼容，会抛出 <code>ArgumentException</code>； </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`GetMethod` 与 `GetParameters` 方法" dir="auto" class="heading" id="`GetMethod`_与_`GetParameters`_方法"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>GetMethod</code> 与 <code>GetParameters</code> 方法</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>GetMethod</code> 方法</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>定义：
+<ul>
+<li data-line="1" dir="auto"><span alt="Pasted image 20251015152222.png" src="Pasted image 20251015152222.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20251015152222.png" src="lib/media/pasted-image-20251015152222.png"></span></li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="3" dir="auto">第一个参数传入要获取的方法名称，第二个参数用于指定重载函数的参数列表；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">private void GetMethodTest()  
+{  
+    string s1 = "Hello,World!";  
+    Type type = s1.GetType();  
+    // 指定要获取的SubString方法的重载版本  
+    Type[] methodParams = { typeof(int) };  
+    MethodInfo methodInfo = type.GetMethod("Substring",methodParams);  
+    Debug.Log("截取字符串方法的元数据：" + methodInfo);  
+  
+    object[] args = { 2 };  
+    string s2 = methodInfo?.Invoke(s1, args) as string;  
+    Debug.Log("截取字符串:" + s2);  
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>结果：
+<ul>
+<li data-line="1" dir="auto"><span alt="Pasted image 20251015152813.png" src="Pasted image 20251015152813.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20251015152813.png" src="lib/media/pasted-image-20251015152813.png"></span></li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>GetParameters</code> 方法</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>定义：
+<ul>
+<li data-line="1" dir="auto"><span alt="Pasted image 20251015153201.png" src="Pasted image 20251015153201.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20251015153201.png" src="lib/media/pasted-image-20251015153201.png"></span></li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="3" dir="auto">返回方法的参数类型列表；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">private void GetMethodTest()  
+{  
+    string s1 = "Hello,World!";  
+    Type type = s1.GetType();  
+    // 指定要获取的SubString方法的重载版本  
+    Type[] methodParams = { typeof(int) };  
+    MethodInfo methodInfo = type.GetMethod("Substring",methodParams);  
+    Debug.Log("截取字符串方法的元数据：" + methodInfo);  
+  
+    object[] args = { 2 };  
+    string s2 = methodInfo?.Invoke(s1, args) as string;  
+    Debug.Log("截取字符串:" + s2);  
+    ParameterInfo[] parameters = methodInfo.GetParameters();  
+    foreach (ParameterInfo parameter in parameters)  
+    {        
+	    Debug.Log(parameter.Name);  
+        Debug.Log(parameter.ParameterType);  
+    }
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>结果：
+<ul>
+<li data-line="1" dir="auto"><span alt="Pasted image 20251015153129.png" src="Pasted image 20251015153129.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20251015153129.png" src="lib/media/pasted-image-20251015153129.png"></span></li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>分析</strong>：使用委托提升性能</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="1" dir="auto">动态调用的效率不高，其开销通常为几微秒；</li>
+<li data-line="2" dir="auto">如果要在一个循环中重复调用某个方法，则可以为目标动态方法动态实例化一个委托，这样就可以将微秒级的开销降低到纳秒级；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto">示例：动态调用 <code>string</code> 的 <code>Trim</code> 方法一百万次而不会出现显著的开销</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">delegate string StringToString(string s);
+
+private void MethofToDelegate()
+{
+	MethodInfo trimMethodInfo = typeof(string).GetMethod("Trim",new Type[0]);
+	var trimMethod = (StringToString)Delegate.CreateDelegate(typeof(StringToString), trimMethodInfo);
+	for (int i =0;i&lt;1000;i++)
+	{
+		trimMethod("test");
+	}
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="元数据的筛选器：`BindingFlags`" dir="auto" class="heading" id="元数据的筛选器：`BindingFlags`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>元数据的筛选器：<code>BindingFlags</code></h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：元数据的筛选器 -  <code>BindingFlags</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">类型上所有检测元数据的方法，例如 <code>GetProperty</code>、<code>GetField</code> 等，都含有使用 <code>BindingFlags</code> 枚举的重载方法，而这个枚举参数就是元数据的筛选器，使用它可以更改默认的筛选标准；</li>
+<li data-line="2" dir="auto">它的常见用法是检索非公有成员 (仅仅适用于桌面应用程序)；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分类：<code>BindingFlags</code> 枚举
+<ul>
+<li data-line="4" dir="auto"><span alt="Pasted image 20251015154717.png" src="Pasted image 20251015154717.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20251015154717.png" src="lib/media/pasted-image-20251015154717.png"></span></li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>示例：常见组合
+<ul>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="6" dir="auto">获取所有成员：<code>BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static</code></li>
+</ol>
+<ul>
+<li data-line="7" dir="auto">这是一个非常宽泛的搜索条件，它会返回指定类型的所有成员，无论其可访问性（公共或非公共）还是类型（实例或静态）</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="8" dir="auto">获取公共实例成员：<code>BindingFlags.Public | BindingFlags.Instance</code></li>
+</ol>
+<ul>
+<li data-line="9" dir="auto">搜索所有公共的实例成员；</li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="10" dir="auto">获取非公共静态成员：<code>BindingFlags.NonPublic | BindingFlags.Static</code></li>
+</ol>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="11" dir="auto">访问私有实例方法：<code>BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod</code></li>
+</ol>
+<ul>
+<li data-line="12" dir="auto">此组合允许你调用一个对象的非公共实例方法，可以用于单元测试，用于测试类的私有方法逻辑；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意：
+<ul>
+<li data-line="14" dir="auto">像 <code>Type.GetMethod(string name)</code> 这样的重载（不接收 <code>BindingFlags</code> 参数），其<strong>默认行为等价于只指定了 <code>Public | Instance | Static</code></strong>，也就是说，它默认会搜索公共的实例方法和静态方法，但不会搜索非公共方法； </li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`MakeGenericMethod` 方法" dir="auto" class="heading" id="`MakeGenericMethod`_方法"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>MakeGenericMethod</code> 方法</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>MakeGenericMethod</code> 方法</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">调用泛型方法需要一个额外的步骤，即在 <code>MethodInfo</code> 对象上调用 <code>MakeGenericMethod</code> 方法，来指定确切的泛型类型参数，该方法将返回一个新的 <code>MethodInfo</code>；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">public static T Echo&lt;T&gt;(T value)
+{
+	return value;
+}
+
+private void GenericTest()
+{
+	MethodInfo methodInfo = typeof(ReflectionTest).GetMethod("Echo");
+	
+	// MakeGenericMethod 方法的参数，用于指定泛型的类型
+	MethodInfo genericMethodInfo = methodInfo.MakeGenericMethod(typeof(int));
+	Debug.Log(genericMethodInfo.Invoke(null, new object[] { 312134 }));
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="反射程序集" dir="auto" class="heading" id="反射程序集"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>反射程序集</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`Assembly` 类" dir="auto" class="heading" id="`Assembly`_类"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Assembly</code> 类</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>Assembly</code> 类</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：程序集
+<ul>
+<li data-line="1" dir="auto"><code>Assembly</code> 是 <code>.NET</code> 应用程序的基本部署单元，通常以 <code>.dll</code>（类库）或 <code>.exe</code>（可执行文件）形式存在。它不仅是编译输出的物理文件，更是一个包含代码、资源和元数据的逻辑单元；</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>.NET</code> 中的 <code>Assembly</code> 主要分为两类： 
+<ul>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="3" dir="auto">私有：仅供单个应用程序使用，通常存放在应用程序目录中； </li>
+</ol>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="4" dir="auto">公有：可被多个应用程序共享，通常存放在全局程序集缓存 (<code>GAC</code>) 中；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="5" dir="auto">全局程序集缓存(<code>GAC</code>)是 <code>.NET</code> 框架提供的特殊文件夹，用于存储共享 <code>Assembly</code>，支持不同版本的同一 <code>Assembly</code> 共存，避免 <code>DLL Hell</code> 问题； </li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：程序集类；
+<ul>
+<li data-line="7" dir="auto">主要用来加载其它程序集，加载后才能用 <code>Type</code> 来使用其它程序集中的信息；</li>
+<li data-line="8" dir="auto">如果想要使用不是自己程序集中的内容，需要先加载程序集比如 <code>dll</code> 文件 (库文件)；</li>
+<li data-line="9" dir="auto">简单的把库文件看成一种代码仓库，它抓供给使用者一些可以直接拿来用的变量、函数或类；</li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：加载程序集的三种方法</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：加载同一文件下的其他程序集
+<ul>
+<li data-line="1" dir="auto"><code>Assembly asembly = Assembly.Load("程序集名称");</code></li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：加载不在同一文件下的其它程序集
+<ul>
+<li data-line="3" dir="auto"><code>Assembly asembly = Assembly.LoadFrom("包含程序集清单的文件的名称或路径");</code></li>
+<li data-line="4" dir="auto"><code>Assembly asembly = Assembly.LoadFile("要加载的文件的完全限定路径”);</code></li>
+</ul>
+</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 1. 加载制定程序集
+Assembly assembly1 = Assembly.LoadFrom(@"\Users\MECHREVo\Desktop\csharp进阶教学\Lesson18_练习题\bin\Debug\netcoreapp3.1\DLL对应名称");
+
+// 2. 获得程序集中全部的类的元数据
+// 获得DLL中所有类型的元数据
+Type[] types = assembly1.GetType();
+for (int i = 0; i &lt; assembly1.Length; i++)
+{
+	Console.WriteLine(assembly1[i]);
+}
+
+// 获得DLL中某一个类型的元数据
+// 注意：Lesson18_练习是其命名空间的名称
+Type icon = assembly1.GetType("Lesson18_练习题.Icon");
+
+// 3. 使用反射进行加载其中方法信息
+MemberInfo[] members = inco.GetMembers();
+for(int i = 0;i&lt;members.Length;i++)
+{
+	Console.WriteLine(members[i]);
+}
+
+// 4. 实例化对象
+// 获得枚举类型
+Type moveDir = assembly1.GetType("Lesson18_练习题.E_MoveDir");
+FieldInfo right = moveDir.GetField("Right");
+// 实例化对象
+// 第一个传入的参数为Type的类型，后三个为构造函数的参数
+object iconobj = Activator.CreateInstance(icon,10,5,right.GetValue(null));
+
+// 5. 得到对象中的方法
+MethodInfo move = icon.GetMethod("Move");
+move.Invoke(iconObj.);
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="模块" dir="auto" class="heading" id="模块"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>模块</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：模块</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">调用多模块程序集对象的 <code>GetTypes</code> 方法将会返回所有模块中的所有类型，但是，当模块之间具有关联性时，就应该对元数据的令牌进行处理；</li>
+<li data-line="2" dir="auto">元数据令牌是一个整数，它对于模块范围内的每一个类型、成员、字符串或者资源都是唯一的；</li>
+<li data-line="3" dir="auto"><code>IL</code> 会使用这些元数据令牌，因此在解析 <code>IL</code> 的过程中，需要解析这些元数据令牌，相应的方法定义在 <code>Module</code> 类型的 <code>ResolveType</code>、<code>ResolveMember</code>、<code>ResolveString</code> 和 <code>ResolveSignature</code> 中；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>方法：
+<ul>
+<li data-line="5" dir="auto"><code>GetModules</code> 方法：可以获得程序集中的所有模块列表，此外还可以通过 <code>ManifestModule</code> 属性直接访问程序集的主模块；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">using System;
+using System.Reflection;
+using System.Linq;
+
+namespace ModuleReflectionDemo
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // 1. 加载当前程序集（也可以是外部多模块程序集）
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Console.WriteLine($"程序集全名: {assembly.FullName}");
+
+            // 2. 获取指定的程序集中的所有模块
+            Module[] modules = assembly.GetModules();
+            Console.WriteLine($"模块数量: {modules.Length}");
+
+            // 3. 访问当前应用程序的主模块（ManifestModule）
+            Module mainModule = assembly.ManifestModule;
+            Console.WriteLine($"主模块名称: {mainModule.Name}");
+
+            // 4. 遍历所有模块并分析模块内的类型
+            foreach (Module module in modules)
+            {
+                Console.WriteLine($"\n--- 模块 {module.Name} 分析开始 ---");
+                
+                // 获取模块中的所有类型
+                Type[] types = module.GetTypes();
+                Console.WriteLine($"模块中的类型数: {types.Length}");
+
+                // 示例：解析模块中第一个类型的元数据令牌（如果存在）
+                if (types.Length &gt; 0)
+                {
+                    Type sampleType = types[0];
+                    int typeToken = sampleType.MetadataToken; // 获取元数据令牌
+                    
+                    Console.WriteLine($"类型: {sampleType.Name}, 元数据令牌: 0x{typeToken:X}");
+                    
+                    // 使用元数据令牌解析类型（验证令牌有效性）[5](@ref)
+                    Type resolvedType = module.ResolveType(typeToken);
+                    Console.WriteLine($"令牌解析结果: {resolvedType?.Name}");
+                }
+
+                // 5. 演示多模块场景下的类型关联性处理
+                if (module != mainModule)
+                {
+                    Console.WriteLine("处理辅助模块中的类型关联性...");
+                    // 此处可添加针对模块间依赖关系的特殊处理逻辑
+                }
+            }
+
+            // 6. 综合示例：通过模块解析方法成员
+            DemonstrateMemberResolution(assembly);
+        }
+
+        static void DemonstrateMemberResolution(Assembly assembly)
+        {
+            // 获取第一个模块中的第一个类型
+            Module module = assembly.Modules.First();
+            Type targetType = module.GetTypes().FirstOrDefault(t =&gt; t.GetMethods().Length &gt; 0);
+            
+            if (targetType != null)
+            {
+                MethodInfo sampleMethod = targetType.GetMethods().First();
+                int methodToken = sampleMethod.MetadataToken;
+                
+                Console.WriteLine($"\n[成员解析示例]");
+                Console.WriteLine($"方法: {sampleMethod.Name}, 令牌: 0x{methodToken:X}");
+                
+                // 通过模块解析方法成员[5](@ref)
+                MemberInfo resolvedMember = module.ResolveMember(methodToken);
+                Console.WriteLine($"解析后的成员: {resolvedMember?.Name}");
+            }
+        }
+    }
+
+    // 示例类1
+    public class SampleClass1
+    {
+        public void MethodA() =&gt; Console.WriteLine("MethodA called");
+    }
+
+    // 示例类2
+    public class SampleClass2
+    {
+        public int MethodB(int x) =&gt; x * 2;
+    }
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="动态生成代码" dir="auto" class="heading" id="动态生成代码"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>动态生成代码</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="什么是动态生成代码" dir="auto" class="heading" id="什么是动态生成代码"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>什么是动态生成代码</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：什么是动态生成代码</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">动态代码生成指的是在程序运行时创建并编译新的类、方法或整个程序集的能力，而非在传统的编译时（<code>compile-time</code>）预先写好；</li>
+<li data-line="2" dir="auto">这与使用反射 <code>Reflection</code> 来“查看”已有元数据不同，它是反向的“创造”过程； </li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>Emit</code> 技术
+<ul>
+<li data-line="4" dir="auto"><code>System.Reflection.Emit</code> 命名空间包含了可以在运行时创建元数据和 <code>IL</code> 的类型，<code>System.Reflection.Emit</code> 命名空间下的类来动态生成中间语言（<code>IL</code>）代码的技术 </li>
+<li data-line="5" dir="auto">可以通过 Emit 代码向它发出指令（定义程序集、模块、类型、方法），它就在内存中为你实时制造出新的、可用的类型和方法；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：多种动态生成代码的方法
+<ul>
+<li data-line="7" dir="auto"><span alt="PixPin_2025-10-16_20-07-32.png" src="PixPin_2025-10-16_20-07-32.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-10-16_20-07-32.png" src="lib/media/pixpin_2025-10-16_20-07-32.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="技术原理：IL 与评估栈" dir="auto" class="heading" id="技术原理：IL_与评估栈"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>技术原理：IL 与评估栈</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：技术原理 - <code>IL</code> 与评估栈</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">编写的 <code>C#</code> 代码首先被编译器编译为 <code>IL</code> 语言​，这是一种与处理器无关的指令集。程序运行时，<code>.NET</code> 的即时编译器（<code>JIT</code>）再将 <code>IL</code> 编译成本地机器码执行；</li>
+<li data-line="2" dir="auto">而 <code>IL</code> 是一种基于栈的语言。大部分 <code>IL</code> 指令的工作方式都是从评估栈上取出操作数，执行操作，再将结果压回栈顶；</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>例如，执行加法 <code>a + b</code> 的 <code>IL</code> 指令流程是：
+<ul>
+<li data-line="4" dir="auto"><code>ldarg.1</code>：将第一个参数 <code>a</code> 压入栈；</li>
+<li data-line="5" dir="auto"><code>ldarg.2</code>：将第二个参数 <code>b</code> 压入栈； </li>
+<li data-line="6" dir="auto"><code>add</code>：从栈顶弹出 <code>a</code> 和 <code>b</code>，相加，将结果压回栈顶；</li>
+<li data-line="7" dir="auto"><code>ret</code>：从栈顶弹出结果并返回；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>Emit</code> 与 <code>IL</code> 的关系
+<ul>
+<li data-line="9" dir="auto"><code>ILGenerator</code> 类就是用来生成这些 <code>IL</code> 指令的工具，通过调用它的 <code>Emit</code> 方法，传入不同的 <code>OpCodes</code>（操作码），来一步步“编织”出方法的逻辑； </li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="使用 `DynamicMethod` 生成 `IL`" dir="auto" class="heading" id="使用_`DynamicMethod`_生成_`IL`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>使用 <code>DynamicMethod</code> 生成 <code>IL</code></h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：使用 <code>DynamicMethod</code> 生成 <code>IL</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>DynamicMethod</code> 类是位于 <code>System.Reflection.Emit</code> 命名空间的一个轻量级工具类，该类可以在运行时生成方法；</li>
+<li data-line="2" dir="auto">与 <code>Type Builder</code> 不同，它不需要首先创建包含该方法的程序集、模块和类型；</li>
+<li data-line="3" dir="auto">这个特点使其非常适用于完成简单的任务，因此我们将其作为介绍 <code>Reflection.Emit</code> 的起点；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 引入必要的命名空间
+using System;
+using System.Reflection.Emit;
+
+public class DynamicMethodDemo
+{
+    public static void Main()
+    {
+        // 1. 创建一个 DynamicMethod 实例
+        // 参数含义："Foo"（方法名）, null（返回类型）, null（参数类型）, typeof(Program)（关联的类型）
+        var dynamicMethod = new DynamicMethod("SayHello", typeof(void), null, typeof(DynamicMethodDemo));
+
+        // 2. 获取 IL 生成器
+        ILGenerator il = dynamicMethod.GetILGenerator();
+
+        // 3. 开始生成 IL 指令
+        il.Emit(OpCodes.Ldstr, "Hello, World from DynamicMethod!"); // 将字符串压入评估栈
+        il.Emit(OpCodes.Call, typeof(Console).GetMethod("WriteLine", new[] { typeof(string) })); // 调用 Console.WriteLine
+        il.Emit(OpCodes.Ret); // 方法返回
+
+        // 4. 调用动态生成的方法
+        // 第一个参数为 null 因为这是静态方法
+        dynamicMethod.Invoke(null, null); 
+        // 输出：Hello, World from DynamicMethod!
+    }
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="使用 `Reflection.Emit` 创建动态类和方法" dir="auto" class="heading" id="使用_`Reflection.Emit`_创建动态类和方法"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>使用 <code>Reflection.Emit</code> 创建动态类和方法</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：使用 <code>Reflection.Emit</code> 创建动态类和方法</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">using System;
+using System.Reflection;
+using System.Reflection.Emit;
+
+public class FullEmitDemo
+{
+    public static void Main()
+    {
+        // 1. 定义动态生成的程序集和模块
+        AssemblyName assemblyName = new AssemblyName("MyDynamicAssembly");
+        AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
+        ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule("MainModule");
+
+        // 2. 在模块中定义一个新的公共类 "Calculator"
+        // 使用 TypeBuilder 类型来装类型创造的容器，其定义在 moduleBuilder 模块中，类型修饰符为公开
+        TypeBuilder typeBuilder = moduleBuilder.DefineType("Calculator", TypeAttributes.Public);
+
+        // 3. 在类中定义一个公共方法 "Add"
+        MethodBuilder methodBuilder = typeBuilder.DefineMethod(
+            "Add",   // 定义方法名
+            MethodAttributes.Public,  // 方法的访问修饰符
+            typeof(int), // 方法的返回类型为 int
+            new Type[] { typeof(int), typeof(int) } // 方法的两个 int 类型的参数
+        );
+
+        // 4. 获取方法的 IL 生成器，并编写方法体
+        ILGenerator il = methodBuilder.GetILGenerator();
+        il.Emit(OpCodes.Ldarg_1); // 加载第一个参数 (a)
+        il.Emit(OpCodes.Ldarg_2); // 加载第二个参数 (b)
+        il.Emit(OpCodes.Add);     // 弹出当前IL栈上的两个参数，执行加法操作，并将结果保存在栈上
+        il.Emit(OpCodes.Ret);     // 返回结果
+
+        // 5. 创建类型信息，使其可用
+        Type calculatorType = typeBuilder.CreateType();
+
+        // 6. 使用动态创建的类
+        object calculatorInstance = Activator.CreateInstance(calculatorType);
+        MethodInfo addMethod = calculatorType.GetMethod("Add");
+        int result = (int)addMethod.Invoke(calculatorInstance, new object[] { 10, 20 });
+
+        Console.WriteLine($"10 + 20 = {result}"); // 输出：10 + 20 = 30
+    }
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="mod-footer mod-ui"></div></div></div></div></div></div></div></div><div class="sidebar-right sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"></div><script defer="">let rs = document.querySelector(".sidebar-right"); rs.classList.add("is-collapsed"); if (window.innerWidth > 768) rs.classList.remove("is-collapsed"); rs.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-right-width"));</script></div></div></body></html>

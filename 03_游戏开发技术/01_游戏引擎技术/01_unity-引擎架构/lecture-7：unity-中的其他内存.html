@@ -1,0 +1,809 @@
+<!DOCTYPE html> <html><head>
+		<title>Lecture 7：Unity 中的其他内存</title>
+		<base href="..\..\../">
+		<meta id="root-path" root-path="..\..\../">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
+		<meta charset="UTF-8">
+		<meta name="description" content="MUBlog - Lecture 7：Unity 中的其他内存">
+		<meta property="og:title" content="Lecture 7：Unity 中的其他内存">
+		<meta property="og:description" content="MUBlog - Lecture 7：Unity 中的其他内存">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="03_游戏开发技术/01_游戏引擎技术/01_unity-引擎架构/lecture-7：unity-中的其他内存.html">
+		<meta property="og:image" content="lib\media\pasted-image-20250827105538.png">
+		<meta property="og:site_name" content="MUBlog">
+		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="lib/rss.xml"><script async="" id="webpage-script" src="lib/scripts/webpage.js" onload="this.onload=null;this.setAttribute(&quot;loaded&quot;, &quot;true&quot;)"></script><link rel="icon" href="lib/media/favicon.png"><style>body{--line-width:40em;--line-width-adaptive:40em;--file-line-width:40em;--sidebar-width:min(20em, 80vw);--collapse-arrow-size:11px;--tree-horizontal-spacing:0.6em;--tree-vertical-spacing:0.6em;--sidebar-margin:12px}.sidebar{height:100%;min-width:calc(var(--sidebar-width) + var(--divider-width-hover));max-width:calc(var(--sidebar-width) + var(--divider-width-hover));font-size:14px;z-index:10;position:relative;overflow:hidden;transition:min-width ease-in-out,max-width ease-in-out;transition-duration:.2s;contain:size}.sidebar-left{left:0}.sidebar-right{right:0}.sidebar.is-collapsed{min-width:0;max-width:0}body.floating-sidebars .sidebar{position:absolute}.sidebar-content{height:100%;min-width:calc(var(--sidebar-width) - var(--divider-width-hover));top:0;padding:var(--sidebar-margin);padding-top:4em;line-height:var(--line-height-tight);background-color:var(--background-secondary);transition:background-color,border-right,border-left,box-shadow;transition-duration:var(--color-fade-speed);transition-timing-function:ease-in-out;position:absolute;display:flex;flex-direction:column}.sidebar:not(.is-collapsed) .sidebar-content{min-width:calc(max(100%,var(--sidebar-width)) - 3px);max-width:calc(max(100%,var(--sidebar-width)) - 3px)}.sidebar-left .sidebar-content{left:0;border-top-right-radius:var(--radius-l);border-bottom-right-radius:var(--radius-l)}.sidebar-right .sidebar-content{right:0;border-top-left-radius:var(--radius-l);border-bottom-left-radius:var(--radius-l)}.sidebar:has(.sidebar-content:empty):has(.topbar-content:empty){display:none}.sidebar-topbar{height:2em;width:var(--sidebar-width);top:var(--sidebar-margin);padding-inline:var(--sidebar-margin);z-index:1;position:fixed;display:flex;align-items:center;transition:width ease-in-out;transition-duration:inherit}.sidebar.is-collapsed .sidebar-topbar{width:calc(2.3em + var(--sidebar-margin) * 2)}.sidebar .sidebar-topbar.is-collapsed{width:0}.sidebar-left .sidebar-topbar{left:0}.sidebar-right .sidebar-topbar{right:0}.topbar-content{overflow:hidden;overflow:clip;width:100%;height:100%;display:flex;align-items:center;transition:inherit}.sidebar.is-collapsed .topbar-content{width:0;transition:inherit}.clickable-icon.sidebar-collapse-icon{background-color:transparent;color:var(--icon-color-focused);padding:0!important;margin:0!important;height:100%!important;width:2.3em!important;margin-inline:0.14em!important;position:absolute}.sidebar-left .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);right:var(--sidebar-margin)}.sidebar-right .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);left:var(--sidebar-margin)}.clickable-icon.sidebar-collapse-icon svg.svg-icon{width:100%;height:100%}.sidebar-section-header{margin:0 0 1em 0;text-transform:uppercase;letter-spacing:.06em;font-weight:600}body{transition:background-color var(--color-fade-speed) ease-in-out}.webpage-container{display:flex;flex-direction:row;height:100%;width:100%;align-items:stretch;justify-content:center}.document-container{opacity:1;flex-basis:100%;max-width:100%;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;transition:opacity .2s ease-in-out;contain:inline-size}.hide{opacity:0;transition:opacity .2s ease-in-out}.document-container>.markdown-preview-view{margin:var(--sidebar-margin);margin-bottom:0;width:100%;width:-webkit-fill-available;width:-moz-available;width:fill-available;background-color:var(--background-primary);transition:background-color var(--color-fade-speed) ease-in-out;border-top-right-radius:var(--window-radius,var(--radius-m));border-top-left-radius:var(--window-radius,var(--radius-m));overflow-x:hidden!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;contain:inline-size}.document-container>.markdown-preview-view>.markdown-preview-sizer{padding-bottom:80vh!important;width:100%!important;max-width:var(--line-width)!important;flex-basis:var(--line-width)!important;transition:background-color var(--color-fade-speed) ease-in-out;contain:inline-size}.markdown-rendered img:not([width]),.view-content img:not([width]){max-width:100%;outline:0}.document-container>.view-content.embed{display:flex;padding:1em;height:100%;width:100%;align-items:center;justify-content:center}.document-container>.view-content.embed>*{max-width:100%;max-height:100%;object-fit:contain}:has(> :is(.math,table)){overflow-x:auto!important}.document-container>.view-content{overflow-x:auto;contain:content;padding:0;margin:0;height:100%}.scroll-highlight{position:absolute;width:100%;height:100%;pointer-events:none;z-index:1000;background-color:hsla(var(--color-accent-hsl),.25);opacity:0;padding:1em;inset:50%;translate:-50% -50%;border-radius:var(--radius-s)}</style><script defer="">async function loadIncludes(){if("file:"!=location.protocol){let e=document.querySelectorAll("include");for(let t=0;t<e.length;t++){let o=e[t],l=o.getAttribute("src");try{const e=await fetch(l);if(!e.ok){console.log("Could not include file: "+l),o?.remove();continue}let t=await e.text(),n=document.createRange().createContextualFragment(t),i=Array.from(n.children);for(let e of i)e.classList.add("hide"),e.style.transition="opacity 0.5s ease-in-out",setTimeout((()=>{e.classList.remove("hide")}),10);o.before(n),o.remove(),console.log("Included file: "+l)}catch(e){o?.remove(),console.log("Could not include file: "+l,e);continue}}}else{if(document.querySelectorAll("include").length>0){var e=document.createElement("div");e.id="error",e.textContent="Web server exports must be hosted on an http / web server to be viewed correctly.",e.style.position="fixed",e.style.top="50%",e.style.left="50%",e.style.transform="translate(-50%, -50%)",e.style.fontSize="1.5em",e.style.fontWeight="bold",e.style.textAlign="center",document.body.appendChild(e),document.querySelector(".document-container")?.classList.remove("hide")}}}document.addEventListener("DOMContentLoaded",(()=>{loadIncludes()}));let isFileProtocol="file:"==location.protocol;function waitLoadScripts(e,t){let o=e.map((e=>document.getElementById(e+"-script"))),l=0;!function e(){let n=o[l];l++,n&&"true"!=n.getAttribute("loaded")||l<o.length&&e(),l<o.length?n.addEventListener("load",e):t()}()}</script><link rel="stylesheet" href="lib/styles/obsidian.css"><link rel="stylesheet" href="lib/styles/theme.css"><link rel="preload" href="lib/styles/global-variable-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/global-variable-styles.css"></noscript><link rel="preload" href="lib/styles/supported-plugins.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/supported-plugins.css"></noscript><link rel="preload" href="lib/styles/main-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/main-styles.css"></noscript><link rel="preload" href="lib/styles/snippets.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/snippets.css"></noscript></head><body class="publish css-settings-manager styled-scrollbars theme-light show-inline-title ctp-rosepine-light ctp-mocha ctp-accent-rosewater anuppuccin-accent-toggle anp-current-line-border anp-callout-color-toggle anp-codeblock-numbers anp-list-toggle anp-table-width anp-toggle-preview anp-color-transition-toggle anp-button-metadata-toggle anp-toggle-metadata anp-toggle-scrollbars anp-h1-red anp-h1-divider anp-h2-peach anp-h3-green anp-h4-teal anp-h5-lavender anp-h6-mauve anp-decoration-toggle anp-bold-maroon anp-italic-green anp-highlight-yellow anp-colorful-frame-icon-toggle-dark anp-simple-rainbow-color-toggle anp-rainbow-file-toggle anp-simple-rainbow-title-toggle anp-simple-rainbow-icon-folder-toggle anp-simple-rainbow-indentation-toggle anp-simple-rainbow-collapse-toggle anp-card-layout anp-card-shadows anp-card-layout-filebrowser anp-theme-ext-light anp-theme-ext-dark anp-theme-ext-amoled ctp-atom-light ctp-atom-dark table-type-three-line table-header-color-blue table-row-alt-background-option table-dark-mode"><script defer="">let theme=localStorage.getItem("theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");"dark"==theme?(document.body.classList.add("theme-dark"),document.body.classList.remove("theme-light")):(document.body.classList.add("theme-light"),document.body.classList.remove("theme-dark")),window.innerWidth<480?document.body.classList.add("is-phone"):window.innerWidth<768?document.body.classList.add("is-tablet"):window.innerWidth<1024?document.body.classList.add("is-small-screen"):document.body.classList.add("is-large-screen")</script><div class="webpage-container workspace"><div class="sidebar-left sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"><label class="theme-toggle-container" for="theme_toggle"><input class="theme-toggle-input" type="checkbox" id="theme_toggle"><div class="toggle-background"></div></label></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"><include src="lib/html/file-tree.html"></include></div><script defer="">let ls = document.querySelector(".sidebar-left"); ls.classList.add("is-collapsed"); if (window.innerWidth > 768) ls.classList.remove("is-collapsed"); ls.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-left-width"));</script></div><div class="document-container markdown-reading-view hide"><div class="markdown-preview-view markdown-rendered allow-fold-headings allow-fold-lists is-readable-line-width"><style id="MJX-CHTML-styles">mjx-c.mjx-c36::before { padding: 0.666em 0.5em 0.022em 0px; content: "6"; }
+mjx-c.mjx-c1D43E.TEX-I::before { padding: 0.683em 0.889em 0px 0px; content: "K"; }
+mjx-c.mjx-c52::before { padding: 0.683em 0.736em 0.022em 0px; content: "R"; }
+mjx-c.mjx-c1D42B.TEX-B::before { padding: 0.45em 0.474em 0px 0px; content: "r"; }
+mjx-c.mjx-c1D428.TEX-B::before { padding: 0.452em 0.575em 0.005em 0px; content: "o"; }
+mjx-c.mjx-c1D41D.TEX-B::before { padding: 0.694em 0.639em 0.006em 0px; content: "d"; }
+mjx-c.mjx-c3C::before { padding: 0.54em 0.778em 0.04em 0px; content: "<"; }
+mjx-c.mjx-c221E::before { padding: 0.442em 1em 0.011em 0px; content: "∞"; }
+mjx-c.mjx-c1D429.TEX-B::before { padding: 0.45em 0.639em 0.194em 0px; content: "p"; }
+mjx-c.mjx-cB1::before { padding: 0.666em 0.778em 0px 0px; content: "±"; }
+mjx-c.mjx-c221A::before { padding: 0.8em 0.853em 0.2em 0px; content: "√"; }
+mjx-c.mjx-c47::before { padding: 0.705em 0.785em 0.022em 0px; content: "G"; }
+mjx-c.mjx-c66::before { padding: 0.705em 0.372em 0px 0px; content: "f"; }
+mjx-c.mjx-c71::before { padding: 0.442em 0.528em 0.194em 0px; content: "q"; }
+mjx-c.mjx-c5E.TEX-B::before { padding: 0.694em 0.575em 0px 0px; content: "^"; }
+mjx-c.mjx-c1D42D.TEX-B::before { padding: 0.635em 0.447em 0.005em 0px; content: "t"; }
+mjx-c.mjx-c1D40E.TEX-B::before { padding: 0.696em 0.864em 0.01em 0px; content: "O"; }
+mjx-c.mjx-c1D403.TEX-B::before { padding: 0.686em 0.882em 0px 0px; content: "D"; }
+mjx-c.mjx-c1D40F.TEX-B::before { padding: 0.686em 0.786em 0px 0px; content: "P"; }
+mjx-c.mjx-c2219::before { padding: 0.444em 0.5em 0px 0px; content: "∙"; }
+mjx-c.mjx-c1D404.TEX-B::before { padding: 0.68em 0.756em 0px 0px; content: "E"; }
+mjx-c.mjx-c20D7.TEX-VB::before { padding: 0.723em 0.575em 0px 0px; content: "→"; }
+mjx-c.mjx-c7B::before { padding: 0.75em 0.5em 0.25em 0px; content: "{"; }
+mjx-c.mjx-c7D::before { padding: 0.75em 0.5em 0.25em 0px; content: "}"; }
+mjx-c.mjx-c26::before { padding: 0.716em 0.778em 0.022em 0px; content: "&"; }
+mjx-c.mjx-c2261::before { padding: 0.464em 0.778em 0px 0px; content: "≡"; }
+mjx-c.mjx-c3A6::before { padding: 0.683em 0.722em 0px 0px; content: "Φ"; }
+mjx-c.mjx-c57::before { padding: 0.683em 1.028em 0.022em 0px; content: "W"; }
+mjx-c.mjx-c2035.TEX-A::before { padding: 0.56em 0.275em 0px 0px; content: "‵"; }
+mjx-c.mjx-c1D446.TEX-I::before { padding: 0.705em 0.645em 0.022em 0px; content: "S"; }
+mjx-c.mjx-c1D719.TEX-I::before { padding: 0.694em 0.596em 0.205em 0px; content: "ϕ"; }
+mjx-c.mjx-c7C::before { padding: 0.75em 0.278em 0.249em 0px; content: "|"; }
+.mjx-stretched mjx-c.mjx-c2013::before { content: "–"; }
+mjx-stretchy-h.mjx-c2013 mjx-ext mjx-c::before { content: "–"; padding: 0.285em 0px 0px; }
+mjx-c.mjx-c1D52E.TEX-FR::before { padding: 0.479em 0.489em 0.219em 0px; content: "q"; }
+mjx-c.mjx-c1D52D.TEX-FR::before { padding: 0.541em 0.5em 0.212em 0px; content: "p"; }
+mjx-c.mjx-c1D43A.TEX-I::before { padding: 0.705em 0.786em 0.022em 0px; content: "G"; }
+mjx-c.mjx-c1D439.TEX-I::before { padding: 0.68em 0.749em 0px 0px; content: "F"; }
+mjx-c.mjx-c3A9::before { padding: 0.704em 0.722em 0px 0px; content: "Ω"; }
+mjx-c.mjx-c2248::before { padding: 0.483em 0.778em 0px 0px; content: "≈"; }
+mjx-c.mjx-c222B.TEX-S1::before { padding: 0.805em 0.61em 0.306em 0px; content: "∫"; }
+mjx-c.mjx-c200B::before { padding: 0px; content: ""; }
+mjx-c.mjx-c1D44A.TEX-I::before { padding: 0.683em 1.048em 0.022em 0px; content: "W"; }
+mjx-c.mjx-c1D443.TEX-I::before { padding: 0.683em 0.751em 0px 0px; content: "P"; }
+mjx-c.mjx-c1D45E.TEX-I::before { padding: 0.442em 0.46em 0.194em 0px; content: "q"; }
+mjx-c.mjx-c2208::before { padding: 0.54em 0.667em 0.04em 0px; content: "∈"; }
+mjx-c.mjx-c4E.TEX-C::before { padding: 0.789em 0.979em 0.05em 0px; content: "N"; }
+mjx-c.mjx-c1D712.TEX-I::before { padding: 0.442em 0.626em 0.204em 0px; content: "χ"; }
+mjx-c.mjx-c53::before { padding: 0.705em 0.556em 0.022em 0px; content: "S"; }
+mjx-c.mjx-c4D::before { padding: 0.683em 0.917em 0px 0px; content: "M"; }
+mjx-c.mjx-c1D44B.TEX-I::before { padding: 0.683em 0.852em 0px 0px; content: "X"; }
+mjx-c.mjx-c56::before { padding: 0.683em 0.75em 0.022em 0px; content: "V"; }
+mjx-c.mjx-c45::before { padding: 0.68em 0.681em 0px 0px; content: "E"; }
+mjx-c.mjx-c2264::before { padding: 0.636em 0.778em 0.138em 0px; content: "≤"; }
+mjx-c.mjx-c1D70E.TEX-I::before { padding: 0.431em 0.571em 0.011em 0px; content: "σ"; }
+mjx-c.mjx-c1D707.TEX-I::before { padding: 0.442em 0.603em 0.216em 0px; content: "μ"; }
+mjx-c.mjx-c1D708.TEX-I::before { padding: 0.442em 0.53em 0px 0px; content: "ν"; }
+mjx-c.mjx-c46::before { padding: 0.68em 0.653em 0px 0px; content: "F"; }
+mjx-c.mjx-c7B.TEX-S3::before { padding: 1.45em 0.75em 0.949em 0px; content: "{"; }
+mjx-c.mjx-c7D.TEX-S3::before { padding: 1.45em 0.75em 0.949em 0px; content: "}"; }
+mjx-c.mjx-c1D438.TEX-I::before { padding: 0.68em 0.764em 0px 0px; content: "E"; }
+mjx-c.mjx-c222B.TEX-S2::before { padding: 1.36em 0.944em 0.862em 0px; content: "∫"; }
+mjx-c.mjx-c1D43B.TEX-I::before { padding: 0.683em 0.888em 0px 0px; content: "H"; }
+mjx-c.mjx-c1D70C.TEX-I::before { padding: 0.442em 0.517em 0.216em 0px; content: "ρ"; }
+mjx-c.mjx-c1D702.TEX-I::before { padding: 0.442em 0.497em 0.216em 0px; content: "η"; }
+mjx-c.mjx-c221A.TEX-S2::before { padding: 1.15em 1.02em 0.65em 0px; content: "√"; }
+mjx-c.mjx-c3E::before { padding: 0.54em 0.778em 0.04em 0px; content: ">"; }
+mjx-munderover { display: inline-block; text-align: left; }
+mjx-munderover:not([limits="false"]) { padding-top: 0.1em; }
+mjx-munderover:not([limits="false"]) > * { display: block; }
+mjx-c.mjx-c221A.TEX-S1::before { padding: 0.85em 1.02em 0.35em 0px; content: "√"; }
+mjx-c.mjx-c3A::before { padding: 0.43em 0.278em 0px 0px; content: ":"; }
+mjx-c.mjx-c211D.TEX-A::before { padding: 0.683em 0.722em 0px 0px; content: "R"; }
+mjx-c.mjx-c3B::before { padding: 0.43em 0.278em 0.194em 0px; content: ";"; }
+mjx-c.mjx-c21A6::before { padding: 0.511em 1em 0.011em 0px; content: "↦"; }
+mjx-c.mjx-c1D41B.TEX-B::before { padding: 0.694em 0.639em 0.006em 0px; content: "b"; }
+mjx-c.mjx-c2211.TEX-S2::before { padding: 0.95em 1.444em 0.45em 0px; content: "∑"; }
+mjx-c.mjx-c1D457.TEX-I::before { padding: 0.661em 0.412em 0.204em 0px; content: "j"; }
+mjx-c.mjx-c38::before { padding: 0.666em 0.5em 0.022em 0px; content: "8"; }
+mjx-c.mjx-c41::before { padding: 0.716em 0.75em 0px 0px; content: "A"; }
+mjx-c.mjx-c43::before { padding: 0.705em 0.722em 0.021em 0px; content: "C"; }
+mjx-msqrt { display: inline-block; text-align: left; }
+mjx-root { display: inline-block; white-space: nowrap; }
+mjx-surd { display: inline-block; vertical-align: top; }
+mjx-sqrt { display: inline-block; padding-top: 0.07em; }
+mjx-sqrt > mjx-box { border-top: 0.07em solid; }
+mjx-sqrt.mjx-tall > mjx-box { padding-left: 0.3em; margin-left: -0.3em; }
+mjx-c.mjx-c1D435.TEX-I::before { padding: 0.683em 0.759em 0px 0px; content: "B"; }
+mjx-c.mjx-c1D436.TEX-I::before { padding: 0.705em 0.76em 0.022em 0px; content: "C"; }
+mjx-c.mjx-c28.TEX-S3::before { padding: 1.45em 0.736em 0.949em 0px; content: "("; }
+mjx-c.mjx-c29.TEX-S3::before { padding: 1.45em 0.736em 0.949em 0px; content: ")"; }
+mjx-c.mjx-c42::before { padding: 0.683em 0.708em 0px 0px; content: "B"; }
+mjx-c.mjx-c1D449.TEX-I::before { padding: 0.683em 0.769em 0.022em 0px; content: "V"; }
+mjx-c.mjx-c1D462.TEX-I::before { padding: 0.442em 0.572em 0.011em 0px; content: "u"; }
+mjx-c.mjx-c221A.TEX-S4::before { padding: 1.75em 1.02em 1.25em 0px; content: "√"; }
+mjx-c.mjx-c22C6::before { padding: 0.486em 0.5em 0px 0px; content: "⋆"; }
+mjx-c.mjx-c1D42E.TEX-B::before { padding: 0.45em 0.639em 0.006em 0px; content: "u"; }
+mjx-c.mjx-c2E::before { padding: 0.12em 0.278em 0px 0px; content: "."; }
+mjx-c.mjx-c1D43C.TEX-I::before { padding: 0.683em 0.504em 0px 0px; content: "I"; }
+mjx-c.mjx-c1D43F.TEX-I::before { padding: 0.683em 0.681em 0px 0px; content: "L"; }
+mjx-c.mjx-c1D458.TEX-I::before { padding: 0.694em 0.521em 0.011em 0px; content: "k"; }
+mjx-c.mjx-c28.TEX-S1::before { padding: 0.85em 0.458em 0.349em 0px; content: "("; }
+mjx-c.mjx-c29.TEX-S1::before { padding: 0.85em 0.458em 0.349em 0px; content: ")"; }
+mjx-c.mjx-c6D::before { padding: 0.442em 0.833em 0px 0px; content: "m"; }
+mjx-c.mjx-c1D425.TEX-B::before { padding: 0.694em 0.319em 0px 0px; content: "l"; }
+mjx-c.mjx-c1D421.TEX-B::before { padding: 0.694em 0.639em 0px 0px; content: "h"; }
+mjx-c.mjx-c62::before { padding: 0.694em 0.556em 0.011em 0px; content: "b"; }
+mjx-c.mjx-c1D42F.TEX-B::before { padding: 0.444em 0.607em 0px 0px; content: "v"; }
+mjx-c.mjx-c2225::before { padding: 0.75em 0.5em 0.25em 0px; content: "∥"; }
+mjx-c.mjx-c1D441.TEX-I::before { padding: 0.683em 0.888em 0px 0px; content: "N"; }
+mjx-c.mjx-c2211.TEX-S1::before { padding: 0.75em 1.056em 0.25em 0px; content: "∑"; }
+mjx-stretchy-v.mjx-c7B mjx-beg mjx-c::before { content: "⎧"; padding: 0.899em 0.889em 0.01em 0px; }
+mjx-stretchy-v.mjx-c7B mjx-ext mjx-c::before { content: "⎪"; width: 0.889em; }
+mjx-stretchy-v.mjx-c7B mjx-end mjx-c::before { content: "⎩"; padding: 0.01em 0.889em 0.899em 0px; }
+mjx-stretchy-v.mjx-c7B mjx-mid mjx-c::before { content: "⎨"; padding: 1.16em 0.889em 0.66em 0px; }
+mjx-stretchy-v.mjx-c7B > mjx-mid { margin-top: -0.91em; margin-bottom: -0.91em; }
+mjx-stretchy-v.mjx-c7B > mjx-end { margin-top: -0.909em; }
+mjx-stretchy-v.mjx-c7B > mjx-ext { height: 50%; border-top-width: 0.879em; border-bottom-width: 0.879em; }
+mjx-c.mjx-c2217::before { padding: 0.465em 0.5em 0px 0px; content: "∗"; }
+mjx-c.mjx-c68::before { padding: 0.694em 0.556em 0px 0px; content: "h"; }
+mjx-c.mjx-c1D70B.TEX-I::before { padding: 0.431em 0.57em 0.011em 0px; content: "π"; }
+mjx-c.mjx-c1D714.TEX-I::before { padding: 0.443em 0.622em 0.011em 0px; content: "ω"; }
+mjx-c.mjx-c37::before { padding: 0.676em 0.5em 0.022em 0px; content: "7"; }
+mjx-mtable { display: inline-block; text-align: center; vertical-align: 0.25em; position: relative; box-sizing: border-box; border-spacing: 0px; border-collapse: collapse; }
+mjx-mstyle[size="s"] mjx-mtable { vertical-align: 0.354em; }
+mjx-labels { position: absolute; left: 0px; top: 0px; }
+mjx-table { display: inline-block; vertical-align: -0.5ex; box-sizing: border-box; }
+mjx-table > mjx-itable { vertical-align: middle; text-align: left; box-sizing: border-box; }
+mjx-labels > mjx-itable { position: absolute; top: 0px; }
+mjx-mtable[justify="left"] { text-align: left; }
+mjx-mtable[justify="right"] { text-align: right; }
+mjx-mtable[justify="left"][side="left"] { padding-right: 0px !important; }
+mjx-mtable[justify="left"][side="right"] { padding-left: 0px !important; }
+mjx-mtable[justify="right"][side="left"] { padding-right: 0px !important; }
+mjx-mtable[justify="right"][side="right"] { padding-left: 0px !important; }
+mjx-mtable[align] { vertical-align: baseline; }
+mjx-mtable[align="top"] > mjx-table { vertical-align: top; }
+mjx-mtable[align="bottom"] > mjx-table { vertical-align: bottom; }
+mjx-mtable[side="right"] mjx-labels { min-width: 100%; }
+mjx-mtr { display: table-row; text-align: left; }
+mjx-mtr[rowalign="top"] > mjx-mtd { vertical-align: top; }
+mjx-mtr[rowalign="center"] > mjx-mtd { vertical-align: middle; }
+mjx-mtr[rowalign="bottom"] > mjx-mtd { vertical-align: bottom; }
+mjx-mtr[rowalign="baseline"] > mjx-mtd { vertical-align: baseline; }
+mjx-mtr[rowalign="axis"] > mjx-mtd { vertical-align: 0.25em; }
+mjx-mtd { display: table-cell; text-align: center; padding: 0.215em 0.4em; }
+mjx-mtd:first-child { padding-left: 0px; }
+mjx-mtd:last-child { padding-right: 0px; }
+mjx-mtable > * > mjx-itable > :first-child > mjx-mtd { padding-top: 0px; }
+mjx-mtable > * > mjx-itable > :last-child > mjx-mtd { padding-bottom: 0px; }
+mjx-tstrut { display: inline-block; height: 1em; vertical-align: -0.25em; }
+mjx-labels[align="left"] > mjx-mtr > mjx-mtd { text-align: left; }
+mjx-labels[align="right"] > mjx-mtr > mjx-mtd { text-align: right; }
+mjx-mtd[extra] { padding: 0px; }
+mjx-mtd[rowalign="top"] { vertical-align: top; }
+mjx-mtd[rowalign="center"] { vertical-align: middle; }
+mjx-mtd[rowalign="bottom"] { vertical-align: bottom; }
+mjx-mtd[rowalign="baseline"] { vertical-align: baseline; }
+mjx-mtd[rowalign="axis"] { vertical-align: 0.25em; }
+mjx-texatom { display: inline-block; text-align: left; }
+mjx-mrow { display: inline-block; text-align: left; }
+mjx-msub { display: inline-block; text-align: left; }
+mjx-mspace { display: inline-block; text-align: left; }
+mjx-mtext { display: inline-block; text-align: left; }
+mjx-munder { display: inline-block; text-align: left; }
+mjx-over { text-align: left; }
+mjx-munder:not([limits="false"]) { display: inline-table; }
+mjx-munder > mjx-row { text-align: left; }
+mjx-under { padding-bottom: 0.1em; }
+mjx-mover { display: inline-block; text-align: left; }
+mjx-mover:not([limits="false"]) { padding-top: 0.1em; }
+mjx-mover:not([limits="false"]) > * { display: block; text-align: left; }
+mjx-msubsup { display: inline-block; text-align: left; }
+mjx-script { display: inline-block; padding-right: 0.05em; padding-left: 0.033em; }
+mjx-script > mjx-spacer { display: block; }
+mjx-mfrac { display: inline-block; text-align: left; }
+mjx-frac { display: inline-block; vertical-align: 0.17em; padding: 0px 0.22em; }
+mjx-frac[type="d"] { vertical-align: 0.04em; }
+mjx-frac[delims] { padding: 0px 0.1em; }
+mjx-frac[atop] { padding: 0px 0.12em; }
+mjx-frac[atop][delims] { padding: 0px; }
+mjx-dtable { display: inline-table; width: 100%; }
+mjx-dtable > * { font-size: 2000%; }
+mjx-dbox { display: block; font-size: 5%; }
+mjx-num { display: block; text-align: center; }
+mjx-den { display: block; text-align: center; }
+mjx-mfrac[bevelled] > mjx-num { display: inline-block; }
+mjx-mfrac[bevelled] > mjx-den { display: inline-block; }
+mjx-den[align="right"], mjx-num[align="right"] { text-align: right; }
+mjx-den[align="left"], mjx-num[align="left"] { text-align: left; }
+mjx-nstrut { display: inline-block; height: 0.054em; width: 0px; vertical-align: -0.054em; }
+mjx-nstrut[type="d"] { height: 0.217em; vertical-align: -0.217em; }
+mjx-dstrut { display: inline-block; height: 0.505em; width: 0px; }
+mjx-dstrut[type="d"] { height: 0.726em; }
+mjx-line { display: block; box-sizing: border-box; min-height: 1px; height: 0.06em; border-top: 0.06em solid; margin: 0.06em -0.1em; overflow: hidden; }
+mjx-line[type="d"] { margin: 0.18em -0.1em; }
+mjx-stretchy-v.mjx-c28 mjx-beg mjx-c::before { content: "⎛"; padding: 1.154em 0.875em 0.655em 0px; }
+mjx-stretchy-v.mjx-c28 mjx-ext mjx-c::before { content: "⎜"; width: 0.875em; }
+mjx-stretchy-v.mjx-c28 mjx-end mjx-c::before { content: "⎝"; padding: 1.165em 0.875em 0.644em 0px; }
+mjx-stretchy-v.mjx-c28 > mjx-end { margin-top: -1.809em; }
+mjx-stretchy-v.mjx-c28 > mjx-ext { border-top-width: 1.779em; border-bottom-width: 1.779em; }
+mjx-stretchy-v.mjx-c29 mjx-beg mjx-c::before { content: "⎞"; padding: 1.154em 0.875em 0.655em 0px; }
+mjx-stretchy-v.mjx-c29 mjx-ext mjx-c::before { content: "⎟"; width: 0.875em; }
+mjx-stretchy-v.mjx-c29 mjx-end mjx-c::before { content: "⎠"; padding: 1.165em 0.875em 0.644em 0px; }
+mjx-stretchy-v.mjx-c29 > mjx-end { margin-top: -1.809em; }
+mjx-stretchy-v.mjx-c29 > mjx-ext { border-top-width: 1.779em; border-bottom-width: 1.779em; }
+mjx-stretchy-v.mjx-c5B mjx-beg mjx-c::before { content: "⎡"; padding: 1.154em 0.667em 0.645em 0px; }
+mjx-stretchy-v.mjx-c5B mjx-ext mjx-c::before { content: "⎢"; width: 0.667em; }
+mjx-stretchy-v.mjx-c5B mjx-end mjx-c::before { content: "⎣"; padding: 1.155em 0.667em 0.644em 0px; }
+mjx-stretchy-v.mjx-c5B > mjx-end { margin-top: -1.799em; }
+mjx-stretchy-v.mjx-c5B > mjx-ext { border-top-width: 1.769em; border-bottom-width: 1.769em; }
+mjx-stretchy-v.mjx-c5D mjx-beg mjx-c::before { content: "⎤"; padding: 1.154em 0.667em 0.645em 0px; }
+mjx-stretchy-v.mjx-c5D mjx-ext mjx-c::before { content: "⎥"; width: 0.667em; }
+mjx-stretchy-v.mjx-c5D mjx-end mjx-c::before { content: "⎦"; padding: 1.155em 0.667em 0.644em 0px; }
+mjx-stretchy-v.mjx-c5D > mjx-end { margin-top: -1.799em; }
+mjx-stretchy-v.mjx-c5D > mjx-ext { border-top-width: 1.769em; border-bottom-width: 1.769em; }
+mjx-stretchy-h.mjx-c23DF mjx-beg mjx-c::before { content: ""; padding: 0.32em 0px 0.2em; }
+mjx-stretchy-h.mjx-c23DF mjx-ext mjx-c::before { content: ""; padding: 0.32em 0px 0.2em; }
+mjx-stretchy-h.mjx-c23DF mjx-end mjx-c::before { content: ""; padding: 0.32em 0px 0.2em; }
+mjx-stretchy-h.mjx-c23DF mjx-mid mjx-c::before { content: ""; padding: 0.32em 0px 0.2em; }
+mjx-stretchy-h.mjx-c23DF > mjx-ext { width: 50%; }
+mjx-c.mjx-c1D466.TEX-I::before { padding: 0.442em 0.49em 0.205em 0px; content: "y"; }
+mjx-c.mjx-c5B.TEX-S3::before { padding: 1.45em 0.528em 0.949em 0px; content: "["; }
+mjx-c.mjx-c5D.TEX-S3::before { padding: 1.45em 0.528em 0.949em 0px; content: "]"; }
+mjx-c.mjx-c30::before { padding: 0.666em 0.5em 0.022em 0px; content: "0"; }
+mjx-c.mjx-c2212::before { padding: 0.583em 0.778em 0.082em 0px; content: "−"; }
+mjx-c.mjx-c1D411.TEX-B::before { padding: 0.686em 0.862em 0.011em 0px; content: "R"; }
+mjx-c.mjx-c1D703.TEX-I::before { padding: 0.705em 0.469em 0.01em 0px; content: "θ"; }
+mjx-c.mjx-c63::before { padding: 0.448em 0.444em 0.011em 0px; content: "c"; }
+mjx-c.mjx-c6F::before { padding: 0.448em 0.5em 0.01em 0px; content: "o"; }
+mjx-c.mjx-c73::before { padding: 0.448em 0.394em 0.011em 0px; content: "s"; }
+mjx-c.mjx-c2061::before { padding: 0px; content: ""; }
+mjx-c.mjx-c69::before { padding: 0.669em 0.278em 0px 0px; content: "i"; }
+mjx-c.mjx-c6E::before { padding: 0.442em 0.556em 0px 0px; content: "n"; }
+mjx-c.mjx-c1D451.TEX-I::before { padding: 0.694em 0.52em 0.01em 0px; content: "d"; }
+mjx-c.mjx-c1D437.TEX-I::before { padding: 0.683em 0.828em 0px 0px; content: "D"; }
+mjx-c.mjx-c1D447.TEX-I::before { padding: 0.677em 0.704em 0px 0px; content: "T"; }
+mjx-c.mjx-c1D464.TEX-I::before { padding: 0.443em 0.716em 0.011em 0px; content: "w"; }
+mjx-c.mjx-c22C5::before { padding: 0.31em 0.278em 0px 0px; content: "⋅"; }
+mjx-c.mjx-c1D412.TEX-B::before { padding: 0.697em 0.639em 0.011em 0px; content: "S"; }
+mjx-c.mjx-c1D6FC.TEX-I::before { padding: 0.442em 0.64em 0.011em 0px; content: "α"; }
+mjx-c.mjx-c1D445.TEX-I::before { padding: 0.683em 0.759em 0.021em 0px; content: "R"; }
+mjx-c.mjx-c34::before { padding: 0.677em 0.5em 0px 0px; content: "4"; }
+mjx-c.mjx-c35::before { padding: 0.666em 0.5em 0.022em 0px; content: "5"; }
+mjx-c.mjx-c2218::before { padding: 0.444em 0.5em 0px 0px; content: "∘"; }
+mjx-c.mjx-c1D434.TEX-I::before { padding: 0.716em 0.75em 0px 0px; content: "A"; }
+mjx-c.mjx-c2026::before { padding: 0.12em 1.172em 0px 0px; content: "…"; }
+mjx-c.mjx-c1D431.TEX-B::before { padding: 0.444em 0.607em 0px 0px; content: "x"; }
+mjx-c.mjx-c1D400.TEX-B::before { padding: 0.698em 0.869em 0px 0px; content: "A"; }
+mjx-c.mjx-c22EF::before { padding: 0.31em 1.172em 0px 0px; content: "⋯"; }
+mjx-c.mjx-c1D413.TEX-B::before { padding: 0.675em 0.8em 0px 0px; content: "T"; }
+mjx-c.mjx-c28.TEX-B::before { padding: 0.75em 0.447em 0.249em 0px; content: "("; }
+mjx-c.mjx-c1D41C.TEX-B::before { padding: 0.453em 0.511em 0.006em 0px; content: "c"; }
+mjx-c.mjx-c29.TEX-B::before { padding: 0.75em 0.447em 0.249em 0px; content: ")"; }
+mjx-c.mjx-c2212.TEX-B::before { padding: 0.281em 0.894em 0px 0px; content: "−"; }
+mjx-c.mjx-c33::before { padding: 0.665em 0.5em 0.022em 0px; content: "3"; }
+mjx-c.mjx-c44::before { padding: 0.683em 0.764em 0px 0px; content: "D"; }
+mjx-c.mjx-cA0::before { padding: 0px 0.25em 0px 0px; content: " "; }
+mjx-c.mjx-c70::before { padding: 0.442em 0.556em 0.194em 0px; content: "p"; }
+mjx-c.mjx-c74::before { padding: 0.615em 0.389em 0.01em 0px; content: "t"; }
+mjx-c.mjx-c78::before { padding: 0.431em 0.528em 0px 0px; content: "x"; }
+mjx-c.mjx-c79::before { padding: 0.431em 0.528em 0.204em 0px; content: "y"; }
+mjx-c.mjx-c7A::before { padding: 0.431em 0.444em 0px 0px; content: "z"; }
+mjx-c.mjx-c54::before { padding: 0.677em 0.722em 0px 0px; content: "T"; }
+mjx-c.mjx-c76::before { padding: 0.431em 0.528em 0.011em 0px; content: "v"; }
+mjx-c.mjx-c65::before { padding: 0.448em 0.444em 0.011em 0px; content: "e"; }
+mjx-c.mjx-c72::before { padding: 0.442em 0.392em 0px 0px; content: "r"; }
+mjx-c.mjx-c1D467.TEX-I::before { padding: 0.442em 0.465em 0.011em 0px; content: "z"; }
+mjx-c.mjx-c1D453.TEX-I::before { padding: 0.705em 0.55em 0.205em 0px; content: "f"; }
+mjx-c.mjx-c1D6FD.TEX-I::before { padding: 0.705em 0.566em 0.194em 0px; content: "β"; }
+mjx-c.mjx-c1D6FE.TEX-I::before { padding: 0.441em 0.543em 0.216em 0px; content: "γ"; }
+mjx-c.mjx-c1D427.TEX-B::before { padding: 0.45em 0.639em 0px 0px; content: "n"; }
+mjx-c.mjx-c1D408.TEX-B::before { padding: 0.686em 0.436em 0px 0px; content: "I"; }
+mjx-c.mjx-c1D40D.TEX-B::before { padding: 0.686em 0.9em 0px 0px; content: "N"; }
+mjx-c.mjx-c50::before { padding: 0.683em 0.681em 0px 0px; content: "P"; }
+mjx-c.mjx-c20D7.TEX-V::before { padding: 0.714em 0.5em 0px 0px; content: "→"; }
+mjx-c.mjx-c4C::before { padding: 0.683em 0.625em 0px 0px; content: "L"; }
+mjx-c.mjx-c6B::before { padding: 0.694em 0.528em 0px 0px; content: "k"; }
+mjx-c.mjx-c2D::before { padding: 0.252em 0.333em 0px 0px; content: "-"; }
+mjx-c.mjx-c61::before { padding: 0.448em 0.5em 0.011em 0px; content: "a"; }
+mjx-c.mjx-c20::before { padding: 0px 0.25em 0px 0px; content: " "; }
+mjx-c.mjx-c2F::before { padding: 0.75em 0.5em 0.25em 0px; content: "/"; }
+mjx-c.mjx-c67::before { padding: 0.453em 0.5em 0.206em 0px; content: "g"; }
+mjx-c.mjx-c64::before { padding: 0.694em 0.556em 0.011em 0px; content: "d"; }
+mjx-c.mjx-c5E::before { padding: 0.694em 0.5em 0px 0px; content: "^"; }
+mjx-c.mjx-c1D448.TEX-I::before { padding: 0.683em 0.767em 0.022em 0px; content: "U"; }
+mjx-c.mjx-cD7::before { padding: 0.491em 0.778em 0px 0px; content: "×"; }
+mjx-c.mjx-c5B::before { padding: 0.75em 0.278em 0.25em 0px; content: "["; }
+mjx-c.mjx-c5D::before { padding: 0.75em 0.278em 0.25em 0px; content: "]"; }
+mjx-c.mjx-c21D2::before { padding: 0.525em 1em 0.024em 0px; content: "⇒"; }
+mjx-c.mjx-c75::before { padding: 0.442em 0.556em 0.011em 0px; content: "u"; }
+mjx-c.mjx-c77::before { padding: 0.431em 0.722em 0.011em 0px; content: "w"; }
+mjx-c.mjx-c6C::before { padding: 0.694em 0.278em 0px 0px; content: "l"; }
+mjx-c.mjx-c1D440.TEX-I::before { padding: 0.683em 1.051em 0px 0px; content: "M"; }
+mjx-c.mjx-c1D465.TEX-I::before { padding: 0.442em 0.572em 0.011em 0px; content: "x"; }
+mjx-c.mjx-cD7::before { padding: 0.491em 0.778em 0px 0px; content: "×"; }
+mjx-c.mjx-c32::before { padding: 0.666em 0.5em 0px 0px; content: "2"; }
+mjx-c.mjx-c1D463.TEX-I::before { padding: 0.443em 0.485em 0.011em 0px; content: "v"; }
+mjx-c.mjx-c1D45D.TEX-I::before { padding: 0.442em 0.503em 0.194em 0px; content: "p"; }
+mjx-c.mjx-c2192::before { padding: 0.511em 1em 0.011em 0px; content: "→"; }
+mjx-c.mjx-c1D44E.TEX-I::before { padding: 0.441em 0.529em 0.01em 0px; content: "a"; }
+mjx-c.mjx-c1D44F.TEX-I::before { padding: 0.694em 0.429em 0.011em 0px; content: "b"; }
+mjx-c.mjx-c1D459.TEX-I::before { padding: 0.694em 0.298em 0.011em 0px; content: "l"; }
+mjx-c.mjx-c1D452.TEX-I::before { padding: 0.442em 0.466em 0.011em 0px; content: "e"; }
+mjx-mn { display: inline-block; text-align: left; }
+mjx-c.mjx-c1D442.TEX-I::before { padding: 0.704em 0.763em 0.022em 0px; content: "O"; }
+mjx-c.mjx-c31::before { padding: 0.666em 0.5em 0px 0px; content: "1"; }
+mjx-container[jax="CHTML"] { line-height: 0; }
+mjx-container [space="1"] { margin-left: 0.111em; }
+mjx-container [space="2"] { margin-left: 0.167em; }
+mjx-container [space="3"] { margin-left: 0.222em; }
+mjx-container [space="4"] { margin-left: 0.278em; }
+mjx-container [space="5"] { margin-left: 0.333em; }
+mjx-container [rspace="1"] { margin-right: 0.111em; }
+mjx-container [rspace="2"] { margin-right: 0.167em; }
+mjx-container [rspace="3"] { margin-right: 0.222em; }
+mjx-container [rspace="4"] { margin-right: 0.278em; }
+mjx-container [rspace="5"] { margin-right: 0.333em; }
+mjx-container [size="s"] { font-size: 70.7%; }
+mjx-container [size="ss"] { font-size: 50%; }
+mjx-container [size="Tn"] { font-size: 60%; }
+mjx-container [size="sm"] { font-size: 85%; }
+mjx-container [size="lg"] { font-size: 120%; }
+mjx-container [size="Lg"] { font-size: 144%; }
+mjx-container [size="LG"] { font-size: 173%; }
+mjx-container [size="hg"] { font-size: 207%; }
+mjx-container [size="HG"] { font-size: 249%; }
+mjx-container [width="full"] { width: 100%; }
+mjx-box { display: inline-block; }
+mjx-block { display: block; }
+mjx-itable { display: inline-table; }
+mjx-row { display: table-row; }
+mjx-row > * { display: table-cell; }
+mjx-mtext { display: inline-block; }
+mjx-mstyle { display: inline-block; }
+mjx-merror { display: inline-block; color: red; background-color: yellow; }
+mjx-mphantom { visibility: hidden; }
+mjx-assistive-mml { top: 0px; left: 0px; clip: rect(1px, 1px, 1px, 1px); user-select: none; position: absolute !important; padding: 1px 0px 0px !important; border: 0px !important; display: block !important; width: auto !important; overflow: hidden !important; }
+mjx-assistive-mml[display="block"] { width: 100% !important; }
+mjx-math { display: inline-block; text-align: left; line-height: 0; text-indent: 0px; font-style: normal; font-weight: normal; font-size: 100%; font-size-adjust: none; letter-spacing: normal; border-collapse: collapse; overflow-wrap: normal; word-spacing: normal; white-space: nowrap; direction: ltr; padding: 1px 0px; }
+mjx-container[jax="CHTML"][display="true"] { display: block; text-align: center; margin: 1em 0px; }
+mjx-container[jax="CHTML"][display="true"][width="full"] { display: flex; }
+mjx-container[jax="CHTML"][display="true"] mjx-math { padding: 0px; }
+mjx-container[jax="CHTML"][justify="left"] { text-align: left; }
+mjx-container[jax="CHTML"][justify="right"] { text-align: right; }
+mjx-mi { display: inline-block; text-align: left; }
+mjx-c { display: inline-block; }
+mjx-utext { display: inline-block; padding: 0.75em 0px 0.2em; }
+mjx-mo { display: inline-block; text-align: left; }
+mjx-stretchy-h { display: inline-table; width: 100%; }
+mjx-stretchy-h > * { display: table-cell; width: 0px; }
+mjx-stretchy-h > * > mjx-c { display: inline-block; transform: scaleX(1); }
+mjx-stretchy-h > * > mjx-c::before { display: inline-block; width: initial; }
+mjx-stretchy-h > mjx-ext { overflow: clip visible; width: 100%; }
+mjx-stretchy-h > mjx-ext > mjx-c::before { transform: scaleX(500); }
+mjx-stretchy-h > mjx-ext > mjx-c { width: 0px; }
+mjx-stretchy-h > mjx-beg > mjx-c { margin-right: -0.1em; }
+mjx-stretchy-h > mjx-end > mjx-c { margin-left: -0.1em; }
+mjx-stretchy-v { display: inline-block; }
+mjx-stretchy-v > * { display: block; }
+mjx-stretchy-v > mjx-beg { height: 0px; }
+mjx-stretchy-v > mjx-end > mjx-c { display: block; }
+mjx-stretchy-v > * > mjx-c { transform: scaleY(1); transform-origin: left center; overflow: hidden; }
+mjx-stretchy-v > mjx-ext { display: block; height: 100%; box-sizing: border-box; border: 0px solid transparent; overflow: visible clip; }
+mjx-stretchy-v > mjx-ext > mjx-c::before { width: initial; box-sizing: border-box; }
+mjx-stretchy-v > mjx-ext > mjx-c { transform: scaleY(500) translateY(0.075em); overflow: visible; }
+mjx-mark { display: inline-block; height: 0px; }
+mjx-msup { display: inline-block; text-align: left; }
+mjx-c::before { display: block; width: 0px; }
+.MJX-TEX { font-family: MJXZERO, MJXTEX; }
+.TEX-B { font-family: MJXZERO, MJXTEX-B; }
+.TEX-I { font-family: MJXZERO, MJXTEX-I; }
+.TEX-MI { font-family: MJXZERO, MJXTEX-MI; }
+.TEX-BI { font-family: MJXZERO, MJXTEX-BI; }
+.TEX-S1 { font-family: MJXZERO, MJXTEX-S1; }
+.TEX-S2 { font-family: MJXZERO, MJXTEX-S2; }
+.TEX-S3 { font-family: MJXZERO, MJXTEX-S3; }
+.TEX-S4 { font-family: MJXZERO, MJXTEX-S4; }
+.TEX-A { font-family: MJXZERO, MJXTEX-A; }
+.TEX-C { font-family: MJXZERO, MJXTEX-C; }
+.TEX-CB { font-family: MJXZERO, MJXTEX-CB; }
+.TEX-FR { font-family: MJXZERO, MJXTEX-FR; }
+.TEX-FRB { font-family: MJXZERO, MJXTEX-FRB; }
+.TEX-SS { font-family: MJXZERO, MJXTEX-SS; }
+.TEX-SSB { font-family: MJXZERO, MJXTEX-SSB; }
+.TEX-SSI { font-family: MJXZERO, MJXTEX-SSI; }
+.TEX-SC { font-family: MJXZERO, MJXTEX-SC; }
+.TEX-T { font-family: MJXZERO, MJXTEX-T; }
+.TEX-V { font-family: MJXZERO, MJXTEX-V; }
+.TEX-VB { font-family: MJXZERO, MJXTEX-VB; }
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c { font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A !important; }
+@font-face { font-family: MJXZERO; src: url("lib/fonts/mathjax_zero.woff") format("woff"); }
+@font-face { font-family: MJXTEX; src: url("lib/fonts/mathjax_main-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-B; src: url("lib/fonts/mathjax_main-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-I; src: url("lib/fonts/mathjax_math-italic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-MI; src: url("lib/fonts/mathjax_main-italic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-BI; src: url("lib/fonts/mathjax_math-bolditalic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S1; src: url("lib/fonts/mathjax_size1-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S2; src: url("lib/fonts/mathjax_size2-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S3; src: url("lib/fonts/mathjax_size3-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S4; src: url("lib/fonts/mathjax_size4-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-A; src: url("lib/fonts/mathjax_ams-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-C; src: url("lib/fonts/mathjax_calligraphic-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-CB; src: url("lib/fonts/mathjax_calligraphic-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-FR; src: url("lib/fonts/mathjax_fraktur-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-FRB; src: url("lib/fonts/mathjax_fraktur-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SS; src: url("lib/fonts/mathjax_sansserif-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SSB; src: url("lib/fonts/mathjax_sansserif-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SSI; src: url("lib/fonts/mathjax_sansserif-italic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SC; src: url("lib/fonts/mathjax_script-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-T; src: url("lib/fonts/mathjax_typewriter-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-V; src: url("lib/fonts/mathjax_vector-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-VB; src: url("lib/fonts/mathjax_vector-bold.woff") format("woff"); }
+mjx-c.mjx-c1D45F.TEX-I::before { padding: 0.442em 0.451em 0.011em 0px; content: "r"; }
+mjx-c.mjx-c210E.TEX-I::before { padding: 0.694em 0.576em 0.011em 0px; content: "h"; }
+mjx-c.mjx-c1D460.TEX-I::before { padding: 0.442em 0.469em 0.01em 0px; content: "s"; }
+mjx-c.mjx-c28::before { padding: 0.75em 0.389em 0.25em 0px; content: "("; }
+mjx-c.mjx-c29::before { padding: 0.75em 0.389em 0.25em 0px; content: ")"; }
+mjx-c.mjx-c3D::before { padding: 0.583em 0.778em 0.082em 0px; content: "="; }
+mjx-c.mjx-c1D45A.TEX-I::before { padding: 0.442em 0.878em 0.011em 0px; content: "m"; }
+mjx-c.mjx-c1D456.TEX-I::before { padding: 0.661em 0.345em 0.011em 0px; content: "i"; }
+mjx-c.mjx-c1D45B.TEX-I::before { padding: 0.442em 0.6em 0.011em 0px; content: "n"; }
+mjx-c.mjx-c1D454.TEX-I::before { padding: 0.442em 0.477em 0.205em 0px; content: "g"; }
+mjx-c.mjx-c2032::before { padding: 0.56em 0.275em 0px 0px; content: "′"; }
+mjx-c.mjx-c2B::before { padding: 0.583em 0.778em 0.082em 0px; content: "+"; }
+mjx-c.mjx-c1D450.TEX-I::before { padding: 0.442em 0.433em 0.011em 0px; content: "c"; }
+mjx-c.mjx-c1D45C.TEX-I::before { padding: 0.441em 0.485em 0.011em 0px; content: "o"; }
+mjx-c.mjx-c1D461.TEX-I::before { padding: 0.626em 0.361em 0.011em 0px; content: "t"; }
+mjx-c.mjx-c2C::before { padding: 0.121em 0.278em 0.194em 0px; content: ","; }
+</style><div class="markdown-preview-sizer markdown-preview-section"><h1 class="page-title heading inline-title" id="Lecture 7：Unity 中的其他内存"><p dir="auto">Lecture 7：Unity 中的其他内存</p></h1><div class="el-h2 heading-wrapper"><h2 data-heading="`C#` 非托管内存" dir="auto" class="heading" id="`C#`_非托管内存"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>C#</code> 非托管内存</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`C#` 非托管内存基础概念" dir="auto" class="heading" id="`C#`_非托管内存基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>C#</code> 非托管内存基础概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>C#</code> 非托管内存</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>C#</code> ​<strong>非托管内存</strong>​ (<code>Unmanaged Memory</code>) 是指不由 <code>.NET</code> 垃圾回收器 (<code>GC</code>) 管理的内存区域；</li>
+<li data-line="2" dir="auto">它让开发者能够手动控制内存的分配和释放，从而避免 <code>GC</code> 带来的性能开销，特别适用于需要频繁分配和释放内存的场景；</li>
+<li data-line="3" dir="auto">可以使用 <code>Unity</code> 核心 <code>API</code> 中的 <code>Unity.Collections</code> 命名空间（包括 <code>NativeArray</code>），以及 <code>Unity Collections</code> 软件包中的数据结构来访问 <code>C#</code> 非托管内存；</li>
+<li data-line="4" dir="auto">如果使用 <code>Unity</code> 的 <code>C# Job</code> 系统或 <code>Burst</code>，则必须使用 <code>C#</code> 非托管内存；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实现：
+<ul>
+<li data-line="6" dir="auto">在 <code>Unity</code> 中，非托管内存主要通过 <code>System.Runtime.InteropServices.Marshal</code> 类进行管理。该类提供了一系列方法，如 <code>AllocHGlobal</code> 和 <code>FreeHGlobal</code>，用于从全局堆中分配和释放内存；</li>
+<li data-line="7" dir="auto">其核心原理是绕过 <code>.NET</code> 的垃圾回收机制，直接通过系统调用申请和释放内存块，从而实现对内存的精确控制；</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>作用：
+<ul>
+<li data-line="9" dir="auto">（1）与原生插件交互​：在调用 <code>C/C++</code> 编写的原生插件时，非托管内存可用于数据交换，避免额外的数据复制和转换开销；</li>
+<li data-line="10" dir="auto">（2）减少 <code>GC</code> 压力​：对于需要频繁创建和销毁的大型对象，使用非托管内存可以显著减少垃圾回收的频率，提升运行时性能；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="使用方法" dir="auto" class="heading" id="使用方法"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>使用方法</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：使用方法</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>流程：
+<ul>
+<li data-line="1" dir="auto">（1）分配内存​：调用 <code>Marshal.AllocHGlobal</code> 方法，传入需要分配的字节数，返回一个 <code>IntPtr</code> 指针，指向分配的内存块；</li>
+<li data-line="2" dir="auto">（2）使用内存​：通过指针读写内存数据，常用方法包括 <code>Marshal.Read/Write</code> 系列方法或 <code>Copy</code> 方法进行数据复制；</li>
+<li data-line="3" dir="auto">（3）​释放内存​：使用 <code>Marshal.FreeHGlobal</code> 方法释放之前分配的内存，并将指针设置为 <code>IntPtr.Zero</code>，避免野指针；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">using System;
+using System.Runtime.InteropServices;
+
+public class UnmanagedMemoryExample
+{
+	// 1. 使用一个IntPtr指针来存储分配得到的非托管内存
+    private IntPtr unmanagedMemory;
+    
+    public void AllocateMemory(int size)
+    {
+        // 2. 分配非托管内存，参数用于指定分配的内存大小
+        unmanagedMemory = Marshal.AllocHGlobal(size);
+        Console.WriteLine($"Allocated {size} bytes of unmanaged memory.");
+    }
+    
+    public void FreeMemory()
+    {
+        // 3. 如果当前指针非空，则释放非托管内存
+        if (unmanagedMemory != IntPtr.Zero)
+        {
+	        // 3.1 Free 当前分配的内存
+            Marshal.FreeHGlobal(unmanagedMemory);
+            // 3.2 将指针置为空，放置野指针
+            unmanagedMemory = IntPtr.Zero;
+            Console.WriteLine("Unmanaged memory freed.");
+        }
+    }
+    
+    public void UseMemory(byte[] data)
+    {
+        // 将数据从托管数组复制到非托管内存
+        Marshal.Copy(data, 0, unmanagedMemory, data.Length);
+        Console.WriteLine("Data copied to unmanaged memory.");
+    }
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="原生内存" dir="auto" class="heading" id="原生内存"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>原生内存</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="原生内存基础概念" dir="auto" class="heading" id="原生内存基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>原生内存基础概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：原生内存 - <code>Native Memory</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">原生内存是 <code>Unity</code> 引擎底层（<code>C++</code>）管理的内存区域，用于存储引擎内部对象和第三方插件分配的内存，它与 <code>C#</code> 托管内存完全分离，不受 <code>.NET</code> 垃圾回收器 (<code>GC</code>) 的管理；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>作用：
+<ul>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>原生内存主要用于存储 <code>Unity</code> 引擎运行所需的各类核心资源，包括：
+<ul>
+<li data-line="4" dir="auto">纹理资源​ (<code>Textures</code>)：包括各种纹理格式的像素数据，通常占用较大的内存空间；</li>
+<li data-line="5" dir="auto">网格数据​ (<code>Meshes</code>)：存储模型的顶点、法线、UV 等几何信息；</li>
+<li data-line="6" dir="auto">音频数据​ (<code>Audio Clips</code>)：存储未压缩或压缩的音频采样数据；</li>
+<li data-line="7" dir="auto">渲染资源​：包括帧缓冲区、渲染目标、着色器程序等图形 API 对象；</li>
+<li data-line="8" dir="auto">物理引擎数据​：如物理碰撞体、刚体、关节等物理状态信息；</li>
+<li data-line="9" dir="auto">第三方插件分配的内存​：例如原生插件通过 <code>malloc</code> 或 <code>new</code> 分配的内存块；</li>
+</ul>
+</li>
+<li data-line="10" dir="auto">与原生内存相关的 <code>Unity</code> 对象（如 <code>Texture2D</code>、<code>Mesh</code>、<code>AudioClip</code> 等）实际上是混合对象​,它们在托管堆中有一个 <code>C#</code> 包装对象，但实际数据存储在原生内存中；</li>
+<li data-line="11" dir="auto">这种设计使得实际数据的生命周期由引擎管理，而不是 <code>.NET GC</code>；</li>
+</ul>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分类：原生内存的五种内存分配器
+<ul>
+<li data-line="13" dir="auto"><code>Unity</code> 有五种分配器类型，每种类型都有不同的算法来将分配拟合到内存块中，因此它们对不同的分配很有用。分配之间的重要区别通常是<strong>持久性</strong>或分配寿命，它决定了分配应该放在哪里；</li>
+<li data-line="14" dir="auto"><span alt="Pasted image 20250827105538.png" src="Pasted image 20250827105538.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250827105538.png" src="lib/media/pasted-image-20250827105538.png"></span></li>
+<li data-line="15" dir="auto">长期（持久）分配进入<strong>堆</strong>和<strong>桶分配器</strong>，而短期分配进入<strong>线程安全的线性分配器</strong>和 <strong><code>TLS</code> 分配器</strong>；</li>
+</ul>
+</li>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>区别：
+<ul>
+<li data-line="17" dir="auto"><span alt="Pasted image 20250827105905.png" src="Pasted image 20250827105905.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250827105905.png" src="lib/media/pasted-image-20250827105905.png"></span></li>
+</ul>
+</li>
+<li data-line="18" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：托管内存和原生内存内存交互机制
+<ul>
+<li data-line="19" dir="auto"><code>UnityEngine.Object</code> 对象（如 <code>Texture2D</code>、<code>GameObject</code>）在托管堆中存储轻量级的包装对象和元数据，并包含一个指向本机内存中实际资源的指针；</li>
+<li data-line="20" dir="auto">当托管包装对象被 <code>GC</code> 回收时，并不意味着本机资源会被立即释放，后者仍需通过 <code>Unity</code> 的引用计数机制来管理； </li>
+</ul>
+</li>
+<li data-line="21" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>方法：设置 <code>Unity</code> 中的内存分配器
+<ul>
+<li data-line="22" dir="auto"><span alt="Pasted image 20250827110303.png" src="Pasted image 20250827110303.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250827110303.png" src="lib/media/pasted-image-20250827110303.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="内存分配器的选择" dir="auto" class="heading" id="内存分配器的选择"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>内存分配器的选择</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>总结</strong>：内存分配器的选择</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：主线程分配会退流程
+<ul>
+<li data-line="1" dir="auto"><span alt="PixPin_2025-11-13_16-44-35.png" src="PixPin_2025-11-13_16-44-35.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-13_16-44-35.png" src="lib/media/pixpin_2025-11-13_16-44-35.png"></span></li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：工作线程分配会退流程
+<ul>
+<li data-line="3" dir="auto"><span alt="PixPin_2025-11-13_16-45-14.png" src="PixPin_2025-11-13_16-45-14.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-13_16-45-14.png" src="lib/media/pixpin_2025-11-13_16-45-14.png"></span></li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结：
+<ul>
+<li data-line="5" dir="auto"><span alt="PixPin_2025-11-13_16-18-18.png" src="PixPin_2025-11-13_16-18-18.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-13_16-18-18.png" src="lib/media/pixpin_2025-11-13_16-18-18.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="内存分配器算法" dir="auto" class="heading" id="内存分配器算法"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>内存分配器算法</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="动态堆分配器" dir="auto" class="heading" id="动态堆分配器"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>动态堆分配器</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：动态堆分配器 - <code>DynamicHeapAllocator</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>动态堆分配器是 <code>Unity</code> 主要的内存分配器之一，其设计目标是：
+<ul>
+<li data-line="2" dir="auto">（1）高效处理动态内存请求​：适应不同大小和生命周期的内存分配需求；</li>
+<li data-line="3" dir="auto">（2）减少内存碎片​：通过特定算法优化内存布局；</li>
+<li data-line="4" dir="auto">（3）提供性能保障​：力求使分配和释放操作在恒定时间（<span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D442 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-math></mjx-container></span>)）​​ 内完成；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto">当分配请求的数量<strong>小于</strong>半个内存块时，动态堆分配器会使用其管理的块进行处理。如果请求的内存达到或超过半个块的大小，分配器无法处理，<code>Unity</code> 会回退（<code>Fallback</code>）到使用虚拟内存 <code>API</code>（如 <code>VirtualAlloc</code> 或 <code>mmap</code>）​​ 来直接分配大块内存；</li>
+<li data-line="6" dir="auto">这种机制设计能防止超大分配请求破坏分配器内部的结构和效率，但也意味着这些分配不再受动态堆分配器的优化管理；</li>
+<li data-line="7" dir="auto">最棘手的部分是设置块的大小。根据不同平台，更大的块效率更高，碎片更少，但对于内存有限的平台来说灵活性差。最大块为 <code>256 M</code>，最小块为 <code>128 k</code>，如果 <code>64</code> 位架构，使用更大的 <code>Region</code> 来保存多个块 <code>MEMORY_USE_LARGE_BLOCKS</code>，如果分配失败会会退到虚拟内存分配，效率更差；</li>
+<li data-line="8" dir="auto"><code>Log</code> 中 <code>[ALLOC_DEFAULT_MAIN]</code> 下关注 <code>Peakusageframecount</code> 字段，查看大多数帧分配内存的范围，关注内存分配峰值 <code>Peak Allocated memory</code> 字段，以及 <code>Peak Large allocation bytes</code> 没有使用 <code>TLSF</code> 分配的内存大小；</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：动态堆分配示例使用报告
+<ul>
+<li data-line="10" dir="auto"><span alt="Pasted image 20250827110713.png" src="Pasted image 20250827110713.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250827110713.png" src="lib/media/pasted-image-20250827110713.png"></span></li>
+<li data-line="11" dir="auto"><code>Requested Block Size 16.0 MB</code>：表示 <code>TLSF</code> 的内存块大小设置为 <code>16 MB</code>；</li>
+<li data-line="12" dir="auto"><code>Peak Block count 2</code>：峰值时分配了 <code>2</code> 个这样的内存块，总计 <code>32 MB</code> 原始空间；</li>
+<li data-line="13" dir="auto"><code>Peak Allocated memory 54.2 MB</code>：峰值时总共分配了 <code>54.2 MB</code> 的内存。这超过了 <code>32 MB</code>，说明有大量内存是通过回退机制（虚拟内存 <code>API</code>）​​ 分配的； </li>
+<li data-line="14" dir="auto"><code>Peak Large allocation bytes 40.2 MB</code>：在峰值分配的内存中，有 <code>40.2 MB</code> 属于大分配​（<code>单个分配 &gt;= 8MB</code>），它们直接来自虚拟内存，而非 <code>TLSF</code> 管理的内存块；</li>
+<li data-line="15" dir="auto"><code>Peak usage frame count</code>：大多数帧（<code>497</code> 帧）的内存使用峰值在 <code>16-32 MB</code> 之间，可能有一帧（如加载帧）的峰值达到了 <code>32-64 MB</code>；</li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>TLSF</code> - <code>Two-Level Segregated Fit</code>  </p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>Unity</code> 的动态堆分配器采用了 ​ <code>TLSF</code> (<code>Two-Level Segregated Fit</code>)​​ 算法，这是一种专为实时系统设计的内存分配算法，以其恒定的分配/释放时间和低碎片化特性而闻名；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>特点：
+<ul>
+<li data-line="3" dir="auto">（1）无论堆的状态如何，<code>malloc</code> 和 <code>free</code> 操作都能在 ​<strong>O (1) 时间复杂度</strong>内完成，满足了实时系统的苛刻要求；</li>
+<li data-line="4" dir="auto">（2）通过立即合并（<code>Immediate Coalescing</code>）​​ 释放的块（当相邻块空闲时立即合并）和 <code>Good-Fit</code> 策略​（寻找足够大但又不会大浪费的空闲块）来有效减少内存碎片；</li>
+<li data-line="5" dir="auto">（3）每次内存分配仅产生约 ​ <code>4</code> 字节的额外开销，用于管理元数据；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>TLSF</code> 算法的核心数据结构
+<ul>
+<li data-line="7" dir="auto"><code>TLSF</code> 通过两级位图（<code>Two-Level Bitmap</code>）​​ 和分级空闲块链表来管理动态内存池中的空闲块：</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（1）内存块大小分类：两级索引
+<ul>
+<li data-line="9" dir="auto"><code>TLSF</code> 将空闲内存块按其大小划分到不同的“容器”中，这些容器组织成两级数组；</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>第一级索引：
+<ul>
+<li data-line="11" dir="auto">根据内存请求大小的大小级（<code>Size Class</code>）进行划分，通常按 <code>2</code> 的幂次方​（如 <code>16</code>, <code>32</code>, <code>64</code>, <code>128</code>, <code>...</code>）进行粗粒度分类；</li>
+<li data-line="12" dir="auto">第一级索引 <code>f</code> 的计算方法是找到请求大小 <code>r</code> 的二进制最高位（<code>MSB</code>）的位置。例如，对于 <code>r=460</code>（二进制 <code>111001100</code>，最高位是第 <code>9</code> 位，从 <code>0</code> 开始计数），<code>f</code> 就是 <code>8</code>，因为 <span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-msup><mjx-mn class="mjx-n"><mjx-c class="mjx-c32"></mjx-c></mjx-mn><mjx-script style="vertical-align: 0.363em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c38"></mjx-c></mjx-mn></mjx-script></mjx-msup><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c32"></mjx-c><mjx-c class="mjx-c35"></mjx-c><mjx-c class="mjx-c36"></mjx-c></mjx-mn><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3C"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c34"></mjx-c><mjx-c class="mjx-c36"></mjx-c><mjx-c class="mjx-c30"></mjx-c></mjx-mn></mjx-math></mjx-container></span>；</li>
+</ul>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>第二级索引：
+<ul>
+<li data-line="14" dir="auto">在每个第一级的大小范围内，再进行更细粒度的线性划分；</li>
+<li data-line="15" dir="auto">第二级索引 <code>s</code> 的计算公式通常为：<span class="math math-inline is-loaded"><mjx-container class="MathJax" jax="CHTML"><mjx-math class="MJX-TEX"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45F TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c2212"></mjx-c></mjx-mo><mjx-msup space="3"><mjx-mn class="mjx-n"><mjx-c class="mjx-c32"></mjx-c></mjx-mn><mjx-script style="vertical-align: 0.363em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msup><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mo class="mjx-n"><mjx-c class="mjx-c2F"></mjx-c></mjx-mo></mjx-texatom><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-msup><mjx-mn class="mjx-n"><mjx-c class="mjx-c32"></mjx-c></mjx-mn><mjx-script style="vertical-align: 0.363em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msup><mjx-texatom texclass="ORD"><mjx-mo class="mjx-n"><mjx-c class="mjx-c2F"></mjx-c></mjx-mo></mjx-texatom><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D446 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D43F TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D43C TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math></mjx-container></span>，其中 <code>SLI</code> 表示 <code>Second Level Index</code>，是第二级划分的数量，这是一个可配置的参数；</li>
+<li data-line="16" dir="auto">例如，<code>SLI=4</code> 表示将每个第一级区间分为 <code>4</code> 份；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="17" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（2）位图标记空闲链表：
+<ul>
+<li data-line="18" dir="auto">每个大小类别（由 <code>f</code> 和 <code>s</code> 共同确定）都对应一个<strong>双向链表</strong>，链接着该特定大小的所有空闲内存块； </li>
+<li data-line="19" dir="auto">系统使用两个位图（第一级位图和第二级位图）来标记哪些大小类别的链表<strong>非空</strong>​（即有空闲块可用），这允许分配器通过几次位操作快速找到满足请求的空闲链表，而无需遍历所有链表；</li>
+</ul>
+</li>
+<li data-line="20" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：两级索引
+<ul>
+<li data-line="21" dir="auto"><span alt="Pasted image 20250827112044.png" src="Pasted image 20250827112044.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250827112044.png" src="lib/media/pasted-image-20250827112044.png"></span></li>
+<li data-line="22" dir="auto"><span alt="Pasted image 20250827112226.png" src="Pasted image 20250827112226.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250827112226.png" src="lib/media/pasted-image-20250827112226.png"></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="23" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实现：算法的分配过程
+<ul>
+<li data-line="24" dir="auto">当收到大小为 <code>r</code>的内存分配请求时：</li>
+<li data-line="25" dir="auto">（1）计算索引​：根据上述公式计算出第一级索引 <code>f</code> 和第二级索引 <code>s</code>；</li>
+<li data-line="26" dir="auto">（2）查找空闲块：检查对应的位图，找到能满足 <code>r</code> 大小的最小空闲块链表。如果该链表非空，则从链表中取出第一块进行分配；</li>
+<li data-line="27" dir="auto">（3）分割块（可选）​​：如果取出的空闲块远大于请求大小，可能会将其分割，剩余部分放回相应的空闲链表中；</li>
+</ul>
+</li>
+<li data-line="28" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实现：算法的释放与合并
+<ul>
+<li data-line="29" dir="auto">当内存被释放时：</li>
+<li data-line="30" dir="auto">（1）立即合并​：<code>TLSF</code> 会立即检查与该释放块物理相邻的内存块是否也是空闲的，如果是，就将它们合并成一个更大的空闲块；</li>
+<li data-line="31" dir="auto">（2）​更新链表和位图​：合并后的新空闲块会根据其新的大小被重新插入到对应的空闲链表中，并更新相应的位图状态；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="桶分配器" dir="auto" class="heading" id="桶分配器"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>桶分配器</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：桶分配器 - <code>BucketAllocator</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">桶分配器是一种快速无锁分配器，用于执行小型分配。通常，桶分配器用作加速小型分配的第一步，然后再转到堆分配器；</li>
+<li data-line="2" dir="auto">分配器为分配保留内存块，每个块被划分为大小为 <code>16KB</code> 的子部分。此设置不可配置，并且不会显示在用户界面中。每个子部分又进一步划分为分配。分配大小是配置的固定大小（称为粒度）的倍数；</li>
+<li data-line="3" dir="auto">核心思想是预先分配好多个不同大小的内存块（即“桶”）​，每个桶专门负责一种固定大小的内存分配请求，从而避免通用分配器在处理小对象时的碎片化和性能开销；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="5" dir="auto">每个 <code>bucket</code> 由固定大小粒度 <code>granularity</code> 表示，如果 <code>granularity</code> 为 <code>16</code> 字节大小，则用于分配 <code>16/32/48/64/</code> 字节的内存；</li>
+<li data-line="6" dir="auto">如果是 <code>development</code> 版本，<code>granularity</code> 在设置大小的基础上增加 <code>40</code> 个字节；</li>
+<li data-line="7" dir="auto">分配器为分配保留内存块 <code>Block</code>，每个块被划分为 <code>16kb</code> 的子段 (<code>subsections</code>)，并且不可配置。<code>Block</code> 块只能增长, 并且需要是固定 <code>16kb</code> 大小的整数倍。分配是固定大小无锁的，速度快，通常作为进入堆分配器之前用来加速小内存分配的分配器</li>
+<li data-line="8" dir="auto"><code>Log</code> 日志中可以通过查看 <code>[ALLOC_BUCKET]</code> 字段来看是否有 <code>FailedAllocations.Bucketlayout</code> 字段以及 <code>PeakAllocatedbytes</code> 字段与 <code>LargeBlocksize</code> 字段的利用率，来判定大小是否分配合适，分配失败会会退到 <code>DynamicHeapAllocator</code> 或 <code>UnityDefaultAllocator</code> 分配器上，效率变差；</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="10" dir="auto"><span alt="PixPin_2025-11-13_16-21-29.png" src="PixPin_2025-11-13_16-21-29.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-13_16-21-29.png" src="lib/media/pixpin_2025-11-13_16-21-29.png"></span></li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：<code>Unity</code> 中相关设置
+<ul>
+<li data-line="12" dir="auto"><span alt="PixPin_2025-11-13_16-21-55.png" src="PixPin_2025-11-13_16-21-55.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-13_16-21-55.png" src="lib/media/pixpin_2025-11-13_16-21-55.png"></span></li>
+</ul>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：桶分配器的核心数据结构
+<ul>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（1）分桶策略：
+<ul>
+<li data-line="15" dir="auto">系统会预先定义一系列固定大小（称为大小类别，<code>Size Classes</code>）​，例如 <code>16B、32B、64B、128B</code> 等，每个大小类别对应一个独立的“桶”；</li>
+<li data-line="16" dir="auto">当一个内存分配请求到来时，分配器会向上取整到最近的标准大小类别，然后交由对应的桶来处理；</li>
+<li data-line="17" dir="auto">例如，请求分配 <code>18B</code> 的内存，可能会被分配在 <code>32B</code> 的桶中；</li>
+</ul>
+</li>
+<li data-line="18" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（2）内存结构：
+<ul>
+<li data-line="19" dir="auto">每个桶在内存中的管理结构通常包含以下部分：</li>
+<li data-line="20" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="20" dir="auto">内存块 (<code>Memory Chunk</code>)​​：从系统申请的一大块连续内存，被划分为多个大小相等的单元 (<code>Cell</code>)​；</li>
+</ol>
+</li>
+<li data-line="21" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="21" dir="auto">空闲链表 (<code>Free List</code>)​​：一个将所有这些空闲单元连接起来的单向链表，链表的每个节点实际上就是空闲单元本身（或一个指向下一个空闲单元的指针）。链表头指针指向第一个可用的空闲单元；</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="22" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实现：算法的分配过程
+<ul>
+<li data-line="23" dir="auto">（1）确定大小类别​：根据请求的分配大小，确定应使用哪个大小的桶；</li>
+<li data-line="24" dir="auto">（2）​检查空闲链表​：从该桶的空闲链表头部获取第一个空闲单元；</li>
+<li data-line="25" dir="auto">（3）调整链表​：将链表头指针指向下一个空闲单元；</li>
+<li data-line="26" dir="auto">（4）​返回内存指针​：将步骤 <code>2</code> 中获取的空闲单元的内存地址返回给调用者；</li>
+</ul>
+</li>
+<li data-line="27" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实现：算法的释放过程
+<ul>
+<li data-line="28" dir="auto">（1）​确定所属桶​：根据要释放的内存地址，确定它来自于哪个桶（分配器通常通过元数据或地址范围来跟踪）</li>
+<li data-line="29" dir="auto">（2）放回空闲链表​：将该内存单元放回其所属桶的空闲链表头部；</li>
+<li data-line="30" dir="auto">（3）更新链表​：让该单元指向原来的链表头，并更新链表头指针指向这个新释放的单元；</li>
+</ul>
+</li>
+<li data-line="31" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>示例：引擎内部管理与《奥日 2》的优化案例
+<ul>
+<li data-line="32" dir="auto"><code>Unity</code> 引擎底层在使用桶分配器管理小型、高频分配的对象，例如 <code>GameObject</code> 和 <code>Component</code> 的内部数据结构、事件参数、渲染命令等，这在《奥日 2》的 <code>Switch</code> 移植优化中得到了很好的体现；</li>
+<li data-line="33" dir="auto"><code>Moon</code> 工作室与 <code>Unity</code> 企业技术支持团队合作时发现，游戏在开始前就填满了部分桶内存。通过适当增加内存桶的数量，为游戏期间分配的小内存提供了额外空间。这使得这些小内存块能够由桶分配器高效处理，而不再交给速度较慢的动态堆分配器。动态堆分配器因此可以更专注于处理大型内存块，其碎片化程度降低，游戏也能更长时间地流畅运行，最终实现了 <code>60</code> 帧的目标；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="双线程分配器" dir="auto" class="heading" id="双线程分配器"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>双线程分配器</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：双线程分配器</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">它是将 2 个 <code>DynamicHeapAllocator</code> 实例与 1 个 <code>BucketAllocator</code> 封装到一起，其中 <code>BucketAllocator</code> 负责小的共享内存分配，<code>1</code> 个无锁的 <code>DynamicHeapAllocator</code> 用于主线程分配，另外一个 <code>DynamicHeapAllocator</code> 负责其他线程的共享分配，但是分配与回收时需要加锁；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="3" dir="auto">双线程分配器是一个包装器，它将动态堆和桶分配器结合起来。更具体地说，它结合了：</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（1）两个动态堆分配器：
+<ul>
+<li data-line="5" dir="auto">一个用于主线程的无锁分配器；</li>
+<li data-line="6" dir="auto">一个用于所有其他线程的分配器，它在分配和释放时锁定；</li>
+<li data-line="7" dir="auto"><code>Unity</code> 使用这些分配器来进行对于桶分配器来说太大的分配；</li>
+<li data-line="8" dir="auto">动态堆分配器使用内存块等于或大于半个块的分配将转到虚拟内存系统，而不是动态堆分配器；</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（2）用于小分配的桶分配器：
+<ul>
+<li data-line="10" dir="auto">如果桶分配器已满，则分配将溢出到动态堆分配器中； </li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>使用：
+<ul>
+<li data-line="12" dir="auto"><code>Log</code> 中 <code>[ALLOC_DEFAULT]</code> 下分别关注 <code>[ALLOC_BUCKET]</code>、<code>[ALLOC_DEFAULT_MAIN]</code>、<code>[ALLOC_DEFAULT_THREAD]</code> 字段下一个 <code>BucketAllocator</code> 与 <code>2</code> 个 <code>DynamicHeapAllocator</code> 的分配信息，其中尤其关注 <code>Peak main deferred allocation count</code> 字段，这个字段代表需要在主线程回收的分配队列；</li>
+<li data-line="13" dir="auto">负责其他线程的共享分配的 <code>DynamicHeapAllocatord</code> 对应 <code>C#</code> 非托管内存的 <code>Allocator.Persistent</code>；</li>
+</ul>
+</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：可以自定义两个动态堆分配器的块大小
+<ul>
+<li data-line="15" dir="auto"><span alt="Pasted image 20250827120711.png" src="Pasted image 20250827120711.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250827120711.png" src="lib/media/pasted-image-20250827120711.png"></span></li>
+<li data-line="16" dir="auto">主分配器，自定义共享线程块大小；</li>
+</ul>
+</li>
+<li data-line="17" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：双线程分配器的分配报告
+<ul>
+<li data-line="18" dir="auto"><span alt="Pasted image 20250827121428.png" src="Pasted image 20250827121428.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250827121428.png" src="lib/media/pasted-image-20250827121428.png"></span></li>
+</ul>
+</li>
+<li data-line="19" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="20" dir="auto"><span alt="Pasted image 20251113162928.png" src="Pasted image 20251113162928.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20251113162928.png" src="lib/media/pasted-image-20251113162928.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="基于栈的分配器" dir="auto" class="heading" id="基于栈的分配器"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>基于栈的分配器</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：基于栈的分配器 - <code>TLS Stack Allocator</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">用于快速临时分配的堆栈分配器。它是最快的分配器，几乎没有开销，并且可以防止内存碎片，对应 <code>C#</code> 非托管内存的 <code>Allocator.Temp</code> 分配类型；</li>
+<li data-line="2" dir="auto">它是基于后进先出 <code>LIFO</code> 的算法，分配的内存生命周期在一帧内，如果分配器使用超过了配置的大小，<code>Unity</code> 会增加分配块大小，但会是配置设置的 <code>2</code> 倍大小；</li>
+<li data-line="3" dir="auto">如果线程堆栈分配器满了，分配器将会退到线程安全线性 <code>job</code> 分配器。这时一帧内允许有 <code>1-10</code> 分配，甚至如果是加载期间可以允许几百次。但如果每帧的分配数字增加可以考虑增加块大小；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>使用：
+<ul>
+<li data-line="5" dir="auto"><code>Log</code> 日志 <code>[ALLOC_TEMP_TLS]</code> 下关注 <code>[ALLOC_TEMP_MAIN]</code> 与 <code>[ALLOC_TEMP_Job.Worker xx]</code> 中的 <code>Peakusage frame count于Peak Allocated Bytes</code> 字段，也要关注 <code>Overflow Count</code> 字段，是否发生了分配器溢出会退的情况；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="线程安全的线性分配器" dir="auto" class="heading" id="线程安全的线性分配器"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>线程安全的线性分配器</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：线程安全的线性分配器 - <code>Thread SafeLinearAllocator</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">用于快速无锁分配 <code>Job</code> 线程的缓冲区，并在 <code>Job</code> 完成后释放缓冲区，对应 <code>C#</code> 非托管内存的 <code>Allocator.TempJob</code>；</li>
+<li data-line="2" dir="auto">采用循环先进先出 <code>FIFO</code> 算法，先分配内存块，然后在这些内存块内进行线性分配内存；</li>
+<li data-line="3" dir="auto">所有可用块都会存到一个池中，当一个块满时再从池中提取一个新的可用块。当分配器不再需要块中内存时，清理该块并放回到可用池中；</li>
+<li data-line="4" dir="auto">快速清理分配可用块非常重要，因此 <code>Job</code> 的分配尽量在几帧内完成；</li>
+<li data-line="5" dir="auto">如果所有块都在使用中，或者一个分配对于一个块太大的情况下，则会退到主堆分配器，分配效率会下降；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>使用：
+<ul>
+<li data-line="7" dir="auto"><code>Log</code> 日志 <code>[ALLOC_TEMP_JOB_4_FRAMES]</code> 中我们需要关注 <code>Overflow Cout(toolarge)</code> 与 <code>OverflowCount(full)</code> 字段，判断是否发生了分配器溢出会退；</li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto">两亿/2=1 亿/5= 合适 2000 万 <code>-&gt;</code> （1000 抽 1）2000/1000 = 2 万（全）<br>
+2000 万 <code>-&gt;</code> 1000 万 <code>-&gt;</code> 350 万 <code>-&gt;</code> （350 抽 2） <code>-&gt;</code> 2 万（全）<br>
+350 万：剩下 100 万<br>
+留 250 万：<br>
+50 抽 1：5 万 <code>-&gt;</code> 一年完成，约 <code>3000</code></p></div><div class="el-p"><p dir="auto">没惹拍自己</p></div><div class="mod-footer mod-ui"></div></div></div></div></div></div></div></div><div class="sidebar-right sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"></div><script defer="">let rs = document.querySelector(".sidebar-right"); rs.classList.add("is-collapsed"); if (window.innerWidth > 768) rs.classList.remove("is-collapsed"); rs.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-right-width"));</script></div></div></body></html>

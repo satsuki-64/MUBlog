@@ -1,0 +1,1543 @@
+<!DOCTYPE html> <html><head>
+		<title>Lecture 6：水体</title>
+		<base href="..\..\../">
+		<meta id="root-path" root-path="..\..\../">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
+		<meta charset="UTF-8">
+		<meta name="description" content="MUBlog - Lecture 6：水体">
+		<meta property="og:title" content="Lecture 6：水体">
+		<meta property="og:description" content="MUBlog - Lecture 6：水体">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="03_游戏开发技术/03_游戏渲染技术/03_常见效果实现/lecture-6：水体.html">
+		<meta property="og:image" content="lib\media\pasted-image-20251031134555.png">
+		<meta property="og:site_name" content="MUBlog">
+		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="lib/rss.xml"><script async="" id="webpage-script" src="lib/scripts/webpage.js" onload="this.onload=null;this.setAttribute(&quot;loaded&quot;, &quot;true&quot;)"></script><link rel="icon" href="lib/media/favicon.png"><style>body{--line-width:40em;--line-width-adaptive:40em;--file-line-width:40em;--sidebar-width:min(20em, 80vw);--collapse-arrow-size:11px;--tree-horizontal-spacing:0.6em;--tree-vertical-spacing:0.6em;--sidebar-margin:12px}.sidebar{height:100%;min-width:calc(var(--sidebar-width) + var(--divider-width-hover));max-width:calc(var(--sidebar-width) + var(--divider-width-hover));font-size:14px;z-index:10;position:relative;overflow:hidden;transition:min-width ease-in-out,max-width ease-in-out;transition-duration:.2s;contain:size}.sidebar-left{left:0}.sidebar-right{right:0}.sidebar.is-collapsed{min-width:0;max-width:0}body.floating-sidebars .sidebar{position:absolute}.sidebar-content{height:100%;min-width:calc(var(--sidebar-width) - var(--divider-width-hover));top:0;padding:var(--sidebar-margin);padding-top:4em;line-height:var(--line-height-tight);background-color:var(--background-secondary);transition:background-color,border-right,border-left,box-shadow;transition-duration:var(--color-fade-speed);transition-timing-function:ease-in-out;position:absolute;display:flex;flex-direction:column}.sidebar:not(.is-collapsed) .sidebar-content{min-width:calc(max(100%,var(--sidebar-width)) - 3px);max-width:calc(max(100%,var(--sidebar-width)) - 3px)}.sidebar-left .sidebar-content{left:0;border-top-right-radius:var(--radius-l);border-bottom-right-radius:var(--radius-l)}.sidebar-right .sidebar-content{right:0;border-top-left-radius:var(--radius-l);border-bottom-left-radius:var(--radius-l)}.sidebar:has(.sidebar-content:empty):has(.topbar-content:empty){display:none}.sidebar-topbar{height:2em;width:var(--sidebar-width);top:var(--sidebar-margin);padding-inline:var(--sidebar-margin);z-index:1;position:fixed;display:flex;align-items:center;transition:width ease-in-out;transition-duration:inherit}.sidebar.is-collapsed .sidebar-topbar{width:calc(2.3em + var(--sidebar-margin) * 2)}.sidebar .sidebar-topbar.is-collapsed{width:0}.sidebar-left .sidebar-topbar{left:0}.sidebar-right .sidebar-topbar{right:0}.topbar-content{overflow:hidden;overflow:clip;width:100%;height:100%;display:flex;align-items:center;transition:inherit}.sidebar.is-collapsed .topbar-content{width:0;transition:inherit}.clickable-icon.sidebar-collapse-icon{background-color:transparent;color:var(--icon-color-focused);padding:0!important;margin:0!important;height:100%!important;width:2.3em!important;margin-inline:0.14em!important;position:absolute}.sidebar-left .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);right:var(--sidebar-margin)}.sidebar-right .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);left:var(--sidebar-margin)}.clickable-icon.sidebar-collapse-icon svg.svg-icon{width:100%;height:100%}.sidebar-section-header{margin:0 0 1em 0;text-transform:uppercase;letter-spacing:.06em;font-weight:600}body{transition:background-color var(--color-fade-speed) ease-in-out}.webpage-container{display:flex;flex-direction:row;height:100%;width:100%;align-items:stretch;justify-content:center}.document-container{opacity:1;flex-basis:100%;max-width:100%;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;transition:opacity .2s ease-in-out;contain:inline-size}.hide{opacity:0;transition:opacity .2s ease-in-out}.document-container>.markdown-preview-view{margin:var(--sidebar-margin);margin-bottom:0;width:100%;width:-webkit-fill-available;width:-moz-available;width:fill-available;background-color:var(--background-primary);transition:background-color var(--color-fade-speed) ease-in-out;border-top-right-radius:var(--window-radius,var(--radius-m));border-top-left-radius:var(--window-radius,var(--radius-m));overflow-x:hidden!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;contain:inline-size}.document-container>.markdown-preview-view>.markdown-preview-sizer{padding-bottom:80vh!important;width:100%!important;max-width:var(--line-width)!important;flex-basis:var(--line-width)!important;transition:background-color var(--color-fade-speed) ease-in-out;contain:inline-size}.markdown-rendered img:not([width]),.view-content img:not([width]){max-width:100%;outline:0}.document-container>.view-content.embed{display:flex;padding:1em;height:100%;width:100%;align-items:center;justify-content:center}.document-container>.view-content.embed>*{max-width:100%;max-height:100%;object-fit:contain}:has(> :is(.math,table)){overflow-x:auto!important}.document-container>.view-content{overflow-x:auto;contain:content;padding:0;margin:0;height:100%}.scroll-highlight{position:absolute;width:100%;height:100%;pointer-events:none;z-index:1000;background-color:hsla(var(--color-accent-hsl),.25);opacity:0;padding:1em;inset:50%;translate:-50% -50%;border-radius:var(--radius-s)}</style><script defer="">async function loadIncludes(){if("file:"!=location.protocol){let e=document.querySelectorAll("include");for(let t=0;t<e.length;t++){let o=e[t],l=o.getAttribute("src");try{const e=await fetch(l);if(!e.ok){console.log("Could not include file: "+l),o?.remove();continue}let t=await e.text(),n=document.createRange().createContextualFragment(t),i=Array.from(n.children);for(let e of i)e.classList.add("hide"),e.style.transition="opacity 0.5s ease-in-out",setTimeout((()=>{e.classList.remove("hide")}),10);o.before(n),o.remove(),console.log("Included file: "+l)}catch(e){o?.remove(),console.log("Could not include file: "+l,e);continue}}}else{if(document.querySelectorAll("include").length>0){var e=document.createElement("div");e.id="error",e.textContent="Web server exports must be hosted on an http / web server to be viewed correctly.",e.style.position="fixed",e.style.top="50%",e.style.left="50%",e.style.transform="translate(-50%, -50%)",e.style.fontSize="1.5em",e.style.fontWeight="bold",e.style.textAlign="center",document.body.appendChild(e),document.querySelector(".document-container")?.classList.remove("hide")}}}document.addEventListener("DOMContentLoaded",(()=>{loadIncludes()}));let isFileProtocol="file:"==location.protocol;function waitLoadScripts(e,t){let o=e.map((e=>document.getElementById(e+"-script"))),l=0;!function e(){let n=o[l];l++,n&&"true"!=n.getAttribute("loaded")||l<o.length&&e(),l<o.length?n.addEventListener("load",e):t()}()}</script><link rel="stylesheet" href="lib/styles/obsidian.css"><link rel="stylesheet" href="lib/styles/theme.css"><link rel="preload" href="lib/styles/global-variable-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/global-variable-styles.css"></noscript><link rel="preload" href="lib/styles/supported-plugins.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/supported-plugins.css"></noscript><link rel="preload" href="lib/styles/main-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/main-styles.css"></noscript><link rel="preload" href="lib/styles/snippets.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/snippets.css"></noscript></head><body class="publish css-settings-manager styled-scrollbars theme-light show-inline-title ctp-rosepine-light ctp-mocha ctp-accent-rosewater anuppuccin-accent-toggle anp-current-line-border anp-callout-color-toggle anp-codeblock-numbers anp-list-toggle anp-table-width anp-toggle-preview anp-color-transition-toggle anp-button-metadata-toggle anp-toggle-metadata anp-toggle-scrollbars anp-h1-red anp-h1-divider anp-h2-peach anp-h3-green anp-h4-teal anp-h5-lavender anp-h6-mauve anp-decoration-toggle anp-bold-maroon anp-italic-green anp-highlight-yellow anp-colorful-frame-icon-toggle-dark anp-simple-rainbow-color-toggle anp-rainbow-file-toggle anp-simple-rainbow-title-toggle anp-simple-rainbow-icon-folder-toggle anp-simple-rainbow-indentation-toggle anp-simple-rainbow-collapse-toggle anp-card-layout anp-card-shadows anp-card-layout-filebrowser anp-theme-ext-light anp-theme-ext-dark anp-theme-ext-amoled ctp-atom-light ctp-atom-dark table-type-three-line table-header-color-blue table-row-alt-background-option table-dark-mode"><script defer="">let theme=localStorage.getItem("theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");"dark"==theme?(document.body.classList.add("theme-dark"),document.body.classList.remove("theme-light")):(document.body.classList.add("theme-light"),document.body.classList.remove("theme-dark")),window.innerWidth<480?document.body.classList.add("is-phone"):window.innerWidth<768?document.body.classList.add("is-tablet"):window.innerWidth<1024?document.body.classList.add("is-small-screen"):document.body.classList.add("is-large-screen")</script><div class="webpage-container workspace"><div class="sidebar-left sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"><label class="theme-toggle-container" for="theme_toggle"><input class="theme-toggle-input" type="checkbox" id="theme_toggle"><div class="toggle-background"></div></label></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"><include src="lib/html/file-tree.html"></include></div><script defer="">let ls = document.querySelector(".sidebar-left"); ls.classList.add("is-collapsed"); if (window.innerWidth > 768) ls.classList.remove("is-collapsed"); ls.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-left-width"));</script></div><div class="document-container markdown-reading-view hide"><div class="markdown-preview-view markdown-rendered allow-fold-headings allow-fold-lists is-readable-line-width"><style id="MJX-CHTML-styles">mjx-mpadded { display: inline-block; text-align: left; }
+mjx-rbox { display: inline-block; position: relative; }
+mjx-stretchy-h.mjx-c2192 mjx-ext mjx-c::before { content: "−"; padding: 0.583em 0px 0.082em; }
+mjx-stretchy-h.mjx-c2192 mjx-end mjx-c::before { content: "→"; padding: 0.583em 0px 0.082em; }
+mjx-c.mjx-c39::before { padding: 0.666em 0.5em 0.022em 0px; content: "9"; }
+mjx-c.mjx-c1D44D.TEX-I::before { padding: 0.683em 0.723em 0px 0px; content: "Z"; }
+mjx-c.mjx-c58::before { padding: 0.683em 0.75em 0px 0px; content: "X"; }
+mjx-c.mjx-c59::before { padding: 0.683em 0.75em 0px 0px; content: "Y"; }
+mjx-c.mjx-c5A::before { padding: 0.683em 0.611em 0px 0px; content: "Z"; }
+mjx-c.mjx-c28.TEX-S2::before { padding: 1.15em 0.597em 0.649em 0px; content: "("; }
+mjx-c.mjx-c29.TEX-S2::before { padding: 1.15em 0.597em 0.649em 0px; content: ")"; }
+mjx-c.mjx-c4E::before { padding: 0.683em 0.75em 0px 0px; content: "N"; }
+mjx-c.mjx-c22A4::before { padding: 0.668em 0.778em 0px 0px; content: "⊤"; }
+mjx-c.mjx-cB7::before { padding: 0.31em 0.278em 0px 0px; content: "⋅"; }
+mjx-c.mjx-c36::before { padding: 0.666em 0.5em 0.022em 0px; content: "6"; }
+mjx-c.mjx-c1D43E.TEX-I::before { padding: 0.683em 0.889em 0px 0px; content: "K"; }
+mjx-c.mjx-c52::before { padding: 0.683em 0.736em 0.022em 0px; content: "R"; }
+mjx-c.mjx-c1D42B.TEX-B::before { padding: 0.45em 0.474em 0px 0px; content: "r"; }
+mjx-c.mjx-c1D428.TEX-B::before { padding: 0.452em 0.575em 0.005em 0px; content: "o"; }
+mjx-c.mjx-c1D41D.TEX-B::before { padding: 0.694em 0.639em 0.006em 0px; content: "d"; }
+mjx-c.mjx-c3C::before { padding: 0.54em 0.778em 0.04em 0px; content: "<"; }
+mjx-c.mjx-c221E::before { padding: 0.442em 1em 0.011em 0px; content: "∞"; }
+mjx-c.mjx-c1D429.TEX-B::before { padding: 0.45em 0.639em 0.194em 0px; content: "p"; }
+mjx-c.mjx-cB1::before { padding: 0.666em 0.778em 0px 0px; content: "±"; }
+mjx-c.mjx-c221A::before { padding: 0.8em 0.853em 0.2em 0px; content: "√"; }
+mjx-c.mjx-c47::before { padding: 0.705em 0.785em 0.022em 0px; content: "G"; }
+mjx-c.mjx-c66::before { padding: 0.705em 0.372em 0px 0px; content: "f"; }
+mjx-c.mjx-c71::before { padding: 0.442em 0.528em 0.194em 0px; content: "q"; }
+mjx-c.mjx-c5E.TEX-B::before { padding: 0.694em 0.575em 0px 0px; content: "^"; }
+mjx-c.mjx-c1D42D.TEX-B::before { padding: 0.635em 0.447em 0.005em 0px; content: "t"; }
+mjx-c.mjx-c1D40E.TEX-B::before { padding: 0.696em 0.864em 0.01em 0px; content: "O"; }
+mjx-c.mjx-c1D403.TEX-B::before { padding: 0.686em 0.882em 0px 0px; content: "D"; }
+mjx-c.mjx-c1D40F.TEX-B::before { padding: 0.686em 0.786em 0px 0px; content: "P"; }
+mjx-c.mjx-c2219::before { padding: 0.444em 0.5em 0px 0px; content: "∙"; }
+mjx-c.mjx-c1D404.TEX-B::before { padding: 0.68em 0.756em 0px 0px; content: "E"; }
+mjx-c.mjx-c20D7.TEX-VB::before { padding: 0.723em 0.575em 0px 0px; content: "→"; }
+mjx-c.mjx-c7B::before { padding: 0.75em 0.5em 0.25em 0px; content: "{"; }
+mjx-c.mjx-c7D::before { padding: 0.75em 0.5em 0.25em 0px; content: "}"; }
+mjx-c.mjx-c26::before { padding: 0.716em 0.778em 0.022em 0px; content: "&"; }
+mjx-c.mjx-c2261::before { padding: 0.464em 0.778em 0px 0px; content: "≡"; }
+mjx-c.mjx-c3A6::before { padding: 0.683em 0.722em 0px 0px; content: "Φ"; }
+mjx-c.mjx-c57::before { padding: 0.683em 1.028em 0.022em 0px; content: "W"; }
+mjx-c.mjx-c2035.TEX-A::before { padding: 0.56em 0.275em 0px 0px; content: "‵"; }
+mjx-c.mjx-c1D446.TEX-I::before { padding: 0.705em 0.645em 0.022em 0px; content: "S"; }
+mjx-c.mjx-c1D719.TEX-I::before { padding: 0.694em 0.596em 0.205em 0px; content: "ϕ"; }
+mjx-c.mjx-c7C::before { padding: 0.75em 0.278em 0.249em 0px; content: "|"; }
+.mjx-stretched mjx-c.mjx-c2013::before { content: "–"; }
+mjx-stretchy-h.mjx-c2013 mjx-ext mjx-c::before { content: "–"; padding: 0.285em 0px 0px; }
+mjx-c.mjx-c1D52E.TEX-FR::before { padding: 0.479em 0.489em 0.219em 0px; content: "q"; }
+mjx-c.mjx-c1D52D.TEX-FR::before { padding: 0.541em 0.5em 0.212em 0px; content: "p"; }
+mjx-c.mjx-c1D43A.TEX-I::before { padding: 0.705em 0.786em 0.022em 0px; content: "G"; }
+mjx-c.mjx-c1D439.TEX-I::before { padding: 0.68em 0.749em 0px 0px; content: "F"; }
+mjx-c.mjx-c3A9::before { padding: 0.704em 0.722em 0px 0px; content: "Ω"; }
+mjx-c.mjx-c2248::before { padding: 0.483em 0.778em 0px 0px; content: "≈"; }
+mjx-c.mjx-c222B.TEX-S1::before { padding: 0.805em 0.61em 0.306em 0px; content: "∫"; }
+mjx-c.mjx-c200B::before { padding: 0px; content: ""; }
+mjx-c.mjx-c1D44A.TEX-I::before { padding: 0.683em 1.048em 0.022em 0px; content: "W"; }
+mjx-c.mjx-c1D443.TEX-I::before { padding: 0.683em 0.751em 0px 0px; content: "P"; }
+mjx-c.mjx-c1D45E.TEX-I::before { padding: 0.442em 0.46em 0.194em 0px; content: "q"; }
+mjx-c.mjx-c2208::before { padding: 0.54em 0.667em 0.04em 0px; content: "∈"; }
+mjx-c.mjx-c4E.TEX-C::before { padding: 0.789em 0.979em 0.05em 0px; content: "N"; }
+mjx-c.mjx-c1D712.TEX-I::before { padding: 0.442em 0.626em 0.204em 0px; content: "χ"; }
+mjx-c.mjx-c53::before { padding: 0.705em 0.556em 0.022em 0px; content: "S"; }
+mjx-c.mjx-c4D::before { padding: 0.683em 0.917em 0px 0px; content: "M"; }
+mjx-c.mjx-c1D44B.TEX-I::before { padding: 0.683em 0.852em 0px 0px; content: "X"; }
+mjx-c.mjx-c56::before { padding: 0.683em 0.75em 0.022em 0px; content: "V"; }
+mjx-c.mjx-c45::before { padding: 0.68em 0.681em 0px 0px; content: "E"; }
+mjx-c.mjx-c2264::before { padding: 0.636em 0.778em 0.138em 0px; content: "≤"; }
+mjx-c.mjx-c1D70E.TEX-I::before { padding: 0.431em 0.571em 0.011em 0px; content: "σ"; }
+mjx-c.mjx-c1D707.TEX-I::before { padding: 0.442em 0.603em 0.216em 0px; content: "μ"; }
+mjx-c.mjx-c1D708.TEX-I::before { padding: 0.442em 0.53em 0px 0px; content: "ν"; }
+mjx-c.mjx-c46::before { padding: 0.68em 0.653em 0px 0px; content: "F"; }
+mjx-c.mjx-c7B.TEX-S3::before { padding: 1.45em 0.75em 0.949em 0px; content: "{"; }
+mjx-c.mjx-c7D.TEX-S3::before { padding: 1.45em 0.75em 0.949em 0px; content: "}"; }
+mjx-c.mjx-c1D438.TEX-I::before { padding: 0.68em 0.764em 0px 0px; content: "E"; }
+mjx-c.mjx-c222B.TEX-S2::before { padding: 1.36em 0.944em 0.862em 0px; content: "∫"; }
+mjx-c.mjx-c1D43B.TEX-I::before { padding: 0.683em 0.888em 0px 0px; content: "H"; }
+mjx-c.mjx-c1D70C.TEX-I::before { padding: 0.442em 0.517em 0.216em 0px; content: "ρ"; }
+mjx-c.mjx-c1D702.TEX-I::before { padding: 0.442em 0.497em 0.216em 0px; content: "η"; }
+mjx-c.mjx-c221A.TEX-S2::before { padding: 1.15em 1.02em 0.65em 0px; content: "√"; }
+mjx-c.mjx-c3E::before { padding: 0.54em 0.778em 0.04em 0px; content: ">"; }
+mjx-munderover { display: inline-block; text-align: left; }
+mjx-munderover:not([limits="false"]) { padding-top: 0.1em; }
+mjx-munderover:not([limits="false"]) > * { display: block; }
+mjx-c.mjx-c221A.TEX-S1::before { padding: 0.85em 1.02em 0.35em 0px; content: "√"; }
+mjx-c.mjx-c3A::before { padding: 0.43em 0.278em 0px 0px; content: ":"; }
+mjx-c.mjx-c211D.TEX-A::before { padding: 0.683em 0.722em 0px 0px; content: "R"; }
+mjx-c.mjx-c3B::before { padding: 0.43em 0.278em 0.194em 0px; content: ";"; }
+mjx-c.mjx-c21A6::before { padding: 0.511em 1em 0.011em 0px; content: "↦"; }
+mjx-c.mjx-c1D41B.TEX-B::before { padding: 0.694em 0.639em 0.006em 0px; content: "b"; }
+mjx-c.mjx-c2211.TEX-S2::before { padding: 0.95em 1.444em 0.45em 0px; content: "∑"; }
+mjx-c.mjx-c1D457.TEX-I::before { padding: 0.661em 0.412em 0.204em 0px; content: "j"; }
+mjx-c.mjx-c38::before { padding: 0.666em 0.5em 0.022em 0px; content: "8"; }
+mjx-c.mjx-c41::before { padding: 0.716em 0.75em 0px 0px; content: "A"; }
+mjx-c.mjx-c43::before { padding: 0.705em 0.722em 0.021em 0px; content: "C"; }
+mjx-msqrt { display: inline-block; text-align: left; }
+mjx-root { display: inline-block; white-space: nowrap; }
+mjx-surd { display: inline-block; vertical-align: top; }
+mjx-sqrt { display: inline-block; padding-top: 0.07em; }
+mjx-sqrt > mjx-box { border-top: 0.07em solid; }
+mjx-sqrt.mjx-tall > mjx-box { padding-left: 0.3em; margin-left: -0.3em; }
+mjx-c.mjx-c1D435.TEX-I::before { padding: 0.683em 0.759em 0px 0px; content: "B"; }
+mjx-c.mjx-c1D436.TEX-I::before { padding: 0.705em 0.76em 0.022em 0px; content: "C"; }
+mjx-c.mjx-c28.TEX-S3::before { padding: 1.45em 0.736em 0.949em 0px; content: "("; }
+mjx-c.mjx-c29.TEX-S3::before { padding: 1.45em 0.736em 0.949em 0px; content: ")"; }
+mjx-c.mjx-c42::before { padding: 0.683em 0.708em 0px 0px; content: "B"; }
+mjx-c.mjx-c1D449.TEX-I::before { padding: 0.683em 0.769em 0.022em 0px; content: "V"; }
+mjx-c.mjx-c1D462.TEX-I::before { padding: 0.442em 0.572em 0.011em 0px; content: "u"; }
+mjx-c.mjx-c221A.TEX-S4::before { padding: 1.75em 1.02em 1.25em 0px; content: "√"; }
+mjx-c.mjx-c22C6::before { padding: 0.486em 0.5em 0px 0px; content: "⋆"; }
+mjx-c.mjx-c1D42E.TEX-B::before { padding: 0.45em 0.639em 0.006em 0px; content: "u"; }
+mjx-c.mjx-c2E::before { padding: 0.12em 0.278em 0px 0px; content: "."; }
+mjx-c.mjx-c1D43C.TEX-I::before { padding: 0.683em 0.504em 0px 0px; content: "I"; }
+mjx-c.mjx-c1D43F.TEX-I::before { padding: 0.683em 0.681em 0px 0px; content: "L"; }
+mjx-c.mjx-c1D458.TEX-I::before { padding: 0.694em 0.521em 0.011em 0px; content: "k"; }
+mjx-c.mjx-c28.TEX-S1::before { padding: 0.85em 0.458em 0.349em 0px; content: "("; }
+mjx-c.mjx-c29.TEX-S1::before { padding: 0.85em 0.458em 0.349em 0px; content: ")"; }
+mjx-c.mjx-c6D::before { padding: 0.442em 0.833em 0px 0px; content: "m"; }
+mjx-c.mjx-c1D425.TEX-B::before { padding: 0.694em 0.319em 0px 0px; content: "l"; }
+mjx-c.mjx-c1D421.TEX-B::before { padding: 0.694em 0.639em 0px 0px; content: "h"; }
+mjx-c.mjx-c62::before { padding: 0.694em 0.556em 0.011em 0px; content: "b"; }
+mjx-c.mjx-c1D42F.TEX-B::before { padding: 0.444em 0.607em 0px 0px; content: "v"; }
+mjx-c.mjx-c2225::before { padding: 0.75em 0.5em 0.25em 0px; content: "∥"; }
+mjx-c.mjx-c1D441.TEX-I::before { padding: 0.683em 0.888em 0px 0px; content: "N"; }
+mjx-c.mjx-c2211.TEX-S1::before { padding: 0.75em 1.056em 0.25em 0px; content: "∑"; }
+mjx-stretchy-v.mjx-c7B mjx-beg mjx-c::before { content: "⎧"; padding: 0.899em 0.889em 0.01em 0px; }
+mjx-stretchy-v.mjx-c7B mjx-ext mjx-c::before { content: "⎪"; width: 0.889em; }
+mjx-stretchy-v.mjx-c7B mjx-end mjx-c::before { content: "⎩"; padding: 0.01em 0.889em 0.899em 0px; }
+mjx-stretchy-v.mjx-c7B mjx-mid mjx-c::before { content: "⎨"; padding: 1.16em 0.889em 0.66em 0px; }
+mjx-stretchy-v.mjx-c7B > mjx-mid { margin-top: -0.91em; margin-bottom: -0.91em; }
+mjx-stretchy-v.mjx-c7B > mjx-end { margin-top: -0.909em; }
+mjx-stretchy-v.mjx-c7B > mjx-ext { height: 50%; border-top-width: 0.879em; border-bottom-width: 0.879em; }
+mjx-c.mjx-c2217::before { padding: 0.465em 0.5em 0px 0px; content: "∗"; }
+mjx-c.mjx-c68::before { padding: 0.694em 0.556em 0px 0px; content: "h"; }
+mjx-c.mjx-c1D70B.TEX-I::before { padding: 0.431em 0.57em 0.011em 0px; content: "π"; }
+mjx-c.mjx-c1D714.TEX-I::before { padding: 0.443em 0.622em 0.011em 0px; content: "ω"; }
+mjx-c.mjx-c37::before { padding: 0.676em 0.5em 0.022em 0px; content: "7"; }
+mjx-mtable { display: inline-block; text-align: center; vertical-align: 0.25em; position: relative; box-sizing: border-box; border-spacing: 0px; border-collapse: collapse; }
+mjx-mstyle[size="s"] mjx-mtable { vertical-align: 0.354em; }
+mjx-labels { position: absolute; left: 0px; top: 0px; }
+mjx-table { display: inline-block; vertical-align: -0.5ex; box-sizing: border-box; }
+mjx-table > mjx-itable { vertical-align: middle; text-align: left; box-sizing: border-box; }
+mjx-labels > mjx-itable { position: absolute; top: 0px; }
+mjx-mtable[justify="left"] { text-align: left; }
+mjx-mtable[justify="right"] { text-align: right; }
+mjx-mtable[justify="left"][side="left"] { padding-right: 0px !important; }
+mjx-mtable[justify="left"][side="right"] { padding-left: 0px !important; }
+mjx-mtable[justify="right"][side="left"] { padding-right: 0px !important; }
+mjx-mtable[justify="right"][side="right"] { padding-left: 0px !important; }
+mjx-mtable[align] { vertical-align: baseline; }
+mjx-mtable[align="top"] > mjx-table { vertical-align: top; }
+mjx-mtable[align="bottom"] > mjx-table { vertical-align: bottom; }
+mjx-mtable[side="right"] mjx-labels { min-width: 100%; }
+mjx-mtr { display: table-row; text-align: left; }
+mjx-mtr[rowalign="top"] > mjx-mtd { vertical-align: top; }
+mjx-mtr[rowalign="center"] > mjx-mtd { vertical-align: middle; }
+mjx-mtr[rowalign="bottom"] > mjx-mtd { vertical-align: bottom; }
+mjx-mtr[rowalign="baseline"] > mjx-mtd { vertical-align: baseline; }
+mjx-mtr[rowalign="axis"] > mjx-mtd { vertical-align: 0.25em; }
+mjx-mtd { display: table-cell; text-align: center; padding: 0.215em 0.4em; }
+mjx-mtd:first-child { padding-left: 0px; }
+mjx-mtd:last-child { padding-right: 0px; }
+mjx-mtable > * > mjx-itable > :first-child > mjx-mtd { padding-top: 0px; }
+mjx-mtable > * > mjx-itable > :last-child > mjx-mtd { padding-bottom: 0px; }
+mjx-tstrut { display: inline-block; height: 1em; vertical-align: -0.25em; }
+mjx-labels[align="left"] > mjx-mtr > mjx-mtd { text-align: left; }
+mjx-labels[align="right"] > mjx-mtr > mjx-mtd { text-align: right; }
+mjx-mtd[extra] { padding: 0px; }
+mjx-mtd[rowalign="top"] { vertical-align: top; }
+mjx-mtd[rowalign="center"] { vertical-align: middle; }
+mjx-mtd[rowalign="bottom"] { vertical-align: bottom; }
+mjx-mtd[rowalign="baseline"] { vertical-align: baseline; }
+mjx-mtd[rowalign="axis"] { vertical-align: 0.25em; }
+mjx-texatom { display: inline-block; text-align: left; }
+mjx-mrow { display: inline-block; text-align: left; }
+mjx-msub { display: inline-block; text-align: left; }
+mjx-mspace { display: inline-block; text-align: left; }
+mjx-mtext { display: inline-block; text-align: left; }
+mjx-munder { display: inline-block; text-align: left; }
+mjx-over { text-align: left; }
+mjx-munder:not([limits="false"]) { display: inline-table; }
+mjx-munder > mjx-row { text-align: left; }
+mjx-under { padding-bottom: 0.1em; }
+mjx-mover { display: inline-block; text-align: left; }
+mjx-mover:not([limits="false"]) { padding-top: 0.1em; }
+mjx-mover:not([limits="false"]) > * { display: block; text-align: left; }
+mjx-msubsup { display: inline-block; text-align: left; }
+mjx-script { display: inline-block; padding-right: 0.05em; padding-left: 0.033em; }
+mjx-script > mjx-spacer { display: block; }
+mjx-mfrac { display: inline-block; text-align: left; }
+mjx-frac { display: inline-block; vertical-align: 0.17em; padding: 0px 0.22em; }
+mjx-frac[type="d"] { vertical-align: 0.04em; }
+mjx-frac[delims] { padding: 0px 0.1em; }
+mjx-frac[atop] { padding: 0px 0.12em; }
+mjx-frac[atop][delims] { padding: 0px; }
+mjx-dtable { display: inline-table; width: 100%; }
+mjx-dtable > * { font-size: 2000%; }
+mjx-dbox { display: block; font-size: 5%; }
+mjx-num { display: block; text-align: center; }
+mjx-den { display: block; text-align: center; }
+mjx-mfrac[bevelled] > mjx-num { display: inline-block; }
+mjx-mfrac[bevelled] > mjx-den { display: inline-block; }
+mjx-den[align="right"], mjx-num[align="right"] { text-align: right; }
+mjx-den[align="left"], mjx-num[align="left"] { text-align: left; }
+mjx-nstrut { display: inline-block; height: 0.054em; width: 0px; vertical-align: -0.054em; }
+mjx-nstrut[type="d"] { height: 0.217em; vertical-align: -0.217em; }
+mjx-dstrut { display: inline-block; height: 0.505em; width: 0px; }
+mjx-dstrut[type="d"] { height: 0.726em; }
+mjx-line { display: block; box-sizing: border-box; min-height: 1px; height: 0.06em; border-top: 0.06em solid; margin: 0.06em -0.1em; overflow: hidden; }
+mjx-line[type="d"] { margin: 0.18em -0.1em; }
+mjx-stretchy-v.mjx-c28 mjx-beg mjx-c::before { content: "⎛"; padding: 1.154em 0.875em 0.655em 0px; }
+mjx-stretchy-v.mjx-c28 mjx-ext mjx-c::before { content: "⎜"; width: 0.875em; }
+mjx-stretchy-v.mjx-c28 mjx-end mjx-c::before { content: "⎝"; padding: 1.165em 0.875em 0.644em 0px; }
+mjx-stretchy-v.mjx-c28 > mjx-end { margin-top: -1.809em; }
+mjx-stretchy-v.mjx-c28 > mjx-ext { border-top-width: 1.779em; border-bottom-width: 1.779em; }
+mjx-stretchy-v.mjx-c29 mjx-beg mjx-c::before { content: "⎞"; padding: 1.154em 0.875em 0.655em 0px; }
+mjx-stretchy-v.mjx-c29 mjx-ext mjx-c::before { content: "⎟"; width: 0.875em; }
+mjx-stretchy-v.mjx-c29 mjx-end mjx-c::before { content: "⎠"; padding: 1.165em 0.875em 0.644em 0px; }
+mjx-stretchy-v.mjx-c29 > mjx-end { margin-top: -1.809em; }
+mjx-stretchy-v.mjx-c29 > mjx-ext { border-top-width: 1.779em; border-bottom-width: 1.779em; }
+mjx-stretchy-v.mjx-c5B mjx-beg mjx-c::before { content: "⎡"; padding: 1.154em 0.667em 0.645em 0px; }
+mjx-stretchy-v.mjx-c5B mjx-ext mjx-c::before { content: "⎢"; width: 0.667em; }
+mjx-stretchy-v.mjx-c5B mjx-end mjx-c::before { content: "⎣"; padding: 1.155em 0.667em 0.644em 0px; }
+mjx-stretchy-v.mjx-c5B > mjx-end { margin-top: -1.799em; }
+mjx-stretchy-v.mjx-c5B > mjx-ext { border-top-width: 1.769em; border-bottom-width: 1.769em; }
+mjx-stretchy-v.mjx-c5D mjx-beg mjx-c::before { content: "⎤"; padding: 1.154em 0.667em 0.645em 0px; }
+mjx-stretchy-v.mjx-c5D mjx-ext mjx-c::before { content: "⎥"; width: 0.667em; }
+mjx-stretchy-v.mjx-c5D mjx-end mjx-c::before { content: "⎦"; padding: 1.155em 0.667em 0.644em 0px; }
+mjx-stretchy-v.mjx-c5D > mjx-end { margin-top: -1.799em; }
+mjx-stretchy-v.mjx-c5D > mjx-ext { border-top-width: 1.769em; border-bottom-width: 1.769em; }
+mjx-stretchy-h.mjx-c23DF mjx-beg mjx-c::before { content: ""; padding: 0.32em 0px 0.2em; }
+mjx-stretchy-h.mjx-c23DF mjx-ext mjx-c::before { content: ""; padding: 0.32em 0px 0.2em; }
+mjx-stretchy-h.mjx-c23DF mjx-end mjx-c::before { content: ""; padding: 0.32em 0px 0.2em; }
+mjx-stretchy-h.mjx-c23DF mjx-mid mjx-c::before { content: ""; padding: 0.32em 0px 0.2em; }
+mjx-stretchy-h.mjx-c23DF > mjx-ext { width: 50%; }
+mjx-c.mjx-c1D466.TEX-I::before { padding: 0.442em 0.49em 0.205em 0px; content: "y"; }
+mjx-c.mjx-c5B.TEX-S3::before { padding: 1.45em 0.528em 0.949em 0px; content: "["; }
+mjx-c.mjx-c5D.TEX-S3::before { padding: 1.45em 0.528em 0.949em 0px; content: "]"; }
+mjx-c.mjx-c30::before { padding: 0.666em 0.5em 0.022em 0px; content: "0"; }
+mjx-c.mjx-c2212::before { padding: 0.583em 0.778em 0.082em 0px; content: "−"; }
+mjx-c.mjx-c1D411.TEX-B::before { padding: 0.686em 0.862em 0.011em 0px; content: "R"; }
+mjx-c.mjx-c1D703.TEX-I::before { padding: 0.705em 0.469em 0.01em 0px; content: "θ"; }
+mjx-c.mjx-c63::before { padding: 0.448em 0.444em 0.011em 0px; content: "c"; }
+mjx-c.mjx-c6F::before { padding: 0.448em 0.5em 0.01em 0px; content: "o"; }
+mjx-c.mjx-c73::before { padding: 0.448em 0.394em 0.011em 0px; content: "s"; }
+mjx-c.mjx-c2061::before { padding: 0px; content: ""; }
+mjx-c.mjx-c69::before { padding: 0.669em 0.278em 0px 0px; content: "i"; }
+mjx-c.mjx-c6E::before { padding: 0.442em 0.556em 0px 0px; content: "n"; }
+mjx-c.mjx-c1D451.TEX-I::before { padding: 0.694em 0.52em 0.01em 0px; content: "d"; }
+mjx-c.mjx-c1D437.TEX-I::before { padding: 0.683em 0.828em 0px 0px; content: "D"; }
+mjx-c.mjx-c1D447.TEX-I::before { padding: 0.677em 0.704em 0px 0px; content: "T"; }
+mjx-c.mjx-c1D464.TEX-I::before { padding: 0.443em 0.716em 0.011em 0px; content: "w"; }
+mjx-c.mjx-c22C5::before { padding: 0.31em 0.278em 0px 0px; content: "⋅"; }
+mjx-c.mjx-c1D412.TEX-B::before { padding: 0.697em 0.639em 0.011em 0px; content: "S"; }
+mjx-c.mjx-c1D6FC.TEX-I::before { padding: 0.442em 0.64em 0.011em 0px; content: "α"; }
+mjx-c.mjx-c1D445.TEX-I::before { padding: 0.683em 0.759em 0.021em 0px; content: "R"; }
+mjx-c.mjx-c34::before { padding: 0.677em 0.5em 0px 0px; content: "4"; }
+mjx-c.mjx-c35::before { padding: 0.666em 0.5em 0.022em 0px; content: "5"; }
+mjx-c.mjx-c2218::before { padding: 0.444em 0.5em 0px 0px; content: "∘"; }
+mjx-c.mjx-c1D434.TEX-I::before { padding: 0.716em 0.75em 0px 0px; content: "A"; }
+mjx-c.mjx-c2026::before { padding: 0.12em 1.172em 0px 0px; content: "…"; }
+mjx-c.mjx-c1D431.TEX-B::before { padding: 0.444em 0.607em 0px 0px; content: "x"; }
+mjx-c.mjx-c1D400.TEX-B::before { padding: 0.698em 0.869em 0px 0px; content: "A"; }
+mjx-c.mjx-c22EF::before { padding: 0.31em 1.172em 0px 0px; content: "⋯"; }
+mjx-c.mjx-c1D413.TEX-B::before { padding: 0.675em 0.8em 0px 0px; content: "T"; }
+mjx-c.mjx-c28.TEX-B::before { padding: 0.75em 0.447em 0.249em 0px; content: "("; }
+mjx-c.mjx-c1D41C.TEX-B::before { padding: 0.453em 0.511em 0.006em 0px; content: "c"; }
+mjx-c.mjx-c29.TEX-B::before { padding: 0.75em 0.447em 0.249em 0px; content: ")"; }
+mjx-c.mjx-c2212.TEX-B::before { padding: 0.281em 0.894em 0px 0px; content: "−"; }
+mjx-c.mjx-c33::before { padding: 0.665em 0.5em 0.022em 0px; content: "3"; }
+mjx-c.mjx-c44::before { padding: 0.683em 0.764em 0px 0px; content: "D"; }
+mjx-c.mjx-cA0::before { padding: 0px 0.25em 0px 0px; content: " "; }
+mjx-c.mjx-c70::before { padding: 0.442em 0.556em 0.194em 0px; content: "p"; }
+mjx-c.mjx-c74::before { padding: 0.615em 0.389em 0.01em 0px; content: "t"; }
+mjx-c.mjx-c78::before { padding: 0.431em 0.528em 0px 0px; content: "x"; }
+mjx-c.mjx-c79::before { padding: 0.431em 0.528em 0.204em 0px; content: "y"; }
+mjx-c.mjx-c7A::before { padding: 0.431em 0.444em 0px 0px; content: "z"; }
+mjx-c.mjx-c54::before { padding: 0.677em 0.722em 0px 0px; content: "T"; }
+mjx-c.mjx-c76::before { padding: 0.431em 0.528em 0.011em 0px; content: "v"; }
+mjx-c.mjx-c65::before { padding: 0.448em 0.444em 0.011em 0px; content: "e"; }
+mjx-c.mjx-c72::before { padding: 0.442em 0.392em 0px 0px; content: "r"; }
+mjx-c.mjx-c1D467.TEX-I::before { padding: 0.442em 0.465em 0.011em 0px; content: "z"; }
+mjx-c.mjx-c1D453.TEX-I::before { padding: 0.705em 0.55em 0.205em 0px; content: "f"; }
+mjx-c.mjx-c1D6FD.TEX-I::before { padding: 0.705em 0.566em 0.194em 0px; content: "β"; }
+mjx-c.mjx-c1D6FE.TEX-I::before { padding: 0.441em 0.543em 0.216em 0px; content: "γ"; }
+mjx-c.mjx-c1D427.TEX-B::before { padding: 0.45em 0.639em 0px 0px; content: "n"; }
+mjx-c.mjx-c1D408.TEX-B::before { padding: 0.686em 0.436em 0px 0px; content: "I"; }
+mjx-c.mjx-c1D40D.TEX-B::before { padding: 0.686em 0.9em 0px 0px; content: "N"; }
+mjx-c.mjx-c50::before { padding: 0.683em 0.681em 0px 0px; content: "P"; }
+mjx-c.mjx-c20D7.TEX-V::before { padding: 0.714em 0.5em 0px 0px; content: "→"; }
+mjx-c.mjx-c4C::before { padding: 0.683em 0.625em 0px 0px; content: "L"; }
+mjx-c.mjx-c6B::before { padding: 0.694em 0.528em 0px 0px; content: "k"; }
+mjx-c.mjx-c2D::before { padding: 0.252em 0.333em 0px 0px; content: "-"; }
+mjx-c.mjx-c61::before { padding: 0.448em 0.5em 0.011em 0px; content: "a"; }
+mjx-c.mjx-c20::before { padding: 0px 0.25em 0px 0px; content: " "; }
+mjx-c.mjx-c2F::before { padding: 0.75em 0.5em 0.25em 0px; content: "/"; }
+mjx-c.mjx-c67::before { padding: 0.453em 0.5em 0.206em 0px; content: "g"; }
+mjx-c.mjx-c64::before { padding: 0.694em 0.556em 0.011em 0px; content: "d"; }
+mjx-c.mjx-c5E::before { padding: 0.694em 0.5em 0px 0px; content: "^"; }
+mjx-c.mjx-c1D448.TEX-I::before { padding: 0.683em 0.767em 0.022em 0px; content: "U"; }
+mjx-c.mjx-cD7::before { padding: 0.491em 0.778em 0px 0px; content: "×"; }
+mjx-c.mjx-c5B::before { padding: 0.75em 0.278em 0.25em 0px; content: "["; }
+mjx-c.mjx-c5D::before { padding: 0.75em 0.278em 0.25em 0px; content: "]"; }
+mjx-c.mjx-c21D2::before { padding: 0.525em 1em 0.024em 0px; content: "⇒"; }
+mjx-c.mjx-c75::before { padding: 0.442em 0.556em 0.011em 0px; content: "u"; }
+mjx-c.mjx-c77::before { padding: 0.431em 0.722em 0.011em 0px; content: "w"; }
+mjx-c.mjx-c6C::before { padding: 0.694em 0.278em 0px 0px; content: "l"; }
+mjx-c.mjx-c1D440.TEX-I::before { padding: 0.683em 1.051em 0px 0px; content: "M"; }
+mjx-c.mjx-c1D465.TEX-I::before { padding: 0.442em 0.572em 0.011em 0px; content: "x"; }
+mjx-c.mjx-cD7::before { padding: 0.491em 0.778em 0px 0px; content: "×"; }
+mjx-c.mjx-c32::before { padding: 0.666em 0.5em 0px 0px; content: "2"; }
+mjx-c.mjx-c1D463.TEX-I::before { padding: 0.443em 0.485em 0.011em 0px; content: "v"; }
+mjx-c.mjx-c1D45D.TEX-I::before { padding: 0.442em 0.503em 0.194em 0px; content: "p"; }
+mjx-c.mjx-c2192::before { padding: 0.511em 1em 0.011em 0px; content: "→"; }
+mjx-c.mjx-c1D44E.TEX-I::before { padding: 0.441em 0.529em 0.01em 0px; content: "a"; }
+mjx-c.mjx-c1D44F.TEX-I::before { padding: 0.694em 0.429em 0.011em 0px; content: "b"; }
+mjx-c.mjx-c1D459.TEX-I::before { padding: 0.694em 0.298em 0.011em 0px; content: "l"; }
+mjx-c.mjx-c1D452.TEX-I::before { padding: 0.442em 0.466em 0.011em 0px; content: "e"; }
+mjx-mn { display: inline-block; text-align: left; }
+mjx-c.mjx-c1D442.TEX-I::before { padding: 0.704em 0.763em 0.022em 0px; content: "O"; }
+mjx-c.mjx-c31::before { padding: 0.666em 0.5em 0px 0px; content: "1"; }
+mjx-container[jax="CHTML"] { line-height: 0; }
+mjx-container [space="1"] { margin-left: 0.111em; }
+mjx-container [space="2"] { margin-left: 0.167em; }
+mjx-container [space="3"] { margin-left: 0.222em; }
+mjx-container [space="4"] { margin-left: 0.278em; }
+mjx-container [space="5"] { margin-left: 0.333em; }
+mjx-container [rspace="1"] { margin-right: 0.111em; }
+mjx-container [rspace="2"] { margin-right: 0.167em; }
+mjx-container [rspace="3"] { margin-right: 0.222em; }
+mjx-container [rspace="4"] { margin-right: 0.278em; }
+mjx-container [rspace="5"] { margin-right: 0.333em; }
+mjx-container [size="s"] { font-size: 70.7%; }
+mjx-container [size="ss"] { font-size: 50%; }
+mjx-container [size="Tn"] { font-size: 60%; }
+mjx-container [size="sm"] { font-size: 85%; }
+mjx-container [size="lg"] { font-size: 120%; }
+mjx-container [size="Lg"] { font-size: 144%; }
+mjx-container [size="LG"] { font-size: 173%; }
+mjx-container [size="hg"] { font-size: 207%; }
+mjx-container [size="HG"] { font-size: 249%; }
+mjx-container [width="full"] { width: 100%; }
+mjx-box { display: inline-block; }
+mjx-block { display: block; }
+mjx-itable { display: inline-table; }
+mjx-row { display: table-row; }
+mjx-row > * { display: table-cell; }
+mjx-mtext { display: inline-block; }
+mjx-mstyle { display: inline-block; }
+mjx-merror { display: inline-block; color: red; background-color: yellow; }
+mjx-mphantom { visibility: hidden; }
+mjx-assistive-mml { top: 0px; left: 0px; clip: rect(1px, 1px, 1px, 1px); user-select: none; position: absolute !important; padding: 1px 0px 0px !important; border: 0px !important; display: block !important; width: auto !important; overflow: hidden !important; }
+mjx-assistive-mml[display="block"] { width: 100% !important; }
+mjx-math { display: inline-block; text-align: left; line-height: 0; text-indent: 0px; font-style: normal; font-weight: normal; font-size: 100%; font-size-adjust: none; letter-spacing: normal; border-collapse: collapse; overflow-wrap: normal; word-spacing: normal; white-space: nowrap; direction: ltr; padding: 1px 0px; }
+mjx-container[jax="CHTML"][display="true"] { display: block; text-align: center; margin: 1em 0px; }
+mjx-container[jax="CHTML"][display="true"][width="full"] { display: flex; }
+mjx-container[jax="CHTML"][display="true"] mjx-math { padding: 0px; }
+mjx-container[jax="CHTML"][justify="left"] { text-align: left; }
+mjx-container[jax="CHTML"][justify="right"] { text-align: right; }
+mjx-mi { display: inline-block; text-align: left; }
+mjx-c { display: inline-block; }
+mjx-utext { display: inline-block; padding: 0.75em 0px 0.2em; }
+mjx-mo { display: inline-block; text-align: left; }
+mjx-stretchy-h { display: inline-table; width: 100%; }
+mjx-stretchy-h > * { display: table-cell; width: 0px; }
+mjx-stretchy-h > * > mjx-c { display: inline-block; transform: scaleX(1); }
+mjx-stretchy-h > * > mjx-c::before { display: inline-block; width: initial; }
+mjx-stretchy-h > mjx-ext { overflow: clip visible; width: 100%; }
+mjx-stretchy-h > mjx-ext > mjx-c::before { transform: scaleX(500); }
+mjx-stretchy-h > mjx-ext > mjx-c { width: 0px; }
+mjx-stretchy-h > mjx-beg > mjx-c { margin-right: -0.1em; }
+mjx-stretchy-h > mjx-end > mjx-c { margin-left: -0.1em; }
+mjx-stretchy-v { display: inline-block; }
+mjx-stretchy-v > * { display: block; }
+mjx-stretchy-v > mjx-beg { height: 0px; }
+mjx-stretchy-v > mjx-end > mjx-c { display: block; }
+mjx-stretchy-v > * > mjx-c { transform: scaleY(1); transform-origin: left center; overflow: hidden; }
+mjx-stretchy-v > mjx-ext { display: block; height: 100%; box-sizing: border-box; border: 0px solid transparent; overflow: visible clip; }
+mjx-stretchy-v > mjx-ext > mjx-c::before { width: initial; box-sizing: border-box; }
+mjx-stretchy-v > mjx-ext > mjx-c { transform: scaleY(500) translateY(0.075em); overflow: visible; }
+mjx-mark { display: inline-block; height: 0px; }
+mjx-msup { display: inline-block; text-align: left; }
+mjx-c::before { display: block; width: 0px; }
+.MJX-TEX { font-family: MJXZERO, MJXTEX; }
+.TEX-B { font-family: MJXZERO, MJXTEX-B; }
+.TEX-I { font-family: MJXZERO, MJXTEX-I; }
+.TEX-MI { font-family: MJXZERO, MJXTEX-MI; }
+.TEX-BI { font-family: MJXZERO, MJXTEX-BI; }
+.TEX-S1 { font-family: MJXZERO, MJXTEX-S1; }
+.TEX-S2 { font-family: MJXZERO, MJXTEX-S2; }
+.TEX-S3 { font-family: MJXZERO, MJXTEX-S3; }
+.TEX-S4 { font-family: MJXZERO, MJXTEX-S4; }
+.TEX-A { font-family: MJXZERO, MJXTEX-A; }
+.TEX-C { font-family: MJXZERO, MJXTEX-C; }
+.TEX-CB { font-family: MJXZERO, MJXTEX-CB; }
+.TEX-FR { font-family: MJXZERO, MJXTEX-FR; }
+.TEX-FRB { font-family: MJXZERO, MJXTEX-FRB; }
+.TEX-SS { font-family: MJXZERO, MJXTEX-SS; }
+.TEX-SSB { font-family: MJXZERO, MJXTEX-SSB; }
+.TEX-SSI { font-family: MJXZERO, MJXTEX-SSI; }
+.TEX-SC { font-family: MJXZERO, MJXTEX-SC; }
+.TEX-T { font-family: MJXZERO, MJXTEX-T; }
+.TEX-V { font-family: MJXZERO, MJXTEX-V; }
+.TEX-VB { font-family: MJXZERO, MJXTEX-VB; }
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c { font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A !important; }
+@font-face { font-family: MJXZERO; src: url("lib/fonts/mathjax_zero.woff") format("woff"); }
+@font-face { font-family: MJXTEX; src: url("lib/fonts/mathjax_main-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-B; src: url("lib/fonts/mathjax_main-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-I; src: url("lib/fonts/mathjax_math-italic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-MI; src: url("lib/fonts/mathjax_main-italic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-BI; src: url("lib/fonts/mathjax_math-bolditalic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S1; src: url("lib/fonts/mathjax_size1-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S2; src: url("lib/fonts/mathjax_size2-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S3; src: url("lib/fonts/mathjax_size3-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-S4; src: url("lib/fonts/mathjax_size4-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-A; src: url("lib/fonts/mathjax_ams-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-C; src: url("lib/fonts/mathjax_calligraphic-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-CB; src: url("lib/fonts/mathjax_calligraphic-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-FR; src: url("lib/fonts/mathjax_fraktur-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-FRB; src: url("lib/fonts/mathjax_fraktur-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SS; src: url("lib/fonts/mathjax_sansserif-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SSB; src: url("lib/fonts/mathjax_sansserif-bold.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SSI; src: url("lib/fonts/mathjax_sansserif-italic.woff") format("woff"); }
+@font-face { font-family: MJXTEX-SC; src: url("lib/fonts/mathjax_script-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-T; src: url("lib/fonts/mathjax_typewriter-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-V; src: url("lib/fonts/mathjax_vector-regular.woff") format("woff"); }
+@font-face { font-family: MJXTEX-VB; src: url("lib/fonts/mathjax_vector-bold.woff") format("woff"); }
+mjx-c.mjx-c1D45F.TEX-I::before { padding: 0.442em 0.451em 0.011em 0px; content: "r"; }
+mjx-c.mjx-c210E.TEX-I::before { padding: 0.694em 0.576em 0.011em 0px; content: "h"; }
+mjx-c.mjx-c1D460.TEX-I::before { padding: 0.442em 0.469em 0.01em 0px; content: "s"; }
+mjx-c.mjx-c28::before { padding: 0.75em 0.389em 0.25em 0px; content: "("; }
+mjx-c.mjx-c29::before { padding: 0.75em 0.389em 0.25em 0px; content: ")"; }
+mjx-c.mjx-c3D::before { padding: 0.583em 0.778em 0.082em 0px; content: "="; }
+mjx-c.mjx-c1D45A.TEX-I::before { padding: 0.442em 0.878em 0.011em 0px; content: "m"; }
+mjx-c.mjx-c1D456.TEX-I::before { padding: 0.661em 0.345em 0.011em 0px; content: "i"; }
+mjx-c.mjx-c1D45B.TEX-I::before { padding: 0.442em 0.6em 0.011em 0px; content: "n"; }
+mjx-c.mjx-c1D454.TEX-I::before { padding: 0.442em 0.477em 0.205em 0px; content: "g"; }
+mjx-c.mjx-c2032::before { padding: 0.56em 0.275em 0px 0px; content: "′"; }
+mjx-c.mjx-c2B::before { padding: 0.583em 0.778em 0.082em 0px; content: "+"; }
+mjx-c.mjx-c1D450.TEX-I::before { padding: 0.442em 0.433em 0.011em 0px; content: "c"; }
+mjx-c.mjx-c1D45C.TEX-I::before { padding: 0.441em 0.485em 0.011em 0px; content: "o"; }
+mjx-c.mjx-c1D461.TEX-I::before { padding: 0.626em 0.361em 0.011em 0px; content: "t"; }
+mjx-c.mjx-c2C::before { padding: 0.121em 0.278em 0.194em 0px; content: ","; }
+</style><div class="markdown-preview-sizer markdown-preview-section"><h1 class="page-title heading inline-title" id="水体基础效果实现"><p dir="auto">水体基础效果实现</p></h1><div class="el-h1 heading-wrapper"><div class="heading-children"><div class="el-h2 heading-wrapper"><h2 data-heading="水体效果分析" dir="auto" class="heading" id="水体效果分析"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>水体效果分析</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：水体效果分析</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">水体效果主要分为几个部分：</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="2" dir="auto">水的深度：</li>
+</ol>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="3" dir="auto">水的高光；</li>
+</ol>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="4" dir="auto">水的反射；</li>
+</ol>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="5" dir="auto">水的焦散效果；</li>
+</ol>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="5">
+<li data-line="6" dir="auto">水下的扭区；</li>
+</ol>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="6">
+<li data-line="7" dir="auto">水面的泡沫；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：水的深度
+<ul>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>效果：
+<ul>
+<li data-line="10" dir="auto">比如水面往下的对象观察的效果会和深度有关，越是靠近水面的物体看的越清楚、颜色越清澈，越是远的物体看的越模糊、颜色越重；</li>
+<li data-line="11" dir="auto">水的深度是水体渲染的基石，它直接影响颜色的过渡、透明度以及许多后续效果（如泡沫）的生成；</li>
+</ul>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>原理：
+<ul>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>深度计算的核心目标是获取<strong>水面某一点到水底物体的垂直距离</strong>。在 <code>URP</code> 中，这通常通过对比两种深度值来实现；
+<ul>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="14" dir="auto">场景深度​：从摄像机到水底物体表面的距离，通过深度纹理获取；</li>
+</ol>
+</li>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="15" dir="auto">水面深度​：从摄像机到水面模型本身的距离；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="16" dir="auto">两者相减，即可得到我们需要的垂直水深；</li>
+</ul>
+</li>
+<li data-line="17" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实现：
+<ul>
+<li data-line="18" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="18" dir="auto">启用纹理​：在 <code>URP</code> 资源文件中，启用 <code>Depth Texture</code> 和 <code>Opaque Texture</code>；</li>
+</ol>
+</li>
+<li data-line="19" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="19" dir="auto">计算垂直水深；</li>
+</ol>
+<ul>
+<li data-line="20" dir="auto">注意，水体本身需要时半透明，不写入深度；</li>
+</ul>
+</li>
+<li data-line="21" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="21" dir="auto">颜色插值；</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="水的深度" dir="auto" class="heading" id="水的深度"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>水的深度</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：水的深度</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">主要分为两步，分别是获得场景中物体的深度（通过深度图采样），以及获得当前水面物体在视图空间下的深度 <code>Z</code>，然后由于</li>
+</ul>
+</li>
+<li data-line="2" dir="auto">实现：</li>
+</ul></div><div class="el-pre"><pre class="language-c"><code data-line="0" class="language-c is-loaded">half depthTex <span class="token operator">=</span> <span class="token function">SAMPLE_TEXTURE2D</span><span class="token punctuation">(</span>_CameraDepthTexture<span class="token punctuation">,</span> sampler_CameraDepthTexture<span class="token punctuation">,</span> screenUV<span class="token punctuation">)</span><span class="token punctuation">;</span>
+half depthScene <span class="token operator">=</span> <span class="token function">LinearEyeDepth</span><span class="token punctuation">(</span>depthTex<span class="token punctuation">,</span> _ZBufferParams<span class="token punctuation">)</span><span class="token punctuation">;</span>
+half depthWater <span class="token operator">=</span> depthScene <span class="token operator">+</span> i<span class="token punctuation">.</span>positonVS<span class="token punctuation">.</span>z<span class="token punctuation">;</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>解释：
+<ul>
+<li data-line="1" dir="auto"><code>depthScene</code> ​：从相机到场景物体表面的直线距离（观察空间下的正值）</li>
+<li data-line="2" dir="auto"><code>i.positonVS.z​</code>：从相机到水面表面的直线距离（观察空间下的负值） </li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>而在 <code>Unity</code> 的观察空间（右手坐标系）中，相机位于原点 <code>(0,0,0)</code>，Z 轴指向相机后方，所以相机前方的物体 Z 坐标为<strong>负值</strong>，因此假设：
+<ul>
+<li data-line="4" dir="auto"><span alt="Pasted image 20251031134555.png" src="Pasted image 20251031134555.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20251031134555.png" src="lib/media/pasted-image-20251031134555.png"></span></li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>因此可以计算得到的水深为 <code>5</code> 个单位，这正好是水面到水底物体的垂直距离；
+<ul>
+<li data-line="6" dir="auto"><span alt="PixPin_2025-10-31_13-46-29.png" src="PixPin_2025-10-31_13-46-29.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-10-31_13-46-29.png" src="lib/media/pixpin_2025-10-31_13-46-29.png"></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="8" dir="auto"><span alt="PixPin_2025-10-31_13-28-53.png" src="PixPin_2025-10-31_13-28-53.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-10-31_13-28-53.png" src="lib/media/pixpin_2025-10-31_13-28-53.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="水体泡沫效果" dir="auto" class="heading" id="水体泡沫效果"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>水体泡沫效果</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：水体泡沫效果</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">水体泡沫效果相对而言比较独立，只需要水的深度；</li>
+<li data-line="2" dir="auto"><span alt="PixPin_2025-10-31_14-52-24.png" src="PixPin_2025-10-31_14-52-24.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-10-31_14-52-24.png" src="lib/media/pixpin_2025-10-31_14-52-24.png"></span></li>
+<li data-line="3" dir="auto">其中，<code>foamRange</code> 表示泡沫存在的范围，<code>foamTex</code> 从噪声图采样、得到多样的泡沫效果，<code>foamMask</code> 用于只计算泡沫区域的颜色，将 <code>foamMask * _FoamColor</code> 得到泡沫区域的颜色，然后再将泡沫颜色和水体颜色相加，得到完整的颜色；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-c"><code data-line="0" class="language-c is-loaded">Shader <span class="token string">"Unlit/Water"</span>
+<span class="token punctuation">{</span>
+    Properties
+    <span class="token punctuation">{</span>
+        <span class="token function">_Speed</span><span class="token punctuation">(</span><span class="token string">"Speed"</span><span class="token punctuation">,</span><span class="token function">Range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0.5</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">0.1</span>
+        
+        <span class="token function">_WaterColor01</span><span class="token punctuation">(</span><span class="token string">"WaterColor01"</span><span class="token punctuation">,</span>Color<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token function">_WaterColor02</span><span class="token punctuation">(</span><span class="token string">"WaterColor02"</span><span class="token punctuation">,</span>Color<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span>
+        
+        <span class="token punctuation">[</span><span class="token function">Header</span><span class="token punctuation">(</span>Foam<span class="token punctuation">)</span><span class="token punctuation">]</span>
+        <span class="token function">_FoamTex</span><span class="token punctuation">(</span><span class="token string">"FoamTex"</span><span class="token punctuation">,</span><span class="token number">2</span>D<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token string">"white"</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+        <span class="token function">_FoamRange</span><span class="token punctuation">(</span><span class="token string">"FoamRange"</span><span class="token punctuation">,</span><span class="token function">Range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">1</span>
+        <span class="token function">_FoamColor</span><span class="token punctuation">(</span><span class="token string">"FoamColor"</span><span class="token punctuation">,</span>Color<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token function">_FoamNoise</span><span class="token punctuation">(</span><span class="token string">"FoamNoise"</span><span class="token punctuation">,</span><span class="token function">Range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">0.5</span>
+        
+        <span class="token function">_Cull</span><span class="token punctuation">(</span><span class="token string">"__cull"</span><span class="token punctuation">,</span> Float<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">2.0</span>
+        <span class="token function">_Cutoff</span><span class="token punctuation">(</span><span class="token string">"Alpha Clipping"</span><span class="token punctuation">,</span> <span class="token function">Range</span><span class="token punctuation">(</span><span class="token number">0.0</span><span class="token punctuation">,</span> <span class="token number">1.0</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">0.5</span>
+    <span class="token punctuation">}</span>
+    
+    SubShader
+    <span class="token punctuation">{</span>
+        Tags
+        <span class="token punctuation">{</span>
+            <span class="token string">"RenderType"</span> <span class="token operator">=</span> <span class="token string">"Transparent"</span>
+            <span class="token string">"Queue"</span> <span class="token operator">=</span> <span class="token string">"Transparent"</span>
+            <span class="token string">"RenderPipeline"</span> <span class="token operator">=</span> <span class="token string">"UniversalPipeline"</span>
+            <span class="token string">"IgnoreProjector"</span> <span class="token operator">=</span> <span class="token string">"True"</span>
+        <span class="token punctuation">}</span>
+        LOD <span class="token number">100</span>
+        ZWrite On
+        ZTest LEqual
+        Cull<span class="token punctuation">[</span>_Cull<span class="token punctuation">]</span>
+
+        Pass
+        <span class="token punctuation">{</span>
+            Name <span class="token string">"Water"</span>
+            HLSLPROGRAM
+            <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">pragma</span> <span class="token expression">vertex vert</span></span>
+            <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">pragma</span> <span class="token expression">fragment frag</span></span>
+            <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">pragma</span> <span class="token expression">multi_compile_fog</span></span>
+            <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"</span></span>
+            <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"</span></span>
+            <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"</span></span>
+            <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"</span></span>
+
+            
+            <span class="token keyword">struct</span> <span class="token class-name">Attributes</span>
+            <span class="token punctuation">{</span>
+                float4 positionOS <span class="token operator">:</span> POSITION<span class="token punctuation">;</span>
+                float2 uv <span class="token operator">:</span> TEXCOORD0<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">struct</span> <span class="token class-name">Varyings</span>
+            <span class="token punctuation">{</span>
+                float4 positionCS <span class="token operator">:</span> SV_POSITION<span class="token punctuation">;</span>
+                float4 uv <span class="token operator">:</span> TEXCOORD0<span class="token punctuation">;</span> <span class="token comment">// xy：foamUV</span>
+                <span class="token keyword">float</span> fogCoord <span class="token operator">:</span> TEXCOORD1<span class="token punctuation">;</span>
+                float3 positonVS <span class="token operator">:</span> TEXCOORD2<span class="token punctuation">;</span>
+                float3 positionWS <span class="token operator">:</span> TEXCOORD3<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+            <span class="token function">CBUFFER_START</span><span class="token punctuation">(</span>UnityPerMaterial<span class="token punctuation">)</span>
+                half4 _WaterColor01<span class="token punctuation">;</span>
+                half4 _WaterColor02<span class="token punctuation">;</span>
+                half _FoamRange<span class="token punctuation">;</span>
+                half4 _FoamColor<span class="token punctuation">;</span>
+                half _Speed<span class="token punctuation">;</span>
+                half _FoamNoise<span class="token punctuation">;</span>
+            CBUFFER_END
+
+            <span class="token function">TEXTURE2D</span><span class="token punctuation">(</span>_CameraDepthTexture<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token function">SAMPLER</span><span class="token punctuation">(</span>sampler_CameraDepthTexture<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">TEXTURE2D</span><span class="token punctuation">(</span>_FoamTex<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token function">SAMPLER</span><span class="token punctuation">(</span>sampler_FoamTex<span class="token punctuation">)</span><span class="token punctuation">;</span>float4 _FoamTex_ST<span class="token punctuation">;</span>
+
+            Varyings <span class="token function">vert</span> <span class="token punctuation">(</span>Attributes v<span class="token punctuation">)</span>
+            <span class="token punctuation">{</span>
+                Varyings o<span class="token punctuation">;</span>
+
+                <span class="token comment">// 将顶点从本地坐标转换为世界坐标，然后再转换为观察空间</span>
+                float3 positionWS <span class="token operator">=</span> <span class="token function">TransformObjectToWorld</span><span class="token punctuation">(</span>v<span class="token punctuation">.</span>positionOS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                o<span class="token punctuation">.</span>positionWS <span class="token operator">=</span> positionWS<span class="token punctuation">;</span>
+                o<span class="token punctuation">.</span>positonVS <span class="token operator">=</span> <span class="token function">TransformWorldToView</span><span class="token punctuation">(</span>positionWS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                o<span class="token punctuation">.</span>positionCS <span class="token operator">=</span> <span class="token function">TransformObjectToHClip</span><span class="token punctuation">(</span>v<span class="token punctuation">.</span>positionOS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                
+                o<span class="token punctuation">.</span>uv<span class="token punctuation">.</span>xy <span class="token operator">=</span> o<span class="token punctuation">.</span>positionWS<span class="token punctuation">.</span>xz <span class="token operator">*</span> _FoamTex_ST<span class="token punctuation">.</span>xy <span class="token operator">+</span> _Time<span class="token punctuation">.</span>y <span class="token operator">*</span> _Speed<span class="token punctuation">;</span>
+                
+                o<span class="token punctuation">.</span>fogCoord <span class="token operator">=</span> <span class="token function">ComputeFogFactor</span><span class="token punctuation">(</span>o<span class="token punctuation">.</span>positionCS<span class="token punctuation">.</span>z<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                <span class="token keyword">return</span> o<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+
+            half4 <span class="token function">frag</span> <span class="token punctuation">(</span>Varyings i<span class="token punctuation">)</span> <span class="token operator">:</span> SV_Target
+            <span class="token punctuation">{</span>
+                <span class="token comment">// 屏幕空间下的 UV 坐标</span>
+                float2 screenUV <span class="token operator">=</span> i<span class="token punctuation">.</span>positionCS<span class="token punctuation">.</span>xy <span class="token operator">/</span> _ScreenParams<span class="token punctuation">.</span>xy<span class="token punctuation">;</span>
+                
+                <span class="token comment">// --------------------- 水的深度 ------------------------</span>
+                <span class="token comment">// 1. 获取场景中物体的深度</span>
+                half depthTex <span class="token operator">=</span> <span class="token function">SAMPLE_TEXTURE2D</span><span class="token punctuation">(</span>_CameraDepthTexture<span class="token punctuation">,</span>sampler_CameraDepthTexture<span class="token punctuation">,</span>screenUV<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                half depthScene <span class="token operator">=</span> <span class="token function">LinearEyeDepth</span><span class="token punctuation">(</span>depthTex<span class="token punctuation">,</span>_ZBufferParams<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 物体的转换到观察空间下的Z值</span>
+                
+                <span class="token comment">// 2. 计算物体本身的观察空间下的Z值，即物体在水下的深度值</span>
+                half depthWater <span class="token operator">=</span> depthScene <span class="token operator">+</span> i<span class="token punctuation">.</span>positonVS<span class="token punctuation">.</span>z<span class="token punctuation">;</span>
+
+                <span class="token comment">// --------------------- 水的颜色 ------------------------</span>
+                half4 waterColor <span class="token operator">=</span> <span class="token function">lerp</span><span class="token punctuation">(</span>_WaterColor01<span class="token punctuation">,</span>_WaterColor02<span class="token punctuation">,</span>depthWater<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                
+                
+                <span class="token comment">// --------------------- 水的泡沫 ------------------------</span>
+                half foamRange <span class="token operator">=</span> depthWater<span class="token operator">*</span> _FoamRange<span class="token punctuation">;</span>
+                half foamTex <span class="token operator">=</span> <span class="token function">SAMPLE_TEXTURE2D</span><span class="token punctuation">(</span>_FoamTex<span class="token punctuation">,</span>sampler_FoamTex<span class="token punctuation">,</span>i<span class="token punctuation">.</span>uv<span class="token punctuation">.</span>xy<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                foamTex <span class="token operator">*=</span> <span class="token function">pow</span><span class="token punctuation">(</span>foamTex<span class="token punctuation">,</span>_FoamNoise<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                half foamMask <span class="token operator">=</span> <span class="token function">step</span><span class="token punctuation">(</span>foamRange<span class="token punctuation">,</span>foamTex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                half4 foam <span class="token operator">=</span> foamMask <span class="token operator">*</span> _FoamColor<span class="token punctuation">;</span>
+                
+                <span class="token keyword">return</span> waterColor <span class="token operator">+</span> foam<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            
+            ENDHLSL
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>效果：
+<ul>
+<li data-line="1" dir="auto"><span alt="PixPin_2025-10-31_14-55-19.png" src="PixPin_2025-10-31_14-55-19.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-10-31_14-55-19.png" src="lib/media/pixpin_2025-10-31_14-55-19.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="水下扭区效果" dir="auto" class="heading" id="水下扭区效果"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>水下扭区效果</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>分析</strong>：水下扭区效果</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：混合模式
+<ul>
+<li data-line="1" dir="auto">水面首先需要能够看到水下的物体、让其透过水面，然后再看到扭区的效果；</li>
+<li data-line="2" dir="auto">因此首先加入 <code>Blend SrcAlpha OneMinusSrcAlpha</code>，然后再继续分析；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：水下扭区实现
+<ul>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="4" dir="auto">首先分析如何实现扭区效果：首先准备一张噪声图，然后使用这个噪声图的采样值、来作为采样主贴图的 <code>UV</code>，就可以实现扭区的效果；</li>
+</ol>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="5" dir="auto">如果想要实现水下的扭区，只需要先进行抓屏，然后再对抓屏后的画面进行采样，采样的 UV 使用屏幕空间 UV 和噪声图的采样值的 lerp 插值，即可实现不同程度的扭区；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：完整实现分析
+<ul>
+<li data-line="7" dir="auto"><span alt="PixPin_2025-11-03_12-51-30.png" src="PixPin_2025-11-03_12-51-30.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-03_12-51-30.png" src="lib/media/pixpin_2025-11-03_12-51-30.png"></span></li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>代码</strong>：核心代码实现</p></div><div class="el-pre"><pre class="language-c"><code data-line="0" class="language-c is-loaded"><span class="token comment">// --------------------- 水的扭区 ------------------------</span>
+half4 distortValue <span class="token operator">=</span> <span class="token function">SAMPLE_TEXTURE2D</span><span class="token punctuation">(</span>_DistortTex<span class="token punctuation">,</span>sampler_DistortTex<span class="token punctuation">,</span>i<span class="token punctuation">.</span>uv<span class="token punctuation">.</span>zw<span class="token punctuation">)</span><span class="token punctuation">;</span>
+float2 distortUV <span class="token operator">=</span> <span class="token function">lerp</span><span class="token punctuation">(</span>screenUV<span class="token punctuation">,</span>distortValue<span class="token punctuation">,</span>_Distort<span class="token punctuation">)</span><span class="token punctuation">;</span>
+float2 opaqueUV<span class="token punctuation">;</span>
+<span class="token comment">// 由于只使用抓屏、无法区分哪些地方该扭区、哪些地方不该扭曲，因此需要利用上当前的深度值信息，通过深度值、计算出来哪些部分在水面以下</span>
+half depthDistortTex <span class="token operator">=</span> <span class="token function">SAMPLE_TEXTURE2D</span><span class="token punctuation">(</span>_CameraDepthTexture<span class="token punctuation">,</span>sampler_CameraDepthTexture<span class="token punctuation">,</span>distortUV<span class="token punctuation">)</span><span class="token punctuation">;</span>
+half depthDistortScene <span class="token operator">=</span> <span class="token function">LinearEyeDepth</span><span class="token punctuation">(</span>depthDistortTex<span class="token punctuation">,</span>_ZBufferParams<span class="token punctuation">)</span><span class="token punctuation">;</span>
+half depthDistortWater <span class="token operator">=</span> depthDistortScene <span class="token operator">+</span> i<span class="token punctuation">.</span>positonVS<span class="token punctuation">.</span>z<span class="token punctuation">;</span>
+<span class="token comment">// 如果 depthDistortWater &lt; 0 则代表当前面片对应的物体的“水深”小于0，代表其位于水面之上，因此其不进行扭区</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>depthDistortWater <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+	opaqueUV <span class="token operator">=</span> screenUV<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">else</span>
+<span class="token punctuation">{</span>
+	opaqueUV <span class="token operator">=</span> distortUV<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+half4 opaqueTex <span class="token operator">=</span> <span class="token function">SAMPLE_TEXTURE2D</span><span class="token punctuation">(</span>_CameraOpaqueTexture<span class="token punctuation">,</span>sampler_CameraOpaqueTexture<span class="token punctuation">,</span>opaqueUV<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+Color <span class="token operator">=</span> opaqueTex <span class="token operator">*</span> waterColor <span class="token operator">+</span> foam<span class="token punctuation">;</span>
+Color<span class="token punctuation">.</span>a <span class="token operator">=</span> <span class="token number">0.5</span><span class="token punctuation">;</span>
+<span class="token keyword">return</span> Color<span class="token punctuation">;</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="水的高光效果" dir="auto" class="heading" id="水的高光效果"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>水的高光效果</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>分析</strong>：水的高光效果实现</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="1" dir="auto">水的高光颜色，这里使用 <code>Blinne-Phone</code> 模型；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实现：
+<ul>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（1）首先实现基础的高光颜色：
+<ul>
+<li data-line="4" dir="auto"><span alt="PixPin_2025-11-03_13-07-10.png" src="PixPin_2025-11-03_13-07-10.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-03_13-07-10.png" src="lib/media/pixpin_2025-11-03_13-07-10.png"></span></li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（2）实现水面的波光粼粼的效果
+<ul>
+<li data-line="6" dir="auto">需要更改法线、使得水面的高光效果更立体；</li>
+<li data-line="7" dir="auto"><span alt="PixPin_2025-11-03_13-28-28.png" src="PixPin_2025-11-03_13-28-28.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-03_13-28-28.png" src="lib/media/pixpin_2025-11-03_13-28-28.png"></span></li>
+<li data-line="8" dir="auto">采样一张法线凹凸贴图，并且分别对其 U 和 V 方向进行流动，然后分别采样 xw、zw，将它们相乘，使得法线贴图在 U 和 V 方向上流动，然后再使用这个凹凸贴图的采样值作为光照计算的法线；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>效果：
+<ul>
+<li data-line="10" dir="auto"><span alt="PixPin_2025-11-03_13-52-13.png" src="PixPin_2025-11-03_13-52-13.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-03_13-52-13.png" src="lib/media/pixpin_2025-11-03_13-52-13.png"></span></li>
+</ul>
+</li>
+<li data-line="11" dir="auto">代码：核心代码</li>
+</ul></div><div class="el-pre"><pre class="language-c"><code data-line="0" class="language-c is-loaded">Shader <span class="token string">"Unlit/Water"</span>
+<span class="token punctuation">{</span>
+    Properties
+    <span class="token punctuation">{</span>
+        <span class="token punctuation">[</span><span class="token function">Header</span><span class="token punctuation">(</span>Base<span class="token punctuation">)</span><span class="token punctuation">]</span>
+        <span class="token function">_Speed</span><span class="token punctuation">(</span><span class="token string">"Speed"</span><span class="token punctuation">,</span><span class="token function">Range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0.1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">0.1</span>
+        <span class="token function">_Alpha</span><span class="token punctuation">(</span><span class="token string">"Alpha"</span><span class="token punctuation">,</span><span class="token function">Range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">0.8</span>
+        
+        <span class="token punctuation">[</span><span class="token function">Header</span><span class="token punctuation">(</span>Color<span class="token punctuation">)</span><span class="token punctuation">]</span>
+        <span class="token function">_WaterColor01</span><span class="token punctuation">(</span><span class="token string">"WaterColor01"</span><span class="token punctuation">,</span>Color<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token function">_WaterColor02</span><span class="token punctuation">(</span><span class="token string">"WaterColor02"</span><span class="token punctuation">,</span>Color<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token function">_SpecularInstensity</span><span class="token punctuation">(</span><span class="token string">"SpecularInstensity"</span><span class="token punctuation">,</span>Float<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">1</span>
+        <span class="token function">_SpecularSmoothness</span><span class="token punctuation">(</span><span class="token string">"SpecularSmoothness"</span><span class="token punctuation">,</span>Float<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">1</span>
+        <span class="token function">_NormalTex</span><span class="token punctuation">(</span><span class="token string">"NormalTex"</span><span class="token punctuation">,</span><span class="token number">2</span>D<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token string">"white"</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+        
+        <span class="token punctuation">[</span><span class="token function">Header</span><span class="token punctuation">(</span>Foam<span class="token punctuation">)</span><span class="token punctuation">]</span>
+        <span class="token function">_FoamTex</span><span class="token punctuation">(</span><span class="token string">"FoamTex"</span><span class="token punctuation">,</span><span class="token number">2</span>D<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token string">"white"</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+        <span class="token function">_FoamRange</span><span class="token punctuation">(</span><span class="token string">"FoamRange"</span><span class="token punctuation">,</span><span class="token function">Range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">1</span>
+        <span class="token function">_FoamColor</span><span class="token punctuation">(</span><span class="token string">"FoamColor"</span><span class="token punctuation">,</span>Color<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token function">_FoamNoise</span><span class="token punctuation">(</span><span class="token string">"FoamNoise"</span><span class="token punctuation">,</span><span class="token function">Range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">0.5</span>
+        
+        <span class="token punctuation">[</span><span class="token function">Header</span><span class="token punctuation">(</span>Distort<span class="token punctuation">)</span><span class="token punctuation">]</span>
+        <span class="token function">_Distort</span><span class="token punctuation">(</span><span class="token string">"Distort"</span><span class="token punctuation">,</span><span class="token function">Range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">0.3</span>
+        <span class="token function">_DistortTex</span><span class="token punctuation">(</span><span class="token string">"DistortTex"</span><span class="token punctuation">,</span><span class="token number">2</span>D<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token string">"white"</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    
+    SubShader
+    <span class="token punctuation">{</span>
+        Tags
+        <span class="token punctuation">{</span>
+            <span class="token string">"RenderType"</span> <span class="token operator">=</span> <span class="token string">"Transparent"</span>
+            <span class="token string">"Queue"</span> <span class="token operator">=</span> <span class="token string">"Transparent"</span>
+            <span class="token string">"RenderPipeline"</span> <span class="token operator">=</span> <span class="token string">"UniversalPipeline"</span>
+            <span class="token string">"IgnoreProjector"</span> <span class="token operator">=</span> <span class="token string">"True"</span>
+        <span class="token punctuation">}</span>
+        LOD <span class="token number">100</span>
+        ZWrite On
+        ZTest LEqual
+        Blend SrcAlpha OneMinusSrcAlpha
+
+        Pass
+        <span class="token punctuation">{</span>
+            Name <span class="token string">"Water"</span>
+            HLSLPROGRAM
+            <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">pragma</span> <span class="token expression">vertex vert</span></span>
+            <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">pragma</span> <span class="token expression">fragment frag</span></span>
+            <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">pragma</span> <span class="token expression">multi_compile_fog</span></span>
+            <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"</span></span>
+            <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"</span></span>
+            <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"</span></span>
+            <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"</span></span>
+
+            
+            <span class="token keyword">struct</span> <span class="token class-name">Attributes</span>
+            <span class="token punctuation">{</span>
+                float4 positionOS <span class="token operator">:</span> POSITION<span class="token punctuation">;</span>
+                float2 uv <span class="token operator">:</span> TEXCOORD0<span class="token punctuation">;</span>
+                float3 normalOS <span class="token operator">:</span> NORMAL<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">struct</span> <span class="token class-name">Varyings</span>
+            <span class="token punctuation">{</span>
+                float4 positionCS <span class="token operator">:</span> SV_POSITION<span class="token punctuation">;</span>
+                float4 uv <span class="token operator">:</span> TEXCOORD0<span class="token punctuation">;</span> <span class="token comment">// xy：foamUV</span>
+                <span class="token keyword">float</span> fogCoord <span class="token operator">:</span> TEXCOORD1<span class="token punctuation">;</span>
+                float3 positonVS <span class="token operator">:</span> TEXCOORD2<span class="token punctuation">;</span>
+                float3 positionWS <span class="token operator">:</span> TEXCOORD3<span class="token punctuation">;</span>
+                float3 normalWS <span class="token operator">:</span> TEXCOORD4<span class="token punctuation">;</span>
+                float4 normalUV <span class="token operator">:</span> TEXCOORD5<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+            <span class="token function">CBUFFER_START</span><span class="token punctuation">(</span>UnityPerMaterial<span class="token punctuation">)</span>
+                half _Alpha<span class="token punctuation">;</span>
+                half4 _WaterColor01<span class="token punctuation">;</span>
+                half4 _WaterColor02<span class="token punctuation">;</span>
+                half4 _SpecularColor<span class="token punctuation">;</span>
+                half _SpecularInstensity<span class="token punctuation">;</span>
+                half _SpecularSmoothness<span class="token punctuation">;</span>
+                half _FoamRange<span class="token punctuation">;</span>
+                half4 _FoamColor<span class="token punctuation">;</span>
+                half _Speed<span class="token punctuation">;</span>
+                half _FoamNoise<span class="token punctuation">;</span>
+                half _Distort<span class="token punctuation">;</span>
+            CBUFFER_END
+
+            <span class="token function">TEXTURE2D</span><span class="token punctuation">(</span>_CameraDepthTexture<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token function">SAMPLER</span><span class="token punctuation">(</span>sampler_CameraDepthTexture<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">TEXTURE2D</span><span class="token punctuation">(</span>_FoamTex<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token function">SAMPLER</span><span class="token punctuation">(</span>sampler_FoamTex<span class="token punctuation">)</span><span class="token punctuation">;</span>float4 _FoamTex_ST<span class="token punctuation">;</span>
+            <span class="token function">TEXTURE2D</span><span class="token punctuation">(</span>_CameraOpaqueTexture<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token function">SAMPLER</span><span class="token punctuation">(</span>sampler_CameraOpaqueTexture<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">TEXTURE2D</span><span class="token punctuation">(</span>_DistortTex<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token function">SAMPLER</span><span class="token punctuation">(</span>sampler_DistortTex<span class="token punctuation">)</span><span class="token punctuation">;</span>float4 _DistortTex_ST<span class="token punctuation">;</span>
+            <span class="token function">TEXTURE2D</span><span class="token punctuation">(</span>_NormalTex<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token function">SAMPLER</span><span class="token punctuation">(</span>sampler_NormalTex<span class="token punctuation">)</span><span class="token punctuation">;</span>float4 _NormalTex_ST<span class="token punctuation">;</span>
+
+            Varyings <span class="token function">vert</span> <span class="token punctuation">(</span>Attributes v<span class="token punctuation">)</span>
+            <span class="token punctuation">{</span>
+                Varyings o<span class="token punctuation">;</span>
+
+                <span class="token comment">// 将顶点从本地坐标转换为世界坐标，然后再转换为观察空间</span>
+                float3 positionWS <span class="token operator">=</span> <span class="token function">TransformObjectToWorld</span><span class="token punctuation">(</span>v<span class="token punctuation">.</span>positionOS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                o<span class="token punctuation">.</span>positionWS <span class="token operator">=</span> positionWS<span class="token punctuation">;</span>
+                o<span class="token punctuation">.</span>positonVS <span class="token operator">=</span> <span class="token function">TransformWorldToView</span><span class="token punctuation">(</span>positionWS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                o<span class="token punctuation">.</span>positionCS <span class="token operator">=</span> <span class="token function">TransformObjectToHClip</span><span class="token punctuation">(</span>v<span class="token punctuation">.</span>positionOS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                <span class="token comment">// UV 采样</span>
+                <span class="token keyword">float</span> speed <span class="token operator">=</span> _Time<span class="token punctuation">.</span>y <span class="token operator">*</span> _Speed<span class="token punctuation">;</span>
+                o<span class="token punctuation">.</span>uv<span class="token punctuation">.</span>xy <span class="token operator">=</span> o<span class="token punctuation">.</span>positionWS<span class="token punctuation">.</span>xz <span class="token operator">*</span> _FoamTex_ST<span class="token punctuation">.</span>xy <span class="token operator">+</span> speed<span class="token punctuation">;</span>
+                o<span class="token punctuation">.</span>uv<span class="token punctuation">.</span>zw <span class="token operator">=</span> <span class="token function">TRANSFORM_TEX</span><span class="token punctuation">(</span>v<span class="token punctuation">.</span>uv<span class="token punctuation">,</span>_FoamTex<span class="token punctuation">)</span> <span class="token operator">+</span> speed<span class="token punctuation">;</span>
+                o<span class="token punctuation">.</span>normalUV<span class="token punctuation">.</span>xy <span class="token operator">=</span> <span class="token function">TRANSFORM_TEX</span><span class="token punctuation">(</span>v<span class="token punctuation">.</span>uv<span class="token punctuation">,</span>_NormalTex<span class="token punctuation">)</span> <span class="token operator">+</span> speed <span class="token operator">*</span> <span class="token function">float2</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+                o<span class="token punctuation">.</span>normalUV<span class="token punctuation">.</span>zw <span class="token operator">=</span> <span class="token function">TRANSFORM_TEX</span><span class="token punctuation">(</span>v<span class="token punctuation">.</span>uv<span class="token punctuation">,</span>_NormalTex<span class="token punctuation">)</span> <span class="token operator">+</span> speed <span class="token operator">*</span> <span class="token function">float2</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                o<span class="token punctuation">.</span>uv<span class="token punctuation">.</span>zw <span class="token operator">=</span> <span class="token function">TRANSFORM_TEX</span><span class="token punctuation">(</span>v<span class="token punctuation">.</span>uv<span class="token punctuation">,</span>_DistortTex<span class="token punctuation">)</span> <span class="token operator">+</span> speed<span class="token punctuation">;</span>
+                
+                <span class="token comment">// 法线与雾效</span>
+                o<span class="token punctuation">.</span>normalWS <span class="token operator">=</span> <span class="token function">TransformObjectToWorldNormal</span><span class="token punctuation">(</span>v<span class="token punctuation">.</span>normalOS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                o<span class="token punctuation">.</span>fogCoord <span class="token operator">=</span> <span class="token function">ComputeFogFactor</span><span class="token punctuation">(</span>o<span class="token punctuation">.</span>positionCS<span class="token punctuation">.</span>z<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                <span class="token keyword">return</span> o<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+
+            half4 <span class="token function">frag</span> <span class="token punctuation">(</span>Varyings i<span class="token punctuation">)</span> <span class="token operator">:</span> SV_Target
+            <span class="token punctuation">{</span>
+                float4 Color<span class="token punctuation">;</span>
+                
+                <span class="token comment">// 屏幕空间下的 UV 坐标</span>
+                float2 screenUV <span class="token operator">=</span> i<span class="token punctuation">.</span>positionCS<span class="token punctuation">.</span>xy <span class="token operator">/</span> _ScreenParams<span class="token punctuation">.</span>xy<span class="token punctuation">;</span>
+                
+                <span class="token comment">// --------------------- 水的深度 ------------------------</span>
+                <span class="token comment">// 1. 获取场景中物体的深度</span>
+                half depthTex <span class="token operator">=</span> <span class="token function">SAMPLE_TEXTURE2D</span><span class="token punctuation">(</span>_CameraDepthTexture<span class="token punctuation">,</span>sampler_CameraDepthTexture<span class="token punctuation">,</span>screenUV<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                half depthScene <span class="token operator">=</span> <span class="token function">LinearEyeDepth</span><span class="token punctuation">(</span>depthTex<span class="token punctuation">,</span>_ZBufferParams<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 物体的转换到观察空间下的Z值</span>
+                 
+                <span class="token comment">// 2. 计算物体本身的观察空间下的Z值，即物体在水下的深度值</span>
+                half depthWater <span class="token operator">=</span> depthScene <span class="token operator">+</span> i<span class="token punctuation">.</span>positonVS<span class="token punctuation">.</span>z<span class="token punctuation">;</span>
+
+                <span class="token comment">// --------------------- 水的颜色 ------------------------</span>
+                half4 waterColor <span class="token operator">=</span> <span class="token function">lerp</span><span class="token punctuation">(</span>_WaterColor01<span class="token punctuation">,</span>_WaterColor02<span class="token punctuation">,</span>depthWater<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                <span class="token comment">// --------------------- 水的高光 ------------------------</span>
+                half4 normalTex01 <span class="token operator">=</span> <span class="token function">SAMPLE_TEXTURE2D</span><span class="token punctuation">(</span>_NormalTex<span class="token punctuation">,</span>sampler_NormalTex<span class="token punctuation">,</span>i<span class="token punctuation">.</span>normalUV<span class="token punctuation">.</span>xy<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                half4 normalTex02 <span class="token operator">=</span> <span class="token function">SAMPLE_TEXTURE2D</span><span class="token punctuation">(</span>_NormalTex<span class="token punctuation">,</span>sampler_NormalTex<span class="token punctuation">,</span>i<span class="token punctuation">.</span>normalUV<span class="token punctuation">.</span>zw<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                half4 normalTex <span class="token operator">=</span> normalTex01 <span class="token operator">*</span> normalTex02<span class="token punctuation">;</span>
+                half4 N <span class="token operator">=</span> normalTex<span class="token punctuation">;</span>
+                Light light <span class="token operator">=</span> <span class="token function">GetMainLight</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                half4 lightColor <span class="token operator">=</span> <span class="token function">float4</span><span class="token punctuation">(</span>light<span class="token punctuation">.</span>color<span class="token punctuation">,</span><span class="token number">0.5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token comment">// 光照的方向</span>
+                half3 L <span class="token operator">=</span> light<span class="token punctuation">.</span>direction<span class="token punctuation">;</span>
+                <span class="token comment">// 顶点指向摄像机的方向</span>
+                half3 V <span class="token operator">=</span> <span class="token function">normalize</span><span class="token punctuation">(</span>_WorldSpaceCameraPos<span class="token punctuation">.</span>xyz <span class="token operator">-</span> i<span class="token punctuation">.</span>positionWS<span class="token punctuation">.</span>xyz<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                half3 H <span class="token operator">=</span> <span class="token function">normalize</span><span class="token punctuation">(</span>L <span class="token operator">+</span> V<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                half NdotH <span class="token operator">=</span> <span class="token function">dot</span><span class="token punctuation">(</span>N<span class="token punctuation">,</span>H<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                half4 specular <span class="token operator">=</span> lightColor <span class="token operator">*</span> _SpecularInstensity <span class="token operator">*</span> <span class="token function">pow</span><span class="token punctuation">(</span><span class="token function">saturate</span><span class="token punctuation">(</span>NdotH<span class="token punctuation">)</span><span class="token punctuation">,</span>_SpecularSmoothness<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                
+                <span class="token comment">// --------------------- 水的泡沫 ------------------------</span>
+                half foamRange <span class="token operator">=</span> depthWater<span class="token operator">*</span> _FoamRange<span class="token punctuation">;</span>
+                half foamTex <span class="token operator">=</span> <span class="token function">SAMPLE_TEXTURE2D</span><span class="token punctuation">(</span>_FoamTex<span class="token punctuation">,</span>sampler_FoamTex<span class="token punctuation">,</span>i<span class="token punctuation">.</span>uv<span class="token punctuation">.</span>xy<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                foamTex <span class="token operator">*=</span> <span class="token function">pow</span><span class="token punctuation">(</span>foamTex<span class="token punctuation">,</span>_FoamNoise<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                half foamMask <span class="token operator">=</span> <span class="token function">step</span><span class="token punctuation">(</span>foamRange<span class="token punctuation">,</span>foamTex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                half4 foam <span class="token operator">=</span> foamMask <span class="token operator">*</span> _FoamColor<span class="token punctuation">;</span>
+                
+                <span class="token comment">// --------------------- 水的扭区 ------------------------</span>
+                half4 distortValue <span class="token operator">=</span> <span class="token function">SAMPLE_TEXTURE2D</span><span class="token punctuation">(</span>_DistortTex<span class="token punctuation">,</span>sampler_DistortTex<span class="token punctuation">,</span>i<span class="token punctuation">.</span>uv<span class="token punctuation">.</span>zw<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                float2 distortUV <span class="token operator">=</span> <span class="token function">lerp</span><span class="token punctuation">(</span>screenUV<span class="token punctuation">,</span>distortValue<span class="token punctuation">,</span>_Distort<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                float2 opaqueUV<span class="token punctuation">;</span>
+                <span class="token comment">// 由于只使用抓屏、无法区分哪些地方该扭区、哪些地方不该扭曲，因此需要利用上当前的深度值信息，通过深度值、计算出来哪些部分在水面以下</span>
+                half depthDistortTex <span class="token operator">=</span> <span class="token function">SAMPLE_TEXTURE2D</span><span class="token punctuation">(</span>_CameraDepthTexture<span class="token punctuation">,</span>sampler_CameraDepthTexture<span class="token punctuation">,</span>distortUV<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                half depthDistortScene <span class="token operator">=</span> <span class="token function">LinearEyeDepth</span><span class="token punctuation">(</span>depthDistortTex<span class="token punctuation">,</span>_ZBufferParams<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                half depthDistortWater <span class="token operator">=</span> depthDistortScene <span class="token operator">+</span> i<span class="token punctuation">.</span>positonVS<span class="token punctuation">.</span>z<span class="token punctuation">;</span>
+                <span class="token comment">// 如果 depthDistortWater &lt; 0 则代表当前面片对应的物体的“水深”小于0，代表其位于水面之上，因此其不进行扭区</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>depthDistortWater <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+                <span class="token punctuation">{</span>
+                    opaqueUV <span class="token operator">=</span> screenUV<span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                <span class="token keyword">else</span>
+                <span class="token punctuation">{</span>
+                    opaqueUV <span class="token operator">=</span> distortUV<span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                half4 opaqueTex <span class="token operator">=</span> <span class="token function">SAMPLE_TEXTURE2D</span><span class="token punctuation">(</span>_CameraOpaqueTexture<span class="token punctuation">,</span>sampler_CameraOpaqueTexture<span class="token punctuation">,</span>opaqueUV<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                Color <span class="token operator">=</span> opaqueTex <span class="token operator">*</span> waterColor <span class="token operator">+</span> foam <span class="token operator">+</span> specular<span class="token punctuation">;</span>
+                Color<span class="token punctuation">.</span>a <span class="token operator">=</span> _Alpha<span class="token punctuation">;</span>
+                <span class="token keyword">return</span> Color<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            
+            ENDHLSL
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="水的反射效果" dir="auto" class="heading" id="水的反射效果"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>水的反射效果</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="反射探针与环境贴图" dir="auto" class="heading" id="反射探针与环境贴图"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>反射探针与环境贴图</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：反射探针与环境贴图</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：反射探针
+<ul>
+<li data-line="1" dir="auto">反射探针是 <code>Unity</code> 中用于模拟环境反射的核心组件，它通过在场景中特定位置捕获周围环境的六个方向视图，生成立方体贴图（<code>Cubemap</code>），然后应用于具有反射材质的物体表面；</li>
+<li data-line="2" dir="auto">在 Hierarchy 面板中右键点击，选择 ​ <code>Light &gt; Reflection Probe</code>，或者通过菜单 ​ <code>GameObject &gt; Light &gt; Reflection Probe</code> ​ 来创建；</li>
+<li data-line="3" dir="auto">将反射探针放置在需要反射的关键位置，如房间中心、窗户附近等，调整 ​<strong>Box Size</strong>​ 属性，使黄色方框覆盖需要反射的区域，使用 ​<strong>Probe Origin</strong>​ 调整采样点的位置，通常放置在窗户或反射表面附近；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：反射探针相关属性
+<ul>
+<li data-line="5" dir="auto"><code>unity_SpecCube0</code>：类型为 <code>TextureCube</code>，包含反射探针烘焙或实时捕获的环境立方体贴图（<code>Cubemap</code>）</li>
+<li data-line="6" dir="auto"><code>samplerunity_SpecCube0</code>：类型为 <code>SamplerState</code>，与 <code>unity_SpecCube0</code> 关联的采样器状态；</li>
+<li data-line="7" dir="auto"><code>unity_SpecCube0_HDR</code>：类型为 <code>float4</code>，存储 <code>HDR</code> 解码参数，如贴图的缩放和偏移，用于正确解码颜色值； </li>
+<li data-line="8" dir="auto"><code>SAMPLE_TEXTURECUBE</code>：用于对立方体贴图进行采样，返回未经解码的 <code>RGBM</code> 等编码格式的颜色值；</li>
+<li data-line="9" dir="auto"><code>DecodeHDREnvironment</code>：对 <code>SAMPLE_TEXTURECUBE</code> 采样的结果进行解码，还原为 <code>HDR</code> 颜色值；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="水的反射效果实现" dir="auto" class="heading" id="水的反射效果实现"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>水的反射效果实现</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>分析</strong>：水的反射 - 第一步：采样反射贴图</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="1" dir="auto">水的反射不会使用实时计算的方式，这样的性能开销太大。这里使用一张 <code>Cubemap</code> 来记录环境；</li>
+<li data-line="2" dir="auto">反射图是将场景烘培成一张反射贴图；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：Cubemap 及其采样
+<ul>
+<li data-line="4" dir="auto"><code>Cubemap</code> 是由 6 个独立的 <code>2D</code> 纹理组成的立方体，每个面代表一个方向（<code>±X、±Y、±Z</code>）</li>
+<li data-line="5" dir="auto">采样的基本原理是：从原点发出一个方向向量，该向量会与立方体的某个面相交，交点处的纹理就是采样结果；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>公式：
+<ul>
+<li data-line="7" dir="auto"><span class="math math-block is-loaded"><mjx-container class="MathJax" jax="CHTML" display="true"><mjx-math display="true" class="MJX-TEX" style="margin-left: 0px; margin-right: 0px;"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D445 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mi class="mjx-i" space="4"><mjx-c class="mjx-c1D43C TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c2212"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="3"><mjx-c class="mjx-c32"></mjx-c></mjx-mn><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c2217"></mjx-c></mjx-mo><mjx-mi class="mjx-i" space="3"><mjx-c class="mjx-c1D451 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45C TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D461 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D441 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-mi class="mjx-i" space="2"><mjx-c class="mjx-c1D43C TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c2217"></mjx-c></mjx-mo><mjx-mi class="mjx-i" space="3"><mjx-c class="mjx-c1D441 TEX-I"></mjx-c></mjx-mi></mjx-math></mjx-container></span></li>
+<li data-line="8" dir="auto">在 Shader 当中，使用计算得到的反射向量来对 <code>Cubemap</code> 进行采样；</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实现：在 <code>Shader</code> 当中，使用 <code>reflect</code> 函数计算反射向量
+<ul>
+<li data-line="10" dir="auto">
+<pre class="language-c"><code data-line="10" class="language-c is-loaded">  float3 viewDir <span class="token operator">=</span> <span class="token function">normalize</span><span class="token punctuation">(</span>_WorldSpaceCameraPos<span class="token punctuation">.</span>xyz <span class="token operator">-</span> i<span class="token punctuation">.</span>pos_world<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// 传入视线方向的反方向，以及法线方向</span>
+float3 reflectDir <span class="token operator">=</span> <span class="token function">reflect</span><span class="token punctuation">(</span><span class="token operator">-</span>viewDir<span class="token punctuation">,</span> normal_dir<span class="token punctuation">)</span><span class="token punctuation">;</span>
+fixed4 col <span class="token operator">=</span> <span class="token function">texCUBE</span><span class="token punctuation">(</span>_CubeMap<span class="token punctuation">,</span> reflectDir<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+</li>
+</ul>
+</li>
+<li data-line="16" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>效果：
+<ul>
+<li data-line="17" dir="auto"><span alt="PixPin_2025-11-04_13-30-55.png" src="PixPin_2025-11-04_13-30-55.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-04_13-30-55.png" src="lib/media/pixpin_2025-11-04_13-30-55.png"></span></li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>分析</strong>：水的反射 - 第二步：水面反射效果</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="1" dir="auto">水面的反射效果和视角有关，当视角和水面几乎垂直时，反射的效果最弱，而接近平行时、反色的效果最强；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto">实现：</li>
+</ul></div><div class="el-pre"><pre class="language-c"><code data-line="0" class="language-c is-loaded"><span class="token comment">// --------------------- 水的反射 ------------------------</span>
+half3 reflectionUV <span class="token operator">=</span> <span class="token function">reflect</span><span class="token punctuation">(</span>V<span class="token punctuation">,</span>N<span class="token punctuation">)</span><span class="token punctuation">;</span>
+half4 encodedColor <span class="token operator">=</span> <span class="token function">SAMPLE_TEXTURECUBE</span><span class="token punctuation">(</span>_ReflectionTex<span class="token punctuation">,</span>sampler_ReflectionTex<span class="token punctuation">,</span>reflectionUV<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 计算菲尼尔项，使用菲尼尔项作为 Mask 来控制反射的效果</span>
+half fresnel <span class="token operator">=</span> <span class="token number">1</span><span class="token operator">-</span><span class="token function">saturate</span><span class="token punctuation">(</span><span class="token function">dot</span><span class="token punctuation">(</span>i<span class="token punctuation">.</span>normalWS<span class="token punctuation">,</span>V<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">return</span> encodedColor <span class="token operator">*</span> fresnel<span class="token punctuation">;</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>效果：
+<ul>
+<li data-line="1" dir="auto"><span alt="PixPin_2025-11-04_13-34-39.png" src="PixPin_2025-11-04_13-34-39.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-04_13-34-39.png" src="lib/media/pixpin_2025-11-04_13-34-39.png"></span></li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>分析</strong>：水的反射 - 第三步：反射颜色叠加</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实现：
+<ul>
+<li data-line="1" dir="auto"><span alt="PixPin_2025-11-04_13-51-42.png" src="PixPin_2025-11-04_13-51-42.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-04_13-51-42.png" src="lib/media/pixpin_2025-11-04_13-51-42.png"></span></li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>效果：
+<ul>
+<li data-line="3" dir="auto"><span alt="PixPin_2025-11-04_13-52-17.png" src="PixPin_2025-11-04_13-52-17.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-04_13-52-17.png" src="lib/media/pixpin_2025-11-04_13-52-17.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="水的焦散效果" dir="auto" class="heading" id="水的焦散效果"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>水的焦散效果</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>分析</strong>：水的焦散效果</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="1" dir="auto">使用类似于深度贴花的技术，获取地表的位置，将焦散效果的纹理贴到水面之下的地表上；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto">实现：第一步 - 使用深度贴花对焦散纹理采样</li>
+</ul></div><div class="el-pre"><pre class="language-c"><code data-line="0" class="language-c is-loaded"><span class="token comment">// --------------------- 水的焦散 ------------------------</span>
+<span class="token comment">// 观察空间下的深度点</span>
+float4 depthVS <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+depthVS<span class="token punctuation">.</span>xy <span class="token operator">=</span> i<span class="token punctuation">.</span>positonVS<span class="token punctuation">.</span>xy <span class="token operator">*</span> depthScene <span class="token operator">/</span> <span class="token operator">-</span> i<span class="token punctuation">.</span>positonVS<span class="token punctuation">.</span>z<span class="token punctuation">;</span>
+depthVS<span class="token punctuation">.</span>z <span class="token operator">=</span> depthScene<span class="token punctuation">;</span>
+float3 depthWS <span class="token operator">=</span> <span class="token function">mul</span><span class="token punctuation">(</span>unity_CameraToWorld<span class="token punctuation">,</span>depthVS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+half4 causticTex <span class="token operator">=</span> <span class="token function">SAMPLE_TEXTURE2D</span><span class="token punctuation">(</span>_CausticTex<span class="token punctuation">,</span>sampler_CausticTex<span class="token punctuation">,</span>depthWS<span class="token punctuation">.</span>xz<span class="token operator">*</span>_CausticScale<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">return</span> causticTex<span class="token punctuation">;</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>效果：
+<ul>
+<li data-line="1" dir="auto"><span alt="PixPin_2025-11-04_14-08-15.png" src="PixPin_2025-11-04_14-08-15.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-04_14-08-15.png" src="lib/media/pixpin_2025-11-04_14-08-15.png"></span></li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实现：第二步 - 增加水流动的多样性
+<ul>
+<li data-line="3" dir="auto"><span alt="PixPin_2025-11-04_14-14-01.png" src="PixPin_2025-11-04_14-14-01.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-04_14-14-01.png" src="lib/media/pixpin_2025-11-04_14-14-01.png"></span></li>
+<li data-line="4" dir="auto">对水流纹理进行重复采样，然后对不同的采样结果取 <code>min</code>；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实现：第三步 - 修复非地面物体的焦散效果
+<ul>
+<li data-line="6" dir="auto"><span alt="PixPin_2025-11-04_14-31-43.png" src="PixPin_2025-11-04_14-31-43.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-04_14-31-43.png" src="lib/media/pixpin_2025-11-04_14-31-43.png"></span></li>
+<li data-line="7" dir="auto">增加两部分代码，增加上 <code>Y</code> 轴上的信息；</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>效果：
+<ul>
+<li data-line="9" dir="auto"><span alt="PixPin_2025-11-04_14-32-26.png" src="PixPin_2025-11-04_14-32-26.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-04_14-32-26.png" src="lib/media/pixpin_2025-11-04_14-32-26.png"></span></li>
+<li data-line="10" dir="auto"><span alt="PixPin_2025-11-04_14-34-09.png" src="PixPin_2025-11-04_14-34-09.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-04_14-34-09.png" src="lib/media/pixpin_2025-11-04_14-34-09.png"></span></li>
+</ul>
+</li>
+<li data-line="11" dir="auto">代码：焦散效果实现</li>
+</ul></div><div class="el-pre"><pre class="language-c"><code data-line="0" class="language-c is-loaded"><span class="token comment">// --------------------- 水的焦散 ------------------------</span>
+<span class="token comment">// 观察空间下的深度点</span>
+float4 depthVS <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+depthVS<span class="token punctuation">.</span>xy <span class="token operator">=</span> i<span class="token punctuation">.</span>positonVS<span class="token punctuation">.</span>xy <span class="token operator">*</span> depthDistortScene <span class="token operator">/</span> <span class="token operator">-</span> i<span class="token punctuation">.</span>positonVS<span class="token punctuation">.</span>z<span class="token punctuation">;</span>
+depthVS<span class="token punctuation">.</span>z <span class="token operator">=</span> depthDistortScene<span class="token punctuation">;</span>
+float3 depthWS <span class="token operator">=</span> <span class="token function">mul</span><span class="token punctuation">(</span>unity_CameraToWorld<span class="token punctuation">,</span>depthVS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+float2 causticUV01 <span class="token operator">=</span> depthWS<span class="token punctuation">.</span>xz <span class="token operator">*</span> _CausticScale <span class="token operator">+</span> depthWS<span class="token punctuation">.</span>y <span class="token operator">*</span> _CausticScaleY <span class="token operator">+</span> _Time<span class="token punctuation">.</span>y <span class="token operator">*</span> _Speed<span class="token punctuation">;</span>
+float2 causticUV02 <span class="token operator">=</span> depthWS<span class="token punctuation">.</span>xz <span class="token operator">*</span> _CausticScale <span class="token operator">*</span> <span class="token number">0.86</span> <span class="token operator">+</span> depthWS<span class="token punctuation">.</span>y <span class="token operator">*</span> _CausticScaleY <span class="token operator">+</span> _Time<span class="token punctuation">.</span>y <span class="token operator">*</span> _Speed <span class="token operator">*</span> <span class="token function">float2</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1.62</span><span class="token punctuation">,</span><span class="token number">1.21</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+half4 causticTex01 <span class="token operator">=</span> <span class="token function">SAMPLE_TEXTURE2D</span><span class="token punctuation">(</span>_CausticTex<span class="token punctuation">,</span>sampler_CausticTex<span class="token punctuation">,</span>causticUV01<span class="token punctuation">)</span><span class="token punctuation">;</span>
+half4 causticTex02 <span class="token operator">=</span> <span class="token function">SAMPLE_TEXTURE2D</span><span class="token punctuation">(</span>_CausticTex<span class="token punctuation">,</span>sampler_CausticTex<span class="token punctuation">,</span>causticUV02<span class="token punctuation">)</span><span class="token punctuation">;</span>
+half4 caustic <span class="token operator">=</span> <span class="token function">min</span><span class="token punctuation">(</span>causticTex01<span class="token punctuation">,</span>causticTex02<span class="token punctuation">)</span> <span class="token operator">*</span> _CausticInstensity<span class="token punctuation">;</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="完整代码实现" dir="auto" class="heading" id="完整代码实现"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>完整代码实现</h2><div class="heading-children"><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">Properties
+{
+	[Header(Base)]
+	_Speed("Speed",Range(0,0.1)) = 0.1
+	_Alpha("Alpha",Range(0,1)) = 0.8
+	
+	[Header(Color)]
+	_WaterColor01("WaterColor01",Color) = (1,1,1,1)
+	_WaterColor02("WaterColor02",Color) = (1,1,1,1)
+	_WaterDepth("WaterDepth",Float) = 1
+	_SpecularInstensity("SpecularInstensity",Float) = 1
+	_SpecularSmoothness("SpecularSmoothness",Float) = 1
+	_NormalTex("NormalTex",2D) = "white"{}
+	_NormalInstensity("NormalInstensity",Range(0,1)) = 0.8
+	
+	[Header(Foam)]
+	_FoamTex("FoamTex",2D) = "white"{}
+	_FoamRange("FoamRange",Range(0,3)) = 1
+	_FoamColor("FoamColor",Color) = (1,1,1,1)
+	_FoamNoise("FoamNoise",Range(0,1)) = 0.5
+	
+	[Header(Distort)]
+	_Distort("Distort",Range(0,0.1)) = 0.05
+	_DistortTex("DistortTex",2D) = "white"{}
+	
+	[Header(Reflection)]
+	_ReflectionTex("ReflectionTex",Cube) = "white"{}
+	_ReflectionInstensity("ReflectionInstensity",Float) = 1
+	
+	[Header(Caustic)]
+	_CausticTex("CausticTex",2D) = "white"{}
+	_CausticScale("CausticScale",Range(0,1)) = 0.5
+	_CausticScaleY("CausticScaleY",Range(0,1)) = 0.2
+	_CausticInstensity("CausticInstensity",Range(0,1)) = 0.8
+}
+
+SubShader
+{
+	Tags
+	{
+		"RenderType" = "Transparent"
+		"Queue" = "Transparent"
+		"RenderPipeline" = "UniversalPipeline"
+		"IgnoreProjector" = "True"
+	}
+	LOD 100
+	ZWrite On
+	ZTest LEqual
+	Blend SrcAlpha OneMinusSrcAlpha
+
+	Pass
+	{
+		Name "Water"
+		HLSLPROGRAM
+		#pragma vertex vert
+		#pragma fragment frag
+		#pragma multi_compile_fog
+		#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
+		#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+		#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+
+		
+		struct Attributes
+		{
+			float4 positionOS : POSITION;
+			float2 uv : TEXCOORD0;
+			float3 normalOS : NORMAL;
+		};
+
+		struct Varyings
+		{
+			float4 positionCS : SV_POSITION;
+			float4 uv : TEXCOORD0; // xy：foamUV
+			float fogCoord : TEXCOORD1;
+			float3 positonVS : TEXCOORD2;
+			float3 positionWS : TEXCOORD3;
+			float3 normalWS : TEXCOORD4;
+			float4 normalUV : TEXCOORD5;
+		};
+
+		CBUFFER_START(UnityPerMaterial)
+			half _Alpha;
+			half4 _WaterColor01;
+			half4 _WaterColor02;
+			half _WaterDepth;
+			half4 _SpecularColor;
+			half _SpecularInstensity;
+			half _SpecularSmoothness;
+			half _FoamRange;
+			half4 _FoamColor;
+			half _Speed;
+			half _FoamNoise;
+			half _Distort;
+			half _NormalInstensity;
+			half _ReflectionInstensity;
+			half _CausticScale;
+			half _CausticScaleY;
+			half _CausticInstensity;
+		CBUFFER_END
+
+		TEXTURE2D(_CameraDepthTexture);SAMPLER(sampler_CameraDepthTexture);
+		TEXTURE2D(_FoamTex);SAMPLER(sampler_FoamTex);float4 _FoamTex_ST;
+		TEXTURE2D(_CameraOpaqueTexture);SAMPLER(sampler_CameraOpaqueTexture);
+		TEXTURE2D(_DistortTex);SAMPLER(sampler_DistortTex);float4 _DistortTex_ST;
+		TEXTURE2D(_NormalTex);SAMPLER(sampler_NormalTex);float4 _NormalTex_ST;
+		TEXTURE2D(_CausticTex);SAMPLER(sampler_CausticTex);
+		TEXTURECUBE(_ReflectionTex);SAMPLER(sampler_ReflectionTex);
+
+		Varyings vert (Attributes v)
+		{
+			Varyings o;
+
+			// 将顶点从本地坐标转换为世界坐标，然后再转换为观察空间
+			float3 positionWS = TransformObjectToWorld(v.positionOS.xyz);
+			o.positionWS = positionWS;
+			o.positonVS = TransformWorldToView(positionWS);
+			o.positionCS = TransformObjectToHClip(v.positionOS.xyz);
+
+			// UV 采样
+			float speed = _Time.y * _Speed;
+			o.uv.xy = o.positionWS.xz * _FoamTex_ST.xy + speed;
+			o.uv.zw = TRANSFORM_TEX(v.uv,_FoamTex) + speed;
+			o.normalUV.xy = TRANSFORM_TEX(v.uv,_NormalTex) + speed * float2(1,1); 
+			o.normalUV.zw = TRANSFORM_TEX(v.uv,_NormalTex) + speed * float2(-1.07,1.3);
+			o.uv.zw = TRANSFORM_TEX(v.uv,_DistortTex) + speed;
+			
+			// 法线与雾效
+			o.normalWS = TransformObjectToWorldNormal(v.normalOS);
+			o.fogCoord = ComputeFogFactor(o.positionCS.z);
+
+			return o;
+		}
+
+		half4 frag (Varyings i) : SV_Target
+		{
+			float4 Color;
+			
+			// 屏幕空间下的 UV 坐标
+			float2 screenUV = i.positionCS.xy / _ScreenParams.xy;
+			
+			// --------------------- 水的深度 ------------------------
+			// 1. 获取场景中物体的深度
+			half depthTex = SAMPLE_TEXTURE2D(_CameraDepthTexture,sampler_CameraDepthTexture,screenUV).r;
+			half depthScene = LinearEyeDepth(depthTex,_ZBufferParams); // 物体的转换到观察空间下的Z值
+			 
+			// 2. 计算物体本身的观察空间下的Z值，即物体在水下的深度值
+			half depthWater = depthScene + i.positonVS.z;
+			depthWater *= _WaterDepth;
+
+			// --------------------- 水的颜色 ------------------------
+			half4 waterColor = lerp(_WaterColor01,_WaterColor02,depthWater);
+
+			// --------------------- 水的高光 ------------------------
+			// 1. 采样法线图，使得水面看起来凹凸起伏
+			half4 normalTex01 = SAMPLE_TEXTURE2D(_NormalTex,sampler_NormalTex,i.normalUV.xy);
+			half4 normalTex02 = SAMPLE_TEXTURE2D(_NormalTex,sampler_NormalTex,i.normalUV.zw);
+			half4 normalTex = normalTex01 * normalTex02;
+			// 2. 使用 Blinne-Phone 模型计算高光
+			half3 N = lerp(normalize(i.normalWS),normalTex.xyz,_NormalInstensity);
+			Light light = GetMainLight();
+			half4 lightColor = float4(light.color,0.5);
+			half3 L = light.direction; // 光照的方向
+			half3 V = normalize(_WorldSpaceCameraPos.xyz - i.positionWS.xyz); // 顶点指向摄像机的方向
+			half3 H = normalize(L + V);
+			half NdotH = dot(N,H);
+			// 3. 计算高光颜色
+			half4 specular = lightColor * _SpecularInstensity * pow(saturate(NdotH),_SpecularSmoothness);
+
+			// --------------------- 水的反射 ------------------------
+			half3 reflectionUV = reflect(V,N);
+			half4 encodedColor = SAMPLE_TEXTURECUBE(_ReflectionTex,sampler_ReflectionTex,reflectionUV);
+			half fresnel = pow(1-saturate(dot(N,V)),_ReflectionInstensity);
+			half4 reflection = encodedColor * fresnel;
+			
+			// --------------------- 水的泡沫 ------------------------
+			half foamRange = depthWater* _FoamRange;
+			half foamTex = SAMPLE_TEXTURE2D(_FoamTex,sampler_FoamTex,i.uv.xy).r;
+			foamTex *= pow(abs(foamTex),_FoamNoise);
+			half foamMask = step(foamRange,foamTex);
+			half4 foam = foamMask * _FoamColor;
+
+			
+			// --------------------- 水的扭区 ------------------------
+			// 1. 计算扭区 UV，_Distort=0 时使用屏幕空间 UV
+			half4 distortValue = SAMPLE_TEXTURE2D(_DistortTex,sampler_DistortTex,i.uv.zw);
+			float2 distortUV = screenUV + distortValue.xy*_Distort;
+			float2 opaqueUV;
+			// 2. 由于只使用抓屏、无法区分哪些地方该扭区、哪些地方不该扭曲，因此需要利用上当前的深度值信息，通过深度值、计算出来哪些部分在水面以下
+			half depthDistortTex = SAMPLE_TEXTURE2D(_CameraDepthTexture,sampler_CameraDepthTexture,distortUV).r;
+			half depthDistortScene = LinearEyeDepth(depthDistortTex,_ZBufferParams);
+			half depthDistortWater = depthDistortScene + i.positonVS.z;
+			// 3. 如果 depthDistortWater &lt; 0 则代表当前面片对应的物体的“水深”小于0，代表其位于水面之上，因此其不进行扭区
+			if (depthDistortWater &lt; 0)
+			{
+				opaqueUV = screenUV;
+			}
+			else
+			{
+				opaqueUV = distortUV;
+			}
+			half4 opaqueTex = SAMPLE_TEXTURE2D(_CameraOpaqueTexture,sampler_CameraOpaqueTexture,opaqueUV);
+			
+			// --------------------- 水的焦散 ------------------------
+			// 1. 观察空间下的深度点
+			float4 depthVS = 1;
+			depthVS.xy = i.positonVS.xy * depthDistortScene / - i.positonVS.z;
+			depthVS.z = depthDistortScene;
+			float3 depthWS = mul(unity_CameraToWorld,depthVS).xyz;
+			// 2. 计算U和V方向上流动的UV
+			float2 causticUV01 = depthWS.xz * _CausticScale + depthWS.y * _CausticScaleY + _Time.y * _Speed;
+			float2 causticUV02 = depthWS.xz * _CausticScale * 0.86 + depthWS.y * _CausticScaleY + _Time.y * _Speed * float2(-1.62,1.21);
+			// 3. 计算焦散颜色，并使用 min 增强焦散的偏移效果
+			half4 causticTex01 = SAMPLE_TEXTURE2D(_CausticTex,sampler_CausticTex,causticUV01);
+			half4 causticTex02 = SAMPLE_TEXTURE2D(_CausticTex,sampler_CausticTex,causticUV02);
+			half4 caustic = min(causticTex01,causticTex02) * _CausticInstensity;
+			
+			// --------------------- 效果叠加 ------------------------
+			Color = opaqueTex * waterColor;
+			Color += caustic;
+			Color += specular;
+			Color += reflection;
+			Color += foam;
+			Color.a = _Alpha;
+			return Color;
+		}
+		
+		ENDHLSL
+	}
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h1 heading-wrapper"><h1 data-heading="水体进阶效果实现" dir="auto" class="heading" id="水体进阶效果实现">水体进阶效果实现</h1><div class="heading-children"><div class="el-h2 heading-wrapper"><h2 data-heading="前置知识：`Texture2D` 类" dir="auto" class="heading" id="前置知识：`Texture2D`_类"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>前置知识：<code>Texture2D</code> 类</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`Texture2D` 类的创建" dir="auto" class="heading" id="`Texture2D`_类的创建"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Texture2D</code> 类的创建</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>Texture2D</code> 类</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>Texture2D</code> 是 <code>Unity</code> 中处理二维纹理的核心类，广泛应用于 <code>Spite</code>、<code>UI</code>、材质贴图等场景；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>Texture2D</code> 类创建参数
+<ul>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（1）纹理格式：
+<ul>
+<li data-line="4" dir="auto">纹理格式定义了每个像素在内存中的存储方式，直接影响图像质量、大小和兼容性；</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="5" dir="auto"><code>RGBA32</code>：每个像素 <code>8</code> 位，包含红、绿、蓝和透明度通道，是最常用的格式之一；</li>
+</ol>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="6" dir="auto"><code>RGB24</code>：每个像素 <code>8</code> 位，仅包含红、绿、蓝通道，​<strong>无透明度</strong>；</li>
+</ol>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="7" dir="auto"><code>ARGB32</code> ​：类似 <code>RGBA32</code>，但 <code>Alpha</code>（透明度）通道顺序不同；</li>
+</ol>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="4">
+<li data-line="8" dir="auto">其他格式​：如 <code>RGBAFloat</code>（高精度 <code>HDR</code>）、<code>BC</code>（压缩格式，节省内存但可能有损）</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（2）<code>MipMap</code>：
+<ul>
+<li data-line="10" dir="auto">是一系列预先计算、逐级缩小的纹理链。当三维物体远离相机时，<code>GPU</code> 会自动切换到更小的 <code>MipMap</code> 级别进行采样，这有助于减少锯齿​（闪烁的像素点），提升视觉质量，尤其适用于 <code>3D</code> 场景中的物体；</li>
+<li data-line="11" dir="auto">启用 <code>MipMap</code> 会增加约三分之一的内存占用；</li>
+</ul>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（3）线性空间：
+<ul>
+<li data-line="13" dir="auto">线性空间 (<code>Linear</code>)​​ 此参数控制纹理的采样方式；</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="14" dir="auto">若设为 <code>true</code>，纹理将在线性颜色空间中被采样，适用于需要物理精确光照的计算（如法线贴图、金属度贴图等）</li>
+</ol>
+</li>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="15" dir="auto">若设为 <code>false</code>，则在 ​ <code>Gamma</code> 颜色空间​（<code>sRGB</code>）中被采样，适用于普通颜色贴图；</li>
+</ol>
+</li>
+<li data-line="16" dir="auto">在 <code>Unity</code> 的 <code>Project Settings -&gt; Player</code> 中启用线性空间渲染时，此设置尤为重要；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="17" dir="auto">概念：<code>Texture2D</code> 创建方式</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 创建一个 512x512 的空白纹理，格式为ARGB32，不生成MipMap
+Texture2D texture = new Texture2D(512, 512);
+
+// 创建一个 256x256 的纹理，格式为RGBA32，生成MipMap，使用线性滤波
+Texture2D textureWithMip = new Texture2D(256, 256, TextureFormat.RGBA32, true, true);
+
+// 创建一个 128x128 的纹理，格式为RGB24，不生成MipMap，使用sRGB采样（false）
+Texture2D textureRGB = new Texture2D(128, 128, TextureFormat.RGB24, false, false);
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">概念：<code>Texture2D</code> 从本地加载</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 方法一：使用 LoadImage (适用于解码PNG/JPG等格式)
+public Texture2D LoadTextureFromFile(byte[] fileData) 
+{
+	// 初始尺寸会被图片实际尺寸覆盖
+    Texture2D texture = new Texture2D(512, 512);
+     
+    // LoadImage 会根据文件数据自动重置纹理尺寸和格式
+    if (texture.LoadImage(fileData)) 
+    { 
+        return texture;
+    }
+    
+    return null;
+}
+
+// 方法二：使用 LoadRawTextureData (适用于已知格式的原始数据)
+public Texture2D LoadTextureFromRawData(byte[] rawData, int width, int height, TextureFormat format) 
+{
+    Texture2D texture = new Texture2D(width, height, format, false);
+    texture.LoadRawTextureData(rawData);
+    
+    // 必须调用Apply使数据生效
+    texture.Apply(); 
+    
+    return texture;
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">概念：从现有 <code>Texture</code> 转换</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 如果需要修改从资源加载的纹理，或者处理 RenderTexture的内容，可以使用以下方法转换
+public Texture2D ConvertRenderTextureToTexture2D(RenderTexture renderTex) 
+{
+    // 保存当前激活的 RenderTexture
+    RenderTexture previous = RenderTexture.active;
+    
+    // 设置目标 RenderTexture 为当前激活状态
+    RenderTexture.active = renderTex;
+
+    // 创建一个新的 Texture2D 来存储像素数据
+    Texture2D tex2D = new Texture2D(renderTex.width, renderTex.height, TextureFormat.RGBA32, false);
+    
+    // 从当前激活的 RenderTexture 中读取像素
+    tex2D.ReadPixels(new Rect(0, 0, renderTex.width, renderTex.height), 0, 0);
+    tex2D.Apply();
+
+    // 恢复之前激活的 RenderTexture
+    RenderTexture.active = previous;
+    return tex2D;
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`Texture2D` 类常用方法" dir="auto" class="heading" id="`Texture2D`_类常用方法"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Texture2D</code> 类常用方法</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>Texture2D</code> 类常用方法</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：像素操作 - <code>SetPixel</code>、<code>GetPixel</code> 与 <code>Apply</code> 
+<ul>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（1）<code>void SetPixel(int x, int y, Color color)​</code>
+<ul>
+<li data-line="2" dir="auto">设置纹理上特定坐标（<code>x, y</code>）处的像素颜色； </li>
+<li data-line="3" dir="auto"><code>x</code>：<code>X</code> 坐标（<code>0</code> 到 <code>width-1</code>），<code>y</code> 同理；</li>
+<li data-line="4" dir="auto"><code>SetPixel</code> 调用后必须<strong>调用 <code>Apply</code> 方法</strong>才能使更改生效。频繁调用 <code>SetPixel</code> 性能较低，如需设置大量像素，应使用 <code>SetPixels</code>；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（2）<code>Color GetPixel(int x, int y)</code>
+<ul>
+<li data-line="6" dir="auto">获取纹理上特定坐标的像素颜色，此方法需要纹理的 <code>isReadable</code> 属性为 <code>true</code>（在纹理导入设置中启用 <code>Read/Write Enabled</code>）</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（3）<code>void Apply(bool updateMipmaps = true, bool makeNoLongerReadable = false)</code>
+<ul>
+<li data-line="8" dir="auto">将所有通过 <code>SetPixel</code> 或 <code>SetPixels</code> 进行的更改上传到显卡并实际应用到纹理；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：批量像素操作 - <code>SetPixels</code> 与 <code>GetPixels</code> 
+<ul>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（1）<code>void SetPixels(Color[] colors)​</code>
+<ul>
+<li data-line="11" dir="auto">用 <code>Color</code> 数组一次性设置整个纹理或指定矩形的像素；</li>
+<li data-line="12" dir="auto">其他重载：<code>SetPixels(int x, int y, int blockWidth, int blockHeight, Color[] colors, int miplevel = 0)</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：编码与保存 - <code>EncodeToPNG</code> 与 <code>EncodeToJPG</code> 
+<ul>
+<li data-line="14" dir="auto"><code>byte[] EncodeToPNG()</code>：将纹理编码为 <code>PNG</code> 格式的字节数组。​ <code>PNG</code> 格式支持无损压缩和透明度；</li>
+</ul>
+</li>
+<li data-line="15" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">public void SaveTextureAsPNG(Texture2D texture, string filePath) 
+{
+    byte[] pngData = texture.EncodeToPNG();
+    System.IO.File.WriteAllBytes(filePath, pngData);
+    Debug.Log("Texture saved to: " + filePath);
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="水的渐变色效果" dir="auto" class="heading" id="水的渐变色效果"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>水的渐变色效果</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`C#` 脚本动态生成渐变图" dir="auto" class="heading" id="`C#`_脚本动态生成渐变图"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>C#</code> 脚本动态生成渐变图</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>代码</strong></p></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">public class WaterController : MonoBehaviour
+{
+	/// &lt;summary&gt;
+	/// 水体的渐变纹理
+	/// &lt;/summary&gt;
+	[Header("水体的渐变纹理")]
+	public Texture2D RampTexture;
+	
+	[Header("水体渐变效果控制")]
+	public Gradient waterGradient;
+	
+	public int count;
+	
+	private void Start()
+	{
+		// 参数一、二：材质的宽和高，单位为像素
+		RampTexture = new Texture2D(512, 256);
+		RampTexture.wrapMode = TextureWrapMode.Clamp;
+		
+		count = RampTexture.width * RampTexture.height;
+		Color[] colors = new Color[count];
+		for (int i = 0; i &lt; count; i++)
+		{
+			colors[i] = waterGradient.Evaluate((float)i/count);
+		}
+
+		RampTexture.SetPixels(colors);
+		RampTexture.Apply();
+		
+		// 全局赋值，将 RampTexture 纹理赋值到 _RampTexture 上 
+		Shader.SetGlobalTexture("_RampTexture", RampTexture);
+	}
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="将渐变色与水深结合" dir="auto" class="heading" id="将渐变色与水深结合"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>将渐变色与水深结合</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>分析</strong>：将渐变色与水深结合</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>目标：
+<ul>
+<li data-line="1" dir="auto">水越浅的地方，采样渐变图的最左边，水越深的地方，采样渐变图的右边；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="3" dir="auto"><span alt="PixPin_2025-11-05_13-55-38.png" src="PixPin_2025-11-05_13-55-38.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-05_13-55-38.png" src="lib/media/pixpin_2025-11-05_13-55-38.png"></span></li>
+<li data-line="4" dir="auto">计算得到的水深，返回的效果图；</li>
+<li data-line="5" dir="auto"><span alt="PixPin_2025-11-05_13-54-34.png" src="PixPin_2025-11-05_13-54-34.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-11-05_13-54-34.png" src="lib/media/pixpin_2025-11-05_13-54-34.png"></span></li>
+</ul>
+</li>
+<li data-line="6" dir="auto"></li>
+</ul></div><div class="mod-footer mod-ui"></div></div></div></div></div></div></div></div></div></div><div class="sidebar-right sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"></div><script defer="">let rs = document.querySelector(".sidebar-right"); rs.classList.add("is-collapsed"); if (window.innerWidth > 768) rs.classList.remove("is-collapsed"); rs.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-right-width"));</script></div></div></body></html>

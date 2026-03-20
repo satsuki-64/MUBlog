@@ -1,0 +1,544 @@
+<!DOCTYPE html> <html><head>
+		<title>Lecture 8：流</title>
+		<base href="..\..\../">
+		<meta id="root-path" root-path="..\..\../">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
+		<meta charset="UTF-8">
+		<meta name="description" content="MUBlog - Lecture 8：流">
+		<meta property="og:title" content="Lecture 8：流">
+		<meta property="og:description" content="MUBlog - Lecture 8：流">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="01_编程语言基础/02_csharp/01_核心知识/lecture-8：流.html">
+		<meta property="og:image" content="lib\media\pixpin_2025-10-17_13-47-42.png">
+		<meta property="og:site_name" content="MUBlog">
+		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="lib/rss.xml"><script async="" id="webpage-script" src="lib/scripts/webpage.js" onload="this.onload=null;this.setAttribute(&quot;loaded&quot;, &quot;true&quot;)"></script><link rel="icon" href="lib/media/favicon.png"><style>body{--line-width:40em;--line-width-adaptive:40em;--file-line-width:40em;--sidebar-width:min(20em, 80vw);--collapse-arrow-size:11px;--tree-horizontal-spacing:0.6em;--tree-vertical-spacing:0.6em;--sidebar-margin:12px}.sidebar{height:100%;min-width:calc(var(--sidebar-width) + var(--divider-width-hover));max-width:calc(var(--sidebar-width) + var(--divider-width-hover));font-size:14px;z-index:10;position:relative;overflow:hidden;transition:min-width ease-in-out,max-width ease-in-out;transition-duration:.2s;contain:size}.sidebar-left{left:0}.sidebar-right{right:0}.sidebar.is-collapsed{min-width:0;max-width:0}body.floating-sidebars .sidebar{position:absolute}.sidebar-content{height:100%;min-width:calc(var(--sidebar-width) - var(--divider-width-hover));top:0;padding:var(--sidebar-margin);padding-top:4em;line-height:var(--line-height-tight);background-color:var(--background-secondary);transition:background-color,border-right,border-left,box-shadow;transition-duration:var(--color-fade-speed);transition-timing-function:ease-in-out;position:absolute;display:flex;flex-direction:column}.sidebar:not(.is-collapsed) .sidebar-content{min-width:calc(max(100%,var(--sidebar-width)) - 3px);max-width:calc(max(100%,var(--sidebar-width)) - 3px)}.sidebar-left .sidebar-content{left:0;border-top-right-radius:var(--radius-l);border-bottom-right-radius:var(--radius-l)}.sidebar-right .sidebar-content{right:0;border-top-left-radius:var(--radius-l);border-bottom-left-radius:var(--radius-l)}.sidebar:has(.sidebar-content:empty):has(.topbar-content:empty){display:none}.sidebar-topbar{height:2em;width:var(--sidebar-width);top:var(--sidebar-margin);padding-inline:var(--sidebar-margin);z-index:1;position:fixed;display:flex;align-items:center;transition:width ease-in-out;transition-duration:inherit}.sidebar.is-collapsed .sidebar-topbar{width:calc(2.3em + var(--sidebar-margin) * 2)}.sidebar .sidebar-topbar.is-collapsed{width:0}.sidebar-left .sidebar-topbar{left:0}.sidebar-right .sidebar-topbar{right:0}.topbar-content{overflow:hidden;overflow:clip;width:100%;height:100%;display:flex;align-items:center;transition:inherit}.sidebar.is-collapsed .topbar-content{width:0;transition:inherit}.clickable-icon.sidebar-collapse-icon{background-color:transparent;color:var(--icon-color-focused);padding:0!important;margin:0!important;height:100%!important;width:2.3em!important;margin-inline:0.14em!important;position:absolute}.sidebar-left .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);right:var(--sidebar-margin)}.sidebar-right .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);left:var(--sidebar-margin)}.clickable-icon.sidebar-collapse-icon svg.svg-icon{width:100%;height:100%}.sidebar-section-header{margin:0 0 1em 0;text-transform:uppercase;letter-spacing:.06em;font-weight:600}body{transition:background-color var(--color-fade-speed) ease-in-out}.webpage-container{display:flex;flex-direction:row;height:100%;width:100%;align-items:stretch;justify-content:center}.document-container{opacity:1;flex-basis:100%;max-width:100%;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;transition:opacity .2s ease-in-out;contain:inline-size}.hide{opacity:0;transition:opacity .2s ease-in-out}.document-container>.markdown-preview-view{margin:var(--sidebar-margin);margin-bottom:0;width:100%;width:-webkit-fill-available;width:-moz-available;width:fill-available;background-color:var(--background-primary);transition:background-color var(--color-fade-speed) ease-in-out;border-top-right-radius:var(--window-radius,var(--radius-m));border-top-left-radius:var(--window-radius,var(--radius-m));overflow-x:hidden!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;contain:inline-size}.document-container>.markdown-preview-view>.markdown-preview-sizer{padding-bottom:80vh!important;width:100%!important;max-width:var(--line-width)!important;flex-basis:var(--line-width)!important;transition:background-color var(--color-fade-speed) ease-in-out;contain:inline-size}.markdown-rendered img:not([width]),.view-content img:not([width]){max-width:100%;outline:0}.document-container>.view-content.embed{display:flex;padding:1em;height:100%;width:100%;align-items:center;justify-content:center}.document-container>.view-content.embed>*{max-width:100%;max-height:100%;object-fit:contain}:has(> :is(.math,table)){overflow-x:auto!important}.document-container>.view-content{overflow-x:auto;contain:content;padding:0;margin:0;height:100%}.scroll-highlight{position:absolute;width:100%;height:100%;pointer-events:none;z-index:1000;background-color:hsla(var(--color-accent-hsl),.25);opacity:0;padding:1em;inset:50%;translate:-50% -50%;border-radius:var(--radius-s)}</style><script defer="">async function loadIncludes(){if("file:"!=location.protocol){let e=document.querySelectorAll("include");for(let t=0;t<e.length;t++){let o=e[t],l=o.getAttribute("src");try{const e=await fetch(l);if(!e.ok){console.log("Could not include file: "+l),o?.remove();continue}let t=await e.text(),n=document.createRange().createContextualFragment(t),i=Array.from(n.children);for(let e of i)e.classList.add("hide"),e.style.transition="opacity 0.5s ease-in-out",setTimeout((()=>{e.classList.remove("hide")}),10);o.before(n),o.remove(),console.log("Included file: "+l)}catch(e){o?.remove(),console.log("Could not include file: "+l,e);continue}}}else{if(document.querySelectorAll("include").length>0){var e=document.createElement("div");e.id="error",e.textContent="Web server exports must be hosted on an http / web server to be viewed correctly.",e.style.position="fixed",e.style.top="50%",e.style.left="50%",e.style.transform="translate(-50%, -50%)",e.style.fontSize="1.5em",e.style.fontWeight="bold",e.style.textAlign="center",document.body.appendChild(e),document.querySelector(".document-container")?.classList.remove("hide")}}}document.addEventListener("DOMContentLoaded",(()=>{loadIncludes()}));let isFileProtocol="file:"==location.protocol;function waitLoadScripts(e,t){let o=e.map((e=>document.getElementById(e+"-script"))),l=0;!function e(){let n=o[l];l++,n&&"true"!=n.getAttribute("loaded")||l<o.length&&e(),l<o.length?n.addEventListener("load",e):t()}()}</script><link rel="stylesheet" href="lib/styles/obsidian.css"><link rel="stylesheet" href="lib/styles/theme.css"><link rel="preload" href="lib/styles/global-variable-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/global-variable-styles.css"></noscript><link rel="preload" href="lib/styles/supported-plugins.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/supported-plugins.css"></noscript><link rel="preload" href="lib/styles/main-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/main-styles.css"></noscript><link rel="preload" href="lib/styles/snippets.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/snippets.css"></noscript></head><body class="publish css-settings-manager styled-scrollbars theme-light show-inline-title ctp-rosepine-light ctp-mocha ctp-accent-rosewater anuppuccin-accent-toggle anp-current-line-border anp-callout-color-toggle anp-codeblock-numbers anp-list-toggle anp-table-width anp-toggle-preview anp-color-transition-toggle anp-button-metadata-toggle anp-toggle-metadata anp-toggle-scrollbars anp-h1-red anp-h1-divider anp-h2-peach anp-h3-green anp-h4-teal anp-h5-lavender anp-h6-mauve anp-decoration-toggle anp-bold-maroon anp-italic-green anp-highlight-yellow anp-colorful-frame-icon-toggle-dark anp-simple-rainbow-color-toggle anp-rainbow-file-toggle anp-simple-rainbow-title-toggle anp-simple-rainbow-icon-folder-toggle anp-simple-rainbow-indentation-toggle anp-simple-rainbow-collapse-toggle anp-card-layout anp-card-shadows anp-card-layout-filebrowser anp-theme-ext-light anp-theme-ext-dark anp-theme-ext-amoled ctp-atom-light ctp-atom-dark table-type-three-line table-header-color-blue table-row-alt-background-option table-dark-mode"><script defer="">let theme=localStorage.getItem("theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");"dark"==theme?(document.body.classList.add("theme-dark"),document.body.classList.remove("theme-light")):(document.body.classList.add("theme-light"),document.body.classList.remove("theme-dark")),window.innerWidth<480?document.body.classList.add("is-phone"):window.innerWidth<768?document.body.classList.add("is-tablet"):window.innerWidth<1024?document.body.classList.add("is-small-screen"):document.body.classList.add("is-large-screen")</script><div class="webpage-container workspace"><div class="sidebar-left sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"><label class="theme-toggle-container" for="theme_toggle"><input class="theme-toggle-input" type="checkbox" id="theme_toggle"><div class="toggle-background"></div></label></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"><include src="lib/html/file-tree.html"></include></div><script defer="">let ls = document.querySelector(".sidebar-left"); ls.classList.add("is-collapsed"); if (window.innerWidth > 768) ls.classList.remove("is-collapsed"); ls.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-left-width"));</script></div><div class="document-container markdown-reading-view hide"><div class="markdown-preview-view markdown-rendered allow-fold-headings allow-fold-lists is-readable-line-width"><style id="MJX-CHTML-styles">mjx-c.mjx-c1D440.TEX-I::before{padding:.683em 1.051em 0 0;content:"M"}mjx-c.mjx-c1D465.TEX-I::before{padding:.442em .572em .011em 0;content:"x"}mjx-c.mjx-cD7::before{padding:.491em .778em 0 0;content:"×"}mjx-c.mjx-c32::before{padding:.666em .5em 0 0;content:"2"}mjx-c.mjx-c1D463.TEX-I::before{padding:.443em .485em .011em 0;content:"v"}mjx-c.mjx-c1D45D.TEX-I::before{padding:.442em .503em .194em 0;content:"p"}mjx-c.mjx-c2192::before{padding:.511em 1em .011em 0;content:"→"}mjx-c.mjx-c1D44E.TEX-I::before{padding:.441em .529em .01em 0;content:"a"}mjx-c.mjx-c1D44F.TEX-I::before{padding:.694em .429em .011em 0;content:"b"}mjx-c.mjx-c1D459.TEX-I::before{padding:.694em .298em .011em 0;content:"l"}mjx-c.mjx-c1D452.TEX-I::before{padding:.442em .466em .011em 0;content:"e"}mjx-mn{display:inline-block;text-align:left}mjx-c.mjx-c1D442.TEX-I::before{padding:.704em .763em .022em 0;content:"O"}mjx-c.mjx-c31::before{padding:.666em .5em 0 0;content:"1"}mjx-container[jax=CHTML]{line-height:0}mjx-container [space="1"]{margin-left:.111em}mjx-container [space="2"]{margin-left:.167em}mjx-container [space="3"]{margin-left:.222em}mjx-container [space="4"]{margin-left:.278em}mjx-container [space="5"]{margin-left:.333em}mjx-container [rspace="1"]{margin-right:.111em}mjx-container [rspace="2"]{margin-right:.167em}mjx-container [rspace="3"]{margin-right:.222em}mjx-container [rspace="4"]{margin-right:.278em}mjx-container [rspace="5"]{margin-right:.333em}mjx-container [size="s"]{font-size:70.7%}mjx-container [size=ss]{font-size:50%}mjx-container [size=Tn]{font-size:60%}mjx-container [size=sm]{font-size:85%}mjx-container [size=lg]{font-size:120%}mjx-container [size=Lg]{font-size:144%}mjx-container [size=LG]{font-size:173%}mjx-container [size=hg]{font-size:207%}mjx-container [size=HG]{font-size:249%}mjx-container [width=full]{width:100%}mjx-box{display:inline-block}mjx-block{display:block}mjx-itable{display:inline-table}mjx-row{display:table-row}mjx-row>*{display:table-cell}mjx-mtext{display:inline-block}mjx-mstyle{display:inline-block}mjx-merror{display:inline-block;color:red;background-color:#ff0}mjx-mphantom{visibility:hidden}mjx-assistive-mml{top:0;left:0;clip:rect(1px,1px,1px,1px);user-select:none;position:absolute!important;padding:1px 0 0!important;border:0!important;display:block!important;width:auto!important;overflow:hidden!important}mjx-assistive-mml[display=block]{width:100%!important}mjx-math{display:inline-block;text-align:left;line-height:0;text-indent:0;font-style:normal;font-weight:400;font-size:100%;font-size-adjust:none;letter-spacing:normal;border-collapse:collapse;overflow-wrap:normal;word-spacing:normal;white-space:nowrap;direction:ltr;padding:1px 0}mjx-container[jax=CHTML][display=true]{display:block;text-align:center;margin:1em 0}mjx-container[jax=CHTML][display=true][width=full]{display:flex}mjx-container[jax=CHTML][display=true] mjx-math{padding:0}mjx-container[jax=CHTML][justify=left]{text-align:left}mjx-container[jax=CHTML][justify=right]{text-align:right}mjx-mi{display:inline-block;text-align:left}mjx-c{display:inline-block}mjx-utext{display:inline-block;padding:.75em 0 .2em}mjx-mo{display:inline-block;text-align:left}mjx-stretchy-h{display:inline-table;width:100%}mjx-stretchy-h>*{display:table-cell;width:0}mjx-stretchy-h>*>mjx-c{display:inline-block;transform:scaleX(1)}mjx-stretchy-h>*>mjx-c::before{display:inline-block;width:initial}mjx-stretchy-h>mjx-ext{overflow:clip visible;width:100%}mjx-stretchy-h>mjx-ext>mjx-c::before{transform:scaleX(500)}mjx-stretchy-h>mjx-ext>mjx-c{width:0}mjx-stretchy-h>mjx-beg>mjx-c{margin-right:-.1em}mjx-stretchy-h>mjx-end>mjx-c{margin-left:-.1em}mjx-stretchy-v{display:inline-block}mjx-stretchy-v>*{display:block}mjx-stretchy-v>mjx-beg{height:0}mjx-stretchy-v>mjx-end>mjx-c{display:block}mjx-stretchy-v>*>mjx-c{transform:scaleY(1);transform-origin:left center;overflow:hidden}mjx-stretchy-v>mjx-ext{display:block;height:100%;box-sizing:border-box;border:0 solid transparent;overflow:visible clip}mjx-stretchy-v>mjx-ext>mjx-c::before{width:initial;box-sizing:border-box}mjx-stretchy-v>mjx-ext>mjx-c{transform:scaleY(500) translateY(.075em);overflow:visible}mjx-mark{display:inline-block;height:0}mjx-msup{display:inline-block;text-align:left}mjx-c::before{display:block;width:0}.MJX-TEX{font-family:MJXZERO,MJXTEX}.TEX-B{font-family:MJXZERO,MJXTEX-B}.TEX-I{font-family:MJXZERO,MJXTEX-I}.TEX-MI{font-family:MJXZERO,MJXTEX-MI}.TEX-BI{font-family:MJXZERO,MJXTEX-BI}.TEX-S1{font-family:MJXZERO,MJXTEX-S1}.TEX-S2{font-family:MJXZERO,MJXTEX-S2}.TEX-S3{font-family:MJXZERO,MJXTEX-S3}.TEX-S4{font-family:MJXZERO,MJXTEX-S4}.TEX-A{font-family:MJXZERO,MJXTEX-A}.TEX-C{font-family:MJXZERO,MJXTEX-C}.TEX-CB{font-family:MJXZERO,MJXTEX-CB}.TEX-FR{font-family:MJXZERO,MJXTEX-FR}.TEX-FRB{font-family:MJXZERO,MJXTEX-FRB}.TEX-SS{font-family:MJXZERO,MJXTEX-SS}.TEX-SSB{font-family:MJXZERO,MJXTEX-SSB}.TEX-SSI{font-family:MJXZERO,MJXTEX-SSI}.TEX-SC{font-family:MJXZERO,MJXTEX-SC}.TEX-T{font-family:MJXZERO,MJXTEX-T}.TEX-V{font-family:MJXZERO,MJXTEX-V}.TEX-VB{font-family:MJXZERO,MJXTEX-VB}mjx-stretchy-h mjx-c,mjx-stretchy-v mjx-c{font-family:MJXZERO,MJXTEX-S1,MJXTEX-S4,MJXTEX,MJXTEX-A!important}@font-face{font-family:MJXZERO;src:url("lib/fonts/mathjax_zero.woff") format("woff")}@font-face{font-family:MJXTEX;src:url("lib/fonts/mathjax_main-regular.woff") format("woff")}@font-face{font-family:MJXTEX-B;src:url("lib/fonts/mathjax_main-bold.woff") format("woff")}@font-face{font-family:MJXTEX-I;src:url("lib/fonts/mathjax_math-italic.woff") format("woff")}@font-face{font-family:MJXTEX-MI;src:url("lib/fonts/mathjax_main-italic.woff") format("woff")}@font-face{font-family:MJXTEX-BI;src:url("lib/fonts/mathjax_math-bolditalic.woff") format("woff")}@font-face{font-family:MJXTEX-S1;src:url("lib/fonts/mathjax_size1-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S2;src:url("lib/fonts/mathjax_size2-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S3;src:url("lib/fonts/mathjax_size3-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S4;src:url("lib/fonts/mathjax_size4-regular.woff") format("woff")}@font-face{font-family:MJXTEX-A;src:url("lib/fonts/mathjax_ams-regular.woff") format("woff")}@font-face{font-family:MJXTEX-C;src:url("lib/fonts/mathjax_calligraphic-regular.woff") format("woff")}@font-face{font-family:MJXTEX-CB;src:url("lib/fonts/mathjax_calligraphic-bold.woff") format("woff")}@font-face{font-family:MJXTEX-FR;src:url("lib/fonts/mathjax_fraktur-regular.woff") format("woff")}@font-face{font-family:MJXTEX-FRB;src:url("lib/fonts/mathjax_fraktur-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SS;src:url("lib/fonts/mathjax_sansserif-regular.woff") format("woff")}@font-face{font-family:MJXTEX-SSB;src:url("lib/fonts/mathjax_sansserif-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SSI;src:url("lib/fonts/mathjax_sansserif-italic.woff") format("woff")}@font-face{font-family:MJXTEX-SC;src:url("lib/fonts/mathjax_script-regular.woff") format("woff")}@font-face{font-family:MJXTEX-T;src:url("lib/fonts/mathjax_typewriter-regular.woff") format("woff")}@font-face{font-family:MJXTEX-V;src:url("lib/fonts/mathjax_vector-regular.woff") format("woff")}@font-face{font-family:MJXTEX-VB;src:url("lib/fonts/mathjax_vector-bold.woff") format("woff")}mjx-c.mjx-c1D45F.TEX-I::before{padding:.442em .451em .011em 0;content:"r"}mjx-c.mjx-c210E.TEX-I::before{padding:.694em .576em .011em 0;content:"h"}mjx-c.mjx-c1D460.TEX-I::before{padding:.442em .469em .01em 0;content:"s"}mjx-c.mjx-c28::before{padding:.75em .389em .25em 0;content:"("}mjx-c.mjx-c29::before{padding:.75em .389em .25em 0;content:")"}mjx-c.mjx-c3D::before{padding:.583em .778em .082em 0;content:"="}mjx-c.mjx-c1D45A.TEX-I::before{padding:.442em .878em .011em 0;content:"m"}mjx-c.mjx-c1D456.TEX-I::before{padding:.661em .345em .011em 0;content:"i"}mjx-c.mjx-c1D45B.TEX-I::before{padding:.442em .6em .011em 0;content:"n"}mjx-c.mjx-c1D454.TEX-I::before{padding:.442em .477em .205em 0;content:"g"}mjx-c.mjx-c2032::before{padding:.56em .275em 0 0;content:"′"}mjx-c.mjx-c2B::before{padding:.583em .778em .082em 0;content:"+"}mjx-c.mjx-c1D450.TEX-I::before{padding:.442em .433em .011em 0;content:"c"}mjx-c.mjx-c1D45C.TEX-I::before{padding:.441em .485em .011em 0;content:"o"}mjx-c.mjx-c1D461.TEX-I::before{padding:.626em .361em .011em 0;content:"t"}mjx-c.mjx-c2C::before{padding:.121em .278em .194em 0;content:","}</style><div class="markdown-preview-sizer markdown-preview-section"><h1 class="page-title heading inline-title" id="Lecture 8：流"><p dir="auto">Lecture 8：流</p></h1><div class="el-h2 heading-wrapper"><h2 data-heading="`.NET` 流架构" dir="auto" class="heading" id="`.NET`_流架构"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>.NET</code> 流架构</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>.NET</code> 流架构</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>.NET</code> 流的架构主要包含三个概念：后台存储、装饰器以及流适配器；</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="2" dir="auto">后台存储流：数据读写的端点或源头</li>
+</ol>
+<ul>
+<li data-line="3" dir="auto">提供最基础的字节序列读写能力，与具体存储介质（如文件、网络、内存）直接交互；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="4" dir="auto">装饰器流：功能的增强者</li>
+</ol>
+<ul>
+<li data-line="5" dir="auto">包装另一个流，透明地提供数据转换功能（如压缩、加密），​<strong>不改变</strong>流的基本字节操作接口；</li>
+<li data-line="6" dir="auto">因为有装饰器流，因此后台存储流无需自己实现压缩或者加密的方法，并且装饰器类之间可以串连不同的装饰器流，为某个简单的后台存储流提供复杂且可定制的功能；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="7" dir="auto">流适配器：数据表示的转换者</li>
+</ol>
+<ul>
+<li data-line="8" dir="auto">将底层的字节流转换为更高级别的数据类型（如文本、<code>XML</code>、基本数据类型），​<strong>隐藏</strong>了字节级别的细节；</li>
+<li data-line="9" dir="auto">后台存储流和装饰器流仅支持字节处理。虽然这种方式灵活又高效，但应用程序往往需要处理更高层次的数据，例如文本或者 XML。适配器正好弥补了这个鸿沟。它在类中创建专门的方法以支持特定的格式；</li>
+<li data-line="10" dir="auto">例如，<code>TextReader</code> 有一个 ReadLine 方法，而 <code>XmlTextWriter</code> 则拥有 <code>WriteAttribute</code> 方法；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>特点：
+<ul>
+<li data-line="12" dir="auto">这种架构的核心优势在于其组合性和单一职责原则；</li>
+<li data-line="13" dir="auto">可以通过简单的对象组合（将一个对象传入另一个对象的构造函数）来构建功能强大的流处理链；</li>
+</ul>
+</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="15" dir="auto"><span alt="PixPin_2025-10-17_13-47-42.png" src="PixPin_2025-10-17_13-47-42.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-10-17_13-47-42.png" src="lib/media/pixpin_2025-10-17_13-47-42.png"></span></li>
+</ul>
+</li>
+<li data-line="16" dir="auto">示例：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">// 1. 创建后台存储流 -&gt; 文件
+using (FileStream fileStream = new FileStream("data.txt.gz", FileMode.Open))
+{
+    // 2. 添加装饰器功能 -&gt; 解压缩
+    using (GZipStream decompressor = new GZipStream(fileStream, CompressionMode.Decompress))
+    {
+        // 3. 添加适配器，以文本形式读取 -&gt; 文本读取
+        using (StreamReader reader = new StreamReader(decompressor))
+        {
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                Console.WriteLine(line);
+            }
+        }
+    }
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`Stream` 流" dir="auto" class="heading" id="`Stream`_流"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Stream</code> 流</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`Stream` 流基础概念" dir="auto" class="heading" id="`Stream`_流基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Stream</code> 流基础概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>Stream</code> 流基础概念</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>Stream</code> 是所有流对象的基类，其通过了若干流的核心操作方法；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结：
+<ul>
+<li data-line="3" dir="auto"><span alt="PixPin_2025-10-17_14-03-30.png" src="PixPin_2025-10-17_14-03-30.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-10-17_14-03-30.png" src="lib/media/pixpin_2025-10-17_14-03-30.png"></span></li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：核心方法
+<ul>
+<li data-line="5" dir="auto"><code>Read/Write</code>：参数一是当前要读取或者写入的字节数组，参数二是当前读取的偏移量，参数三是读取的数量；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：
+<ul>
+<li data-line="7" dir="auto">从 <code>.NETFramework 4.5</code> 开始，它还提供了异步的 <code>Read</code> 和 <code>Write</code> 方法，这些方法都会返回 <code>Task</code> 对象，并支持取消令牌；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="示例：使用 `Stream` 流读取和写入" dir="auto" class="heading" id="示例：使用_`Stream`_流读取和写入"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>示例：使用 <code>Stream</code> 流读取和写入</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>示例</strong>：使用 <code>Stream</code> 流读取和写入</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">private void ReadAndWrite()
+{
+	using (FileStream fs = new FileStream(Application.dataPath + "/Art/test.txt",FileMode.Create))
+	{
+		Debug.Log(fs.Length);
+		Debug.Log(fs.CanWrite);
+		Debug.Log(fs.CanRead);
+		Debug.Log(fs.CanSeek);
+
+		// 将数据写入
+		fs.WriteByte(101);
+		fs.WriteByte(102);
+		byte[] bytes = { 1,2,3,4,5};
+		fs.Write(bytes, 0, bytes.Length);
+		Debug.Log("fs.Length" + fs.Length);
+		Debug.Log("fs.Position" + fs.Position);
+
+		fs.Position = 0;
+		Debug.Log(fs.ReadByte());
+		Debug.Log(fs.ReadByte());
+		
+		// 读取指定数组的指定长度
+		Debug.Log("fs.Read(bytes, 0, bytes.Length)" + fs.Read(bytes, 0, bytes.Length));
+		Debug.Log("fs.Read(bytes, 0, bytes.Length)" + fs.Read(bytes, 0, bytes.Length));
+
+		byte[] bytes2 = { 111, 222, 212, 111, 112, 255 };
+		fs.Write(bytes2, 0, bytes2.Length);
+	}
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">代码：异步版本</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">private async void ReadAndWriteAsync()
+{
+	using (FileStream fs = new FileStream(Application.dataPath + "/Art/test.txt",FileMode.Create))
+	{
+		Debug.Log(fs.Length);
+		Debug.Log(fs.CanWrite);
+		Debug.Log(fs.CanRead);
+		Debug.Log(fs.CanSeek);
+
+		// 将数据写入
+		fs.WriteByte(101);
+		fs.WriteByte(102);
+		byte[] bytes = { 1,2,3,4,5};
+		
+		// 将写入操作改成异步
+		await fs.WriteAsync(bytes, 0, bytes.Length);
+		
+		Debug.Log("fs.Length" + fs.Length);
+		Debug.Log("fs.Position" + fs.Position);
+
+		fs.Position = 0;
+		Debug.Log(fs.ReadByte());
+		Debug.Log(fs.ReadByte());
+		
+		// 读取指定数组的指定长度
+		Debug.Log("fs.Read(bytes, 0, bytes.Length)" + await fs.ReadAsync(bytes, 0, bytes.Length));
+		Debug.Log("fs.Read(bytes, 0, bytes.Length)" + await fs.ReadAsync(bytes, 0, bytes.Length));
+
+		byte[] bytes2 = { 111, 222, 212, 111, 112, 255 };
+		await fs.WriteAsync(bytes2, 0, bytes2.Length);
+	}
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="后台存储流" dir="auto" class="heading" id="后台存储流"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>后台存储流</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="后台存储流构成" dir="auto" class="heading" id="后台存储流构成"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>后台存储流构成</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：后台存储流构成</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">后台存储流是流架构中的端点或源头。它们是直接与特定物理（或逻辑）存储介质进行字节级交互的 <code>Stream</code> 类的具体实现。它们是整个数据流操作的基石，所有高级功能（如装饰器、适配器）都构建在它们之上；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：什么是可查找
+<ul>
+<li data-line="3" dir="auto">可查找流​意味着你可以通过 <code>Seek()</code> 方法或设置 <code>Position</code> 属性，随意地在数据流中跳转（例如，从开头跳到末尾，或从中间某个位置继续读取）。​文件和内存天然支持这种随机访问，<strong>网络</strong>和<strong>管道</strong>数据是顺序到达的，因此不支持查找，因此 <code>NetworkStream</code> 和 <code>PipeStream</code> 不支持； </li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="5" dir="auto"><span alt="PixPin_2025-10-17_14-28-00.png" src="PixPin_2025-10-17_14-28-00.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-10-17_14-28-00.png" src="lib/media/pixpin_2025-10-17_14-28-00.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`FileStream` 类" dir="auto" class="heading" id="`FileStream`_类"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>FileStream</code> 类</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>FileStream</code> 类基础概念</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>FileStream</code> 创建方法
+<ul>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>方法一：使用 <code>File.XXX</code> 
+<ul>
+<li data-line="2" dir="auto"><span alt="PixPin_2025-10-17_14-32-52.png" src="PixPin_2025-10-17_14-32-52.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-10-17_14-32-52.png" src="lib/media/pixpin_2025-10-17_14-32-52.png"></span></li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>方法二：实例化 <code>FileStream</code>
+<ul>
+<li data-line="4" dir="auto"><span alt="PixPin_2025-10-17_14-33-11.png" src="PixPin_2025-10-17_14-33-11.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-10-17_14-33-11.png" src="lib/media/pixpin_2025-10-17_14-33-11.png"></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意：
+<ul>
+<li data-line="6" dir="auto">如果文件已经存在，那么 <code>OpenWrite</code> 和 <code>Create</code> 的行为是不同的；</li>
+<li data-line="7" dir="auto"><code>Create</code> 方法会删除其全部内容，而 <code>OpenWrite</code> 则会保留流中全部已有内容，并将流的起始位置设置为 <code>0</code>；</li>
+<li data-line="8" dir="auto">如果我们写入的内容比原始文件内容长度还短，则 <code>OpenWrite</code> 执行之后其文件内容会同时包含新旧内容；</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>File</code> 类提供的快捷写入/读取方法
+<ul>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>读取方法：
+<ul>
+<li data-line="11" dir="auto">读取字符串：<code>File.ReadAllText</code></li>
+<li data-line="12" dir="auto">读取字符串数组：<code>File.ReadAllLines</code></li>
+<li data-line="13" dir="auto">读取字节数组：<code>File.ReadAllBytes</code></li>
+</ul>
+</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>写入方法：
+<ul>
+<li data-line="15" dir="auto">写入字符串：<code>File.WriteAllText</code></li>
+<li data-line="16" dir="auto">写入多个字符串的数组：<code>File.WriteAllLines</code></li>
+<li data-line="17" dir="auto">写入字节数组：<code>File.WriteAllBytes</code></li>
+<li data-line="18" dir="auto">追加字符串：<code>File.AppendAllText</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>FileStream</code> 参数</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>FileStream</code> 指定文件名
+<ul>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="2" dir="auto">文件名可以是绝对路径（例如 <code>c;\temp\test.txt</code> ）也可以是相对当前目录的路径（例如，<code>test.txt</code> 或者 <code>temp\test.txt</code>）；</li>
+<li data-line="3" dir="auto">可以访问 <code>Environment.CurrentDirectory</code> 属性来获得或者更改当前目录；</li>
+<li data-line="4" dir="auto"><code>AppDomain.CurrentDomain.BaseDirectory</code> 属性会返回应用程序的基础目录（<code>basedirectony</code>)，正常情况下它就是可执行文件所在的文件夹，结合使用 <code>Path.Combine</code> 方法就可以定位该目录下的文件名；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>代码：
+<ul>
+<li data-line="6" dir="auto">
+<pre class="language-none"><code data-line="6" class="language-C# language-none is-loaded">string baseFolder = AppDomain.CurrentDomain.BaseDirectory;
+string logoPath = Path.Combine(baseFolder,"Arts/logo.jpg");
+Console.WriteLine(File.Exists(logoPath));
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>FileStream</code> 指定 <code>FileMode</code> 
+<ul>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="13" dir="auto"><code>FileStream</code> 类型每一个接受文件名的构造器都需要提供 <code>FileMode</code> 枚举参数，每一种 <code>FileMode</code> 的选择都在 <code>File</code> 类型中有相对应的静态方法：</li>
+</ul>
+</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>总结：
+<ul>
+<li data-line="15" dir="auto"><span alt="PixPin_2025-10-20_12-53-38.png" src="PixPin_2025-10-20_12-53-38.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-10-20_12-53-38.png" src="lib/media/pixpin_2025-10-20_12-53-38.png"></span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div><div class="el-div"><div data-callout-metadata="" data-callout-fold="" data-callout="warning" class="callout drop-shadow"><div class="callout-title" dir="auto"><div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-alert-triangle"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></div><div class="callout-title-inner">注意：</div></div><div class="callout-content">
+<ul>
+<li data-line="1" dir="auto">用 <code>File.Create</code> 或者 <code>FileMode.Create</code> 处理隐藏文件会抛出异常。如果想要覆盖一个隐藏文件，必须先删除该隐藏文件，而后再重新创建：</li>
+</ul>
+</div></div></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`MemoryStream` 类" dir="auto" class="heading" id="`MemoryStream`_类"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>MemoryStream</code> 类</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>MemoryStream</code> 类</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>MemoryStream</code> 使用数组作为后台存储，这在一定程度上与使用流的目的是相违背的，因为这个后台存储都必须一次性地驻留在内存中；</li>
+<li data-line="2" dir="auto">然而，MemoryStream 仍然有一定的用途，例如随机访问一个不可查找的流；</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>如果原始的流的大小可以承受，则可以通过如下的方式将其复制到 <code>MemoryStream</code> 中：
+<ul>
+<li data-line="4" dir="auto"><code>var ms= new MemoryStream ();</code></li>
+<li data-line="5" dir="auto"><code>sourceStream.CopyTo (ms);</code></li>
+</ul>
+</li>
+<li data-line="6" dir="auto">我们可以调用 <code>ToArray</code> 方法将一个 <code>MemoryStream</code> 转换为一个字节数组，而 <code>GetBuffer</code> 方法则更加高效地直接返回底层存储数组的引用；</li>
+<li data-line="7" dir="auto">但是，需要注意的是这个数组通常会比流的实际长度要长一些。</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：关于 <code>MemoryStream</code> 实例的刷新和关闭
+<ul>
+<li data-line="9" dir="auto"><code>MemoryStream</code> 的关闭和刷新不是必须的，如果关闭了一个 <code>Memory-Stream</code> 就无法再次读写了。但是我们仍然可以调用 <code>ToArray</code> 方法来获得底层的数据。而刷新操作则不会对内存流执行任何操作；</li>
+</ul>
+</li>
+<li data-line="10" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">using UnityEngine;
+using System.IO;
+using System.Text;
+using System.Runtime.Serialization.Formatters.Binary;
+
+public class MemoryStreamDemo : MonoBehaviour
+{
+    [System.Serializable]
+    public class PlayerData
+    {
+        public string playerName;
+        public int level;
+        public float health;
+        public Vector3 position;
+        
+        public PlayerData(string name, int lvl, float hp, Vector3 pos)
+        {
+            playerName = name;
+            level = lvl;
+            health = hp;
+            position = pos;
+        }
+    }
+    
+    void Start()
+    {
+        DemoBasicMemoryStream();
+        DemoBinarySerialization();
+        DemoCustomDataTypes();
+    }
+    
+    /// &lt;summary&gt;
+    /// 演示1: MemoryStream的基本读写操作
+    /// 展示如何向内存流写入数据并从内存流读取数据
+    /// &lt;/summary&gt;
+    void DemoBasicMemoryStream()
+    {
+        Debug.Log("=== 基本MemoryStream操作演示 ===");
+        
+        // 创建MemoryStream对象 - 在内存中创建数据流[4](@ref)
+        using (MemoryStream stream = new MemoryStream())
+        {
+            // 示例数据：玩家信息字符串
+            string playerInfo = "Player:John,Level:10,Health:85.5";
+            
+            // 将字符串转换为字节数组并写入内存流
+            byte[] dataBytes = Encoding.UTF8.GetBytes(playerInfo);
+            stream.Write(dataBytes, 0, dataBytes.Length);
+            
+            Debug.Log($"流容量: {stream.Capacity}, 流长度: {stream.Length}, 当前位置: {stream.Position}");
+            
+            // 重置流位置到开头以便读取
+            stream.Seek(0, SeekOrigin.Begin);
+            
+            // 从内存流读取数据
+            byte[] readBuffer = new byte[stream.Length];
+            // 将当前 stream 中的数据读取到字节数组 readBuffer 当中
+            stream.Read(readBuffer, 0, (int)stream.Length);
+            string decodedString = Encoding.UTF8.GetString(readBuffer);
+            
+            Debug.Log($"读取的数据: {decodedString}");
+        } // using语句自动释放资源
+    }
+    
+    /// &lt;summary&gt;
+    /// 演示2: 使用MemoryStream进行二进制序列化
+    /// 将Unity自定义类对象序列化为二进制数据
+    /// &lt;/summary&gt;
+    void DemoBinarySerialization()
+    {
+        Debug.Log("=== 二进制序列化演示 ===");
+        
+        // 创建玩家数据对象
+        PlayerData player = new PlayerData("UnityPlayer", 25, 75.5f, new Vector3(10, 5, 20));
+        
+        // 序列化：对象 → 字节数组
+        byte[] serializedData = SerializeToBytes(player);
+        Debug.Log($"序列化后的字节数组长度: {serializedData.Length}");
+        
+        // 反序列化：字节数组 → 对象
+        PlayerData deserializedPlayer = DeserializeFromBytes&lt;PlayerData&gt;(serializedData);
+        Debug.Log($"反序列化结果 - 名称: {deserializedPlayer.playerName}, 等级: {deserializedPlayer.level}, 位置: {deserializedPlayer.position}");
+    }
+    
+    /// &lt;summary&gt;
+    /// 将对象序列化为字节数组
+    /// 使用BinaryFormatter和MemoryStream组合[6](@ref)
+    /// &lt;/summary&gt;
+    byte[] SerializeToBytes&lt;T&gt;(T obj) where T : class
+    {
+        // 使用using确保资源正确释放
+        using (MemoryStream memoryStream = new MemoryStream())
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            
+            try
+            {
+                // 将对象序列化到内存流[6](@ref)
+                formatter.Serialize(memoryStream, obj);
+                return memoryStream.ToArray(); // 获取字节数组
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"序列化失败: {e.Message}");
+                return null;
+            }
+        }
+    }
+    
+    /// &lt;summary&gt;
+    /// 从字节数组反序列化对象
+    /// &lt;/summary&gt;
+    T DeserializeFromBytes&lt;T&gt;(byte[] data) where T : class
+    {
+        if (data == null || data.Length == 0)
+            return null;
+            
+        using (MemoryStream memoryStream = new MemoryStream(data))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            
+            try
+            {
+                // 从内存流反序列化对象[6](@ref)
+                return (T)formatter.Deserialize(memoryStream);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"反序列化失败: {e.Message}");
+                return null;
+            }
+        }
+    }
+    
+    /// &lt;summary&gt;
+    /// 演示3: 自定义数据类型的读写
+    /// 展示如何读写各种基本数据类型[1](@ref)
+    /// &lt;/summary&gt;
+    void DemoCustomDataTypes()
+    {
+        Debug.Log("=== 自定义数据类型读写演示 ===");
+        
+        using (ExtendedMemoryStream stream = new ExtendedMemoryStream())
+        {
+            // 写入各种数据类型
+            stream.WriteInt(42);
+            stream.WriteFloat(3.14f);
+            stream.WriteBool(true);
+            stream.WriteString("Unity MemoryStream演示");
+            stream.WriteVector3(new Vector3(1, 2, 3));
+            
+            // 重置位置准备读取
+            stream.Seek(0, SeekOrigin.Begin);
+            
+            // 按写入顺序读取数据
+            int intValue = stream.ReadInt();
+            float floatValue = stream.ReadFloat();
+            bool boolValue = stream.ReadBool();
+            string stringValue = stream.ReadString();
+            Vector3 vectorValue = stream.ReadVector3();
+            
+            Debug.Log($"读取结果: int={intValue}, float={floatValue}, bool={boolValue}");
+            Debug.Log($"字符串: {stringValue}, 向量: {vectorValue}");
+        }
+    }
+}
+
+/// &lt;summary&gt;
+/// 扩展的MemoryStream类，添加对Unity常用数据类型的支持[1](@ref)
+/// &lt;/summary&gt;
+public class ExtendedMemoryStream : MemoryStream
+{
+    public ExtendedMemoryStream() : base() { }
+    public ExtendedMemoryStream(byte[] buffer) : base(buffer) { }
+    
+    #region 基本数据类型读写
+    public int ReadInt()
+    {
+        byte[] bytes = new byte[4];
+        Read(bytes, 0, 4);
+        return System.BitConverter.ToInt32(bytes, 0);
+    }
+    
+    public void WriteInt(int value)
+    {
+        byte[] bytes = System.BitConverter.GetBytes(value);
+        Write(bytes, 0, bytes.Length);
+    }
+    
+    public float ReadFloat()
+    {
+        byte[] bytes = new byte[4];
+        Read(bytes, 0, 4);
+        return System.BitConverter.ToSingle(bytes, 0);
+    }
+    
+    public void WriteFloat(float value)
+    {
+        byte[] bytes = System.BitConverter.GetBytes(value);
+        Write(bytes, 0, bytes.Length);
+    }
+    
+    public bool ReadBool()
+    {
+        return ReadByte() == 1;
+    }
+    
+    public void WriteBool(bool value)
+    {
+        WriteByte((byte)(value ? 1 : 0));
+    }
+    
+    public string ReadString()
+    {
+        int length = ReadInt();
+        byte[] bytes = new byte[length];
+        Read(bytes, 0, length);
+        return Encoding.UTF8.GetString(bytes);
+    }
+    
+    public void WriteString(string value)
+    {
+        byte[] bytes = Encoding.UTF8.GetBytes(value);
+        WriteInt(bytes.Length);
+        Write(bytes, 0, bytes.Length);
+    }
+    #endregion
+    
+    #region Unity特有类型支持
+    public Vector3 ReadVector3()
+    {
+        float x = ReadFloat();
+        float y = ReadFloat();
+        float z = ReadFloat();
+        return new Vector3(x, y, z);
+    }
+    
+    public void WriteVector3(Vector3 vector)
+    {
+        WriteFloat(vector.x);
+        WriteFloat(vector.y);
+        WriteFloat(vector.z);
+    }
+    
+    public Vector2 ReadVector2()
+    {
+        float x = ReadFloat();
+        float y = ReadFloat();
+        return new Vector2(x, y);
+    }
+    
+    public void WriteVector2(Vector2 vector)
+    {
+        WriteFloat(vector.x);
+        WriteFloat(vector.y);
+    }
+    #endregion
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="装饰器流" dir="auto" class="heading" id="装饰器流"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>装饰器流</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`StreamReader/StreamWriter`" dir="auto" class="heading" id="`StreamReader/StreamWriter`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>StreamReader/StreamWriter</code></h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>StreamReader/StreamWriter</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：使用 <code>StreamReader/StreamWriter</code>
+<ul>
+<li data-line="1" dir="auto"><span alt="PixPin_2025-10-20_13-07-59.png" src="PixPin_2025-10-20_13-07-59.png" class="internal-embed media-embed image-embed is-loaded"><img alt="PixPin_2025-10-20_13-07-59.png" src="lib/media/pixpin_2025-10-20_13-07-59.png"></span></li>
+</ul>
+</li>
+</ul></div><div class="mod-footer mod-ui"></div></div></div></div></div></div></div></div><div class="sidebar-right sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"></div><script defer="">let rs = document.querySelector(".sidebar-right"); rs.classList.add("is-collapsed"); if (window.innerWidth > 768) rs.classList.remove("is-collapsed"); rs.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-right-width"));</script></div></div></body></html>

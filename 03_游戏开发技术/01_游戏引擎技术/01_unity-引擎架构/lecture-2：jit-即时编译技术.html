@@ -1,0 +1,687 @@
+<!DOCTYPE html> <html><head>
+		<title>Lecture 2：JIT 即时编译技术</title>
+		<base href="..\..\../">
+		<meta id="root-path" root-path="..\..\../">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
+		<meta charset="UTF-8">
+		<meta name="description" content="MUBlog - Lecture 2：JIT 即时编译技术">
+		<meta property="og:title" content="Lecture 2：JIT 即时编译技术">
+		<meta property="og:description" content="MUBlog - Lecture 2：JIT 即时编译技术">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="03_游戏开发技术/01_游戏引擎技术/01_unity-引擎架构/lecture-2：jit-即时编译技术.html">
+		<meta property="og:image" content="lib\media\pasted-image-20250819111827.png">
+		<meta property="og:site_name" content="MUBlog">
+		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="lib/rss.xml"><script async="" id="webpage-script" src="lib/scripts/webpage.js" onload="this.onload=null;this.setAttribute(&quot;loaded&quot;, &quot;true&quot;)"></script><link rel="icon" href="lib/media/favicon.png"><style>body{--line-width:40em;--line-width-adaptive:40em;--file-line-width:40em;--sidebar-width:min(20em, 80vw);--collapse-arrow-size:11px;--tree-horizontal-spacing:0.6em;--tree-vertical-spacing:0.6em;--sidebar-margin:12px}.sidebar{height:100%;min-width:calc(var(--sidebar-width) + var(--divider-width-hover));max-width:calc(var(--sidebar-width) + var(--divider-width-hover));font-size:14px;z-index:10;position:relative;overflow:hidden;transition:min-width ease-in-out,max-width ease-in-out;transition-duration:.2s;contain:size}.sidebar-left{left:0}.sidebar-right{right:0}.sidebar.is-collapsed{min-width:0;max-width:0}body.floating-sidebars .sidebar{position:absolute}.sidebar-content{height:100%;min-width:calc(var(--sidebar-width) - var(--divider-width-hover));top:0;padding:var(--sidebar-margin);padding-top:4em;line-height:var(--line-height-tight);background-color:var(--background-secondary);transition:background-color,border-right,border-left,box-shadow;transition-duration:var(--color-fade-speed);transition-timing-function:ease-in-out;position:absolute;display:flex;flex-direction:column}.sidebar:not(.is-collapsed) .sidebar-content{min-width:calc(max(100%,var(--sidebar-width)) - 3px);max-width:calc(max(100%,var(--sidebar-width)) - 3px)}.sidebar-left .sidebar-content{left:0;border-top-right-radius:var(--radius-l);border-bottom-right-radius:var(--radius-l)}.sidebar-right .sidebar-content{right:0;border-top-left-radius:var(--radius-l);border-bottom-left-radius:var(--radius-l)}.sidebar:has(.sidebar-content:empty):has(.topbar-content:empty){display:none}.sidebar-topbar{height:2em;width:var(--sidebar-width);top:var(--sidebar-margin);padding-inline:var(--sidebar-margin);z-index:1;position:fixed;display:flex;align-items:center;transition:width ease-in-out;transition-duration:inherit}.sidebar.is-collapsed .sidebar-topbar{width:calc(2.3em + var(--sidebar-margin) * 2)}.sidebar .sidebar-topbar.is-collapsed{width:0}.sidebar-left .sidebar-topbar{left:0}.sidebar-right .sidebar-topbar{right:0}.topbar-content{overflow:hidden;overflow:clip;width:100%;height:100%;display:flex;align-items:center;transition:inherit}.sidebar.is-collapsed .topbar-content{width:0;transition:inherit}.clickable-icon.sidebar-collapse-icon{background-color:transparent;color:var(--icon-color-focused);padding:0!important;margin:0!important;height:100%!important;width:2.3em!important;margin-inline:0.14em!important;position:absolute}.sidebar-left .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);right:var(--sidebar-margin)}.sidebar-right .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);left:var(--sidebar-margin)}.clickable-icon.sidebar-collapse-icon svg.svg-icon{width:100%;height:100%}.sidebar-section-header{margin:0 0 1em 0;text-transform:uppercase;letter-spacing:.06em;font-weight:600}body{transition:background-color var(--color-fade-speed) ease-in-out}.webpage-container{display:flex;flex-direction:row;height:100%;width:100%;align-items:stretch;justify-content:center}.document-container{opacity:1;flex-basis:100%;max-width:100%;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;transition:opacity .2s ease-in-out;contain:inline-size}.hide{opacity:0;transition:opacity .2s ease-in-out}.document-container>.markdown-preview-view{margin:var(--sidebar-margin);margin-bottom:0;width:100%;width:-webkit-fill-available;width:-moz-available;width:fill-available;background-color:var(--background-primary);transition:background-color var(--color-fade-speed) ease-in-out;border-top-right-radius:var(--window-radius,var(--radius-m));border-top-left-radius:var(--window-radius,var(--radius-m));overflow-x:hidden!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;contain:inline-size}.document-container>.markdown-preview-view>.markdown-preview-sizer{padding-bottom:80vh!important;width:100%!important;max-width:var(--line-width)!important;flex-basis:var(--line-width)!important;transition:background-color var(--color-fade-speed) ease-in-out;contain:inline-size}.markdown-rendered img:not([width]),.view-content img:not([width]){max-width:100%;outline:0}.document-container>.view-content.embed{display:flex;padding:1em;height:100%;width:100%;align-items:center;justify-content:center}.document-container>.view-content.embed>*{max-width:100%;max-height:100%;object-fit:contain}:has(> :is(.math,table)){overflow-x:auto!important}.document-container>.view-content{overflow-x:auto;contain:content;padding:0;margin:0;height:100%}.scroll-highlight{position:absolute;width:100%;height:100%;pointer-events:none;z-index:1000;background-color:hsla(var(--color-accent-hsl),.25);opacity:0;padding:1em;inset:50%;translate:-50% -50%;border-radius:var(--radius-s)}</style><script defer="">async function loadIncludes(){if("file:"!=location.protocol){let e=document.querySelectorAll("include");for(let t=0;t<e.length;t++){let o=e[t],l=o.getAttribute("src");try{const e=await fetch(l);if(!e.ok){console.log("Could not include file: "+l),o?.remove();continue}let t=await e.text(),n=document.createRange().createContextualFragment(t),i=Array.from(n.children);for(let e of i)e.classList.add("hide"),e.style.transition="opacity 0.5s ease-in-out",setTimeout((()=>{e.classList.remove("hide")}),10);o.before(n),o.remove(),console.log("Included file: "+l)}catch(e){o?.remove(),console.log("Could not include file: "+l,e);continue}}}else{if(document.querySelectorAll("include").length>0){var e=document.createElement("div");e.id="error",e.textContent="Web server exports must be hosted on an http / web server to be viewed correctly.",e.style.position="fixed",e.style.top="50%",e.style.left="50%",e.style.transform="translate(-50%, -50%)",e.style.fontSize="1.5em",e.style.fontWeight="bold",e.style.textAlign="center",document.body.appendChild(e),document.querySelector(".document-container")?.classList.remove("hide")}}}document.addEventListener("DOMContentLoaded",(()=>{loadIncludes()}));let isFileProtocol="file:"==location.protocol;function waitLoadScripts(e,t){let o=e.map((e=>document.getElementById(e+"-script"))),l=0;!function e(){let n=o[l];l++,n&&"true"!=n.getAttribute("loaded")||l<o.length&&e(),l<o.length?n.addEventListener("load",e):t()}()}</script><link rel="stylesheet" href="lib/styles/obsidian.css"><link rel="stylesheet" href="lib/styles/theme.css"><link rel="preload" href="lib/styles/global-variable-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/global-variable-styles.css"></noscript><link rel="preload" href="lib/styles/supported-plugins.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/supported-plugins.css"></noscript><link rel="preload" href="lib/styles/main-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/main-styles.css"></noscript><link rel="preload" href="lib/styles/snippets.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/snippets.css"></noscript></head><body class="publish css-settings-manager styled-scrollbars theme-light show-inline-title ctp-rosepine-light ctp-mocha ctp-accent-rosewater anuppuccin-accent-toggle anp-current-line-border anp-callout-color-toggle anp-codeblock-numbers anp-list-toggle anp-table-width anp-toggle-preview anp-color-transition-toggle anp-button-metadata-toggle anp-toggle-metadata anp-toggle-scrollbars anp-h1-red anp-h1-divider anp-h2-peach anp-h3-green anp-h4-teal anp-h5-lavender anp-h6-mauve anp-decoration-toggle anp-bold-maroon anp-italic-green anp-highlight-yellow anp-colorful-frame-icon-toggle-dark anp-simple-rainbow-color-toggle anp-rainbow-file-toggle anp-simple-rainbow-title-toggle anp-simple-rainbow-icon-folder-toggle anp-simple-rainbow-indentation-toggle anp-simple-rainbow-collapse-toggle anp-card-layout anp-card-shadows anp-card-layout-filebrowser anp-theme-ext-light anp-theme-ext-dark anp-theme-ext-amoled ctp-atom-light ctp-atom-dark table-type-three-line table-header-color-blue table-row-alt-background-option table-dark-mode"><script defer="">let theme=localStorage.getItem("theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");"dark"==theme?(document.body.classList.add("theme-dark"),document.body.classList.remove("theme-light")):(document.body.classList.add("theme-light"),document.body.classList.remove("theme-dark")),window.innerWidth<480?document.body.classList.add("is-phone"):window.innerWidth<768?document.body.classList.add("is-tablet"):window.innerWidth<1024?document.body.classList.add("is-small-screen"):document.body.classList.add("is-large-screen")</script><div class="webpage-container workspace"><div class="sidebar-left sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"><label class="theme-toggle-container" for="theme_toggle"><input class="theme-toggle-input" type="checkbox" id="theme_toggle"><div class="toggle-background"></div></label></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"><include src="lib/html/file-tree.html"></include></div><script defer="">let ls = document.querySelector(".sidebar-left"); ls.classList.add("is-collapsed"); if (window.innerWidth > 768) ls.classList.remove("is-collapsed"); ls.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-left-width"));</script></div><div class="document-container markdown-reading-view hide"><div class="markdown-preview-view markdown-rendered allow-fold-headings allow-fold-lists is-readable-line-width"><style id="MJX-CHTML-styles">mjx-c.mjx-c1D43E.TEX-I::before{padding:.683em .889em 0 0;content:"K"}mjx-c.mjx-c52::before{padding:.683em .736em .022em 0;content:"R"}mjx-c.mjx-c1D42B.TEX-B::before{padding:.45em .474em 0 0;content:"r"}mjx-c.mjx-c1D428.TEX-B::before{padding:.452em .575em .005em 0;content:"o"}mjx-c.mjx-c1D41D.TEX-B::before{padding:.694em .639em .006em 0;content:"d"}mjx-c.mjx-c3C::before{padding:.54em .778em .04em 0;content:"<"}mjx-c.mjx-c221E::before{padding:.442em 1em .011em 0;content:"∞"}mjx-c.mjx-c1D429.TEX-B::before{padding:.45em .639em .194em 0;content:"p"}mjx-c.mjx-cB1::before{padding:.666em .778em 0 0;content:"±"}mjx-c.mjx-c221A::before{padding:.8em .853em .2em 0;content:"√"}mjx-c.mjx-c47::before{padding:.705em .785em .022em 0;content:"G"}mjx-c.mjx-c66::before{padding:.705em .372em 0 0;content:"f"}mjx-c.mjx-c71::before{padding:.442em .528em .194em 0;content:"q"}mjx-c.mjx-c5E.TEX-B::before{padding:.694em .575em 0 0;content:"^"}mjx-c.mjx-c1D42D.TEX-B::before{padding:.635em .447em .005em 0;content:"t"}mjx-c.mjx-c1D40E.TEX-B::before{padding:.696em .864em .01em 0;content:"O"}mjx-c.mjx-c1D403.TEX-B::before{padding:.686em .882em 0 0;content:"D"}mjx-c.mjx-c1D40F.TEX-B::before{padding:.686em .786em 0 0;content:"P"}mjx-c.mjx-c2219::before{padding:.444em .5em 0 0;content:"∙"}mjx-c.mjx-c1D404.TEX-B::before{padding:.68em .756em 0 0;content:"E"}mjx-c.mjx-c20D7.TEX-VB::before{padding:.723em .575em 0 0;content:"→"}mjx-c.mjx-c7B::before{padding:.75em .5em .25em 0;content:"{"}mjx-c.mjx-c7D::before{padding:.75em .5em .25em 0;content:"}"}mjx-c.mjx-c26::before{padding:.716em .778em .022em 0;content:"&"}mjx-c.mjx-c2261::before{padding:.464em .778em 0 0;content:"≡"}mjx-c.mjx-c3A6::before{padding:.683em .722em 0 0;content:"Φ"}mjx-c.mjx-c57::before{padding:.683em 1.028em .022em 0;content:"W"}mjx-c.mjx-c2035.TEX-A::before{padding:.56em .275em 0 0;content:"‵"}mjx-c.mjx-c1D446.TEX-I::before{padding:.705em .645em .022em 0;content:"S"}mjx-c.mjx-c1D719.TEX-I::before{padding:.694em .596em .205em 0;content:"ϕ"}mjx-c.mjx-c7C::before{padding:.75em .278em .249em 0;content:"|"}.mjx-stretched mjx-c.mjx-c2013::before{content:"–"}mjx-stretchy-h.mjx-c2013 mjx-ext mjx-c::before{content:"–";padding:.285em 0 0}mjx-c.mjx-c1D52E.TEX-FR::before{padding:.479em .489em .219em 0;content:"q"}mjx-c.mjx-c1D52D.TEX-FR::before{padding:.541em .5em .212em 0;content:"p"}mjx-c.mjx-c1D43A.TEX-I::before{padding:.705em .786em .022em 0;content:"G"}mjx-c.mjx-c1D439.TEX-I::before{padding:.68em .749em 0 0;content:"F"}mjx-c.mjx-c3A9::before{padding:.704em .722em 0 0;content:"Ω"}mjx-c.mjx-c2248::before{padding:.483em .778em 0 0;content:"≈"}mjx-c.mjx-c222B.TEX-S1::before{padding:.805em .61em .306em 0;content:"∫"}mjx-c.mjx-c200B::before{padding:0;content:""}mjx-c.mjx-c1D44A.TEX-I::before{padding:.683em 1.048em .022em 0;content:"W"}mjx-c.mjx-c1D443.TEX-I::before{padding:.683em .751em 0 0;content:"P"}mjx-c.mjx-c1D45E.TEX-I::before{padding:.442em .46em .194em 0;content:"q"}mjx-c.mjx-c2208::before{padding:.54em .667em .04em 0;content:"∈"}mjx-c.mjx-c4E.TEX-C::before{padding:.789em .979em .05em 0;content:"N"}mjx-c.mjx-c1D712.TEX-I::before{padding:.442em .626em .204em 0;content:"χ"}mjx-c.mjx-c53::before{padding:.705em .556em .022em 0;content:"S"}mjx-c.mjx-c4D::before{padding:.683em .917em 0 0;content:"M"}mjx-c.mjx-c1D44B.TEX-I::before{padding:.683em .852em 0 0;content:"X"}mjx-c.mjx-c56::before{padding:.683em .75em .022em 0;content:"V"}mjx-c.mjx-c45::before{padding:.68em .681em 0 0;content:"E"}mjx-c.mjx-c2264::before{padding:.636em .778em .138em 0;content:"≤"}mjx-c.mjx-c1D70E.TEX-I::before{padding:.431em .571em .011em 0;content:"σ"}mjx-c.mjx-c1D707.TEX-I::before{padding:.442em .603em .216em 0;content:"μ"}mjx-c.mjx-c1D708.TEX-I::before{padding:.442em .53em 0 0;content:"ν"}mjx-c.mjx-c46::before{padding:.68em .653em 0 0;content:"F"}mjx-c.mjx-c7B.TEX-S3::before{padding:1.45em .75em .949em 0;content:"{"}mjx-c.mjx-c7D.TEX-S3::before{padding:1.45em .75em .949em 0;content:"}"}mjx-c.mjx-c1D438.TEX-I::before{padding:.68em .764em 0 0;content:"E"}mjx-c.mjx-c222B.TEX-S2::before{padding:1.36em .944em .862em 0;content:"∫"}mjx-c.mjx-c1D43B.TEX-I::before{padding:.683em .888em 0 0;content:"H"}mjx-c.mjx-c1D70C.TEX-I::before{padding:.442em .517em .216em 0;content:"ρ"}mjx-c.mjx-c1D702.TEX-I::before{padding:.442em .497em .216em 0;content:"η"}mjx-c.mjx-c221A.TEX-S2::before{padding:1.15em 1.02em .65em 0;content:"√"}mjx-c.mjx-c3E::before{padding:.54em .778em .04em 0;content:">"}mjx-munderover{display:inline-block;text-align:left}mjx-munderover:not([limits=false]){padding-top:.1em}mjx-munderover:not([limits=false])>*{display:block}mjx-c.mjx-c221A.TEX-S1::before{padding:.85em 1.02em .35em 0;content:"√"}mjx-c.mjx-c3A::before{padding:.43em .278em 0 0;content:":"}mjx-c.mjx-c211D.TEX-A::before{padding:.683em .722em 0 0;content:"R"}mjx-c.mjx-c3B::before{padding:.43em .278em .194em 0;content:";"}mjx-c.mjx-c21A6::before{padding:.511em 1em .011em 0;content:"↦"}mjx-c.mjx-c1D41B.TEX-B::before{padding:.694em .639em .006em 0;content:"b"}mjx-c.mjx-c2211.TEX-S2::before{padding:.95em 1.444em .45em 0;content:"∑"}mjx-c.mjx-c1D457.TEX-I::before{padding:.661em .412em .204em 0;content:"j"}mjx-c.mjx-c38::before{padding:.666em .5em .022em 0;content:"8"}mjx-c.mjx-c41::before{padding:.716em .75em 0 0;content:"A"}mjx-c.mjx-c43::before{padding:.705em .722em .021em 0;content:"C"}mjx-msqrt{display:inline-block;text-align:left}mjx-root{display:inline-block;white-space:nowrap}mjx-surd{display:inline-block;vertical-align:top}mjx-sqrt{display:inline-block;padding-top:.07em}mjx-sqrt>mjx-box{border-top:.07em solid}mjx-sqrt.mjx-tall>mjx-box{padding-left:.3em;margin-left:-.3em}mjx-c.mjx-c1D435.TEX-I::before{padding:.683em .759em 0 0;content:"B"}mjx-c.mjx-c1D436.TEX-I::before{padding:.705em .76em .022em 0;content:"C"}mjx-c.mjx-c28.TEX-S3::before{padding:1.45em .736em .949em 0;content:"("}mjx-c.mjx-c29.TEX-S3::before{padding:1.45em .736em .949em 0;content:")"}mjx-c.mjx-c42::before{padding:.683em .708em 0 0;content:"B"}mjx-c.mjx-c1D449.TEX-I::before{padding:.683em .769em .022em 0;content:"V"}mjx-c.mjx-c1D462.TEX-I::before{padding:.442em .572em .011em 0;content:"u"}mjx-c.mjx-c221A.TEX-S4::before{padding:1.75em 1.02em 1.25em 0;content:"√"}mjx-c.mjx-c22C6::before{padding:.486em .5em 0 0;content:"⋆"}mjx-c.mjx-c1D42E.TEX-B::before{padding:.45em .639em .006em 0;content:"u"}mjx-c.mjx-c2E::before{padding:.12em .278em 0 0;content:"."}mjx-c.mjx-c1D43C.TEX-I::before{padding:.683em .504em 0 0;content:"I"}mjx-c.mjx-c1D43F.TEX-I::before{padding:.683em .681em 0 0;content:"L"}mjx-c.mjx-c1D458.TEX-I::before{padding:.694em .521em .011em 0;content:"k"}mjx-c.mjx-c28.TEX-S1::before{padding:.85em .458em .349em 0;content:"("}mjx-c.mjx-c29.TEX-S1::before{padding:.85em .458em .349em 0;content:")"}mjx-c.mjx-c6D::before{padding:.442em .833em 0 0;content:"m"}mjx-c.mjx-c1D425.TEX-B::before{padding:.694em .319em 0 0;content:"l"}mjx-c.mjx-c1D421.TEX-B::before{padding:.694em .639em 0 0;content:"h"}mjx-c.mjx-c62::before{padding:.694em .556em .011em 0;content:"b"}mjx-c.mjx-c1D42F.TEX-B::before{padding:.444em .607em 0 0;content:"v"}mjx-c.mjx-c2225::before{padding:.75em .5em .25em 0;content:"∥"}mjx-c.mjx-c1D441.TEX-I::before{padding:.683em .888em 0 0;content:"N"}mjx-c.mjx-c2211.TEX-S1::before{padding:.75em 1.056em .25em 0;content:"∑"}mjx-stretchy-v.mjx-c7B mjx-beg mjx-c::before{content:"⎧";padding:.899em .889em .01em 0}mjx-stretchy-v.mjx-c7B mjx-ext mjx-c::before{content:"⎪";width:.889em}mjx-stretchy-v.mjx-c7B mjx-end mjx-c::before{content:"⎩";padding:.01em .889em .899em 0}mjx-stretchy-v.mjx-c7B mjx-mid mjx-c::before{content:"⎨";padding:1.16em .889em .66em 0}mjx-stretchy-v.mjx-c7B>mjx-mid{margin-top:-.91em;margin-bottom:-.91em}mjx-stretchy-v.mjx-c7B>mjx-end{margin-top:-.909em}mjx-stretchy-v.mjx-c7B>mjx-ext{height:50%;border-top-width:.879em;border-bottom-width:.879em}mjx-c.mjx-c2217::before{padding:.465em .5em 0 0;content:"∗"}mjx-c.mjx-c68::before{padding:.694em .556em 0 0;content:"h"}mjx-c.mjx-c1D70B.TEX-I::before{padding:.431em .57em .011em 0;content:"π"}mjx-c.mjx-c1D714.TEX-I::before{padding:.443em .622em .011em 0;content:"ω"}mjx-c.mjx-c37::before{padding:.676em .5em .022em 0;content:"7"}mjx-mtable{display:inline-block;text-align:center;vertical-align:.25em;position:relative;box-sizing:border-box;border-spacing:0px;border-collapse:collapse}mjx-mstyle[size="s"] mjx-mtable{vertical-align:.354em}mjx-labels{position:absolute;left:0;top:0}mjx-table{display:inline-block;vertical-align:-.5ex;box-sizing:border-box}mjx-table>mjx-itable{vertical-align:middle;text-align:left;box-sizing:border-box}mjx-labels>mjx-itable{position:absolute;top:0}mjx-mtable[justify=left]{text-align:left}mjx-mtable[justify=right]{text-align:right}mjx-mtable[justify=left][side=left]{padding-right:0!important}mjx-mtable[justify=left][side=right]{padding-left:0!important}mjx-mtable[justify=right][side=left]{padding-right:0!important}mjx-mtable[justify=right][side=right]{padding-left:0!important}mjx-mtable[align]{vertical-align:baseline}mjx-mtable[align=top]>mjx-table{vertical-align:top}mjx-mtable[align=bottom]>mjx-table{vertical-align:bottom}mjx-mtable[side=right] mjx-labels{min-width:100%}mjx-mtr{display:table-row;text-align:left}mjx-mtr[rowalign=top]>mjx-mtd{vertical-align:top}mjx-mtr[rowalign=center]>mjx-mtd{vertical-align:middle}mjx-mtr[rowalign=bottom]>mjx-mtd{vertical-align:bottom}mjx-mtr[rowalign=baseline]>mjx-mtd{vertical-align:baseline}mjx-mtr[rowalign=axis]>mjx-mtd{vertical-align:.25em}mjx-mtd{display:table-cell;text-align:center;padding:.215em .4em}mjx-mtd:first-child{padding-left:0}mjx-mtd:last-child{padding-right:0}mjx-mtable>*>mjx-itable>:first-child>mjx-mtd{padding-top:0}mjx-mtable>*>mjx-itable>:last-child>mjx-mtd{padding-bottom:0}mjx-tstrut{display:inline-block;height:1em;vertical-align:-.25em}mjx-labels[align=left]>mjx-mtr>mjx-mtd{text-align:left}mjx-labels[align=right]>mjx-mtr>mjx-mtd{text-align:right}mjx-mtd[extra]{padding:0}mjx-mtd[rowalign=top]{vertical-align:top}mjx-mtd[rowalign=center]{vertical-align:middle}mjx-mtd[rowalign=bottom]{vertical-align:bottom}mjx-mtd[rowalign=baseline]{vertical-align:baseline}mjx-mtd[rowalign=axis]{vertical-align:.25em}mjx-texatom{display:inline-block;text-align:left}mjx-mrow{display:inline-block;text-align:left}mjx-msub{display:inline-block;text-align:left}mjx-mspace{display:inline-block;text-align:left}mjx-mtext{display:inline-block;text-align:left}mjx-munder{display:inline-block;text-align:left}mjx-over{text-align:left}mjx-munder:not([limits=false]){display:inline-table}mjx-munder>mjx-row{text-align:left}mjx-under{padding-bottom:.1em}mjx-mover{display:inline-block;text-align:left}mjx-mover:not([limits=false]){padding-top:.1em}mjx-mover:not([limits=false])>*{display:block;text-align:left}mjx-msubsup{display:inline-block;text-align:left}mjx-script{display:inline-block;padding-right:.05em;padding-left:.033em}mjx-script>mjx-spacer{display:block}mjx-mfrac{display:inline-block;text-align:left}mjx-frac{display:inline-block;vertical-align:.17em;padding:0 .22em}mjx-frac[type="d"]{vertical-align:.04em}mjx-frac[delims]{padding:0 .1em}mjx-frac[atop]{padding:0 .12em}mjx-frac[atop][delims]{padding:0}mjx-dtable{display:inline-table;width:100%}mjx-dtable>*{font-size:2000%}mjx-dbox{display:block;font-size:5%}mjx-num{display:block;text-align:center}mjx-den{display:block;text-align:center}mjx-mfrac[bevelled]>mjx-num{display:inline-block}mjx-mfrac[bevelled]>mjx-den{display:inline-block}mjx-den[align=right],mjx-num[align=right]{text-align:right}mjx-den[align=left],mjx-num[align=left]{text-align:left}mjx-nstrut{display:inline-block;height:.054em;width:0;vertical-align:-.054em}mjx-nstrut[type="d"]{height:.217em;vertical-align:-.217em}mjx-dstrut{display:inline-block;height:.505em;width:0}mjx-dstrut[type="d"]{height:.726em}mjx-line{display:block;box-sizing:border-box;min-height:1px;height:.06em;border-top:.06em solid;margin:.06em -.1em;overflow:hidden}mjx-line[type="d"]{margin:.18em -.1em}mjx-stretchy-v.mjx-c28 mjx-beg mjx-c::before{content:"⎛";padding:1.154em .875em .655em 0}mjx-stretchy-v.mjx-c28 mjx-ext mjx-c::before{content:"⎜";width:.875em}mjx-stretchy-v.mjx-c28 mjx-end mjx-c::before{content:"⎝";padding:1.165em .875em .644em 0}mjx-stretchy-v.mjx-c28>mjx-end{margin-top:-1.809em}mjx-stretchy-v.mjx-c28>mjx-ext{border-top-width:1.779em;border-bottom-width:1.779em}mjx-stretchy-v.mjx-c29 mjx-beg mjx-c::before{content:"⎞";padding:1.154em .875em .655em 0}mjx-stretchy-v.mjx-c29 mjx-ext mjx-c::before{content:"⎟";width:.875em}mjx-stretchy-v.mjx-c29 mjx-end mjx-c::before{content:"⎠";padding:1.165em .875em .644em 0}mjx-stretchy-v.mjx-c29>mjx-end{margin-top:-1.809em}mjx-stretchy-v.mjx-c29>mjx-ext{border-top-width:1.779em;border-bottom-width:1.779em}mjx-stretchy-v.mjx-c5B mjx-beg mjx-c::before{content:"⎡";padding:1.154em .667em .645em 0}mjx-stretchy-v.mjx-c5B mjx-ext mjx-c::before{content:"⎢";width:.667em}mjx-stretchy-v.mjx-c5B mjx-end mjx-c::before{content:"⎣";padding:1.155em .667em .644em 0}mjx-stretchy-v.mjx-c5B>mjx-end{margin-top:-1.799em}mjx-stretchy-v.mjx-c5B>mjx-ext{border-top-width:1.769em;border-bottom-width:1.769em}mjx-stretchy-v.mjx-c5D mjx-beg mjx-c::before{content:"⎤";padding:1.154em .667em .645em 0}mjx-stretchy-v.mjx-c5D mjx-ext mjx-c::before{content:"⎥";width:.667em}mjx-stretchy-v.mjx-c5D mjx-end mjx-c::before{content:"⎦";padding:1.155em .667em .644em 0}mjx-stretchy-v.mjx-c5D>mjx-end{margin-top:-1.799em}mjx-stretchy-v.mjx-c5D>mjx-ext{border-top-width:1.769em;border-bottom-width:1.769em}mjx-stretchy-h.mjx-c23DF mjx-beg mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF mjx-ext mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF mjx-end mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF mjx-mid mjx-c::before{content:"";padding:.32em 0 .2em}mjx-stretchy-h.mjx-c23DF>mjx-ext{width:50%}mjx-c.mjx-c1D466.TEX-I::before{padding:.442em .49em .205em 0;content:"y"}mjx-c.mjx-c5B.TEX-S3::before{padding:1.45em .528em .949em 0;content:"["}mjx-c.mjx-c5D.TEX-S3::before{padding:1.45em .528em .949em 0;content:"]"}mjx-c.mjx-c30::before{padding:.666em .5em .022em 0;content:"0"}mjx-c.mjx-c2212::before{padding:.583em .778em .082em 0;content:"−"}mjx-c.mjx-c1D411.TEX-B::before{padding:.686em .862em .011em 0;content:"R"}mjx-c.mjx-c1D703.TEX-I::before{padding:.705em .469em .01em 0;content:"θ"}mjx-c.mjx-c63::before{padding:.448em .444em .011em 0;content:"c"}mjx-c.mjx-c6F::before{padding:.448em .5em .01em 0;content:"o"}mjx-c.mjx-c73::before{padding:.448em .394em .011em 0;content:"s"}mjx-c.mjx-c2061::before{padding:0;content:""}mjx-c.mjx-c69::before{padding:.669em .278em 0 0;content:"i"}mjx-c.mjx-c6E::before{padding:.442em .556em 0 0;content:"n"}mjx-c.mjx-c1D451.TEX-I::before{padding:.694em .52em .01em 0;content:"d"}mjx-c.mjx-c1D437.TEX-I::before{padding:.683em .828em 0 0;content:"D"}mjx-c.mjx-c1D447.TEX-I::before{padding:.677em .704em 0 0;content:"T"}mjx-c.mjx-c1D464.TEX-I::before{padding:.443em .716em .011em 0;content:"w"}mjx-c.mjx-c22C5::before{padding:.31em .278em 0 0;content:"⋅"}mjx-c.mjx-c1D412.TEX-B::before{padding:.697em .639em .011em 0;content:"S"}mjx-c.mjx-c1D6FC.TEX-I::before{padding:.442em .64em .011em 0;content:"α"}mjx-c.mjx-c1D445.TEX-I::before{padding:.683em .759em .021em 0;content:"R"}mjx-c.mjx-c34::before{padding:.677em .5em 0 0;content:"4"}mjx-c.mjx-c35::before{padding:.666em .5em .022em 0;content:"5"}mjx-c.mjx-c2218::before{padding:.444em .5em 0 0;content:"∘"}mjx-c.mjx-c1D434.TEX-I::before{padding:.716em .75em 0 0;content:"A"}mjx-c.mjx-c2026::before{padding:.12em 1.172em 0 0;content:"…"}mjx-c.mjx-c1D431.TEX-B::before{padding:.444em .607em 0 0;content:"x"}mjx-c.mjx-c1D400.TEX-B::before{padding:.698em .869em 0 0;content:"A"}mjx-c.mjx-c22EF::before{padding:.31em 1.172em 0 0;content:"⋯"}mjx-c.mjx-c1D413.TEX-B::before{padding:.675em .8em 0 0;content:"T"}mjx-c.mjx-c28.TEX-B::before{padding:.75em .447em .249em 0;content:"("}mjx-c.mjx-c1D41C.TEX-B::before{padding:.453em .511em .006em 0;content:"c"}mjx-c.mjx-c29.TEX-B::before{padding:.75em .447em .249em 0;content:")"}mjx-c.mjx-c2212.TEX-B::before{padding:.281em .894em 0 0;content:"−"}mjx-c.mjx-c33::before{padding:.665em .5em .022em 0;content:"3"}mjx-c.mjx-c44::before{padding:.683em .764em 0 0;content:"D"}mjx-c.mjx-cA0::before{padding:0 .25em 0 0;content:" "}mjx-c.mjx-c70::before{padding:.442em .556em .194em 0;content:"p"}mjx-c.mjx-c74::before{padding:.615em .389em .01em 0;content:"t"}mjx-c.mjx-c78::before{padding:.431em .528em 0 0;content:"x"}mjx-c.mjx-c79::before{padding:.431em .528em .204em 0;content:"y"}mjx-c.mjx-c7A::before{padding:.431em .444em 0 0;content:"z"}mjx-c.mjx-c54::before{padding:.677em .722em 0 0;content:"T"}mjx-c.mjx-c76::before{padding:.431em .528em .011em 0;content:"v"}mjx-c.mjx-c65::before{padding:.448em .444em .011em 0;content:"e"}mjx-c.mjx-c72::before{padding:.442em .392em 0 0;content:"r"}mjx-c.mjx-c1D467.TEX-I::before{padding:.442em .465em .011em 0;content:"z"}mjx-c.mjx-c1D453.TEX-I::before{padding:.705em .55em .205em 0;content:"f"}mjx-c.mjx-c1D6FD.TEX-I::before{padding:.705em .566em .194em 0;content:"β"}mjx-c.mjx-c1D6FE.TEX-I::before{padding:.441em .543em .216em 0;content:"γ"}mjx-c.mjx-c1D427.TEX-B::before{padding:.45em .639em 0 0;content:"n"}mjx-c.mjx-c1D408.TEX-B::before{padding:.686em .436em 0 0;content:"I"}mjx-c.mjx-c1D40D.TEX-B::before{padding:.686em .9em 0 0;content:"N"}mjx-c.mjx-c50::before{padding:.683em .681em 0 0;content:"P"}mjx-c.mjx-c20D7.TEX-V::before{padding:.714em .5em 0 0;content:"→"}mjx-c.mjx-c4C::before{padding:.683em .625em 0 0;content:"L"}mjx-c.mjx-c6B::before{padding:.694em .528em 0 0;content:"k"}mjx-c.mjx-c2D::before{padding:.252em .333em 0 0;content:"-"}mjx-c.mjx-c61::before{padding:.448em .5em .011em 0;content:"a"}mjx-c.mjx-c20::before{padding:0 .25em 0 0;content:" "}mjx-c.mjx-c2F::before{padding:.75em .5em .25em 0;content:"/"}mjx-c.mjx-c67::before{padding:.453em .5em .206em 0;content:"g"}mjx-c.mjx-c64::before{padding:.694em .556em .011em 0;content:"d"}mjx-c.mjx-c5E::before{padding:.694em .5em 0 0;content:"^"}mjx-c.mjx-c1D448.TEX-I::before{padding:.683em .767em .022em 0;content:"U"}mjx-c.mjx-cD7::before{padding:.491em .778em 0 0;content:"×"}mjx-c.mjx-c5B::before{padding:.75em .278em .25em 0;content:"["}mjx-c.mjx-c5D::before{padding:.75em .278em .25em 0;content:"]"}mjx-c.mjx-c21D2::before{padding:.525em 1em .024em 0;content:"⇒"}mjx-c.mjx-c75::before{padding:.442em .556em .011em 0;content:"u"}mjx-c.mjx-c77::before{padding:.431em .722em .011em 0;content:"w"}mjx-c.mjx-c6C::before{padding:.694em .278em 0 0;content:"l"}mjx-c.mjx-c1D440.TEX-I::before{padding:.683em 1.051em 0 0;content:"M"}mjx-c.mjx-c1D465.TEX-I::before{padding:.442em .572em .011em 0;content:"x"}mjx-c.mjx-cD7::before{padding:.491em .778em 0 0;content:"×"}mjx-c.mjx-c32::before{padding:.666em .5em 0 0;content:"2"}mjx-c.mjx-c1D463.TEX-I::before{padding:.443em .485em .011em 0;content:"v"}mjx-c.mjx-c1D45D.TEX-I::before{padding:.442em .503em .194em 0;content:"p"}mjx-c.mjx-c2192::before{padding:.511em 1em .011em 0;content:"→"}mjx-c.mjx-c1D44E.TEX-I::before{padding:.441em .529em .01em 0;content:"a"}mjx-c.mjx-c1D44F.TEX-I::before{padding:.694em .429em .011em 0;content:"b"}mjx-c.mjx-c1D459.TEX-I::before{padding:.694em .298em .011em 0;content:"l"}mjx-c.mjx-c1D452.TEX-I::before{padding:.442em .466em .011em 0;content:"e"}mjx-mn{display:inline-block;text-align:left}mjx-c.mjx-c1D442.TEX-I::before{padding:.704em .763em .022em 0;content:"O"}mjx-c.mjx-c31::before{padding:.666em .5em 0 0;content:"1"}mjx-container[jax=CHTML]{line-height:0}mjx-container [space="1"]{margin-left:.111em}mjx-container [space="2"]{margin-left:.167em}mjx-container [space="3"]{margin-left:.222em}mjx-container [space="4"]{margin-left:.278em}mjx-container [space="5"]{margin-left:.333em}mjx-container [rspace="1"]{margin-right:.111em}mjx-container [rspace="2"]{margin-right:.167em}mjx-container [rspace="3"]{margin-right:.222em}mjx-container [rspace="4"]{margin-right:.278em}mjx-container [rspace="5"]{margin-right:.333em}mjx-container [size="s"]{font-size:70.7%}mjx-container [size=ss]{font-size:50%}mjx-container [size=Tn]{font-size:60%}mjx-container [size=sm]{font-size:85%}mjx-container [size=lg]{font-size:120%}mjx-container [size=Lg]{font-size:144%}mjx-container [size=LG]{font-size:173%}mjx-container [size=hg]{font-size:207%}mjx-container [size=HG]{font-size:249%}mjx-container [width=full]{width:100%}mjx-box{display:inline-block}mjx-block{display:block}mjx-itable{display:inline-table}mjx-row{display:table-row}mjx-row>*{display:table-cell}mjx-mtext{display:inline-block}mjx-mstyle{display:inline-block}mjx-merror{display:inline-block;color:red;background-color:#ff0}mjx-mphantom{visibility:hidden}mjx-assistive-mml{top:0;left:0;clip:rect(1px,1px,1px,1px);user-select:none;position:absolute!important;padding:1px 0 0!important;border:0!important;display:block!important;width:auto!important;overflow:hidden!important}mjx-assistive-mml[display=block]{width:100%!important}mjx-math{display:inline-block;text-align:left;line-height:0;text-indent:0;font-style:normal;font-weight:400;font-size:100%;font-size-adjust:none;letter-spacing:normal;border-collapse:collapse;overflow-wrap:normal;word-spacing:normal;white-space:nowrap;direction:ltr;padding:1px 0}mjx-container[jax=CHTML][display=true]{display:block;text-align:center;margin:1em 0}mjx-container[jax=CHTML][display=true][width=full]{display:flex}mjx-container[jax=CHTML][display=true] mjx-math{padding:0}mjx-container[jax=CHTML][justify=left]{text-align:left}mjx-container[jax=CHTML][justify=right]{text-align:right}mjx-mi{display:inline-block;text-align:left}mjx-c{display:inline-block}mjx-utext{display:inline-block;padding:.75em 0 .2em}mjx-mo{display:inline-block;text-align:left}mjx-stretchy-h{display:inline-table;width:100%}mjx-stretchy-h>*{display:table-cell;width:0}mjx-stretchy-h>*>mjx-c{display:inline-block;transform:scaleX(1)}mjx-stretchy-h>*>mjx-c::before{display:inline-block;width:initial}mjx-stretchy-h>mjx-ext{overflow:clip visible;width:100%}mjx-stretchy-h>mjx-ext>mjx-c::before{transform:scaleX(500)}mjx-stretchy-h>mjx-ext>mjx-c{width:0}mjx-stretchy-h>mjx-beg>mjx-c{margin-right:-.1em}mjx-stretchy-h>mjx-end>mjx-c{margin-left:-.1em}mjx-stretchy-v{display:inline-block}mjx-stretchy-v>*{display:block}mjx-stretchy-v>mjx-beg{height:0}mjx-stretchy-v>mjx-end>mjx-c{display:block}mjx-stretchy-v>*>mjx-c{transform:scaleY(1);transform-origin:left center;overflow:hidden}mjx-stretchy-v>mjx-ext{display:block;height:100%;box-sizing:border-box;border:0 solid transparent;overflow:visible clip}mjx-stretchy-v>mjx-ext>mjx-c::before{width:initial;box-sizing:border-box}mjx-stretchy-v>mjx-ext>mjx-c{transform:scaleY(500) translateY(.075em);overflow:visible}mjx-mark{display:inline-block;height:0}mjx-msup{display:inline-block;text-align:left}mjx-c::before{display:block;width:0}.MJX-TEX{font-family:MJXZERO,MJXTEX}.TEX-B{font-family:MJXZERO,MJXTEX-B}.TEX-I{font-family:MJXZERO,MJXTEX-I}.TEX-MI{font-family:MJXZERO,MJXTEX-MI}.TEX-BI{font-family:MJXZERO,MJXTEX-BI}.TEX-S1{font-family:MJXZERO,MJXTEX-S1}.TEX-S2{font-family:MJXZERO,MJXTEX-S2}.TEX-S3{font-family:MJXZERO,MJXTEX-S3}.TEX-S4{font-family:MJXZERO,MJXTEX-S4}.TEX-A{font-family:MJXZERO,MJXTEX-A}.TEX-C{font-family:MJXZERO,MJXTEX-C}.TEX-CB{font-family:MJXZERO,MJXTEX-CB}.TEX-FR{font-family:MJXZERO,MJXTEX-FR}.TEX-FRB{font-family:MJXZERO,MJXTEX-FRB}.TEX-SS{font-family:MJXZERO,MJXTEX-SS}.TEX-SSB{font-family:MJXZERO,MJXTEX-SSB}.TEX-SSI{font-family:MJXZERO,MJXTEX-SSI}.TEX-SC{font-family:MJXZERO,MJXTEX-SC}.TEX-T{font-family:MJXZERO,MJXTEX-T}.TEX-V{font-family:MJXZERO,MJXTEX-V}.TEX-VB{font-family:MJXZERO,MJXTEX-VB}mjx-stretchy-h mjx-c,mjx-stretchy-v mjx-c{font-family:MJXZERO,MJXTEX-S1,MJXTEX-S4,MJXTEX,MJXTEX-A!important}@font-face{font-family:MJXZERO;src:url("lib/fonts/mathjax_zero.woff") format("woff")}@font-face{font-family:MJXTEX;src:url("lib/fonts/mathjax_main-regular.woff") format("woff")}@font-face{font-family:MJXTEX-B;src:url("lib/fonts/mathjax_main-bold.woff") format("woff")}@font-face{font-family:MJXTEX-I;src:url("lib/fonts/mathjax_math-italic.woff") format("woff")}@font-face{font-family:MJXTEX-MI;src:url("lib/fonts/mathjax_main-italic.woff") format("woff")}@font-face{font-family:MJXTEX-BI;src:url("lib/fonts/mathjax_math-bolditalic.woff") format("woff")}@font-face{font-family:MJXTEX-S1;src:url("lib/fonts/mathjax_size1-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S2;src:url("lib/fonts/mathjax_size2-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S3;src:url("lib/fonts/mathjax_size3-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S4;src:url("lib/fonts/mathjax_size4-regular.woff") format("woff")}@font-face{font-family:MJXTEX-A;src:url("lib/fonts/mathjax_ams-regular.woff") format("woff")}@font-face{font-family:MJXTEX-C;src:url("lib/fonts/mathjax_calligraphic-regular.woff") format("woff")}@font-face{font-family:MJXTEX-CB;src:url("lib/fonts/mathjax_calligraphic-bold.woff") format("woff")}@font-face{font-family:MJXTEX-FR;src:url("lib/fonts/mathjax_fraktur-regular.woff") format("woff")}@font-face{font-family:MJXTEX-FRB;src:url("lib/fonts/mathjax_fraktur-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SS;src:url("lib/fonts/mathjax_sansserif-regular.woff") format("woff")}@font-face{font-family:MJXTEX-SSB;src:url("lib/fonts/mathjax_sansserif-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SSI;src:url("lib/fonts/mathjax_sansserif-italic.woff") format("woff")}@font-face{font-family:MJXTEX-SC;src:url("lib/fonts/mathjax_script-regular.woff") format("woff")}@font-face{font-family:MJXTEX-T;src:url("lib/fonts/mathjax_typewriter-regular.woff") format("woff")}@font-face{font-family:MJXTEX-V;src:url("lib/fonts/mathjax_vector-regular.woff") format("woff")}@font-face{font-family:MJXTEX-VB;src:url("lib/fonts/mathjax_vector-bold.woff") format("woff")}mjx-c.mjx-c1D45F.TEX-I::before{padding:.442em .451em .011em 0;content:"r"}mjx-c.mjx-c210E.TEX-I::before{padding:.694em .576em .011em 0;content:"h"}mjx-c.mjx-c1D460.TEX-I::before{padding:.442em .469em .01em 0;content:"s"}mjx-c.mjx-c28::before{padding:.75em .389em .25em 0;content:"("}mjx-c.mjx-c29::before{padding:.75em .389em .25em 0;content:")"}mjx-c.mjx-c3D::before{padding:.583em .778em .082em 0;content:"="}mjx-c.mjx-c1D45A.TEX-I::before{padding:.442em .878em .011em 0;content:"m"}mjx-c.mjx-c1D456.TEX-I::before{padding:.661em .345em .011em 0;content:"i"}mjx-c.mjx-c1D45B.TEX-I::before{padding:.442em .6em .011em 0;content:"n"}mjx-c.mjx-c1D454.TEX-I::before{padding:.442em .477em .205em 0;content:"g"}mjx-c.mjx-c2032::before{padding:.56em .275em 0 0;content:"′"}mjx-c.mjx-c2B::before{padding:.583em .778em .082em 0;content:"+"}mjx-c.mjx-c1D450.TEX-I::before{padding:.442em .433em .011em 0;content:"c"}mjx-c.mjx-c1D45C.TEX-I::before{padding:.441em .485em .011em 0;content:"o"}mjx-c.mjx-c1D461.TEX-I::before{padding:.626em .361em .011em 0;content:"t"}mjx-c.mjx-c2C::before{padding:.121em .278em .194em 0;content:","}</style><pre class="frontmatter language-yaml" style="display: none;"><code class="language-yaml is-loaded"><span class="token key atrule">zhihu-title</span><span class="token punctuation">:</span> Lecture 2：JIT 即时编译技术
+<span class="token key atrule">zhihu-topics</span><span class="token punctuation">:</span> Unity
+<span class="token key atrule">zhihu-link</span><span class="token punctuation">:</span> https<span class="token punctuation">:</span>//zhuanlan.zhihu.com/p/1941497989634958070
+<span class="token key atrule">toc</span><span class="token punctuation">:</span> <span class="token string">"true"</span>
+<span class="token key atrule">zhihu-created-at</span><span class="token punctuation">:</span> 2025<span class="token punctuation">-</span>08<span class="token punctuation">-</span>20 13<span class="token punctuation">:</span><span class="token number">53</span></code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre><div class="markdown-preview-sizer markdown-preview-section"><h1 class="page-title heading inline-title" id="Lecture 2：JIT 即时编译技术"><p dir="auto">Lecture 2：JIT 即时编译技术</p></h1><div class="el-h2 heading-wrapper"><h2 data-heading="`JIT` 的作用" dir="auto" class="heading" id="`JIT`_的作用"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>JIT</code> 的作用</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>JIT</code> 的作用</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">编写的 <code>C#</code> 代码在经过编译后得出的 <code>exe</code> 或 <code>dll</code> 里面包含的并不是机器代码，而是一种中间代码, 也称为 <code>MSIL</code> (简称 <code>IL</code>)；  </li>
+<li data-line="2" dir="auto"><code>MSIL</code> 可以在不同的系统或者平台上执行，<code>CLR</code> 中执行它们的模块就是这篇要讲的 <code>JIT</code>；</li>
+<li data-line="3" dir="auto"><code>CoreCLR</code> 中的 <code>JIT</code> 代号是 <code>RyuJIT</code>，<code>RyuJIT</code> 可以把 <code>MSIL</code> 翻译为 <code>X86</code>、<code>X64</code> 或者 <code>ARM</code> 的机器代码； </li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>特点：
+<ul>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>优点：
+<ul>
+<li data-line="6" dir="auto">同一个程序集可以在不同平台上运行；</li>
+<li data-line="7" dir="auto">减少编译时间 (编译到 <code>MSIL</code> 的时间比编译到机器代码的时间要短很多)； </li>
+<li data-line="8" dir="auto">可以根据目标平台选择最优的代码 (例如只在支持 <code>AVX</code> 指令的 <code>CPU</code> 使用 <code>AVX</code> 指令)</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>缺点：
+<ul>
+<li data-line="10" dir="auto">部分平台上无法使用 (例如 <code>iOS</code>)</li>
+<li data-line="11" dir="auto">不能执行过多的优化 (否则将会增加更多的运行负担)；</li>
+</ul>
+</li>
+<li data-line="12" dir="auto">为了解决这些坏处而出现的技术有 <code>NGEN</code>, <code>AOT</code>, <code>CoreRT</code> 等, 但是使用它们以后同时也就失去了使用 <code>JIT</code> 的好处；</li>
+</ul>
+</li>
+<li data-line="13" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="14" dir="auto"><span alt="Pasted image 20250819111827.png" src="Pasted image 20250819111827.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250819111827.png" src="lib/media/pasted-image-20250819111827.png"></span></li>
+</ul>
+</li>
+</ul></div><div class="el-div"><div data-callout-metadata="" data-callout-fold="" data-callout="warning" class="callout drop-shadow"><div class="callout-title" dir="auto"><div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-alert-triangle"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></div><div class="callout-title-inner">注意：<code>IOS</code> 与 <code>JIT</code></div></div><div class="callout-content">
+<ul>
+<li data-line="1" dir="auto"><code>Apple</code> 出于安全考虑禁止应用动态生成可执行代码，<code>JIT</code> 需要内存写入+执行权限，违反 <code>iOS</code> 沙盒规则；</li>
+<li data-line="2" dir="auto">并且，<code>App Store</code> 及 <code>iOS</code> 使用 <code>No eXecute bit</code> 技术，审核要求所有代码必须静态打包，禁止运行时修改代码，所以在 <code>Unity</code> 当中，使用 <code>AOT</code> 编译来规避此问题，提前将 <code>IL</code> 代码编译为 <code>Native</code> 代码，<code>iOS</code> 上默认使用这种方式；</li>
+<li data-line="3" dir="auto">那么，为什么 <code>IOS</code> 可以支持 <code>Lua</code> 热更新呢？因为 <code>Lua</code> 代码作为文本资源由 <code>Lua</code> 虚拟机解释执行，无需编译为本地代码，因此不被视为"可执行代码更新"。<code>Lua</code> 脚本可作为 <code>AssetBundle</code> 资源打包，通过资源热更新流程动态加载，与纹理、音效等资源更新方式一致，因此规避了代码编译的问题；</li>
+<li data-line="4" dir="auto">具体而言，通过预生成所有可能的桥接代码，避免在 <code>iOS</code> 的 <code>AOT</code> 环境下动态生成代码；</li>
+</ul>
+</div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`JIT` 流程" dir="auto" class="heading" id="`JIT`_流程"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>JIT</code> 流程</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`JIT` 流程概述" dir="auto" class="heading" id="`JIT`_流程概述"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>JIT</code> 流程概述</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>JIT</code> 流程概述</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">总体上来说，<code>RyuJIT</code> 可以分为两个部分：</li>
+<li data-line="2" dir="auto">前端: 也就是图上的第一行，负责把 <code>MSIL</code> 转换为 <code>JIT</code> 中的内部表现 (<code>IR</code>)并且执行优化；  </li>
+<li data-line="3" dir="auto">后端: 也就是图上的第二行，负责准备生成机器代码，分配寄存器等与平台相关的处理；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：导入器
+<ul>
+<li data-line="5" dir="auto">将线性的、基于堆栈的 <code>MSIL</code> 指令转换为 <code>RyuJIT</code> 内部使用的、更复杂的中间表示（<code>IR</code>），这是一种树形结构（或基于图的）的 <code>IR</code>，更精确地表达了操作之间的依赖关系和操作数的来源（而不仅仅是堆栈操作），包含了丰富的类型信息和控制流信息；</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>RyuJIT</code> 阶段
+<ul>
+<li data-line="7" dir="auto">这是 <code>JIT</code> 编译的核心和主体（图中用浅蓝色高亮区域表示）；</li>
+<li data-line="8" dir="auto">它包含一系列连续的、相互依赖的<strong>优化</strong>和<strong>分析</strong>阶段（<code>Passes</code>），对 <code>GenTrees</code> 进行反复的转换和精炼。这些阶段的目标是生成尽可能高效的 <code>GenTrees IR</code>；</li>
+<li data-line="9" dir="auto">常见的优化包括函数内联、常量传播、循环优化、移除非执行代码、控制流优化；</li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：指令描述符 - <code>InstrDescs</code>
+<ul>
+<li data-line="11" dir="auto">将抽象的、平台无关的 <code>GenTrees</code> <code>IR</code> 转换为<strong>特定于目标 <code>CPU</code> 架构</strong>的中间表示，称为 <code>InstrDescs</code> (<code>Instruction Descriptors</code>) ，它代表了目标 <code>CPU</code> 的机器指令或指令模板，它包含了操作码、操作数类型、寻址模式、指令长度等具体信息。但是它仍然是一个<strong>描述性</strong>的结构，还不是最终的二进制字节码，充当了抽象 <code>IR</code> 与具体硬件指令之间的桥梁；</li>
+</ul>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：发射器
+<ul>
+<li data-line="13" dir="auto">将 <code>InstrDescs</code> 转换（“发射”）为真正的、可执行的<strong>本地机器码 (<code>Native Code</code>)​</strong>​ 二进制指令流。这涉及到解析 <code>InstrDescs</code> 中的信息，生成对应的操作码字节、操作数字节，计算相对跳转偏移量等；</li>
+<li data-line="14" dir="auto">同时生成方法运行所需的额外信息，这些信息与机器码一起存储在内存中，供 <code>.NET</code> 运行时使用。最终的可执行<strong>本地机器码 (<code>Native Code</code>)​</strong>​ 块，以及与之关联的 <code>Debug, GC, EH Info</code>​ 数据结构；</li>
+</ul>
+</li>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="16" dir="auto"><span alt="Pasted image 20250819112207.png" src="Pasted image 20250819112207.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250819112207.png" src="lib/media/pasted-image-20250819112207.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`JIT` 具体流程" dir="auto" class="heading" id="`JIT`_具体流程"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>JIT</code> 具体流程</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>JIT</code> 具体流程</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="1" dir="auto"><span alt="Pasted image 20250819112854.png" src="Pasted image 20250819112854.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250819112854.png" src="lib/media/pasted-image-20250819112854.png"></span></li>
+</ul>
+</li>
+<li data-line="2" dir="auto">代码：<code>C#</code> 代码示例</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C# language-none is-loaded">using System;
+using System.Runtime.InteropServices;
+
+namespace ConsoleApplication
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            for (int x = 0; x &lt; 3; ++x)
+            {
+                Console.WriteLine(x);
+            }
+        }
+    }
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">代码：对应的 <code>IL</code> 代码</li>
+</ul></div><div class="el-pre"><pre class="language-text"><code data-line="0" class="language-text is-loaded">IL to import:
+// 无操作 (No Operation)。这是一条空指令，通常由编译器插入用于调试目的（例如设置断点）或对齐。在发布版本中，编译器通常会优化掉这些指令
+IL_0000  00                nop
+
+// 将 32 位整数常量 0 压入操作数栈顶。
+// ​C# 对应：​​ int x = 0;中的 0
+IL_0001  16                ldc.i4.0                  ; 运行堆栈 [ 0 ]
+
+// 将操作数栈顶的值弹出，并存储到索引为 0 的局部变量中
+// stloc.0 = store local to index 0
+IL_0002  0a                stloc.0                   ; 运行堆栈 [ ], 保存到本地变量0 (x = 0)
+
+// 无条件短跳转 (Branch Short)。立即跳转到偏移量 0x0d(十进制 13) 处的指令，即 IL_0012
+// for循环初始化完成后 (x = 0)，​直接跳转到循环条件检查部分​ (x &lt; 3)。这是 for循环结构在 IL 中的典型实现方式
+IL_0003  2b 0d             br.s         13 (IL_0012) ; 跳转到IL_0012
+
+// 无操作 (同上 IL_0000)。可能标记循环体开始或用于调试
+IL_0005  00                nop
+
+// 将索引为 0 的局部变量的值加载到操作数栈顶
+// ldloc.0 = load local from index 0
+IL_0006  06                ldloc.0                   ; 运行堆栈 [ x ]
+
+// 调用由指定元数据令牌 (0xA00000C) 标识的方法。这个令牌指向 Console.WriteLine(int)方法
+IL_0007  28 0c 00 00 0a    call         0xA00000C    ; 运行堆栈 [ ], 调用Console.WriteLine, 这里的0xA00000C是token
+
+IL_000c  00                nop
+IL_000d  00                nop         
+
+// 再次将索引为 0的局部变量 x的值加载到操作数栈顶.加载变量 x的值，准备进行 ++x操作
+IL_000e  06                ldloc.0                   ; 运行堆栈 [ x ]
+IL_000f  17                ldc.i4.1                  ; 运行堆栈 [ x, 1 ]
+IL_0010  58                add                       ; 运行堆栈 [ x+1 ]
+IL_0011  0a                stloc.0                   ; 运行堆栈 [ ], 保存到本地变量0 (x = x + 1)
+IL_0012  06                ldloc.0                   ; 运行堆栈 [ x ]
+IL_0013  19                ldc.i4.3                  ; 运行堆栈 [ x, 3 ]
+IL_0014  fe 04             clt                       ; 运行堆栈 [ x&lt;3 ]
+IL_0016  0b                stloc.1                   ; 运行堆栈 [ ], 保存到本地变量1 (tmp = x &lt; 3)
+IL_0017  07                ldloc.1                   ; 运行堆栈 [ tmp ]
+IL_0018  2d eb             brtrue.s     -21 (IL_0005); 运行堆栈 [ ], 如果tmp为true则跳转到IL_0005
+IL_001a  2a                ret                       ; 从函数返回
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">代码：<code>RyuJIT</code> 的前端会把 <code>IL</code> 导入为中间表现 (<code>IR</code>)</li>
+</ul></div><div class="el-pre"><pre class="language-text"><code data-line="0" class="language-text is-loaded">Importing BB02 (PC=000) of 'ConsoleApplication.Program:Main(ref)'
+    [ 0]   0 (0x000) nop
+
+               [000004] ------------             *  stmtExpr  void  (IL 0x000...  ???)
+               [000003] ------------             \--*  no_op     void  
+
+    [ 0]   1 (0x001) ldc.i4.0 0
+    [ 1]   2 (0x002) stloc.0
+
+               [000008] ------------             *  stmtExpr  void  (IL 0x001...  ???)
+               [000005] ------------             |  /--*  const     int    0
+               [000007] -A----------             \--*  =         int   
+               [000006] D------N----                \--*  lclVar    int    V01 loc0         
+
+    [ 0]   3 (0x003) br.s
+
+               [000010] ------------             *  stmtExpr  void  (IL 0x003...  ???)
+               [000009] ------------             \--*  nop       void  
+
+Importing BB03 (PC=005) of 'ConsoleApplication.Program:Main(ref)'
+    [ 0]   5 (0x005) nop
+
+               [000025] ------------             *  stmtExpr  void  (IL 0x005...  ???)
+               [000024] ------------             \--*  no_op     void  
+
+    [ 0]   6 (0x006) ldloc.0
+    [ 1]   7 (0x007) call 0A00000C
+
+               [000029] ------------             *  stmtExpr  void  (IL 0x006...  ???)
+               [000027] --C-G-------             \--*  call      void   System.Console.WriteLine
+               [000026] ------------ arg0           \--*  lclVar    int    V01 loc0         
+
+    [ 0]  12 (0x00c) nop
+
+               [000031] ------------             *  stmtExpr  void  (IL 0x00C...  ???)
+               [000030] ------------             \--*  no_op     void  
+
+    [ 0]  13 (0x00d) nop
+
+               [000033] ------------             *  stmtExpr  void  (IL 0x00D...  ???)
+               [000032] ------------             \--*  no_op     void  
+
+    [ 0]  14 (0x00e) ldloc.0
+    [ 1]  15 (0x00f) ldc.i4.1 1
+    [ 2]  16 (0x010) add
+    [ 1]  17 (0x011) stloc.0
+
+               [000039] ------------             *  stmtExpr  void  (IL 0x00E...  ???)
+               [000035] ------------             |     /--*  const     int    1
+               [000036] ------------             |  /--*  +         int   
+               [000034] ------------             |  |  \--*  lclVar    int    V01 loc0         
+               [000038] -A----------             \--*  =         int   
+               [000037] D------N----                \--*  lclVar    int    V01 loc0         
+
+Importing BB04 (PC=018) of 'ConsoleApplication.Program:Main(ref)'
+    [ 0]  18 (0x012) ldloc.0
+    [ 1]  19 (0x013) ldc.i4.3 3
+    [ 2]  20 (0x014) clt
+    [ 1]  22 (0x016) stloc.1
+
+               [000017] ------------             *  stmtExpr  void  (IL 0x012...  ???)
+               [000013] ------------             |     /--*  const     int    3
+               [000014] ------------             |  /--*  &lt;         int   
+               [000012] ------------             |  |  \--*  lclVar    int    V01 loc0         
+               [000016] -A----------             \--*  =         int   
+               [000015] D------N----                \--*  lclVar    int    V02 loc1         
+
+    [ 0]  23 (0x017) ldloc.1
+    [ 1]  24 (0x018) brtrue.s
+
+               [000022] ------------             *  stmtExpr  void  (IL 0x017...  ???)
+               [000021] ------------             \--*  jmpTrue   void  
+               [000019] ------------                |  /--*  const     int    0
+               [000020] ------------                \--*  !=        int   
+               [000018] ------------                   \--*  lclVar    int    V02 loc1         
+
+Importing BB05 (PC=026) of 'ConsoleApplication.Program:Main(ref)'
+    [ 0]  26 (0x01a) ret
+
+               [000042] ------------             *  stmtExpr  void  (IL 0x01A...  ???)
+               [000041] ------------             \--*  return    void  
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：
+<ul>
+<li data-line="1" dir="auto"><code>IL</code> 被分成了好几组 (<code>BB02~BB05</code>), 这里的 <code>BB</code> 是 <code>BasicBlock</code> 的缩写,  一个 <code>BasicBlock</code> 中有多个语句 (<code>Statement</code>), 一个语句就是一棵树 (<code>GenTree</code>)；</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>上面的文本对应了以下的结构 (又称 <code>HIR</code> 结构)：
+<ul>
+<li data-line="3" dir="auto"><span alt="Pasted image 20250819114011.png" src="Pasted image 20250819114011.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250819114011.png" src="lib/media/pasted-image-20250819114011.png"></span></li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><code>BasicBlock</code>: 保存了一组语句, <code>BasicBlock</code> 内原则上跳转指令只会出现在最后一个语句；</li>
+<li data-line="5" dir="auto"><code>Statement</code>: 一个语句就是一棵树, 在内部 <code>Statement</code> 也是一个 <code>GenTree</code> 的子类 (<code>GenTreeStmt</code>)；</li>
+<li data-line="6" dir="auto"><code>GenTree</code>: 组成树的节点, 有很多不同的类型例如 <code>GenTreeUnOp(unary op)</code>, <code>GenTreeIntCon(int constant)</code>；</li>
+<li data-line="7" dir="auto">有人可能会好奇为什么上面的 <code>BasicBlock</code> 从 <code>02</code> 开始, 这是因为 <code>01</code> 是内部用的 <code>block</code>, 里面会保存函数开始时运行的内部处理； </li>
+</ul>
+</li>
+<li data-line="8" dir="auto">代码：<code>RyuJIT</code> 的前端会不断的修改 <code>HIR</code> 结构, 做出各种变形和优化 </li>
+</ul></div><div class="el-pre"><pre class="language-text"><code data-line="0" class="language-text is-loaded">Trees before IR Rationalize
+
+-------------------------------------------------------------------------------------------------------------------------------------
+BBnum         descAddr ref try hnd preds           weight   [IL range]      [jump]      [EH region]         [flags]
+-------------------------------------------------------------------------------------------------------------------------------------
+BB01 [00000000024701F8]  1                              1   [???..???)                                     i internal label target 
+BB02 [0000000002473350]  1       BB01                   1   [???..???)-&gt; BB04 ( cond )                     internal 
+BB03 [0000000002473460]  1       BB02                   0.5 [???..???)                                     internal 
+BB04 [0000000002473240]  2       BB02,BB03              1   [???..???)                                     i internal label target 
+BB05 [0000000002470470]  1       BB04                   1   [000..005)-&gt; BB07 (always)                     i 
+BB06 [0000000002470580]  1       BB07                   1   [005..012)                                     i label target gcsafe bwd 
+BB07 [0000000002470690]  2       BB05,BB06              1   [012..01A)-&gt; BB06 ( cond )                     i label target bwd 
+BB08 [00000000024707A0]  1       BB07                   1   [01A..01B)        (return)                     i 
+-------------------------------------------------------------------------------------------------------------------------------------
+
+------------ BB01 [???..???), preds={} succs={BB02}
+
+***** BB01, stmt 1
+     (  0,  0) [000001] ------------             *  stmtExpr  void  (IL   ???...  ???)
+N001 (  0,  0) [000000] ------------             \--*  nop       void  
+
+------------ BB02 [???..???) -&gt; BB04 (cond), preds={BB01} succs={BB03,BB04}
+
+***** BB02, stmt 2
+     (  9, 16) [000055] ------------             *  stmtExpr  void  (IL   ???...  ???)
+N005 (  9, 16) [000054] ------------             \--*  jmpTrue   void  
+N003 (  1,  1) [000045] ------------                |  /--*  const     int    0
+N004 (  7, 14) [000046] J------N----                \--*  ==        int   
+N002 (  5, 12) [000044] ------------                   \--*  indir     int   
+N001 (  3, 10) [000043] ------------                      \--*  const(h)  long   0x7f95ea870610 token
+
+------------ BB03 [???..???), preds={BB02} succs={BB04}
+
+***** BB03, stmt 3
+     ( 14,  5) [000056] ------------             *  stmtExpr  void  (IL   ???...  ???)
+N001 ( 14,  5) [000047] --C-G-?-----             \--*  call help void   HELPER.CORINFO_HELP_DBG_IS_JUST_MY_CODE
+
+------------ BB04 [???..???), preds={BB02,BB03} succs={BB05}
+
+------------ BB05 [000..005) -&gt; BB07 (always), preds={BB04} succs={BB07}
+
+***** BB05, stmt 4
+     (  1,  1) [000004] ------------             *  stmtExpr  void  (IL 0x000...0x000)
+N001 (  1,  1) [000003] ------------             \--*  no_op     void  
+
+***** BB05, stmt 5
+     (  1,  3) [000008] ------------             *  stmtExpr  void  (IL 0x001...0x002)
+N001 (  1,  1) [000005] ------------             |  /--*  const     int    0
+N003 (  1,  3) [000007] -A------R---             \--*  =         int   
+N002 (  1,  1) [000006] D------N----                \--*  lclVar    int    V01 loc0         
+
+***** BB05, stmt 6
+     (  0,  0) [000010] ------------             *  stmtExpr  void  (IL 0x003...0x003)
+N001 (  0,  0) [000009] ------------             \--*  nop       void  
+
+------------ BB06 [005..012), preds={BB07} succs={BB07}
+
+***** BB06, stmt 7
+     (  1,  1) [000025] ------------             *  stmtExpr  void  (IL 0x005...0x005)
+N001 (  1,  1) [000024] ------------             \--*  no_op     void  
+
+***** BB06, stmt 8
+     ( 15,  7) [000029] ------------             *  stmtExpr  void  (IL 0x006...0x00C)
+N005 ( 15,  7) [000027] --C-G-------             \--*  call      void   System.Console.WriteLine
+N003 (  1,  1) [000026] ------------ arg0 in rdi    \--*  lclVar    int    V01 loc0         
+
+***** BB06, stmt 9
+     (  1,  1) [000031] ------------             *  stmtExpr  void  (IL 0x00C...  ???)
+N001 (  1,  1) [000030] ------------             \--*  no_op     void  
+
+***** BB06, stmt 10
+     (  1,  1) [000033] ------------             *  stmtExpr  void  (IL 0x00D...0x00D)
+N001 (  1,  1) [000032] ------------             \--*  no_op     void  
+
+***** BB06, stmt 11
+     (  3,  3) [000039] ------------             *  stmtExpr  void  (IL 0x00E...0x011)
+N002 (  1,  1) [000035] ------------             |     /--*  const     int    1
+N003 (  3,  3) [000036] ------------             |  /--*  +         int   
+N001 (  1,  1) [000034] ------------             |  |  \--*  lclVar    int    V01 loc0         
+N005 (  3,  3) [000038] -A------R---             \--*  =         int   
+N004 (  1,  1) [000037] D------N----                \--*  lclVar    int    V01 loc0         
+
+------------ BB07 [012..01A) -&gt; BB06 (cond), preds={BB05,BB06} succs={BB08,BB06}
+
+***** BB07, stmt 12
+     ( 10,  6) [000017] ------------             *  stmtExpr  void  (IL 0x012...0x016)
+N002 (  1,  1) [000013] ------------             |     /--*  const     int    3
+N003 (  6,  3) [000014] ------------             |  /--*  &lt;         int   
+N001 (  1,  1) [000012] ------------             |  |  \--*  lclVar    int    V01 loc0         
+N005 ( 10,  6) [000016] -A------R---             \--*  =         int   
+N004 (  3,  2) [000015] D------N----                \--*  lclVar    int    V02 loc1         
+
+***** BB07, stmt 13
+     (  7,  6) [000022] ------------             *  stmtExpr  void  (IL 0x017...0x018)
+N004 (  7,  6) [000021] ------------             \--*  jmpTrue   void  
+N002 (  1,  1) [000019] ------------                |  /--*  const     int    0
+N003 (  5,  4) [000020] J------N----                \--*  !=        int   
+N001 (  3,  2) [000018] ------------                   \--*  lclVar    int    V02 loc1         
+
+------------ BB08 [01A..01B) (return), preds={BB07} succs={}
+
+***** BB08, stmt 14
+     (  0,  0) [000042] ------------             *  stmtExpr  void  (IL 0x01A...0x01A)
+N001 (  0,  0) [000041] ------------             \--*  return    void
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>代码：进入 <code>RyuJIT</code> 的后端, <code>RyuJIT</code> 的后端会根据 <code>HIR</code> 结构生成 <code>LIR</code> 结构 
+<ul>
+<li data-line="1" dir="auto"><code>LIR</code> 结构里, <code>BasicBlock</code> 包含的是 <code>GenTree</code> 节点的<strong>有序列表</strong>, 原来是树结构的节点现在都连成了一串；</li>
+<li data-line="2" dir="auto"><code>LIR</code> 结构跟最终生成的机器代码结构非常的相似； </li>
+</ul>
+</li>
+</ul></div><div class="el-pre"><pre class="language-text"><code data-line="0" class="language-text is-loaded">Trees after IR Rationalize
+
+-------------------------------------------------------------------------------------------------------------------------------------
+BBnum         descAddr ref try hnd preds           weight   [IL range]      [jump]      [EH region]         [flags]
+-------------------------------------------------------------------------------------------------------------------------------------
+BB01 [00000000024701F8]  1                              1   [???..???)                                     i internal label target LIR 
+BB02 [0000000002473350]  1       BB01                   1   [???..???)-&gt; BB04 ( cond )                     internal LIR 
+BB03 [0000000002473460]  1       BB02                   0.5 [???..???)                                     internal LIR 
+BB04 [0000000002473240]  2       BB02,BB03              1   [???..???)                                     i internal label target LIR 
+BB05 [0000000002470470]  1       BB04                   1   [000..005)-&gt; BB07 (always)                     i LIR 
+BB06 [0000000002470580]  1       BB07                   1   [005..012)                                     i label target gcsafe bwd LIR 
+BB07 [0000000002470690]  2       BB05,BB06              1   [012..01A)-&gt; BB06 ( cond )                     i label target bwd LIR 
+BB08 [00000000024707A0]  1       BB07                   1   [01A..01B)        (return)                     i LIR 
+-------------------------------------------------------------------------------------------------------------------------------------
+
+------------ BB01 [???..???), preds={} succs={BB02}
+N001 (  0,  0) [000000] ------------                nop       void  
+
+
+------------ BB02 [???..???) -&gt; BB04 (cond), preds={BB01} succs={BB03,BB04}
+N001 (  3, 10) [000043] ------------       t43 =    const(h)  long   0x7f95ea870610 token
+
+                                                 /--*  t43    long   
+N002 (  5, 12) [000044] ------------       t44 = *  indir     int   
+
+N003 (  1,  1) [000045] ------------       t45 =    const     int    0
+
+                                                 /--*  t44    int    
+                                                 +--*  t45    int    
+N004 (  7, 14) [000046] J------N----       t46 = *  ==        int   
+
+                                                 /--*  t46    int    
+N005 (  9, 16) [000054] ------------             *  jmpTrue   void  
+
+
+------------ BB03 [???..???), preds={BB02} succs={BB04}
+N001 ( 14,  5) [000047] --C-G-?-----                call help void   HELPER.CORINFO_HELP_DBG_IS_JUST_MY_CODE
+
+
+------------ BB04 [???..???), preds={BB02,BB03} succs={BB05}
+
+------------ BB05 [000..005) -&gt; BB07 (always), preds={BB04} succs={BB07}
+     (  1,  1) [000004] ------------                il_offset void   IL offset: 0
+
+N001 (  1,  1) [000003] ------------                no_op     void  
+
+     (  1,  3) [000008] ------------                il_offset void   IL offset: 1
+
+N001 (  1,  1) [000005] ------------        t5 =    const     int    0
+
+                                                 /--*  t5     int    
+N003 (  1,  3) [000007] DA----------             *  st.lclVar int    V01 loc0         
+
+     (  0,  0) [000010] ------------                il_offset void   IL offset: 3
+
+N001 (  0,  0) [000009] ------------                nop       void  
+
+
+------------ BB06 [005..012), preds={BB07} succs={BB07}
+     (  1,  1) [000025] ------------                il_offset void   IL offset: 5
+
+N001 (  1,  1) [000024] ------------                no_op     void  
+
+     ( 15,  7) [000029] ------------                il_offset void   IL offset: 6
+
+N003 (  1,  1) [000026] ------------       t26 =    lclVar    int    V01 loc0         
+
+                                                 /--*  t26    int    arg0 in rdi
+N005 ( 15,  7) [000027] --C-G-------             *  call      void   System.Console.WriteLine
+
+     (  1,  1) [000031] ------------                il_offset void   IL offset: 12
+
+N001 (  1,  1) [000030] ------------                no_op     void  
+
+     (  1,  1) [000033] ------------                il_offset void   IL offset: 13
+
+N001 (  1,  1) [000032] ------------                no_op     void  
+
+     (  3,  3) [000039] ------------                il_offset void   IL offset: 14
+
+N001 (  1,  1) [000034] ------------       t34 =    lclVar    int    V01 loc0         
+
+N002 (  1,  1) [000035] ------------       t35 =    const     int    1
+
+                                                 /--*  t34    int    
+                                                 +--*  t35    int    
+N003 (  3,  3) [000036] ------------       t36 = *  +         int   
+
+                                                 /--*  t36    int    
+N005 (  3,  3) [000038] DA----------             *  st.lclVar int    V01 loc0         
+
+
+------------ BB07 [012..01A) -&gt; BB06 (cond), preds={BB05,BB06} succs={BB08,BB06}
+     ( 10,  6) [000017] ------------                il_offset void   IL offset: 18
+
+N001 (  1,  1) [000012] ------------       t12 =    lclVar    int    V01 loc0         
+
+N002 (  1,  1) [000013] ------------       t13 =    const     int    3
+
+                                                 /--*  t12    int    
+                                                 +--*  t13    int    
+N003 (  6,  3) [000014] ------------       t14 = *  &lt;         int   
+
+                                                 /--*  t14    int    
+N005 ( 10,  6) [000016] DA----------             *  st.lclVar int    V02 loc1         
+
+     (  7,  6) [000022] ------------                il_offset void   IL offset: 23
+
+N001 (  3,  2) [000018] ------------       t18 =    lclVar    int    V02 loc1         
+
+N002 (  1,  1) [000019] ------------       t19 =    const     int    0
+
+                                                 /--*  t18    int    
+                                                 +--*  t19    int    
+N003 (  5,  4) [000020] J------N----       t20 = *  !=        int   
+
+                                                 /--*  t20    int    
+N004 (  7,  6) [000021] ------------             *  jmpTrue   void  
+
+
+------------ BB08 [01A..01B) (return), preds={BB07} succs={}
+     (  0,  0) [000042] ------------                il_offset void   IL offset: 26
+
+N001 (  0,  0) [000041] ------------                return    void
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">代码：<code>RyuJIT</code> 的后端会给 <code>LIR</code> 结构中的 <code>GenTree</code> 节点<strong>分配寄存器</strong>, 并且根据 <code>LIR</code> 结构<strong>生成汇编指令</strong>列表</li>
+</ul></div><div class="el-pre"><pre class="language-text"><code data-line="0" class="language-text is-loaded">Instructions as they come out of the scheduler
+
+G_M21556_IG01:        ; func=00, offs=000000H, size=0016H, gcrefRegs=00000000 {}, byrefRegs=00000000 {}, byref, nogc &lt;-- Prolog IG
+IN001b: 000000 55                   push     rbp
+IN001c: 000001 4883EC10             sub      rsp, 16
+IN001d: 000005 488D6C2410           lea      rbp, [rsp+10H]
+IN001e: 00000A 33C0                 xor      rax, rax
+IN001f: 00000C 8945F4               mov      dword ptr [rbp-0CH], eax
+IN0020: 00000F 8945F0               mov      dword ptr [rbp-10H], eax
+IN0021: 000012 48897DF8             mov      gword ptr [rbp-08H], rdi
+
+G_M21556_IG02:        ; func=00, offs=000016H, size=0014H, gcrefRegs=00000000 {}, byrefRegs=00000000 {}, byref, isz
+IN0001: 000016 48B8100687EA957F0000 mov      rax, 0x7F95EA870610
+IN0002: 000020 833800               cmp      dword ptr [rax], 0
+IN0003: 000023 7405                 je       SHORT G_M21556_IG03
+[02479BA8] ptr arg pop  0
+IN0004: 000025 E8D6E0B578           call     CORINFO_HELP_DBG_IS_JUST_MY_CODE
+
+G_M21556_IG03:        ; func=00, offs=00002AH, size=0009H, gcrefRegs=00000000 {}, byrefRegs=00000000 {}, byref, isz
+IN0005: 00002A 90                   nop      
+IN0006: 00002B 33FF                 xor      edi, edi
+IN0007: 00002D 897DF4               mov      dword ptr [rbp-0CH], edi
+IN0008: 000030 90                   nop      
+IN0009: 000031 EB13                 jmp      SHORT G_M21556_IG05
+
+G_M21556_IG04:        ; func=00, offs=000033H, size=0013H, gcrefRegs=00000000 {}, byrefRegs=00000000 {}, byref
+IN000a: 000033 90                   nop      
+IN000b: 000034 8B7DF4               mov      edi, dword ptr [rbp-0CH]
+[02479BC0] ptr arg pop  0
+IN000c: 000037 E864F7FFFF           call     System.Console:WriteLine(int)
+IN000d: 00003C 90                   nop      
+IN000e: 00003D 90                   nop      
+IN000f: 00003E 8B45F4               mov      eax, dword ptr [rbp-0CH]
+IN0010: 000041 FFC0                 inc      eax
+IN0011: 000043 8945F4               mov      dword ptr [rbp-0CH], eax
+
+G_M21556_IG05:        ; func=00, offs=000046H, size=0019H, gcrefRegs=00000000 {}, byrefRegs=00000000 {}, byref, isz
+IN0012: 000046 8B7DF4               mov      edi, dword ptr [rbp-0CH]
+IN0013: 000049 83FF03               cmp      edi, 3
+IN0014: 00004C 400F9CC7             setl     dil
+IN0015: 000050 400FB6FF             movzx    rdi, dil
+IN0016: 000054 897DF0               mov      dword ptr [rbp-10H], edi
+IN0017: 000057 8B7DF0               mov      edi, dword ptr [rbp-10H]
+IN0018: 00005A 85FF                 test     edi, edi
+IN0019: 00005C 75D5                 jne      SHORT G_M21556_IG04
+IN001a: 00005E 90                   nop      
+
+G_M21556_IG06:        ; func=00, offs=00005FH, size=0006H, epilog, nogc, emitadd
+IN0022: 00005F 488D6500             lea      rsp, [rbp]
+IN0023: 000063 5D                   pop      rbp
+IN0024: 000064 C3                   ret      
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">最后 <code>Emitter</code> 把这些指令编码成机器代码就完成了 <code>JIT</code> 的编译工作；</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`JIT` 的数据结构" dir="auto" class="heading" id="`JIT`_的数据结构"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>JIT</code> 的数据结构</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`HIR` 高层中间表示" dir="auto" class="heading" id="`HIR`_高层中间表示"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>HIR</code> 高层中间表示</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>JIT</code> 的数据结构</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：<code>HIR</code> 的数据结构
+<ul>
+<li data-line="1" dir="auto"><span alt="Pasted image 20250819114811.png" src="Pasted image 20250819114811.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250819114811.png" src="lib/media/pasted-image-20250819114811.png"></span></li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概述：
+<ul>
+<li data-line="3" dir="auto"><code>HIR</code> 的核心思想是将代码表示为 ​基本块 (<code>Basic Blocks</code>)​​ 的序列。每个基本块内部包含一系列 ​语句 (<code>Statements</code>)​。而每个语句本身则由一棵 ​表达式树 (<code>Expression Tree</code>)​​ 来表示其计算逻辑；</li>
+<li data-line="4" dir="auto">同时，编译器维护一个关于方法中所有 ​局部变量 (<code>Local Variables</code>)​​ 信息的表；</li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>Compiler</code> (编译器对象)​
+<ul>
+<li data-line="6" dir="auto">这是整个 <code>JIT</code> 编译过程的中心控制器和状态持有者。它包含了编译当前方法所需的所有全局信息和上下文；</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>fgFirstBB</code>:​​ 
+<ul>
+<li data-line="8" dir="auto">这是一个指针，指向方法控制流图 (<code>Control Flow Graph</code>, <code>CFG</code>) 中的 ​第一个基本块 (<code>BasicBlock</code>)​。这是遍历整个方法代码的入口点；</li>
+</ul>
+</li>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>IvaTable</code> (或类似结构，如 <code>lvaTable</code>)​：
+<ul>
+<li data-line="10" dir="auto">这是一个数组或表的 ​索引​ 或 ​基址；</li>
+<li data-line="11" dir="auto">它指向 ​局部变量描述符表 (<code>LclVarDsc</code> 数组)​​ 的起始位置，<code>Iva</code> 能代表 "<code>Indexed Variable Address</code>"</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：局部变量描述符 - <code>LclVarDsc</code>
+<ul>
+<li data-line="13" dir="auto">描述方法中一个局部变量的所有关键属性；</li>
+<li data-line="14" dir="auto">编译器为方法中声明的每个局部变量（包括编译器生成的临时变量）创建一个 <code>LclVarDsc</code> 条目，表达式树 (<code>GenTree</code>) 中引用该变量的节点（如 <code>LCL_VAR</code> 加载变量，<code>STORE_LCL_VAR</code> 存储变量）会通过变量索引 (<code>lvIndex</code>) 链接回对应的 <code>LclVarDsc</code> 条目； </li>
+</ul>
+</li>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>Basic Block</code>
+<ul>
+<li data-line="16" dir="auto">表示代码中一个线性执行的指令序列，它有一个唯一的入口点​（第一条指令）和一个唯一的出口点​（最后一条指令）。基本块是控制流分析、数据流分析和优化的基本单位。循环、条件分支等结构通过基本块之间的跳转关系来表示；</li>
+<li data-line="17" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>bbNext</code>, <code>bbPrev</code>：
+<ul>
+<li data-line="18" dir="auto">指向控制流图中下一个和上一个基本块的指针；</li>
+<li data-line="19" dir="auto">这些指针通常按照代码的布局顺序 (<code>Layout Order</code>)​​ 连接基本块，形成一个双向链表。这方便了顺序遍历基本块（例如按源码顺序）；</li>
+</ul>
+</li>
+<li data-line="20" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>bbStmtList</code>：
+<ul>
+<li data-line="21" dir="auto">这是一个指针，指向属于这个基本块的第一条语句 (<code>GenTreeStmt</code>)​；</li>
+<li data-line="22" dir="auto">通过这条语句，可以遍历该基本块内的所有语句；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="23" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>GenTreeStmt</code> 语句节点 - <code>Statement Node</code>
+<ul>
+<li data-line="24" dir="auto">​表示一个完整的语句。在 <code>HIR</code> 中，语句是位于基本块内、表达式树之上的一个层级。它对应着源代码中的一个语句或 <code>IL</code> 中的一组有明确语义边界的指令（例如：一个赋值、一个方法调用、一个 <code>return</code>）</li>
+<li data-line="25" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>​<code>gtStmtExpr</code>：
+<ul>
+<li data-line="26" dir="auto">这是该语句的核心，是一个指向 ​表达式树根节点 (<code>GenTree</code>)​​ 的指针。这棵表达式树完整地描述了该语句所执行的计算和操作；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="27" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>GenTree</code> 表达式树
+<ul>
+<li data-line="28" dir="auto">表示计算、操作和值；</li>
+<li data-line="29" dir="auto">这是 <code>HIR</code> 最核心的数据结构，用于构建表达式树。每个节点代表一个操作（如加法 <code>+</code>、加载变量、方法调用）或一个值（如常量、局部变量引用）</li>
+<li data-line="30" dir="auto">节点通过操作数指针 (<code>gtOp1</code>, <code>gtOp2等</code>) 连接起来形成树形结构，精确地表达了计算的依赖关系和操作数的来源；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="`LIR` 低层中间表示" dir="auto" class="heading" id="`LIR`_低层中间表示"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>LIR</code> 低层中间表示</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：低层中间表示 - <code>LIR</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="1" dir="auto"><span alt="Pasted image 20250819115653.png" src="Pasted image 20250819115653.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250819115653.png" src="lib/media/pasted-image-20250819115653.png"></span></li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>Expression GenTree</code>（表达式树节点）​
+<ul>
+<li data-line="3" dir="auto">表示计算逻辑的最小单元（如加载变量、算术运算、函数调用），是 <code>LIR</code> 的核心数据结构；</li>
+<li data-line="4" dir="auto"><code>gtOper</code>：标识节点类型（如 <code>GT_ADD</code> 加法、<code>GT_CALL</code> 函数调用、<code>GT_LCL_VAR</code> 加载变量）</li>
+<li data-line="5" dir="auto"><code>gtType</code>：节点结果的类型（如 <code>int</code>、<code>float</code>）</li>
+</ul>
+</li>
+</ul></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`JIT` 的触发" dir="auto" class="heading" id="`JIT`_的触发"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>JIT</code> 的触发</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>JIT</code> 的触发</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>Stub</code> 与 <code>JIT</code> 
+<ul>
+<li data-line="1" dir="auto">当方法首次被调用时，<code>CLR</code> 检查其机器码是否已生成。若未生成，<code>JIT</code> 编译流程启动；</li>
+<li data-line="2" dir="auto">这一过程通过 ​<strong>方法表</strong>（<code>Method Table</code>）​​中的函数入口指针实现：初始在方法表中，方法的指针指向一个 ​桩 <code>Stub</code> 而非实际代码； </li>
+<li data-line="3" dir="auto">若多个线程同时首次调用同一方法，<code>CLR</code> 通过 ​<strong>锁机制（如 <code>SpinLock</code>）​</strong>​ 确保仅一个线程触发 <code>JIT</code> 编译，其他线程等待编译完成后再执行缓存代码；</li>
+<li data-line="4" dir="auto"><code>CLR</code> 使用<strong>自旋锁（<code>SpinLock</code>）​</strong>​ 或其他同步原语来实现这种保护。自旋锁的特点是当线程获取锁失败时，不会立即阻塞，而是循环尝试获取锁，这在锁竞争不激烈的场景下性能较好； </li>
+</ul>
+</li>
+<li data-line="5" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：多线程下的 <code>JIT</code> 编译
+<ul>
+<li data-line="6" dir="auto">第一个到达的线程获取锁并开始 <code>JIT</code> 编译，其他后续线程在尝试获取锁时会发现锁已被占用，于是它们会自旋等待直到编译完成，然后直接使用已编译好的机器代码；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>Compiler</code> 实例
+<ul>
+<li data-line="8" dir="auto"><code>JIT</code> 会为准备的函数创建一个 <code>Compiler</code> 实例，<code>Compiler</code> 实例储存了 <code>BasicBlock</code> 列表等编译时需要的信息。<strong>一个正在编译的函数对应一个 <code>Compiler</code> 实例</strong>，函数编译后 <code>Compiler</code> 实例会被销毁；</li>
+<li data-line="9" dir="auto"><code>Compiler</code> 实例负责将 <code>IL</code> 代码逐行读取，并将其转换为特定平台的机器指令。这个过程包括解析 <code>IL</code> 指令、进行各种优化（如内联、循环展开和死代码消除），最终生成高效的本地机器代码；</li>
+<li data-line="10" dir="auto">编译完成后，生成的机器代码会被缓存到动态分配的内存块中，同时方法表中的方法指针会被更新为指向这个内存地址。此后，该方法的调用将直接执行缓存中的机器代码，不再需要 <code>JIT</code> 编译；</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="12" dir="auto"><span alt="Pasted image 20250819120153.png" src="Pasted image 20250819120153.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250819120153.png" src="lib/media/pasted-image-20250819120153.png"></span></li>
+</ul>
+</li>
+</ul></div><div class="el-div"><div data-callout-metadata="" data-callout-fold="" data-callout="summary" class="callout drop-shadow"><div class="callout-title" dir="auto"><div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-clipboard-list"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="M12 11h4"></path><path d="M12 16h4"></path><path d="M8 11h.01"></path><path d="M8 16h.01"></path></svg></div><div class="callout-title-inner">补充：对类型方法的 <code>JIT</code> 编译</div></div><div class="callout-content">
+<ul>
+<li data-line="1" dir="auto">在 <code>CLR</code> 为每个类型创建的内部数据结构中，每个方法都有一个对应的记录项，其中包含一个地址字段指向方法的实现。当方法首次被调用时，这个地址字段初始指向一个特殊的未编档函数：<code>JITCompiler</code> 函数，而不是实际的方法代码；</li>
+<li data-line="2" dir="auto">在方法首次被调用前，这个指针指向的是一个<strong>桩（<code>Stub</code>）​</strong>，即指向 <code>JITCompiler</code> 函数的地址。这个桩的作用是拦截方法的首次调用，触发 <code>JIT</code> 编译过程。只有当 <code>JIT</code> 编译完成后，这个指针才会被修改为指向新编译生成的本地机器代码的内存地址；</li>
+</ul>
+</div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`JIT` 编译 - 前端实现" dir="auto" class="heading" id="`JIT`_编译_-_前端实现"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>JIT</code> 编译 - 前端实现</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`Importer`" dir="auto" class="heading" id="`Importer`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Importer</code></h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>Importer</code></p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto"><code>Importer</code> 负责读取和解析 <code>IL</code> (<code>byte array</code>)，并根据 <code>IL</code> 生成 <code>JIT</code> 使用的内部表现 <code>IR</code> (<code>BasicBlock</code>, <code>Statement</code>, <code>GenTree</code>)；</li>
+<li data-line="2" dir="auto"><code>BasicBlock</code> 会根据它们的跳转类型连接成一个图(<code>graph</code>)，第一个 <code>BasicBlock</code> 是内部使用的, 会添加一些函数进入的初始化处理(但不要和汇编中的 <code>prolog</code> 混淆)；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="4" dir="auto"><span alt="Pasted image 20250819120541.png" src="Pasted image 20250819120541.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250819120541.png" src="lib/media/pasted-image-20250819120541.png"></span></li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="内联优化" dir="auto" class="heading" id="内联优化"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>内联优化</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：内联优化</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">如果函数符合内联的条件, 则 <code>Inliner</code> 会把函数的 <code>IR</code> 嵌入到它的调用端函数 (<code>callsite</code>), 并且对本地变量和参数进行修整，执行内联后接下来的步骤将在调用端函数中完成；</li>
+</ul>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：内联优化的条件
+<ul>
+<li data-line="3" dir="auto"><span alt="Pasted image 20250819120908.png" src="Pasted image 20250819120908.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250819120908.png" src="lib/media/pasted-image-20250819120908.png"></span></li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示：
+<ul>
+<li data-line="5" dir="auto"><span alt="Pasted image 20250819121004.png" src="Pasted image 20250819121004.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250819121004.png" src="lib/media/pasted-image-20250819121004.png"></span></li>
+</ul>
+</li>
+</ul></div><div class="mod-footer mod-ui"></div></div></div></div></div></div></div></div><div class="sidebar-right sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"></div><script defer="">let rs = document.querySelector(".sidebar-right"); rs.classList.add("is-collapsed"); if (window.innerWidth > 768) rs.classList.remove("is-collapsed"); rs.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-right-width"));</script></div></div></body></html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html> <html><head>
+		<title>Lecture 1：C++ 内存管理</title>
+		<base href="..\..\../">
+		<meta id="root-path" root-path="..\..\../">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
+		<meta charset="UTF-8">
+		<meta name="description" content="MUBlog - Lecture 1：C++ 内存管理">
+		<meta property="og:title" content="Lecture 1：C++ 内存管理">
+		<meta property="og:description" content="MUBlog - Lecture 1：C++ 内存管理">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="01_编程语言基础/01_cpp/03_进阶主题/lecture-1：c++-内存管理.html">
+		<meta property="og:image" content="lib\media\pasted-image-20250111143055.png">
+		<meta property="og:site_name" content="MUBlog">
+		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="lib/rss.xml"><script async="" id="webpage-script" src="lib/scripts/webpage.js" onload="this.onload=null;this.setAttribute(&quot;loaded&quot;, &quot;true&quot;)"></script><link rel="icon" href="lib/media/favicon.png"><style>body{--line-width:40em;--line-width-adaptive:40em;--file-line-width:40em;--sidebar-width:min(20em, 80vw);--collapse-arrow-size:11px;--tree-horizontal-spacing:0.6em;--tree-vertical-spacing:0.6em;--sidebar-margin:12px}.sidebar{height:100%;min-width:calc(var(--sidebar-width) + var(--divider-width-hover));max-width:calc(var(--sidebar-width) + var(--divider-width-hover));font-size:14px;z-index:10;position:relative;overflow:hidden;transition:min-width ease-in-out,max-width ease-in-out;transition-duration:.2s;contain:size}.sidebar-left{left:0}.sidebar-right{right:0}.sidebar.is-collapsed{min-width:0;max-width:0}body.floating-sidebars .sidebar{position:absolute}.sidebar-content{height:100%;min-width:calc(var(--sidebar-width) - var(--divider-width-hover));top:0;padding:var(--sidebar-margin);padding-top:4em;line-height:var(--line-height-tight);background-color:var(--background-secondary);transition:background-color,border-right,border-left,box-shadow;transition-duration:var(--color-fade-speed);transition-timing-function:ease-in-out;position:absolute;display:flex;flex-direction:column}.sidebar:not(.is-collapsed) .sidebar-content{min-width:calc(max(100%,var(--sidebar-width)) - 3px);max-width:calc(max(100%,var(--sidebar-width)) - 3px)}.sidebar-left .sidebar-content{left:0;border-top-right-radius:var(--radius-l);border-bottom-right-radius:var(--radius-l)}.sidebar-right .sidebar-content{right:0;border-top-left-radius:var(--radius-l);border-bottom-left-radius:var(--radius-l)}.sidebar:has(.sidebar-content:empty):has(.topbar-content:empty){display:none}.sidebar-topbar{height:2em;width:var(--sidebar-width);top:var(--sidebar-margin);padding-inline:var(--sidebar-margin);z-index:1;position:fixed;display:flex;align-items:center;transition:width ease-in-out;transition-duration:inherit}.sidebar.is-collapsed .sidebar-topbar{width:calc(2.3em + var(--sidebar-margin) * 2)}.sidebar .sidebar-topbar.is-collapsed{width:0}.sidebar-left .sidebar-topbar{left:0}.sidebar-right .sidebar-topbar{right:0}.topbar-content{overflow:hidden;overflow:clip;width:100%;height:100%;display:flex;align-items:center;transition:inherit}.sidebar.is-collapsed .topbar-content{width:0;transition:inherit}.clickable-icon.sidebar-collapse-icon{background-color:transparent;color:var(--icon-color-focused);padding:0!important;margin:0!important;height:100%!important;width:2.3em!important;margin-inline:0.14em!important;position:absolute}.sidebar-left .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);right:var(--sidebar-margin)}.sidebar-right .clickable-icon.sidebar-collapse-icon{transform:rotateY(180deg);left:var(--sidebar-margin)}.clickable-icon.sidebar-collapse-icon svg.svg-icon{width:100%;height:100%}.sidebar-section-header{margin:0 0 1em 0;text-transform:uppercase;letter-spacing:.06em;font-weight:600}body{transition:background-color var(--color-fade-speed) ease-in-out}.webpage-container{display:flex;flex-direction:row;height:100%;width:100%;align-items:stretch;justify-content:center}.document-container{opacity:1;flex-basis:100%;max-width:100%;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;transition:opacity .2s ease-in-out;contain:inline-size}.hide{opacity:0;transition:opacity .2s ease-in-out}.document-container>.markdown-preview-view{margin:var(--sidebar-margin);margin-bottom:0;width:100%;width:-webkit-fill-available;width:-moz-available;width:fill-available;background-color:var(--background-primary);transition:background-color var(--color-fade-speed) ease-in-out;border-top-right-radius:var(--window-radius,var(--radius-m));border-top-left-radius:var(--window-radius,var(--radius-m));overflow-x:hidden!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;contain:inline-size}.document-container>.markdown-preview-view>.markdown-preview-sizer{padding-bottom:80vh!important;width:100%!important;max-width:var(--line-width)!important;flex-basis:var(--line-width)!important;transition:background-color var(--color-fade-speed) ease-in-out;contain:inline-size}.markdown-rendered img:not([width]),.view-content img:not([width]){max-width:100%;outline:0}.document-container>.view-content.embed{display:flex;padding:1em;height:100%;width:100%;align-items:center;justify-content:center}.document-container>.view-content.embed>*{max-width:100%;max-height:100%;object-fit:contain}:has(> :is(.math,table)){overflow-x:auto!important}.document-container>.view-content{overflow-x:auto;contain:content;padding:0;margin:0;height:100%}.scroll-highlight{position:absolute;width:100%;height:100%;pointer-events:none;z-index:1000;background-color:hsla(var(--color-accent-hsl),.25);opacity:0;padding:1em;inset:50%;translate:-50% -50%;border-radius:var(--radius-s)}</style><script defer="">async function loadIncludes(){if("file:"!=location.protocol){let e=document.querySelectorAll("include");for(let t=0;t<e.length;t++){let o=e[t],l=o.getAttribute("src");try{const e=await fetch(l);if(!e.ok){console.log("Could not include file: "+l),o?.remove();continue}let t=await e.text(),n=document.createRange().createContextualFragment(t),i=Array.from(n.children);for(let e of i)e.classList.add("hide"),e.style.transition="opacity 0.5s ease-in-out",setTimeout((()=>{e.classList.remove("hide")}),10);o.before(n),o.remove(),console.log("Included file: "+l)}catch(e){o?.remove(),console.log("Could not include file: "+l,e);continue}}}else{if(document.querySelectorAll("include").length>0){var e=document.createElement("div");e.id="error",e.textContent="Web server exports must be hosted on an http / web server to be viewed correctly.",e.style.position="fixed",e.style.top="50%",e.style.left="50%",e.style.transform="translate(-50%, -50%)",e.style.fontSize="1.5em",e.style.fontWeight="bold",e.style.textAlign="center",document.body.appendChild(e),document.querySelector(".document-container")?.classList.remove("hide")}}}document.addEventListener("DOMContentLoaded",(()=>{loadIncludes()}));let isFileProtocol="file:"==location.protocol;function waitLoadScripts(e,t){let o=e.map((e=>document.getElementById(e+"-script"))),l=0;!function e(){let n=o[l];l++,n&&"true"!=n.getAttribute("loaded")||l<o.length&&e(),l<o.length?n.addEventListener("load",e):t()}()}</script><link rel="stylesheet" href="lib/styles/obsidian.css"><link rel="stylesheet" href="lib/styles/theme.css"><link rel="preload" href="lib/styles/global-variable-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/global-variable-styles.css"></noscript><link rel="preload" href="lib/styles/supported-plugins.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/supported-plugins.css"></noscript><link rel="preload" href="lib/styles/main-styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/main-styles.css"></noscript><link rel="preload" href="lib/styles/snippets.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="lib/styles/snippets.css"></noscript></head><body class="publish css-settings-manager styled-scrollbars theme-light show-inline-title ctp-rosepine-light ctp-mocha ctp-accent-rosewater anuppuccin-accent-toggle anp-current-line-border anp-callout-color-toggle anp-codeblock-numbers anp-list-toggle anp-table-width anp-toggle-preview anp-color-transition-toggle anp-button-metadata-toggle anp-toggle-metadata anp-toggle-scrollbars anp-h1-red anp-h1-divider anp-h2-peach anp-h3-green anp-h4-teal anp-h5-lavender anp-h6-mauve anp-decoration-toggle anp-bold-maroon anp-italic-green anp-highlight-yellow anp-colorful-frame-icon-toggle-dark anp-simple-rainbow-color-toggle anp-rainbow-file-toggle anp-simple-rainbow-title-toggle anp-simple-rainbow-icon-folder-toggle anp-simple-rainbow-indentation-toggle anp-simple-rainbow-collapse-toggle anp-card-layout anp-card-shadows anp-card-layout-filebrowser anp-theme-ext-light anp-theme-ext-dark anp-theme-ext-amoled ctp-atom-light ctp-atom-dark table-type-three-line table-header-color-blue table-row-alt-background-option table-dark-mode"><script defer="">let theme=localStorage.getItem("theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");"dark"==theme?(document.body.classList.add("theme-dark"),document.body.classList.remove("theme-light")):(document.body.classList.add("theme-light"),document.body.classList.remove("theme-dark")),window.innerWidth<480?document.body.classList.add("is-phone"):window.innerWidth<768?document.body.classList.add("is-tablet"):window.innerWidth<1024?document.body.classList.add("is-small-screen"):document.body.classList.add("is-large-screen")</script><div class="webpage-container workspace"><div class="sidebar-left sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"><label class="theme-toggle-container" for="theme_toggle"><input class="theme-toggle-input" type="checkbox" id="theme_toggle"><div class="toggle-background"></div></label></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"><include src="lib/html/file-tree.html"></include></div><script defer="">let ls = document.querySelector(".sidebar-left"); ls.classList.add("is-collapsed"); if (window.innerWidth > 768) ls.classList.remove("is-collapsed"); ls.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-left-width"));</script></div><div class="document-container markdown-reading-view hide"><div class="markdown-preview-view markdown-rendered allow-fold-headings allow-fold-lists is-readable-line-width"><style id="MJX-CHTML-styles">mjx-c.mjx-c1D463.TEX-I::before{padding:.443em .485em .011em 0;content:"v"}mjx-c.mjx-c1D45D.TEX-I::before{padding:.442em .503em .194em 0;content:"p"}mjx-c.mjx-c2192::before{padding:.511em 1em .011em 0;content:"→"}mjx-c.mjx-c1D44E.TEX-I::before{padding:.441em .529em .01em 0;content:"a"}mjx-c.mjx-c1D44F.TEX-I::before{padding:.694em .429em .011em 0;content:"b"}mjx-c.mjx-c1D459.TEX-I::before{padding:.694em .298em .011em 0;content:"l"}mjx-c.mjx-c1D452.TEX-I::before{padding:.442em .466em .011em 0;content:"e"}mjx-mn{display:inline-block;text-align:left}mjx-c.mjx-c1D442.TEX-I::before{padding:.704em .763em .022em 0;content:"O"}mjx-c.mjx-c31::before{padding:.666em .5em 0 0;content:"1"}mjx-container[jax=CHTML]{line-height:0}mjx-container [space="1"]{margin-left:.111em}mjx-container [space="2"]{margin-left:.167em}mjx-container [space="3"]{margin-left:.222em}mjx-container [space="4"]{margin-left:.278em}mjx-container [space="5"]{margin-left:.333em}mjx-container [rspace="1"]{margin-right:.111em}mjx-container [rspace="2"]{margin-right:.167em}mjx-container [rspace="3"]{margin-right:.222em}mjx-container [rspace="4"]{margin-right:.278em}mjx-container [rspace="5"]{margin-right:.333em}mjx-container [size="s"]{font-size:70.7%}mjx-container [size=ss]{font-size:50%}mjx-container [size=Tn]{font-size:60%}mjx-container [size=sm]{font-size:85%}mjx-container [size=lg]{font-size:120%}mjx-container [size=Lg]{font-size:144%}mjx-container [size=LG]{font-size:173%}mjx-container [size=hg]{font-size:207%}mjx-container [size=HG]{font-size:249%}mjx-container [width=full]{width:100%}mjx-box{display:inline-block}mjx-block{display:block}mjx-itable{display:inline-table}mjx-row{display:table-row}mjx-row>*{display:table-cell}mjx-mtext{display:inline-block}mjx-mstyle{display:inline-block}mjx-merror{display:inline-block;color:red;background-color:#ff0}mjx-mphantom{visibility:hidden}mjx-assistive-mml{top:0;left:0;clip:rect(1px,1px,1px,1px);user-select:none;position:absolute!important;padding:1px 0 0!important;border:0!important;display:block!important;width:auto!important;overflow:hidden!important}mjx-assistive-mml[display=block]{width:100%!important}mjx-math{display:inline-block;text-align:left;line-height:0;text-indent:0;font-style:normal;font-weight:400;font-size:100%;font-size-adjust:none;letter-spacing:normal;border-collapse:collapse;overflow-wrap:normal;word-spacing:normal;white-space:nowrap;direction:ltr;padding:1px 0}mjx-container[jax=CHTML][display=true]{display:block;text-align:center;margin:1em 0}mjx-container[jax=CHTML][display=true][width=full]{display:flex}mjx-container[jax=CHTML][display=true] mjx-math{padding:0}mjx-container[jax=CHTML][justify=left]{text-align:left}mjx-container[jax=CHTML][justify=right]{text-align:right}mjx-mi{display:inline-block;text-align:left}mjx-c{display:inline-block}mjx-utext{display:inline-block;padding:.75em 0 .2em}mjx-mo{display:inline-block;text-align:left}mjx-stretchy-h{display:inline-table;width:100%}mjx-stretchy-h>*{display:table-cell;width:0}mjx-stretchy-h>*>mjx-c{display:inline-block;transform:scaleX(1)}mjx-stretchy-h>*>mjx-c::before{display:inline-block;width:initial}mjx-stretchy-h>mjx-ext{overflow:clip visible;width:100%}mjx-stretchy-h>mjx-ext>mjx-c::before{transform:scaleX(500)}mjx-stretchy-h>mjx-ext>mjx-c{width:0}mjx-stretchy-h>mjx-beg>mjx-c{margin-right:-.1em}mjx-stretchy-h>mjx-end>mjx-c{margin-left:-.1em}mjx-stretchy-v{display:inline-block}mjx-stretchy-v>*{display:block}mjx-stretchy-v>mjx-beg{height:0}mjx-stretchy-v>mjx-end>mjx-c{display:block}mjx-stretchy-v>*>mjx-c{transform:scaleY(1);transform-origin:left center;overflow:hidden}mjx-stretchy-v>mjx-ext{display:block;height:100%;box-sizing:border-box;border:0 solid transparent;overflow:visible clip}mjx-stretchy-v>mjx-ext>mjx-c::before{width:initial;box-sizing:border-box}mjx-stretchy-v>mjx-ext>mjx-c{transform:scaleY(500) translateY(.075em);overflow:visible}mjx-mark{display:inline-block;height:0}mjx-msup{display:inline-block;text-align:left}mjx-c::before{display:block;width:0}.MJX-TEX{font-family:MJXZERO,MJXTEX}.TEX-B{font-family:MJXZERO,MJXTEX-B}.TEX-I{font-family:MJXZERO,MJXTEX-I}.TEX-MI{font-family:MJXZERO,MJXTEX-MI}.TEX-BI{font-family:MJXZERO,MJXTEX-BI}.TEX-S1{font-family:MJXZERO,MJXTEX-S1}.TEX-S2{font-family:MJXZERO,MJXTEX-S2}.TEX-S3{font-family:MJXZERO,MJXTEX-S3}.TEX-S4{font-family:MJXZERO,MJXTEX-S4}.TEX-A{font-family:MJXZERO,MJXTEX-A}.TEX-C{font-family:MJXZERO,MJXTEX-C}.TEX-CB{font-family:MJXZERO,MJXTEX-CB}.TEX-FR{font-family:MJXZERO,MJXTEX-FR}.TEX-FRB{font-family:MJXZERO,MJXTEX-FRB}.TEX-SS{font-family:MJXZERO,MJXTEX-SS}.TEX-SSB{font-family:MJXZERO,MJXTEX-SSB}.TEX-SSI{font-family:MJXZERO,MJXTEX-SSI}.TEX-SC{font-family:MJXZERO,MJXTEX-SC}.TEX-T{font-family:MJXZERO,MJXTEX-T}.TEX-V{font-family:MJXZERO,MJXTEX-V}.TEX-VB{font-family:MJXZERO,MJXTEX-VB}mjx-stretchy-h mjx-c,mjx-stretchy-v mjx-c{font-family:MJXZERO,MJXTEX-S1,MJXTEX-S4,MJXTEX,MJXTEX-A!important}@font-face{font-family:MJXZERO;src:url("lib/fonts/mathjax_zero.woff") format("woff")}@font-face{font-family:MJXTEX;src:url("lib/fonts/mathjax_main-regular.woff") format("woff")}@font-face{font-family:MJXTEX-B;src:url("lib/fonts/mathjax_main-bold.woff") format("woff")}@font-face{font-family:MJXTEX-I;src:url("lib/fonts/mathjax_math-italic.woff") format("woff")}@font-face{font-family:MJXTEX-MI;src:url("lib/fonts/mathjax_main-italic.woff") format("woff")}@font-face{font-family:MJXTEX-BI;src:url("lib/fonts/mathjax_math-bolditalic.woff") format("woff")}@font-face{font-family:MJXTEX-S1;src:url("lib/fonts/mathjax_size1-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S2;src:url("lib/fonts/mathjax_size2-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S3;src:url("lib/fonts/mathjax_size3-regular.woff") format("woff")}@font-face{font-family:MJXTEX-S4;src:url("lib/fonts/mathjax_size4-regular.woff") format("woff")}@font-face{font-family:MJXTEX-A;src:url("lib/fonts/mathjax_ams-regular.woff") format("woff")}@font-face{font-family:MJXTEX-C;src:url("lib/fonts/mathjax_calligraphic-regular.woff") format("woff")}@font-face{font-family:MJXTEX-CB;src:url("lib/fonts/mathjax_calligraphic-bold.woff") format("woff")}@font-face{font-family:MJXTEX-FR;src:url("lib/fonts/mathjax_fraktur-regular.woff") format("woff")}@font-face{font-family:MJXTEX-FRB;src:url("lib/fonts/mathjax_fraktur-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SS;src:url("lib/fonts/mathjax_sansserif-regular.woff") format("woff")}@font-face{font-family:MJXTEX-SSB;src:url("lib/fonts/mathjax_sansserif-bold.woff") format("woff")}@font-face{font-family:MJXTEX-SSI;src:url("lib/fonts/mathjax_sansserif-italic.woff") format("woff")}@font-face{font-family:MJXTEX-SC;src:url("lib/fonts/mathjax_script-regular.woff") format("woff")}@font-face{font-family:MJXTEX-T;src:url("lib/fonts/mathjax_typewriter-regular.woff") format("woff")}@font-face{font-family:MJXTEX-V;src:url("lib/fonts/mathjax_vector-regular.woff") format("woff")}@font-face{font-family:MJXTEX-VB;src:url("lib/fonts/mathjax_vector-bold.woff") format("woff")}mjx-c.mjx-c1D45F.TEX-I::before{padding:.442em .451em .011em 0;content:"r"}mjx-c.mjx-c210E.TEX-I::before{padding:.694em .576em .011em 0;content:"h"}mjx-c.mjx-c1D460.TEX-I::before{padding:.442em .469em .01em 0;content:"s"}mjx-c.mjx-c28::before{padding:.75em .389em .25em 0;content:"("}mjx-c.mjx-c29::before{padding:.75em .389em .25em 0;content:")"}mjx-c.mjx-c3D::before{padding:.583em .778em .082em 0;content:"="}mjx-c.mjx-c1D45A.TEX-I::before{padding:.442em .878em .011em 0;content:"m"}mjx-c.mjx-c1D456.TEX-I::before{padding:.661em .345em .011em 0;content:"i"}mjx-c.mjx-c1D45B.TEX-I::before{padding:.442em .6em .011em 0;content:"n"}mjx-c.mjx-c1D454.TEX-I::before{padding:.442em .477em .205em 0;content:"g"}mjx-c.mjx-c2032::before{padding:.56em .275em 0 0;content:"′"}mjx-c.mjx-c2B::before{padding:.583em .778em .082em 0;content:"+"}mjx-c.mjx-c1D450.TEX-I::before{padding:.442em .433em .011em 0;content:"c"}mjx-c.mjx-c1D45C.TEX-I::before{padding:.441em .485em .011em 0;content:"o"}mjx-c.mjx-c1D461.TEX-I::before{padding:.626em .361em .011em 0;content:"t"}mjx-c.mjx-c2C::before{padding:.121em .278em .194em 0;content:","}</style><div class="markdown-preview-sizer markdown-preview-section"><h1 class="page-title heading inline-title" id="Lecture 1：C++ 内存管理"><p dir="auto">Lecture 1：C++ 内存管理</p></h1><div class="el-h2 heading-wrapper"><h2 data-heading="引入" dir="auto" class="heading" id="引入"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>引入</h2><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：内存分配的五个层次</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">层次一：语言应用层</li>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>层次二：语言标准库
+<ul>
+<li data-line="2" dir="auto">特点：也不依赖与底层的 <code>malloc</code> 是否做管理，因为其是 C 语言层面的东西</li>
+</ul>
+</li>
+<li data-line="3" dir="auto">层次三：语言语法</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>层次四：CRT（malloc 与 free）
+<ul>
+<li data-line="5" dir="auto">特点一：该层次和具体操作系统无关，不预设底层的操作系统是否做管理</li>
+<li data-line="6" dir="auto">特点二：不再进行复杂内存管理，把责任交给了 OS 的 API</li>
+</ul>
+</li>
+<li data-line="7" dir="auto">层次五：操作系统 API</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>总结</strong>：C++中内存分配的方式</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分类：
+<ul>
+<li data-line="1" dir="auto"><span alt="Pasted image 20250111143055.png" src="Pasted image 20250111143055.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250111143055.png" src="lib/media/pasted-image-20250111143055.png"></span></li>
+</ul>
+</li>
+<li data-line="2" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">void* p1 = malloc(512); //512bytes
+free(p1);
+
+complex&lt;int&gt;* p2 = new complex&lt;int&gt;; //one object
+delete p2;
+
+void* p3 = ::operator new(512);//512bytes
+::operator delete(p3);
+
+
+//GNUC 2.9版本
+//以下两个函数都是static，可通过全名调用之。以下分配512bytes
+void* p4 = alloc::allocate(512);
+alloc::deallocate(p4,512);
+
+//GNUC 4.9版本(两种方式)
+//以下两个函数都是non-static，定要通过object调用。以下分配7个ints
+void* p4 = allocator&lt;int&gt;().allocate(7);
+allocator&lt;int&gt;().deallocate((int*)p4,7);
+
+//以下两个函数都是non-static，定要通过object调用。以下分配9个ints
+void* p5 = __gnu_cxx::__pool_alloc&lt;int&gt;().allocate(9);
+__gnu_cxx::__pool_alloc&lt;int&gt;().deallocate((int*)p5,9);//2.9版本的alloc到4.9版本换了名字，叫__pool_alloc
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`New` 与 `Delete` 设计" dir="auto" class="heading" id="`New`_与_`Delete`_设计"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>New</code> 与 <code>Delete</code> 设计</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="New 设计" dir="auto" class="heading" id="New_设计"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>New 设计</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>New</code> 关键字执行全过程</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>第一步：编译器转换
+<ul>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="2" dir="auto">在编译器发现了一个 <code>New</code> 关键字之后，在编译时会将其变成一个 <code>try-catch</code> 语句；</li>
+<li data-line="3" dir="auto"><code>C++</code> 里，如果 <code>New</code> 分配内存失败，默认是<strong>抛出异常</strong>的；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>举例：
+<ul>
+<li data-line="5" dir="auto">分析以下代码：&nbsp;<code>int* p = new int[SIZE]; if ( p == 0 ) // 检查 p 是否空指针</code>;  </li>
+<li data-line="6" dir="auto">如果分配成功，<code>p == 0</code> 就绝对不会成立；而如果分配失败了，也不会执行 <code>if ( p == 0 )</code>，因为分配失败时，<code>new</code> 就会<strong>抛出异常跳过后面的代码</strong>；所以这个代码不会发挥应有的效果；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：
+<ul>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（1）标准 C++ 亦提供了一个方法来<strong>抑制 new 抛出异常</strong>，而返回空指针；
+<ul>
+<li data-line="9" dir="auto"><code>int* p = new (std::nothrow) int; // 这样如果 new 失败了，就不会抛出异常，而是返回空指针</code></li>
+</ul>
+</li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（2）按 <code>c++</code> 标准的话，<code>new</code> 失败会抛出 <code>bad_alloc</code> 异常 
+<ul>
+<li data-line="11" dir="auto">按 <code>c++</code> 标准的话，<code>new</code> 失败会抛出 <code>bad_alloc</code> 异常，但是有些编译器对 <code>c++</code> 标准支持不是很好，比如 <code>vc++6.0</code> 中 <code>new</code> 失败不会抛出异常，而返回 <code>0</code>；</li>
+</ul>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（3）标准推荐做法
+<ul>
+<li data-line="13" dir="auto"><span alt="Pasted image 20250111143110.png" src="Pasted image 20250111143110.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250111143110.png" src="lib/media/pasted-image-20250111143110.png"></span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>第二步：利用 <code>operator new</code> 操作符的重载函数分配内存
+<ul>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="16" dir="auto">在 <code>new</code> 关键字调用后，利用 <code>operator new</code> 操作符重载函数分配指定大小的内存：</li>
+<li data-line="17" dir="auto"><code>void* mem = operator new(sizeof(Complex));</code></li>
+</ul>
+</li>
+<li data-line="18" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：
+<ul>
+<li data-line="19" dir="auto">也可以自己直接调用 <code>operator</code> 来分配内存，比如：</li>
+<li data-line="20" dir="auto"><code>A *p = (A*)::operator new(sizeof(A));// 直接调用operator new，只分配内存</code></li>
+<li data-line="21" dir="auto">但这样调用的话，将无法触发类型的构造函数；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="22" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>第三步：在 <code>operator</code> 内部使用 <code>malloc</code> 来实现内存分配
+<ul>
+<li data-line="23" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>operator</code> 代码
+<ul>
+<li data-line="24" dir="auto"><span alt="Pasted image 20250111143135.png" src="Pasted image 20250111143135.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250111143135.png" src="lib/media/pasted-image-20250111143135.png"></span></li>
+</ul>
+</li>
+<li data-line="25" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>参数
+<ul>
+<li data-line="26" dir="auto">参数一：待分配内存大小</li>
+<li data-line="27" dir="auto">参数二：此函数保证不抛出异常</li>
+</ul>
+</li>
+<li data-line="28" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>行为
+<ul>
+<li data-line="29" dir="auto">在方法中先检测 <code>malloc</code> 是否分配失败；</li>
+<li data-line="30" dir="auto">如果分配完了，则执行一次 <code>callnewh()</code>，将部分<strong>垃圾内存进行释放</strong>；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="31" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>第四步：<code>Static Cast</code> 静态转换
+<ul>
+<li data-line="32" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="33" dir="auto">在 <code>new</code> 当中使用 <code>void* mem = operator new(sizeof(Complex))</code> 分配得到内存后，使用 <code>static cast</code> 进行静态转化，将分配出的 <code>void</code> 类型的指向内存的指针、转换为对应类型的变量；</li>
+</ul>
+</li>
+<li data-line="34" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>举例：
+<ul>
+<li data-line="35" dir="auto">比如申请为 <code>new</code> 出一个 <code> Complex</code> 类，会静态转化为 <code>Complex</code> 类型；</li>
+<li data-line="36" dir="auto"><code>void* mem = operator new(sizeof(Complex));</code></li>
+<li data-line="37" dir="auto"><code>pc = static_cast&lt;Complex*&gt;(sizeof(mem));</code></li>
+<li data-line="38" dir="auto"><code>operator new(sizeof(Complex))</code> 得到的是一个 <code>void*</code> 指针，需要转化为 <code>Complex*</code> 类型；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="39" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>第五步：调用程序构造函数
+<ul>
+<li data-line="40" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="41" dir="auto">在程序执行完静态转换后，调用程序对应构造函数；</li>
+<li data-line="42" dir="auto">并且构造函数的执行<strong>编译器自动调用的</strong>；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>代码</strong>：<code>Complex* pc = new Complex(1,2)</code> 经过编译器转化为以下代码</p></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">//编译器转为：
+Complex *pc;
+try{
+    void* mem = operator new(sizeof(Complex)); //allocate
+    pc = static_cast&lt;Complex*&gt;(mem);		   //cast
+    pc-&gt;Complex::Complex(1,2);				   //construct
+    //注意：只有编译器才可以想这样直接呼叫ctor，欲直接调用ctor，可运用placement new:new(p)Complex(1,2);
+}
+catch( std::bad_alloc ){
+    //若allocation失败就不执行constructor
+}
+
+
+void *operator new(size_t size,const std::nothrow_t&amp;) _THROW0(){ //nothrow这个表示该函数一定不会发生异常
+    //try to allocate size bytes
+    void *p;
+    while((p = malloc(size)) == 0){ //直到内存分配成功
+        //buy more memory or return null pointer
+        _TRY_BEGIN
+            if(_callnewh(size)==0) break;  //_callnewh里面定义我们自己的动作，例如：释放内存等
+        _CATCH(std::bad_alloc) return (0);
+        _CATCH_END
+    }
+    return (p);
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="Delete 设计" dir="auto" class="heading" id="Delete_设计"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>Delete 设计</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>Delete</code> 设计</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：执行过程
+<ul>
+<li data-line="1" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol>
+<li data-line="1" dir="auto">进行编译器转换；</li>
+</ol>
+</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="2">
+<li data-line="2" dir="auto">通过指针调用析构函数；</li>
+</ol>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>
+<ol start="3">
+<li data-line="3" dir="auto">调用 operator 进行内存清除；</li>
+</ol>
+</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>Delete</code> 与 <code>Default</code> 
+<ul>
+<li data-line="5" dir="auto">在 <code>CPP</code> 当中，可以指明部分函数是否使用其默认的版本；</li>
+<li data-line="6" dir="auto">CPP 当中的构造函数与析构函数都有一个默认函数，当程序员不编写这部分的时，编译器将自动给与一个替代版本；</li>
+<li data-line="7" dir="auto">此默认版本也可以设计在 <code>new</code> 和 <code>new[]</code> 上； </li>
+<li data-line="8" dir="auto"><code>static void* operator new[](size_t size) = delete;</code></li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>代码</strong>：<code>Delete</code> 经过编译器转换</p></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">Complex* pc = new Complex(1,2);
+...
+delete pc;
+
+//编译器转为:
+pc-&gt;~Complex();//先析构
+//可以直接呼叫它的析构函数
+operator delete(pc);//然后释放内存
+
+void __cdecl operator delete(void* p)_THROW0(){
+    //free an allocated object
+    free(p);
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="Array New 设计" dir="auto" class="heading" id="Array_New_设计"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>Array New 设计</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>Array New</code> 设计</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：
+<ul>
+<li data-line="1" dir="auto">在使用 <code>Array New</code> 获得的对象的时候，需要利用 <code>[]</code> 指明其中的个数，在 <code>delete</code> 的时候也需要在 <code>[]</code> 中加上个数，只有加上 <code>[]</code> 程序才将其判断为数组；</li>
+<li data-line="2" dir="auto">需要在 <code>new[]</code> 一个对象数组时，需要保存数组的维度，C++ 的做法是在分配数组空间时多分配了 4 个字节的大小，专门保存数组的大小，在 <code>delete[]</code> 时就可以取出这个保存的数，就知道了需要调用析构函数多少次了；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实现：
+<ul>
+<li data-line="4" dir="auto">使用一个 <code>cookie</code> 来记录数组的长度；</li>
+<li data-line="5" dir="auto">如果不使用带 <code>[]</code> 的数组，可能会导致内存泄露；</li>
+<li data-line="6" dir="auto">使用 <code>Array</code> 时要统一使用 <code>Array New</code> 和 <code>Delete</code>；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>举例：
+<ul>
+<li data-line="8" dir="auto"><code>class A *pAa = new A[3];</code></li>
+<li data-line="9" dir="auto">在以上数组对象分配时，除了三个 A 类的实例外，还多分配了 4 个字节用来保存数组的大小，但是最终返回的是对象数组的指针，而不是所有分配空间的起始地址；</li>
+<li data-line="10" dir="auto">因此直接使用 <code>delete []pAa</code> 就可以完成全部的释放；</li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>补充：
+<ul>
+<li data-line="12" dir="auto">（1）调用析构函数的次数是从数组对象指针前面的 4 个字节中取出的；</li>
+<li data-line="13" dir="auto">（2）传入&nbsp;<code>operator delete[]</code>&nbsp;函数的参数不是数组对象的指针 <code>pAa</code>，而是 <code>pAa</code> 的值减 <code>4</code>；</li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>分析</strong>：为什么 <code>new/delete</code> 、<code>new []/delete[]</code> 要配对使用 </p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>举例一：内置类型
+<ul>
+<li data-line="1" dir="auto"><code>int *pia = new int[10];</code></li>
+<li data-line="2" dir="auto"><code>delete []pia;</code></li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析： 
+<ul>
+<li data-line="4" dir="auto">在&nbsp;<code>new []</code>&nbsp;时多分配 <code>4</code> 个字节的缘由，是因为析构时需要知道数组的大小；  </li>
+<li data-line="5" dir="auto">但如果不调用析构函数呢（如内置类型，这里的 <code>int</code> 数组）？我们在&nbsp;<code>new []</code>&nbsp;时就没必要多分配那 4 个字节， <code>delete[]</code> 时直接到第二步释放为 <code>int</code> 数组分配的空间； </li>
+<li data-line="6" dir="auto">如果这里使用&nbsp;<code>delete pia</code>，那么将会调用&nbsp;<code>operator delete</code>&nbsp;函数，传入的参数是分配给数组的起始地址，所做的事情就是释放掉这块内存空间。不存在问题的； </li>
+<li data-line="7" dir="auto">这里说的使用&nbsp;<code>new []</code>&nbsp;用 <code>delete</code> 来释放对象的提前是：对象的类型是<strong>内置类型</strong>或者是<strong>无自定义的析构函数的类类型</strong>；</li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>举例二：自定义析构函数类型
+<ul>
+<li data-line="9" dir="auto"><code>class A *pAa = new class A[3];</code></li>
+<li data-line="10" dir="auto"><code>delete pAa;</code></li>
+</ul>
+</li>
+<li data-line="11" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：   
+<ul>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>以上代码中 <code>delete pAa;</code>&nbsp;做了两件事： 
+<ul>
+<li data-line="13" dir="auto">调用一次 <code>pAa</code> 指向的对象的析构函数； </li>
+<li data-line="14" dir="auto">调用&nbsp;<strong><code>operator delete(pAa);</code></strong>&nbsp;释放内存；</li>
+</ul>
+</li>
+<li data-line="15" dir="auto">显然，这里只对数组的第一个类对象调用了析构函数，后面的两个对象均没调用析构函数；</li>
+<li data-line="16" dir="auto">如果类对象中申请了大量的内存需要在析构函数中释放，而你却在销毁数组对象时少调用了析构函数，这会造成内存泄漏； </li>
+<li data-line="17" dir="auto">此外，直接释放 pAa 指向的内存空间会造成严重的段错误，因为分配的空间的起始地址是 <code>pAa</code> 指向的地方减去 <code>4</code> 个字节的地方。你应该传入参数设为那个地址； </li>
+<li data-line="18" dir="auto">同理，如果使用 new 来分配，用&nbsp;<code>delete []</code>&nbsp;来释放也会导致问题；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="Placement New 设计" dir="auto" class="heading" id="Placement_New_设计"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>Placement New 设计</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>Placement New</code> 使用</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：  
+<ul>
+<li data-line="1" dir="auto"><code>Placement New</code> 的作用：允许将对象构建于 <code>allocated memory</code> 当中，并且不分配内存；</li>
+<li data-line="2" dir="auto">其在行为上类似于构造函数，传入一个指针表示已经分配好的内存；</li>
+<li data-line="3" dir="auto">Placement New 可以用于精准控制内存布局，在已经分配好的内存区域中创建对象；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>语法： 
+<ul>
+<li data-line="5" dir="auto"><code>Type* ptr = new (place) Type(args...);</code></li>
+<li data-line="6" dir="auto">这里，<code>place</code> 是一个指针，指向预分配的内存地址，<code>Type</code> 和 <code>args...</code> 同上。<code>placement new</code> 不负责分配内存，仅调用构造函数初始化对象；</li>
+</ul>
+</li>
+<li data-line="7" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>使用： 
+<ul>
+<li data-line="8" dir="auto">形式一：<code>new(ptr)</code></li>
+<li data-line="9" dir="auto">形式二：<code>::operator new (size,void*)</code></li>
+<li data-line="10" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>使用：
+<ul>
+<li data-line="11" dir="auto">这里的 <code>buf</code> 是一块已经分配好的内存，<code>new</code> 此时并不需要在对其进行内存的分配；</li>
+<li data-line="12" dir="auto"><code>char* buf = new char[sizeof (Complex)*3];</code> </li>
+<li data-line="13" dir="auto"><code>Complex* pc = new (buf) Complex (1,2);</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="14" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意： 
+<ul>
+<li data-line="15" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>（1）使用 <code>placement new</code> 后，需手动调用析构函数（而非 <code>delete</code>），且需确保内存的正确释放；
+<ul>
+<li data-line="16" dir="auto"><code>placement new</code> 只是在现有的内存位置上构造对象，它不负责内存的分配； </li>
+<li data-line="17" dir="auto">因此，当你使用 <code>placement new</code> 时，你必须已经为对象分配好了内存空间； </li>
+<li data-line="18" dir="auto">由于 <code>delete</code> 操作会尝试释放由 <code>new</code> 操作分配的内存，使用它来释放通过 <code>placement new</code> 构造的对象会导致未定义行为，因为 <code>delete</code> 会尝试去释放一块它没有记录分配信息的内存，因此不能使用 <code>delete</code> 来释放；</li>
+</ul>
+</li>
+<li data-line="19" dir="auto">（2）必须保证 <code>place</code> 指向的内存足够大，且未被其他对象占用，否则可能导致未定义行为；</li>
+</ul>
+</li>
+</ul></div><div class="el-p"><p dir="auto"><strong>分析</strong>：<code>Placement New</code> 实现小型内存池</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析： 
+<ul>
+<li data-line="1" dir="auto"><code>MemoryPool</code> 类在栈区中预分配了一块大小为 <code>POOL_SIZE</code> 的内存区域；</li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>createParticle</code> 方法中使用 <code>placement new</code> 在内存池的起始位置构造了一个 <code>Particle</code> 对象； 
+<ul>
+<li data-line="3" dir="auto">注意，这里简化处理，实际上每次分配应考虑内存池的当前状态，避免覆盖已有对象；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto">当不再需要某个对象时，通过调用对象的析构函数（而非 <code>delete</code>）来清理资源，这是因为 <code>placement new</code> 并没有改变内存的所有权关系； </li>
+</ul>
+</li>
+<li data-line="5" dir="auto">代码：</li>
+</ul></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">#include &lt;iostream&gt;
+#include &lt;cstdlib&gt;
+
+class Particle {
+public:
+    Particle() { std::cout &lt;&lt; "Particle created" &lt;&lt; std::endl; }
+    ~Particle() { std::cout &lt;&lt; "Particle destroyed" &lt;&lt; std::endl; }
+    // ...其他成员函数和数据...
+};
+
+class MemoryPool {
+private:
+    static const size_t POOL_SIZE = 1000;
+    char memory[POOL_SIZE]; // 预分配内存
+    void* allocate(size_t size) {
+        return static_cast&lt;void*&gt;(memory);
+    }
+public:
+    Particle* createParticle() {
+        return new (allocate(sizeof(Particle))) Particle();
+    }
+
+    void destroyParticle(Particle* p) {
+        if (p) {
+            p-&gt;~Particle(); // 手动调用析构函数
+        }
+    }
+};
+
+int main() {
+    MemoryPool pool;
+
+    // 创建粒子对象
+    Particle* particle = pool.createParticle();
+    // 使用粒子...
+    
+    // 销毁粒子对象
+    pool.destroyParticle(particle);
+
+    return 0;
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>代码</strong>：<code>Placement New</code> 编译器转换后形式 </p></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">Complex* pc;
+try
+{
+	void* mem = operator new(sizeof(Complex),buf);//注意这里的第二参数
+	pc = static_cast&lt;Complex*&gt;(mem);
+	pc-&gt;Complex::Complex(1,2);
+
+}
+catch(std::bad_alloc)
+{
+	//如果失败则不执行构造器
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="`Operator New` 与 `Delete`" dir="auto" class="heading" id="`Operator_New`_与_`Delete`"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Operator New</code> 与 <code>Delete</code></h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="`Operator New` 基础概念" dir="auto" class="heading" id="`Operator_New`_基础概念"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div><code>Operator New</code> 基础概念</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>代码</strong>：<code>Operator New 与 Delete</code></p></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">void *operator new(size_t);     //allocate an object
+void *operator delete(void *);    //free an object
+
+void *operator new[](size_t);     //allocate an array
+void *operator delete[](void *);    //free an array
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>代码</strong>：全局 <code>operator new</code> 实现</p></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">void* myAlloc(size_t size)
+{
+	return malloc(size);
+}
+void* myFree(void* ptr)
+{
+	return free(ptr);
+}
+
+inline void* operator new(size_t size)
+{
+	cout&lt;&lt;"jjhou global new()\n";
+	return myAlloc(size);
+}
+inline void* operator new[](size_t size)
+{
+	cout&lt;&lt;"jjhou global new[]()\n";
+	return myAlloc(size);
+}
+inline void operator delete(void* ptr)
+{
+	cout&lt;&lt;"jjhou global delete ()\n";
+	myFree (ptr);
+}
+inline void operator delete[](void* ptr)
+{
+	cout&lt;&lt;"jjhou global delete[]()\n";
+	myFree (ptr);
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="Operator New 重载" dir="auto" class="heading" id="Operator_New_重载"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>Operator New 重载</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>代码</strong>：一般 <code>Operator New</code> 重载</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">以下是一般的 new 代码：</li>
+</ul></div><div class="el-pre"><pre class="language-c"><code data-line="0" class="language-c is-loaded">Foo<span class="token operator">*</span> p <span class="token operator">=</span> <span class="token punctuation">(</span>Foo<span class="token punctuation">)</span> operator <span class="token function">new</span> <span class="token punctuation">(</span><span class="token keyword">sizeof</span> <span class="token punctuation">(</span>Foo<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">在执行完以上 <code>new</code> 之后，如果当前 <code>Foo</code> 类自身已经写好了 <code>operator new</code> 的重载，由于重载的行为以上代码会跳转到此处：</li>
+</ul></div><div class="el-pre"><pre class="language-c"><code data-line="0" class="language-c is-loaded">Foo<span class="token operator">::</span> operator <span class="token function">new</span> <span class="token punctuation">(</span><span class="token class-name">size_t</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto">如果 <code>Foo</code> 没有编写 <code>operator new</code> 重载，则会执行全局的重载：</li>
+</ul></div><div class="el-pre"><pre class="language-c"><code data-line="0" class="language-c is-loaded"><span class="token operator">::</span> operator <span class="token function">new</span> <span class="token punctuation">(</span><span class="token class-name">size_t</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div><div class="el-p"><p dir="auto"><strong>代码</strong>：其他 <code>operator new</code> 重载</p></div><div class="el-pre"><pre class="language-none"><code data-line="0" class="language-C++ language-none is-loaded">void* Airplane:: operator new (size_t size)
+{
+    //当中如果大小有误，则使用全局 operator new
+    if (size !== sizeof (Airplane))
+    {
+        return :: operator new (size);     
+
+	}
+	
+    Airplane* p = headofFreeList;
+	if (p) headOfFreeList = p-&gt;next;
+    else
+    {
+        //当 freelist 为空时，执行内存分配
+        Airplane* newBlock = static_cast&lt;Airplane*&gt;(:: operator new (BLOCK_SIZE*sizeof (Airplane)));  
+    }
+
+	//每次移动八个字节，将其分成一堆小的 block
+    for ( int i = 1; i &lt; BLOCK_SIZE - 1; ++i )
+    {
+        newBlock[BLOCK_SIZE-1]. next = 0;
+        p = newBlock;
+        headOfFreeList = &amp;newBlock[1];
+    }
+ 
+	return p;
+}
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre></div></div></div></div></div><div class="el-h2 heading-wrapper"><h2 data-heading="malloc 与 free 设计" dir="auto" class="heading" id="malloc_与_free_设计"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>malloc 与 free 设计</h2><div class="heading-children"><div class="el-h3 heading-wrapper"><h3 data-heading="malloc 设计" dir="auto" class="heading" id="malloc_设计"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>malloc 设计</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：<code>malloc</code> 分配内存 </p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念： 
+<ul>
+<li data-line="1" dir="auto">malloc 并不是系统调用，而是 C 库里的函数，用于动态分配内存，<code>malloc</code> 申请内存的时候，会有两种方式向操作系统申请内存； </li>
+<li data-line="2" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>方式一：通过 <code>brk ()</code> 系统调用，从<strong>堆</strong>分配内存； 
+<ul>
+<li data-line="3" dir="auto">malloc 的底层实现是系统调用函数 <code>brk</code>，其主要移动指针 <code>_enddata</code>，此时的 <code>_enddata</code> 指的是 Linux 地址空间中堆段的末尾地址，不是数据段的末尾地址；</li>
+</ul>
+</li>
+<li data-line="4" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>方式二：通过 <code>mmap ()</code> 系统调用，在<strong>文件映射区域</strong>分配内存；
+<ul>
+<li data-line="5" dir="auto">堆和栈中间，称为“文件映射区域”的地方</li>
+</ul>
+</li>
+<li data-line="6" dir="auto"><code>malloc ()</code> 源码里默认定义了一个阈值，如果用户分配的内存小于 <code>128 KB</code>，则通过 <code>brk ()</code> 申请内存； </li>
+<li data-line="7" dir="auto">如果用户分配的内存大于 <code>128 KB</code>，则通过 <code>mmap ()</code> 申请内存； </li>
+</ul>
+</li>
+<li data-line="8" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>brk ()</code> 方式 
+<ul>
+<li data-line="9" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实现： 
+<ul>
+<li data-line="10" dir="auto">方式一实现的方式很简单，就是通过 brk  函数将堆顶指针向高地址移动，获得新的内存空间；</li>
+<li data-line="11" dir="auto"><span alt="Pasted image 20250111143159.png" src="Pasted image 20250111143159.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250111143159.png" src="lib/media/pasted-image-20250111143159.png"></span></li>
+</ul>
+</li>
+<li data-line="12" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：为什么不直接使用 <code>brk</code> 分配内存 
+<ul>
+<li data-line="13" dir="auto">通过 <code>brk</code> 从堆空间分配的内存，并不会归还给操作系统，那么考虑这样一个场景：如果我们连续申请了 <code>10 k，20 k，30 k</code> 这三片内存，如果 <code>10 k</code> 和 <code>20 k</code> 这两片释放了，变为了空闲内存空间，如果下次申请的内存小于 <code>30 k</code>，那么就可以重用这个空闲内存空间；</li>
+<li data-line="14" dir="auto">但是如果下次申请的内存大于 <code>30 k</code>，没有可用的空闲内存空间，必须向 <code>OS</code> 申请，实际使用内存继续增加；</li>
+<li data-line="15" dir="auto">因此，随着系统频繁地 <code>malloc</code> 和 <code>free</code> ，尤其对于小块内存，堆内将产生越来越多不可用的碎片，导致“内存泄露”。而这种“泄露“现象很难检测出来的；</li>
+<li data-line="16" dir="auto">所以，<code>malloc</code> 实现中，充分考虑了 <code>brk</code> 和 <code>mmap</code> 行为上的差异及优缺点，默认分配大块内存 (128 KB)才使用 <code>mmap</code> 分配内存空间；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="17" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念：<code>mmap</code> 方式
+<ul>
+<li data-line="18" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>实现： 
+<ul>
+<li data-line="19" dir="auto">通过 mmap 系统调用中私有匿名映射的方式，在文件映射区分配一块内存，也就是从文件映射区“偷“了一块内存；</li>
+<li data-line="20" dir="auto"><span alt="Pasted image 20250111143211.png" src="Pasted image 20250111143211.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250111143211.png" src="lib/media/pasted-image-20250111143211.png"></span></li>
+</ul>
+</li>
+<li data-line="21" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>分析：为什么不直接使用 <code>mmap</code> 分配内存 
+<ul>
+<li data-line="22" dir="auto">向操作系统申请内存，是要通过系统调用的，执行系统调用是要进入内核态的，然后在回到用户态，运行态的切换会耗费不少时间；</li>
+<li data-line="23" dir="auto">所以，申请内存的操作应该避免频繁的系统调用，如果都用 mmap 来分配内存，等于每次都要执行系统调用；</li>
+<li data-line="24" dir="auto">另外，因为 mmap 分配的内存每次释放的时候，都会归还给操作系统，于是每次 mmap 分配的虚拟地址都是缺页状态的，然后在第一次访问该虚拟地址的时候，就会触发缺页中断；</li>
+<li data-line="25" dir="auto">也就是说，频繁通过 mmap 分配的内存话，不仅每次都会发生运行态的切换，还会发生缺页中断 (在第一次访问虚拟地址后)，这样会导致 CPU 消耗较大； </li>
+<li data-line="26" dir="auto">为了改进这两个问题，<code>malloc</code> 通过 <code>brk</code> 系统调用在堆空间申请内存的时候，由于堆空间是连续的，所以直接预分配更大的内存来作为内存池，当内存释放的时候，就缓存在内存池中；</li>
+<li data-line="27" dir="auto">等下次在申请内存的时候，就直接从内存池取出对应的内存块就行了，而且可能这个内存块的虚拟地址与物理地址的映射关系还存在，这样不仅减少了系统调用的次数，也减少了缺页中断的次数，这将大大降低 CPU 的消耗；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li data-line="28" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>注意： 
+<ul>
+<li data-line="29" dir="auto">malloc 分配的是虚拟内存，只有在 OS 查找页表、发现虚拟内存对应页不在物理内存时，会触发缺页中断，进而建立虚拟内存和物理内存之间的映射关系；</li>
+</ul>
+</li>
+</ul></div></div></div><div class="el-h3 heading-wrapper"><h3 data-heading="free 设计" dir="auto" class="heading" id="free_设计"><div class="heading-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>free 设计</h3><div class="heading-children"><div class="el-p"><p dir="auto"><strong>概念</strong>：free 设计</p></div><div class="el-ul"><ul>
+<li data-line="0" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>概念： 
+<ul>
+<li data-line="1" dir="auto">malloc 返回给用户态的内存起始地址比进程的堆空间起始地址多了 16 字节，这个多出来的 16 字节就是保存了该内存块的描述信息，比如有该内存块的大小；</li>
+<li data-line="2" dir="auto">这样当执行 free  函数时，free 会对传入进来的内存地址向左偏移 16 字节，然后从这个 16 字节的分析出当前的内存块的大小，自然就知道要释放多大的内存了；</li>
+</ul>
+</li>
+<li data-line="3" dir="auto"><div class="list-collapse-indicator collapse-indicator collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-triangle"><path d="M3 8L12 17L21 8"></path></svg></div>图示： 
+<ul>
+<li data-line="4" dir="auto"><span alt="Pasted image 20250111143222.png" src="Pasted image 20250111143222.png" class="internal-embed media-embed image-embed is-loaded"><img alt="Pasted image 20250111143222.png" src="lib/media/pasted-image-20250111143222.png"></span></li>
+</ul>
+</li>
+</ul></div><div class="mod-footer mod-ui"></div></div></div></div></div></div></div></div><div class="sidebar-right sidebar"><div class="sidebar-handle"></div><div class="sidebar-topbar"><div class="topbar-content"></div><div class="clickable-icon sidebar-collapse-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg></div></div><div class="sidebar-content"></div><script defer="">let rs = document.querySelector(".sidebar-right"); rs.classList.add("is-collapsed"); if (window.innerWidth > 768) rs.classList.remove("is-collapsed"); rs.style.setProperty("--sidebar-width", localStorage.getItem("sidebar-right-width"));</script></div></div></body></html>
